@@ -29,7 +29,7 @@ class LoginView extends HookWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CloseView(onTap: () => model.navigateTo(view: const GuestView(isGuest: true,)),),
+                  CloseView(onTap: () async => model.navigateTo(view: const GuestView()),),
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 20),
                     decoration: BoxDecoration(
@@ -74,7 +74,8 @@ class LoginView extends HookWidget {
               TextFormField(
                 controller: password,
                 obscureText: model.isObscure,
-                validator: model.validatePassword(value: password.text),
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: (value) => model.validatePassword(value: value),
                 decoration: InputDecoration(
                   hintText: 'Password',
                   hintStyle: const TextStyle(fontSize: 14),
@@ -122,7 +123,8 @@ class LoginView extends HookWidget {
                 )
               ).gestures(
                 onTap: userName.text.isNotEmpty && password.text.isNotEmpty ? () {
-                  model.clearAndNavigateTo(view: const GuestView(isGuest: false,));
+                  model.setToken(token: 'token');
+                  model.clearAndNavigateTo(view: const GuestView());
                 } : () {},
               ),
               verticalSpaceRegular,
