@@ -37,7 +37,7 @@ class CheckoutView extends HookWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Image.asset("assets/icons/checkout/visa.png", width: screenWidthPercentage(context, percentage: 1/5.5),),
+                    Image.asset("assets/icons/checkout/visa_method.png", width: screenWidthPercentage(context, percentage: 1/5.5),),
                     Image.asset("assets/icons/checkout/master_card.png", width: screenWidthPercentage(context, percentage: 1/5.5),),
                     Image.asset("assets/icons/checkout/paypal.png", width: screenWidthPercentage(context, percentage: 1/5.5),),
                     Image.asset("assets/icons/checkout/apple_pay.png", width: screenWidthPercentage(context, percentage: 1/5.5),),
