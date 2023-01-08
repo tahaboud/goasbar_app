@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
+import 'package:goasbar/ui/views/guest/guest_view.dart';
 import 'package:goasbar/ui/views/login/login_view.dart';
 import 'package:goasbar/ui/widgets/splash_clipper.dart';
 import 'package:goasbar/shared/colors.dart';
@@ -93,8 +94,12 @@ class SplashView extends StatelessWidget {
                       child: Text('Get Started', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
                     ),
                   ).gestures(
-                    onTap: () {
-                      model.navigateTo(view: const LoginView());
+                    onTap: () async {
+                      if (await model.checkToken()) {
+                        model.navigateTo(view: const GuestView());
+                      } else {
+                        model.navigateTo(view: const LoginView());
+                      }
                     },
                   )
                       .translate(offset: Offset(35, size.height - 30 - 50 ))
