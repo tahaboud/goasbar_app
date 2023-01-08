@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/app/app.router.dart';
+import 'package:goasbar/ui/setup_bottomsheet_ui.dart';
 import 'package:goasbar/ui/setup_dialogui.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -11,6 +12,7 @@ void main() async {
 
   setupLocator();
   setupDialogUi();
+  setupBottomSheetUi();
 
   runApp(
     EasyLocalization(
