@@ -71,8 +71,8 @@ class ConfirmBookingViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  validatePhoneNumber ({String? value}) {
-    _validationService.validatePhoneNumber(value);
+  String? validatePhoneNumber ({String? value}) {
+    return _validationService.validatePhoneNumber(value);
   }
 
   void showAvailableTimingsPicker({context}) {
