@@ -9,8 +9,8 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class ExperienceView extends HookWidget {
-  const ExperienceView({Key? key, this.isGuest}) : super(key: key);
-  final bool? isGuest;
+  const ExperienceView({Key? key, this.isUser}) : super(key: key);
+  final bool? isUser;
 
   @override
   Widget build(BuildContext context) {
@@ -34,17 +34,17 @@ class ExperienceView extends HookWidget {
                         border: Border.all(color: kMainDisabledGray),
                       ),
                       child: Row(
-                        children: isGuest! ? [
-                          Image.asset("assets/icons/person_login.png", color: kMainColor1),
-                          horizontalSpaceTiny,
-                          const Text('welcome ,Guest'),
-                        ] : [
+                        children: isUser! ? [
                           Image.asset("assets/images/user.png",),
                           horizontalSpaceTiny,
                           const Text('Hi , Oussama !'),
+                        ] : [
+                          Image.asset("assets/icons/person_login.png", color: kMainColor1),
+                          horizontalSpaceTiny,
+                          const Text('welcome ,Guest'),
                         ],
                       ),
-                    ).gestures(onTap: isGuest! ? () => model.back() : () {},),
+                    ).gestures(onTap: isUser! ? () {} : () => model.back(),),
                     const Spacer(),
                     Container(
                       width: 45,
