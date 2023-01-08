@@ -4,19 +4,20 @@ import 'package:goasbar/ui/views/must_login_first/must_login_first_view.dart';
 import 'package:goasbar/ui/views/navbar/experience/experience_view.dart';
 import 'package:goasbar/ui/views/navbar/saved_experiences/saved_experiences_view.dart';
 import 'package:goasbar/ui/views/navbar/search/search_view.dart';
+import 'package:goasbar/ui/views/navbar/settings/settings_view.dart';
 import 'package:goasbar/ui/views/navbar/trips/trips_view.dart';
 import 'package:stacked/stacked.dart';
 import 'package:animations/animations.dart';
+import 'package:goasbar/ui/widgets/loader.dart';
 
 class GuestView extends StatelessWidget {
-  const GuestView({Key? key, this.isGuest}) : super(key: key);
-  final bool? isGuest;
+  const GuestView({Key? key,}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<GuestViewModel>.reactive(
       builder: (context, model, child) => Scaffold(
-        body: PageTransitionSwitcher(
+        body: model.isBusy ? const Loader() : PageTransitionSwitcher(
           duration: const Duration(milliseconds: 300),
           reverse: model.reverse,
           transitionBuilder: (
@@ -31,7 +32,7 @@ class GuestView extends StatelessWidget {
               child: child,
             );
           },
-          child: getViewForIndex(model.currentIndex),
+          child: getViewForIndex(index: model.currentIndex, isUser: model.isTokenExist),
         ),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
@@ -63,21 +64,22 @@ class GuestView extends StatelessWidget {
         ),
       ),
       viewModelBuilder: () => GuestViewModel(),
+      onModelReady: (model) => model.checkToken(),
     );
   }
 
-  Widget getViewForIndex(int index) {
+  Widget getViewForIndex({int? index, bool? isUser}) {
     switch (index) {
       case 0:
-        return ExperienceView(isGuest: isGuest);
+        return ExperienceView(isUser: isUser);
       case 1:
         return const SearchView();
       case 2:
-        return isGuest! ? const MustLoginFirstView(text: 'Trips',) : const TripsView(text: "Trips",);
+        return isUser! ? const TripsView(text: "Trips",) : const MustLoginFirstView(text: 'Trips',);
       case 3:
-        return isGuest! ? const MustLoginFirstView(text: 'Saved Experiences',) : const SavedExperiencesView(text: 'Saved Experiences',);
+        return isUser! ? const SavedExperiencesView(text: 'Saved Experiences',) : const MustLoginFirstView(text: 'Saved Experiences',);
       case 4:
-        return Container();
+        return SettingsView(isUser: isUser);
       default:
         return Container();
     }
