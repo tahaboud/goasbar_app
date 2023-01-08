@@ -12,6 +12,8 @@ import 'package:stacked_services/src/dialog/dialog_service.dart';
 import 'package:stacked_services/src/navigation/navigation_service.dart';
 import 'package:stacked_services/src/snackbar/snackbar_service.dart';
 
+import '../services/media_service.dart';
+import '../services/token_service.dart';
 import '../services/validation_service.dart';
 
 final locator = StackedLocator.instance;
@@ -28,4 +30,6 @@ Future<void> setupLocator(
   locator.registerLazySingleton(() => BottomSheetService());
   locator.registerLazySingleton(() => NavigationService());
   locator.registerLazySingleton(() => ValidationService());
+  locator.registerLazySingleton(() => MediaService());
+  locator.registerLazySingleton(() => TokenService());
 }
