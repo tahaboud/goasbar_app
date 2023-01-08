@@ -224,8 +224,9 @@ class ConfirmBookingView extends HookWidget {
                       verticalSpaceMedium,
                       TextFormField(
                         controller: phone,
-                        validator: model.validatePhoneNumber(value: phone.text),
+                        validator: (value) => model.validatePhoneNumber(value: value),
                         keyboardType: TextInputType.number,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
                         decoration: InputDecoration(
                           hintText: 'xx x - xx x - xx x',
                           hintStyle: const TextStyle(fontSize: 14),
