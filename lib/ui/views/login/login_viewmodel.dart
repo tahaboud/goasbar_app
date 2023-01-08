@@ -1,5 +1,6 @@
 import 'package:flutter/animation.dart';
 import 'package:goasbar/app/app.locator.dart';
+import 'package:goasbar/services/token_service.dart';
 import 'package:goasbar/services/validation_service.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -8,6 +9,7 @@ class LoginViewModel extends BaseViewModel {
   bool isObscure = true;
   final _navigationService = locator<NavigationService>();
   final _validationService = locator<ValidationService>();
+  final _tokenService = locator<TokenService>();
 
   void changeObscure() {
     isObscure = !isObscure;
@@ -23,7 +25,11 @@ class LoginViewModel extends BaseViewModel {
   }
 
 
-  validatePassword ({String? value}) {
-    _validationService.passwordValidation(value);
+  String? validatePassword ({String? value}) {
+    return _validationService.passwordValidation(value);
+  }
+
+  setToken ({token}) {
+    _tokenService.setTokenValue(token);
   }
 }
