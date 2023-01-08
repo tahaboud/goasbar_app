@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/enum/dialog_type.dart';
+import 'package:goasbar/services/token_service.dart';
 import 'package:goasbar/services/validation_service.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -13,6 +14,7 @@ class CompleteProfileViewModel extends BaseViewModel {
   final _navigationService = locator<NavigationService>();
   final _dialogService = locator<DialogService>();
   final _validationService = locator<ValidationService>();
+  final _tokenService = locator<TokenService>();
 
   void changeObscure() {
     isObscure = !isObscure;
@@ -27,8 +29,8 @@ class CompleteProfileViewModel extends BaseViewModel {
     _navigationService.clearStackAndShowView(view,);
   }
 
-  validateEmail ({String? value}) {
-    _validationService.validateEmail(value);
+  String? validateEmail ({String? value}) {
+    return _validationService.validateEmail(value);
   }
 
   void showSelectionDialog({gen}) async {
@@ -54,5 +56,9 @@ class CompleteProfileViewModel extends BaseViewModel {
 
     birthDate.text = formatted;
     notifyListeners();
+  }
+
+  setToken ({token}) {
+    _tokenService.setTokenValue(token);
   }
 }
