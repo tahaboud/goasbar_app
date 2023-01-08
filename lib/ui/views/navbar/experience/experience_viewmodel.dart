@@ -6,6 +6,7 @@ import 'package:stacked_services/stacked_services.dart';
 class ExperienceViewModel extends BaseViewModel {
   int index = 1;
   final _navigationService = locator<NavigationService>();
+  bool? isTokenExist;
 
   void selectCategory({ind}) {
     index = ind;
