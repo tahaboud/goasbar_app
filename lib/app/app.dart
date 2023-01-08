@@ -1,7 +1,9 @@
+import 'package:goasbar/services/media_service.dart';
 import 'package:goasbar/ui/views/home/home_view.dart';
 import 'package:goasbar/ui/views/login/login_view.dart';
 import 'package:goasbar/ui/views/splash/splash_view.dart';
 import 'package:goasbar/services/validation_service.dart';
+import 'package:goasbar/services/token_service.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -12,6 +14,8 @@ import 'package:stacked_services/stacked_services.dart';
     LazySingleton(classType: BottomSheetService),
     LazySingleton(classType: NavigationService),
     LazySingleton(classType: ValidationService),
+    LazySingleton(classType: MediaService),
+    LazySingleton(classType: TokenService),
   ],
   routes: [
     MaterialRoute(
