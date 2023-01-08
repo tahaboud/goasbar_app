@@ -112,8 +112,9 @@ class CompleteProfileView extends HookWidget {
                   verticalSpaceMedium,
                   TextFormField(
                     controller: email,
-                    validator: model.validateEmail(value: email.text),
+                    validator: (value) => model.validateEmail(value: value),
                     keyboardType: TextInputType.emailAddress,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: InputDecoration(
                       hintText: 'anas.yahya42@gmail.com',
                       hintStyle: const TextStyle(fontSize: 14),
@@ -138,8 +139,9 @@ class CompleteProfileView extends HookWidget {
                     ),
                     child: const Text('Go To Home Page', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
                   ).gestures(
-                    onTap: name.text.isNotEmpty && email.text.isNotEmpty && model.birthDate.text.isNotEmpty && model.gender.text.isNotEmpty ? () {
-                      model.clearAndNavigateTo(view: const GuestView(isGuest: false,));
+                    onTap: name.text.isNotEmpty && email.text.isNotEmpty && model.birthDate.text.isNotEmpty && model.gender.text.isNotEmpty ? () async {
+                      model.setToken(token: "token");
+                      model.clearAndNavigateTo(view: const GuestView());
                     } : () {},
                   ),
                 ],
