@@ -1,0 +1,4 @@
+enum IncDecrease {
+  increase,
+  decrease,
+}
