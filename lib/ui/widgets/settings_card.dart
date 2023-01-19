@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/widgets/settings_card_item.dart';
+import 'package:styled_widget/styled_widget.dart';
 
 class SettingsCard extends StatelessWidget {
   const SettingsCard({
@@ -13,6 +14,8 @@ class SettingsCard extends StatelessWidget {
     this.item2Title,
     this.onTapParameter,
     this.onTapPaymentParameter,
+    this.onItem1Tap,
+    this.onItem2Tap,
     this.isUser,
   }) : super(key: key);
   final String? item1Image;
@@ -22,6 +25,8 @@ class SettingsCard extends StatelessWidget {
   final String? item2Title;
   final String? item2Parameter;
   final Function()? onTapParameter;
+  final Function()? onItem1Tap;
+  final Function()? onItem2Tap;
   final Function()? onTapPaymentParameter;
   final bool? isUser;
 
@@ -45,9 +50,9 @@ class SettingsCard extends StatelessWidget {
         children: [
           isUser! ? SettingsCardItem(image: "wallet", title: "Add payment method", parameter: "Add more", onTapParameter: onTapPaymentParameter,) : Container(),
           isUser! ? verticalSpaceRegular : Container(),
-          SettingsCardItem(image: item1Image, title: item1Title, parameter: item1Parameter, onTapParameter: onTapParameter),
+          SettingsCardItem(image: item1Image, title: item1Title, parameter: item1Parameter, onTapParameter: onTapParameter).gestures(onTap: onItem1Tap),
           verticalSpaceRegular,
-          SettingsCardItem(image: item2Image, title: item2Title, parameter: item2Parameter),
+          SettingsCardItem(image: item2Image, title: item2Title, parameter: item2Parameter).gestures(onTap: onItem2Tap),
         ],
       ),
     );
