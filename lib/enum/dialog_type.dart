@@ -4,4 +4,7 @@ enum DialogType {
   availablePlaces,
   typeOfIdentity,
   error,
+  bookingList,
+  profile,
+  genderConstraints,
 }
