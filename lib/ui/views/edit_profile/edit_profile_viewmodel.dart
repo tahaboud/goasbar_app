@@ -43,7 +43,7 @@ class EditProfileViewModel extends BaseViewModel {
   void showSelectionDialog({gen}) async {
     var response = await _dialogService.showCustomDialog(
       variant: DialogType.selection,
-      data: gen,
+      data: gender.text.isNotEmpty ? gender.text : gen,
     );
 
     gender.text = response!.data;
