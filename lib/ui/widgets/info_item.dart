@@ -55,7 +55,7 @@ class InfoItem extends StatelessWidget {
                 CardNumberInputFormatter()
               ] : [],
               controller: controller,
-              keyboardType: label == "Identity number" || label == "Card Number" || label == "Expiry Date" || label == "CVV" ? TextInputType.number : TextInputType.text,
+              keyboardType: label == "Identity number" || label == "Duration (hours)" || label == "Card Number" || label == "Expiry Date" || label == "CVV" || label == "Minimum Age" ? TextInputType.number : TextInputType.text,
               decoration: InputDecoration(
                 hintText: hintText!,
                 hintStyle: const TextStyle(fontSize: 14),
