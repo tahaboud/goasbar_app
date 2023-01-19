@@ -4,7 +4,13 @@ import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/edit_profile/edit_profile_view.dart';
 import 'package:goasbar/ui/views/login/login_view.dart';
 import 'package:goasbar/ui/views/navbar/settings/settings_viewmodel.dart';
-import 'package:goasbar/ui/views/settings/payment_method/payment_method_view.dart';
+import 'package:goasbar/ui/views/settings_pages/language/language_view.dart';
+import 'package:goasbar/ui/views/settings_pages/notification_settings/notification_settings_view.dart';
+import 'package:goasbar/ui/views/settings_pages/payment_method/payment_method_view.dart';
+import 'package:goasbar/ui/views/settings_pages/post_experience/post_experience_view.dart';
+import 'package:goasbar/ui/views/settings_pages/privacy/privacy_view.dart';
+import 'package:goasbar/ui/views/settings_pages/security/security_view.dart';
+import 'package:goasbar/ui/views/settings_pages/support/support_view.dart';
 import 'package:goasbar/ui/widgets/settings_card.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -75,13 +81,15 @@ class SettingsView extends HookWidget {
                 child: Text(isUser! ? "Edit Your Profile" : "Get Your Information", style: TextStyle(color: isUser! ? kMainColor1 : Colors.black),).center(),
               ).gestures(onTap: isUser! ? () => model.navigateTo(view: const EditProfileView()) : () => model.navigateTo(view: const LoginView()),),
               verticalSpaceRegular,
-              const SettingsCard(
+              SettingsCard(
                 item1Image: 'notification',
                 item1Title: 'Notifications',
                 item1Parameter: "ON",
                 item2Image: 'lang',
                 item2Title: 'Language',
                 item2Parameter: "English",
+                onItem1Tap: () => model.navigateTo(view: const NotificationSettingsView()),
+                onItem2Tap: () => model.navigateTo(view: const LanguageView()),
                 isUser: false,
               ),
               verticalSpaceRegular,
@@ -93,6 +101,8 @@ class SettingsView extends HookWidget {
                 item2Image: 'security',
                 item2Title: 'Security',
                 item2Parameter: "",
+                onItem1Tap: () => model.navigateTo(view: const PostExperienceView()),
+                onItem2Tap: () => model.navigateTo(view: const SecurityView()),
                 isUser: false,
               ),
               verticalSpaceRegular,
@@ -104,6 +114,8 @@ class SettingsView extends HookWidget {
                 item2Image: 'privacy',
                 item2Title: 'Privacy policy',
                 item2Parameter: "",
+                onItem1Tap: () => model.navigateTo(view: const SupportView()),
+                onItem2Tap: () => model.navigateTo(view: const PrivacyView()),
                 isUser: isUser!,
               ),
               verticalSpaceLarge,
