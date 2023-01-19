@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
-import 'package:goasbar/ui/views/settings/add_payment_method/add_payment_method_view.dart';
-import 'package:goasbar/ui/views/settings/payment_method/payment_method_viewmodel.dart';
 import 'package:goasbar/shared/colors.dart';
+import 'package:goasbar/ui/views/add_payment_method/add_payment_method_view.dart';
+import 'package:goasbar/ui/views/settings_pages/payment_method/payment_method_viewmodel.dart';
 import 'package:goasbar/ui/widgets/payment_method_card.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
