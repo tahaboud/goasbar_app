@@ -24,21 +24,21 @@ class TypeOfIdentityDialog extends HookWidget {
         children: [
           Container(
             height: 40,
-            color : dialogRequest!.data == 'Passport' ? kMainDisabledGray : Colors.white,
-            child: const Text('Passport')
+            color : dialogRequest!.data == 'IDENTITY' ? kMainDisabledGray : Colors.white,
+            child: const Text('IDENTITY')
                 .center(),
           ).gestures(onTap: () {
-            onDialogTap!(DialogResponse(data: 'Passport',));
+            onDialogTap!(DialogResponse(data: 'IDENTITY',));
           }),
           const Divider(height: 1, thickness: 2),
           // verticalSpaceRegular,
           Container(
             height: 40,
-            color : dialogRequest!.data == 'National Card ID' ? kMainDisabledGray : Colors.white,
-            child: const Text('National Card ID')
+            color : dialogRequest!.data == 'REGISTRATION' ? kMainDisabledGray : Colors.white,
+            child: const Text('REGISTRATION')
                 .center(),
           ).gestures(onTap: () {
-            onDialogTap!(DialogResponse(data: 'National Card ID',));
+            onDialogTap!(DialogResponse(data: 'REGISTRATION',));
           }),
         ],
       ),
