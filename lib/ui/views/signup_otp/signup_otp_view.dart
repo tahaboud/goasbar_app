@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
-import 'package:goasbar/ui/views/complete_profile/complete_profile_view.dart';
+import 'package:goasbar/ui/views/home/home_view.dart';
 import 'package:goasbar/ui/views/signup_otp/signup_otp_viewmodel.dart';
+import 'package:motion_toast/motion_toast.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:pinput/pinput.dart';
+import 'package:goasbar/enum/status_code.dart';
 
 class SignUpOtpView extends HookWidget {
-  const SignUpOtpView({Key? key, this.phone}) : super(key: key);
+  const SignUpOtpView({Key? key, this.phone, this.body}) : super(key: key);
   final String? phone;
+  final Map? body;
 
   @override
   Widget build(BuildContext context) {
@@ -56,16 +59,32 @@ class SignUpOtpView extends HookWidget {
                 const Spacer(),
                 Pinput(
                   controller: codeController,
-                  length: 4,
+                  length: 5,
                   defaultPinTheme: defaultPinTheme,
                   onCompleted: (code) {
-                    if (codeController.text.length == 4) {
-                      model.navigateTo(view: const CompleteProfileView());
-                    }
-                  },
-                  onSubmitted: (code) {
-                    if (codeController.text.length == 4) {
-                      model.navigateTo(view: const CompleteProfileView());
+                    if (codeController.text.length == 5) {
+                      body!["phone_number"] = "+966$phone";
+                      body!["verification_code"] = code;
+
+                      model.register(body: body,).then((value) {
+                        if (value == StatusCode.throttled) {
+                          MotionToast.error(
+                            title: const Text("Register Failed"),
+                            description: const Text("Request was throttled."),
+                            animationCurve: Curves.easeIn,
+                            animationDuration: const Duration(milliseconds: 200),
+                          ).show(context);
+                        } else if (value == StatusCode.other){
+                          MotionToast.warning(
+                            title: const Text("Register Failed"),
+                            description: const Text("An error has occurred, please try again"),
+                            animationCurve: Curves.easeIn,
+                            animationDuration: const Duration(milliseconds: 200),
+                          ).show(context);
+                        } else {
+                          model.navigateTo(view: const HomeView());
+                        }
+                      });
                     }
                   },
                 ),
