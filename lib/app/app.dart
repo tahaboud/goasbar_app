@@ -1,9 +1,12 @@
+import 'package:goasbar/services/experience_api_service.dart';
 import 'package:goasbar/services/media_service.dart';
 import 'package:goasbar/ui/views/home/home_view.dart';
 import 'package:goasbar/ui/views/login/login_view.dart';
 import 'package:goasbar/ui/views/splash/splash_view.dart';
 import 'package:goasbar/services/validation_service.dart';
 import 'package:goasbar/services/token_service.dart';
+import 'package:goasbar/services/auth_service.dart';
+import 'package:goasbar/services/provider_api_service.dart';
 import 'package:goasbar/services/url_service.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -18,6 +21,9 @@ import 'package:stacked_services/stacked_services.dart';
     LazySingleton(classType: MediaService),
     LazySingleton(classType: TokenService),
     LazySingleton(classType: UrlService),
+    LazySingleton(classType: AuthService),
+    LazySingleton(classType: ProviderApiService),
+    LazySingleton(classType: ExperienceApiService),
   ],
   routes: [
     MaterialRoute(
