@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
+import 'package:goasbar/ui/views/complete_profile/complete_profile_view.dart';
 import 'package:goasbar/ui/views/login/login_view.dart';
 import 'package:goasbar/ui/views/must_login_first/must_login_first_viewmodel.dart';
 import 'package:goasbar/ui/views/signup/signup_view.dart';
@@ -64,7 +65,7 @@ class MustLoginFirstView extends HookWidget {
                     ),
                   ).gestures(
                     onTap: () {
-                      model.navigateTo(view: const SignUpView());
+                      model.navigateTo(view: const CompleteProfileView());
                     },
                   ),
                 ],
