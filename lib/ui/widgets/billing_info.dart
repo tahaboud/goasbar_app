@@ -1,6 +1,7 @@
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/ui/widgets/dot_item.dart';
 import 'package:goasbar/ui/widgets/info_item.dart';
+import 'package:motion_toast/motion_toast.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
@@ -11,7 +12,7 @@ class BillingInfo extends StatelessWidget {
     required this.twitter,
     required this.instagram,
     required this.facebook,
-    required this.bankEbay,
+    required this.bankName,
     required this.bankAccountNumber,
     required this.iban,
     this.onTapBack,
@@ -22,12 +23,12 @@ class BillingInfo extends StatelessWidget {
   final TextEditingController twitter;
   final TextEditingController instagram;
   final TextEditingController facebook;
-  final TextEditingController bankEbay;
+  final TextEditingController bankName;
   final TextEditingController bankAccountNumber;
   final TextEditingController iban;
   final Function()? onTapBack;
   final Function? showErrorDialog;
-  final Function? onTapSubmit;
+  final Function()? onTapSubmit;
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +95,7 @@ class BillingInfo extends StatelessWidget {
           const Text('Bank information', style: TextStyle(fontWeight: FontWeight.bold),),
           verticalSpaceSmall,
           InfoItem(
-            controller: bankEbay,
+            controller: bankName,
             label: 'Bank name',
             hintText: 'Eastybay',
           ),
@@ -108,7 +109,7 @@ class BillingInfo extends StatelessWidget {
           InfoItem(
             controller: iban,
             label: 'IBAN',
-            hintText: '******* xxx - xxxx - xxxxx',
+            hintText: 'SA xxxx xxxx - xxxx - xxxxx',
           ),
           verticalSpaceMedium,
           Container(
@@ -123,8 +124,17 @@ class BillingInfo extends StatelessWidget {
             ),
           ).gestures(
             onTap: () {
-              if (twitter.text.isNotEmpty && instagram.text.isNotEmpty && facebook.text.isNotEmpty && bankEbay.text.isNotEmpty && bankAccountNumber.text.isNotEmpty && iban.text.isNotEmpty) {
-                onTapSubmit!();
+              if (bankName.text.isNotEmpty && bankAccountNumber.text.isNotEmpty && iban.text.isNotEmpty) {
+                if (iban.text.replaceAll(' ', '').length != 23) {
+                  MotionToast.warning(
+                    title: const Text("Incorrect IBAN Format"),
+                    description: const Text("IBAN must be 23 digits length."),
+                    animationCurve: Curves.easeIn,
+                    animationDuration: const Duration(milliseconds: 200),
+                  ).show(context);
+                } else {
+                  onTapSubmit!();
+                }
               } else {
                 showErrorDialog!();
               }
