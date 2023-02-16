@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
+import 'package:goasbar/ui/views/complete_profile/complete_profile_view.dart';
 import 'package:goasbar/ui/views/reset_password/reset_password_viewmodel.dart';
-import 'package:goasbar/ui/views/signup/signup_view.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -157,7 +157,7 @@ class ResetPasswordView extends HookWidget {
                     )
                 ).gestures(
                   onTap: password.text.isNotEmpty && rePassword.text.isNotEmpty ? () {
-                    model.navigateTo(view: const SignUpView());
+                    model.navigateTo(view: const CompleteProfileView());
                   } : () {},
                 ),
               ],
