@@ -3,13 +3,16 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/app/app.locator.dart';
+import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/enum/dialog_type.dart';
+import 'package:goasbar/services/auth_service.dart';
 import 'package:goasbar/services/media_service.dart';
+import 'package:goasbar/services/token_service.dart';
 import 'package:goasbar/services/validation_service.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
-class EditProfileViewModel extends BaseViewModel {
+class EditProfileViewModel extends FutureViewModel<dynamic> {
   bool isObscure = true;
   TextEditingController gender = TextEditingController();
   TextEditingController birthDate = TextEditingController();
@@ -17,7 +20,10 @@ class EditProfileViewModel extends BaseViewModel {
   final _dialogService = locator<DialogService>();
   final _validationService = locator<ValidationService>();
   final _mediaService = locator<MediaService>();
+  final _authService = locator<AuthService>();
+  final _tokenService = locator<TokenService>();
   File? file;
+  UserModel? user;
 
   void changeObscure() {
     isObscure = !isObscure;
@@ -72,9 +78,34 @@ class EditProfileViewModel extends BaseViewModel {
     }
   }
 
-  showErrorDialog() {
-    _dialogService.showCustomDialog(
-      variant: DialogType.error,
-    );
+  Future<dynamic> getUserData() async {
+    String token = await _tokenService.getTokenValue();
+    return _authService.getUserData(token: token).then((value) {
+      if (value != null) {
+        user = value;
+        notifyListeners();
+        return user;
+      } else {
+        return null;
+      }
+    });
+  }
+
+  Future<dynamic> updateUserData({Map<String, dynamic>? body}) async {
+    String token = await _tokenService.getTokenValue();
+    return _authService.updateUserData(token: token, body: body,).then((value) {
+      if (value != null) {
+        user = value;
+        notifyListeners();
+        return user;
+      } else {
+        return null;
+      }
+    });
+  }
+
+  @override
+  Future futureToRun() {
+    return getUserData();
   }
 }
