@@ -157,10 +157,9 @@ class GeneralInfo extends StatelessWidget {
                   child: TextFormField(
                     validator: validatePhone,
                     controller: phone,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
-                      hintText: '+213699414965',
+                      hintText: '+966xxxxxxxxx',
                       hintStyle: TextStyle(fontSize: 14),
                       fillColor: kTextFiledMainColor,
                       filled: true,
@@ -189,7 +188,7 @@ class GeneralInfo extends StatelessWidget {
             ),
           ).gestures(
             onTap: () {
-              if (name.text.isNotEmpty && bio.text.isNotEmpty && email.text.isNotEmpty && website.text.isNotEmpty && phone.text.isNotEmpty) {
+              if (name.text.isNotEmpty && bio.text.isNotEmpty && email.text.isNotEmpty && phone.text.isNotEmpty) {
                 pageController.jumpToPage(1);
               } else {
                 showErrorDialog!();
