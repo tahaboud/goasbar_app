@@ -44,7 +44,7 @@ class ErrorDialog extends HookWidget {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 8.0),
                     child: Text(
-                      'You got errors',
+                      'All mandatory fields must not be empty',
                       softWrap: true,
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -78,6 +78,6 @@ class ErrorDialog extends HookWidget {
           ),
         ),
       ),
-    ).height(220);
+    ).height(235);
   }
 }
