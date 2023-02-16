@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/enum/dialog_type.dart';
-import 'package:goasbar/services/token_service.dart';
 import 'package:goasbar/services/validation_service.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -14,7 +13,7 @@ class CompleteProfileViewModel extends BaseViewModel {
   final _navigationService = locator<NavigationService>();
   final _dialogService = locator<DialogService>();
   final _validationService = locator<ValidationService>();
-  final _tokenService = locator<TokenService>();
+  String? city = "RIYADH";
 
   void changeObscure() {
     isObscure = !isObscure;
@@ -31,6 +30,19 @@ class CompleteProfileViewModel extends BaseViewModel {
 
   String? validateEmail ({String? value}) {
     return _validationService.validateEmail(value);
+  }
+
+  String? validatePassword ({String? value}) {
+    return _validationService.passwordValidation(value);
+  }
+
+  String? validateRePassword ({String? password, String? rePassword}) {
+    return _validationService.rePasswordValidation(password: password, rePassword: rePassword);
+  }
+
+  updateCity({String? value}) {
+    city = value;
+    notifyListeners();
   }
 
   void showSelectionDialog({gen}) async {
@@ -51,14 +63,10 @@ class CompleteProfileViewModel extends BaseViewModel {
       lastDate: DateTime.now(),
     );
 
-    final DateFormat formatter = DateFormat('dd . MM yyyy');
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String formatted = formatter.format(picked!);
 
     birthDate.text = formatted;
     notifyListeners();
-  }
-
-  setToken ({token}) {
-    _tokenService.setTokenValue(token);
   }
 }
