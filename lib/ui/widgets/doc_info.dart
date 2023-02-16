@@ -1,6 +1,7 @@
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/ui/widgets/dot_item.dart';
 import 'package:goasbar/ui/widgets/info_item.dart';
+import 'package:motion_toast/motion_toast.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
@@ -164,8 +165,17 @@ class DocInfo extends StatelessWidget {
             ),
           ).gestures(
             onTap: () {
-              if (typeOfIdentity!.text.isNotEmpty && identityNumber.text.isNotEmpty && !condition!) {
-                pageController.jumpToPage(2);
+              if (typeOfIdentity!.text.isNotEmpty && identityNumber.text.isNotEmpty) {
+                if (identityNumber.text.length != 10) {
+                  MotionToast.warning(
+                    title: const Text("Incorrect Identity Number"),
+                    description: const Text("identity number must be 10 digits length"),
+                    animationCurve: Curves.easeIn,
+                    animationDuration: const Duration(milliseconds: 200),
+                  ).show(context);
+                } else {
+                  pageController.jumpToPage(2);
+                }
               } else {
                 showErrorDialog!();
               }
