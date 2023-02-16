@@ -3,6 +3,7 @@ import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/forget_password/forget_password_viewmodel.dart';
 import 'package:goasbar/ui/views/reset_password/reset_password_view.dart';
+import 'package:motion_toast/motion_toast.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -13,7 +14,7 @@ class ForgetPasswordView extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userName = useTextEditingController();
+    final phoneNumber = useTextEditingController();
 
     return ViewModelBuilder<ForgetPasswordViewModel>.reactive(
       builder: (context, model, child) => Scaffold(
@@ -59,12 +60,16 @@ class ForgetPasswordView extends HookWidget {
                   ],
                 ),
                 verticalSpaceMedium,
-                TextField(
-                  controller: userName,
+                TextFormField(
+                  controller: phoneNumber,
+                  validator: (value) => model.validatePhoneNumber(value: value),
+                  keyboardType: TextInputType.number,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: InputDecoration(
-                    hintText: 'User name or email',
+                    hintText: 'xx x - xx x - xx x',
                     hintStyle: const TextStyle(fontSize: 14),
-                    prefixIcon: const Icon(Icons.alternate_email_outlined, size: 16, ),
+                    // prefixText: 'Saudi Arabia ( +966 ) | ',
+                    prefixIcon: const Text(' ( +966 )  |', style: TextStyle(color: kMainGray, fontSize: 14),).padding(vertical: 20, horizontal: 10),
                     fillColor: kTextFiledGrayColor,
                     filled: true,
                     border: OutlineInputBorder(
@@ -81,7 +86,7 @@ class ForgetPasswordView extends HookWidget {
                     height: 50,
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
-                      gradient: userName.text.isNotEmpty ? kMainGradient : kMainDisabledGradient,
+                      gradient: phoneNumber.text.isNotEmpty ? kMainGradient : kMainDisabledGradient,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -96,8 +101,25 @@ class ForgetPasswordView extends HookWidget {
                       ],
                     )
                 ).gestures(
-                  onTap: userName.text.isNotEmpty ? () {
-                    model.navigateTo(view: const ResetPasswordView());
+                  onTap: phoneNumber.text.isNotEmpty ? () {
+                    model.forgetPassword(phoneNumber: "+966${phoneNumber.text}").then((value) {
+                      if (value!) {
+                        MotionToast.success(
+                          title: const Text("Request Password Success"),
+                          description: const Text("Request was sent."),
+                          animationCurve: Curves.easeIn,
+                          animationDuration: const Duration(milliseconds: 200),
+                        ).show(context);
+                        model.navigateTo(view: const ResetPasswordView());
+                      } else {
+                        MotionToast.error(
+                          title: const Text("Request Password Failed"),
+                          description: const Text("Request was cancelled, please try again"),
+                          animationCurve: Curves.easeIn,
+                          animationDuration: const Duration(milliseconds: 200),
+                        ).show(context);
+                      }
+                    });
                   } : () {},
                 ),
               ],
