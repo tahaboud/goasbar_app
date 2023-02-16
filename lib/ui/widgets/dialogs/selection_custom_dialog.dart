@@ -24,21 +24,21 @@ class SelectionCustomDialog extends HookWidget {
         children: [
           Container(
             height: 40,
-            color : dialogRequest!.data == 'Male' ? kMainDisabledGray : Colors.white,
-            child: const Text('Male')
+            color : dialogRequest!.data == "Male" ? kMainDisabledGray : Colors.white,
+            child: const Text("Male")
                 .center(),
           ).gestures(onTap: () {
-            onDialogTap!(DialogResponse(data: 'Male',));
+            onDialogTap!(DialogResponse(data: "Male",));
           }),
           const Divider(height: 1, thickness: 2),
           // verticalSpaceRegular,
           Container(
             height: 40,
-            color : dialogRequest!.data == 'Female' ? kMainDisabledGray : Colors.white,
-            child: const Text('Female')
+            color : dialogRequest!.data == "Female" ? kMainDisabledGray : Colors.white,
+            child: const Text("Female")
                 .center(),
           ).gestures(onTap: () {
-            onDialogTap!(DialogResponse(data: 'Female',));
+            onDialogTap!(DialogResponse(data: "Female",));
           }),
         ],
       ),
