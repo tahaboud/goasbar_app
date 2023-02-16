@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
+import 'package:goasbar/ui/views/complete_profile/complete_profile_view.dart';
 import 'package:goasbar/ui/views/faqs/faqs_view.dart';
 import 'package:goasbar/ui/views/forget_password/forget_password_view.dart';
-import 'package:goasbar/ui/views/guest/guest_view.dart';
+import 'package:goasbar/ui/views/home/home_view.dart';
 import 'package:goasbar/ui/views/login/login_viewmodel.dart';
 import 'package:goasbar/ui/views/signup/signup_view.dart';
 import 'package:goasbar/ui/widgets/close_view.dart';
+import 'package:motion_toast/motion_toast.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -29,7 +31,7 @@ class LoginView extends HookWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CloseView(onTap: () async => model.navigateTo(view: const GuestView()),),
+                  CloseView(onTap: () async => model.navigateTo(view: const HomeView()),),
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 20),
                     decoration: BoxDecoration(
@@ -123,8 +125,21 @@ class LoginView extends HookWidget {
                 )
               ).gestures(
                 onTap: userName.text.isNotEmpty && password.text.isNotEmpty ? () {
-                  model.setToken(token: 'token');
-                  model.clearAndNavigateTo(view: const GuestView());
+                  model.login(body: {
+                    "email": userName.text,
+                    "password": password.text,
+                  }).then((value) {
+                    if (value) {
+                      model.clearAndNavigateTo(view: const HomeView());
+                    } else {
+                      MotionToast.warning(
+                        title: const Text("Login Failed"),
+                        description: const Text("An error has occurred, please try again"),
+                        animationCurve: Curves.easeIn,
+                        animationDuration: const Duration(milliseconds: 200),
+                      ).show(context);
+                    }
+                  });
                 } : () {},
               ),
               verticalSpaceRegular,
@@ -156,7 +171,7 @@ class LoginView extends HookWidget {
                   )
               ).gestures(
                 onTap: () {
-                  model.navigateTo(view: const SignUpView());
+                  model.navigateTo(view: const CompleteProfileView());
                 },
               ),
             ],
