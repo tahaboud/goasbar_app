@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/faqs/faqs_view.dart';
+import 'package:goasbar/ui/views/login/login_view.dart';
 import 'package:goasbar/ui/views/signup/signup_viewmodel.dart';
 import 'package:goasbar/ui/views/signup_otp/signup_otp_view.dart';
+import 'package:motion_toast/motion_toast.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class SignUpView extends HookWidget {
-  const SignUpView({Key? key}) : super(key: key);
+  const SignUpView({Key? key, this.body}) : super(key: key);
+  final Map? body;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +49,7 @@ class SignUpView extends HookWidget {
                 ],
               ),
               verticalSpaceRegular,
-              Image.asset("assets/images/signup_img.png", height: 300),
+              Image.asset("assets/images/signup_img.png", height: 230),
               verticalSpaceRegular,
               const Text("New \nAccount ?", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 30),),
               verticalSpaceSmall,
@@ -96,7 +99,18 @@ class SignUpView extends HookWidget {
                 )
               ).gestures(
                 onTap: phone.text.isNotEmpty ? () {
-                  model.navigateTo(view: SignUpOtpView(phone: phone.text,));
+                  model.verifyPhoneNumber(phoneNumber: "+966${phone.text}").then((value) {
+                    if (value) {
+                      model.navigateTo(view: SignUpOtpView(phone: phone.text, body: body,));
+                    } else {
+                      MotionToast.error(
+                        title: const Text("Verification Code Not Sent"),
+                        description: const Text("An error has occurred, please try again."),
+                        animationCurve: Curves.easeIn,
+                        animationDuration: const Duration(milliseconds: 200),
+                      ).show(context);
+                    }
+                  });
                 } : () {},
               ),
               verticalSpaceRegular,
@@ -120,7 +134,7 @@ class SignUpView extends HookWidget {
                       const Spacer(),
                       const Spacer(),
                       const Spacer(),
-                      const Text('Go Back To Sign In', style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500),),
+                      const Text('Go To Sign In', style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500),),
                       const Spacer(),
                       const Spacer(),
                       Image.asset("assets/icons/person_signup.png",).padding(horizontal: 15),
@@ -128,7 +142,7 @@ class SignUpView extends HookWidget {
                   )
               ).gestures(
                 onTap: () {
-                  model.back();
+                  model.navigateTo(view: const LoginView());
                 },
               ),
             ],
