@@ -1,5 +1,7 @@
 import 'package:flutter/animation.dart';
 import 'package:goasbar/app/app.locator.dart';
+import 'package:goasbar/data_models/auth_response.dart';
+import 'package:goasbar/services/auth_service.dart';
 import 'package:goasbar/services/token_service.dart';
 import 'package:goasbar/services/validation_service.dart';
 import 'package:stacked/stacked.dart';
@@ -10,6 +12,8 @@ class LoginViewModel extends BaseViewModel {
   final _navigationService = locator<NavigationService>();
   final _validationService = locator<ValidationService>();
   final _tokenService = locator<TokenService>();
+  final _authService = locator<AuthService>();
+  AuthResponse? authResponse;
 
   void changeObscure() {
     isObscure = !isObscure;
@@ -31,5 +35,18 @@ class LoginViewModel extends BaseViewModel {
 
   setToken ({token}) {
     _tokenService.setTokenValue(token);
+  }
+
+  Future<bool> login({Map? body}) async {
+    authResponse = await _authService.login(
+      body: body,
+    );
+    if (authResponse!.token != null) {
+      _tokenService.setTokenValue(authResponse!.token!);
+      notifyListeners();
+      return true;
+    } else {
+      return false;
+    }
   }
 }
