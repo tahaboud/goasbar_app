@@ -60,14 +60,14 @@ class InfoItem extends StatelessWidget {
                 IbanFormatter(),
               ] : [],
               controller: controller,
-              maxLength: label == "Identity number" ? 10 : null,
+              maxLength: label == "Identity number" ? 10 : label == "Minimum Age" ? 2 : null,
               keyboardType: label == "Identity number" || label == "IBAN" || label == "Duration (hours)" || label == "Card Number" || label == "Expiry Date" || label == "CVV" || label == "Minimum Age" ? TextInputType.number : TextInputType.text,
               decoration: InputDecoration(
                 hintText: hintText!,
                 hintStyle: const TextStyle(fontSize: 14),
                 fillColor: kTextFiledMainColor,
                 filled: true,
-                counterText: label == "Identity number" ? "" : null,
+                counterText: label == "Identity number" || label == 'Minimum Age' ? "" : null,
                 focusedBorder: const OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.transparent),
                 ),
