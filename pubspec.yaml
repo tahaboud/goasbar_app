@@ -25,6 +25,7 @@ dependencies:
   url_launcher: ^6.1.7
   motion_toast: ^2.6.5
   dio: ^5.0.0
+  maps_launcher: ^2.2.0
 
   # Media Service
   image_picker: ^0.8.6
