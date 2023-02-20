@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:goasbar/data_models/experience_response.dart';
 import 'package:goasbar/enum/incdecrease.dart';
+import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/checkout/checkout_view.dart';
 import 'package:goasbar/ui/views/confirm_booking/confirm_booking_viewmodel.dart';
 import 'package:goasbar/ui/widgets/incdecrease_button.dart';
+import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class ConfirmBookingView extends HookWidget {
-  const ConfirmBookingView({Key? key}) : super(key: key);
+  const ConfirmBookingView({Key? key, this.experience}) : super(key: key);
+  final ExperienceResults? experience;
 
   @override
   Widget build(BuildContext context) {
@@ -45,12 +49,17 @@ class ConfirmBookingView extends HookWidget {
                     Container(
                       width: 143,
                       height: 90,
-                      decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage("assets/images/image4.png"),
-                          )
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: experience!.profileImage != null
+                              ? NetworkImage("$baseUrl${experience!.profileImage}") as ImageProvider
+                              : const AssetImage("assets/images/image4.png"),
+                        ),
                       ),
                     ).center(),
+                    horizontalSpaceRegular,
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -58,16 +67,16 @@ class ConfirmBookingView extends HookWidget {
                           children: [
                             Image.asset("assets/icons/location.png"),
                             horizontalSpaceTiny,
-                            const Text("Dammam , 1 Hour", style: TextStyle(color: kMainGray, fontSize: 11))
+                            Text("${experience!.city!} , ${experience!.duration!} ${double.parse(experience!.duration!) >= 2 ? 'Hours' : 'Hour'}", style: const TextStyle(color: kMainGray, fontSize: 11))
                           ],
                         ),
                         verticalSpaceMedium,
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Icon(Icons.star, color: kStarColor, size: 18),
+                          children: [
+                            const Icon(Icons.star, color: kStarColor, size: 18),
                             horizontalSpaceTiny,
-                            Text('4.0', style: TextStyle(fontWeight: FontWeight.bold,)),
+                            Text(experience!.rate! == "0.00" ? "0.0" : experience!.rate!, style: const TextStyle(fontWeight: FontWeight.bold,)),
                           ],
                         ),
                       ],
@@ -92,50 +101,68 @@ class ConfirmBookingView extends HookWidget {
                     ).gestures(onTap: () => model.showAvailableTimingsPicker(context: context)),
                   ],
                 ),
-                verticalSpaceMedium,
-                SizedBox(
-                  height: 80,
-                  child: ListView(
+                // model.isBusy ? const SizedBox() : model.data!.count == 0 ? const SizedBox() : verticalSpaceMedium,
+                // model.isBusy ? const Loader().center() : model.data!.count == 0 ? const SizedBox() : SizedBox(
+                //   height: 80,
+                //   child: ListView.builder(
+                //     itemCount: model.data!.count,
+                //     itemBuilder: (context, index) {
+                //       return Container(
+                //         margin: const EdgeInsets.symmetric(horizontal: 10),
+                //         padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 15),
+                //         child: Column(
+                //           crossAxisAlignment: CrossAxisAlignment.center,
+                //           children: [
+                //             Text(model.formatDate(model.data!.results![index].date!), style: TextStyle(color: index == model.selectedIndexDate ? Colors.white : Colors.black)),
+                //             verticalSpaceSmall,
+                //             Text(model.data!.results![index].date!.substring(8, 10), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: index == model.selectedIndexDate ? Colors.white : Colors.black),)
+                //           ],
+                //         ),
+                //       ).decorated(borderRadius: BorderRadius.circular(10), color: index == model.selectedIndexDate ? kMainColor1 : Colors.transparent, animate: true)
+                //           .animate(const Duration(milliseconds: 300), Curves.easeIn)
+                //           .gestures(onTap: () {
+                //         model.changeSelectionDate(index: index);
+                //       });
+                //     },
+                //     physics: const BouncingScrollPhysics(),
+                //     shrinkWrap: true,
+                //     scrollDirection: Axis.horizontal,
+                //   ).alignment(Alignment.centerLeft),
+                // ),
+                model.isBusy ? const SizedBox() : model.data!.count == 0 ? const SizedBox() : verticalSpaceMedium,
+                model.isBusy ? const Loader().center() : model.data!.count == 0 ? const SizedBox() : SizedBox(
+                  height: 82,
+                  child: ListView.builder(
+                    itemCount: model.data!.count,
                     physics: const BouncingScrollPhysics(),
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
-                    children: List.generate(10, (index) => Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 10),
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text("TH", style: TextStyle(color: index == model.selectedIndexDate ? Colors.white : Colors.black)),
-                          verticalSpaceSmall,
-                          Text('02', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: index == model.selectedIndexDate ? Colors.white : Colors.black),)
-                        ],
-                      ),
-                    ).decorated(borderRadius: BorderRadius.circular(10), color: index == model.selectedIndexDate ? kMainColor1 : Colors.transparent, animate: true)
-                        .animate(const Duration(milliseconds: 300), Curves.easeIn)
-                        .gestures(onTap: () {
-                      model.changeSelectionDate(index: index);
-                    })).toList(),
-                  ),
-                ),
-                verticalSpaceMedium,
-                SizedBox(
-                  height: 50,
-                  child: ListView(
-                    physics: const BouncingScrollPhysics(),
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    children: List.generate(5, (index) => Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 10),
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                      child: Text("12AM - 06AM", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: index == model.selectedIndexTime ? Colors.white : kMainColor1)),
-                    ).decorated(border: Border.all(color: Colors.black12, width: model.selectedIndexTime == index ? 0 : 2),
-                            borderRadius: BorderRadius.circular(10), color: index == model.selectedIndexTime ? kMainColor1 : Colors.transparent,
-                            animate: true)
-                        .padding(right: 10)
-                        .animate(const Duration(milliseconds: 300), Curves.easeIn)
-                        .gestures(onTap: () {
-                      model.changeSelectionTime(index: index);
-                    })).toList(),
+                    itemBuilder: (context, index) {
+                      return Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Text(model.formatDate(model.data!.results![index].date!), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: index == model.selectedIndex ? Colors.white : Colors.black)),
+                                horizontalSpaceSmall,
+                                Text(model.data!.results![index].date!.substring(8, 10), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: index == model.selectedIndex ? Colors.white : Colors.black),)
+                              ],
+                            ),
+                            verticalSpaceSmall,
+                            Text(model.data!.results![index].startTime!, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: index == model.selectedIndex ? Colors.white : kMainColor1)),
+                          ],
+                        ),
+                      ).decorated(border: Border.all(color: Colors.black12, width: model.selectedIndex == index ? 0 : 2),
+                          borderRadius: BorderRadius.circular(10), color: index == model.selectedIndex ? kMainColor1 : Colors.transparent,
+                          animate: true)
+                          .padding(right: 10)
+                          .animate(const Duration(milliseconds: 300), Curves.easeIn)
+                          .gestures(onTap: () {
+                        model.changeSelection(index: index);
+                      });
+                    },
                   ),
                 ),
                 const Divider(thickness: 1.2, height: 40),
@@ -187,7 +214,7 @@ class ConfirmBookingView extends HookWidget {
                       TextField(
                         controller: name,
                         decoration: InputDecoration(
-                          hintText: 'Your Full Name',
+                          hintText: 'Guest Full Name',
                           hintStyle: const TextStyle(fontSize: 14),
                           // prefixText: 'Saudi Arabia ( +966 ) | ',
                           fillColor: kTextFiledGrayColor,
@@ -299,7 +326,7 @@ class ConfirmBookingView extends HookWidget {
           ),
         ),
       ),
-      viewModelBuilder: () => ConfirmBookingViewModel(),
+      viewModelBuilder: () => ConfirmBookingViewModel(experienceId: experience!.id),
     );
   }
 }
