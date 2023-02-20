@@ -32,8 +32,9 @@ class PublishSuccessView extends HookWidget {
               verticalSpaceSmall,
               const Text('Your experience has been published', style: TextStyle(color: kGrayText)),
               verticalSpaceMedium,
-              Image.asset("assets/images/success_image.png"),
-              verticalSpaceLarge,
+              Image.asset("assets/images/success_image.png", height: 250),
+              verticalSpaceMedium,
+              verticalSpaceRegular,
               Container(
                 width: MediaQuery.of(context).size.width - 60,
                 height: 50,
@@ -46,7 +47,7 @@ class PublishSuccessView extends HookWidget {
                 ),
               ).gestures(
                 onTap: () {
-                  model.back();
+                  completer(SheetResponse(confirmed: true));
                 },
               ),
               verticalSpaceRegular,
