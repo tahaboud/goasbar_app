@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
-import 'package:goasbar/ui/views/confirm_booking/confirm_booking_view.dart';
 import 'package:goasbar/ui/views/navbar/search/search_viewmodel.dart';
-import 'package:goasbar/ui/widgets/close_view.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:styled_widget/styled_widget.dart';
 
 class SearchView extends HookWidget {
   const SearchView({Key? key}) : super(key: key);
@@ -164,173 +161,173 @@ class SearchView extends HookWidget {
                     ],
                   ),
                   verticalSpaceLarge,
-                  const Text('Popular search', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),),
-                  verticalSpaceMedium,
-                  SizedBox(
-                    height: 255,
-                    child: ListView(
-                      shrinkWrap: true,
-                      physics: const BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        Container(
-                          height: 250,
-                          width: 200,
-                          padding: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Colors.white,
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Colors.black12,
-                                blurRadius: 1,
-                                offset: Offset(0, 0),
-                                spreadRadius: 1,
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: 200,
-                                height: 150,
-                                decoration: const BoxDecoration(
-                                  image: DecorationImage(
-                                    image: AssetImage("assets/images/image4.png"),
-                                  )
-                                ),
-                              ).center(),
-                              verticalSpaceSmall,
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text('Dammam Trip', style: TextStyle(fontWeight: FontWeight.bold)),
-                                  Row(
-                                    children: const [
-                                      Text('4.0'),
-                                      horizontalSpaceTiny,
-                                      Icon(Icons.star, color: kStarColor,)
-                                    ],
-                                  )
-                                ],
-                              ),
-                              verticalSpaceSmall,
-                              Row(
-                                children: [
-                                  Image.asset("assets/icons/location.png"),
-                                  horizontalSpaceTiny,
-                                  const Text("Dammam , 1 Hour", style: TextStyle(color: kMainGray, fontSize: 11))
-                                ],
-                              ),
-                              verticalSpaceSmall,
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: const [
-                                      Text('76.00 SR', style: TextStyle(color: kMainColor1, fontSize: 9)),
-                                      Text(' / Person', style: TextStyle(color: kMainGray, fontSize: 9)),
-                                    ],
-                                  ),
-                                  Container(
-                                    width: 70,
-                                    height: 25,
-                                    decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                                      gradient: kMainGradient,
-                                    ),
-                                    child: const Text('Book Now', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500),).center(),
-                                  ).gestures(onTap: () {
-                                    model.navigateTo(view: const ConfirmBookingView());
-                                  }),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        horizontalSpaceRegular,
-                        Container(
-                          height: 250,
-                          width: 200,
-                          padding: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Colors.white,
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Colors.black12,
-                                blurRadius: 1,
-                                offset: Offset(0, 0),
-                                spreadRadius: 1,
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: 200,
-                                height: 150,
-                                decoration: const BoxDecoration(
-                                    image: DecorationImage(
-                                      image: AssetImage("assets/images/image4.png"),
-                                    )
-                                ),
-                              ).center(),
-                              verticalSpaceSmall,
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text('Dammam Trip', style: TextStyle(fontWeight: FontWeight.bold)),
-                                  Row(
-                                    children: const [
-                                      Text('4.0'),
-                                      horizontalSpaceTiny,
-                                      Icon(Icons.star, color: kStarColor,)
-                                    ],
-                                  )
-                                ],
-                              ),
-                              verticalSpaceSmall,
-                              Row(
-                                children: [
-                                  Image.asset("assets/icons/location.png"),
-                                  horizontalSpaceTiny,
-                                  const Text("Dammam , 1 Hour", style: TextStyle(color: kMainGray, fontSize: 11))
-                                ],
-                              ),
-                              verticalSpaceSmall,
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: const [
-                                      Text('76.00 SR', style: TextStyle(color: kMainColor1, fontSize: 9)),
-                                      Text(' / Person', style: TextStyle(color: kMainGray, fontSize: 9)),
-                                    ],
-                                  ),
-                                  Container(
-                                    width: 70,
-                                    height: 25,
-                                    decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                                      gradient: kMainGradient,
-                                    ),
-                                    child: const Text('Book Now', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500),).center(),
-                                  ).gestures(onTap: () {
-                                    model.navigateTo(view: const ConfirmBookingView());
-                                  }),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
+                  // const Text('Popular search', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),),
+                  // verticalSpaceMedium,
+                  // SizedBox(
+                  //   height: 255,
+                  //   child: ListView(
+                  //     shrinkWrap: true,
+                  //     physics: const BouncingScrollPhysics(),
+                  //     scrollDirection: Axis.horizontal,
+                  //     children: [
+                  //       Container(
+                  //         height: 250,
+                  //         width: 200,
+                  //         padding: const EdgeInsets.all(5),
+                  //         decoration: BoxDecoration(
+                  //           borderRadius: BorderRadius.circular(15),
+                  //           color: Colors.white,
+                  //           boxShadow: const [
+                  //             BoxShadow(
+                  //               color: Colors.black12,
+                  //               blurRadius: 1,
+                  //               offset: Offset(0, 0),
+                  //               spreadRadius: 1,
+                  //             ),
+                  //           ],
+                  //         ),
+                  //         child: Column(
+                  //           mainAxisAlignment: MainAxisAlignment.start,
+                  //           crossAxisAlignment: CrossAxisAlignment.start,
+                  //           children: [
+                  //             Container(
+                  //               width: 200,
+                  //               height: 150,
+                  //               decoration: const BoxDecoration(
+                  //                 image: DecorationImage(
+                  //                   image: AssetImage("assets/images/image4.png"),
+                  //                 )
+                  //               ),
+                  //             ).center(),
+                  //             verticalSpaceSmall,
+                  //             Row(
+                  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //               children: [
+                  //                 const Text('Dammam Trip', style: TextStyle(fontWeight: FontWeight.bold)),
+                  //                 Row(
+                  //                   children: const [
+                  //                     Text('4.0'),
+                  //                     horizontalSpaceTiny,
+                  //                     Icon(Icons.star, color: kStarColor,)
+                  //                   ],
+                  //                 )
+                  //               ],
+                  //             ),
+                  //             verticalSpaceSmall,
+                  //             Row(
+                  //               children: [
+                  //                 Image.asset("assets/icons/location.png"),
+                  //                 horizontalSpaceTiny,
+                  //                 const Text("Dammam , 1 Hour", style: TextStyle(color: kMainGray, fontSize: 11))
+                  //               ],
+                  //             ),
+                  //             verticalSpaceSmall,
+                  //             Row(
+                  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //               children: [
+                  //                 Row(
+                  //                   children: const [
+                  //                     Text('76.00 SR', style: TextStyle(color: kMainColor1, fontSize: 9)),
+                  //                     Text(' / Person', style: TextStyle(color: kMainGray, fontSize: 9)),
+                  //                   ],
+                  //                 ),
+                  //                 Container(
+                  //                   width: 70,
+                  //                   height: 25,
+                  //                   decoration: const BoxDecoration(
+                  //                     borderRadius: BorderRadius.all(Radius.circular(8)),
+                  //                     gradient: kMainGradient,
+                  //                   ),
+                  //                   child: const Text('Book Now', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500),).center(),
+                  //                 ).gestures(onTap: () {
+                  //                   model.navigateTo(view: const ConfirmBookingView());
+                  //                 }),
+                  //               ],
+                  //             ),
+                  //           ],
+                  //         ),
+                  //       ),
+                  //       horizontalSpaceRegular,
+                  //       Container(
+                  //         height: 250,
+                  //         width: 200,
+                  //         padding: const EdgeInsets.all(5),
+                  //         decoration: BoxDecoration(
+                  //           borderRadius: BorderRadius.circular(15),
+                  //           color: Colors.white,
+                  //           boxShadow: const [
+                  //             BoxShadow(
+                  //               color: Colors.black12,
+                  //               blurRadius: 1,
+                  //               offset: Offset(0, 0),
+                  //               spreadRadius: 1,
+                  //             ),
+                  //           ],
+                  //         ),
+                  //         child: Column(
+                  //           mainAxisAlignment: MainAxisAlignment.start,
+                  //           crossAxisAlignment: CrossAxisAlignment.start,
+                  //           children: [
+                  //             Container(
+                  //               width: 200,
+                  //               height: 150,
+                  //               decoration: const BoxDecoration(
+                  //                   image: DecorationImage(
+                  //                     image: AssetImage("assets/images/image4.png"),
+                  //                   )
+                  //               ),
+                  //             ).center(),
+                  //             verticalSpaceSmall,
+                  //             Row(
+                  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //               children: [
+                  //                 const Text('Dammam Trip', style: TextStyle(fontWeight: FontWeight.bold)),
+                  //                 Row(
+                  //                   children: const [
+                  //                     Text('4.0'),
+                  //                     horizontalSpaceTiny,
+                  //                     Icon(Icons.star, color: kStarColor,)
+                  //                   ],
+                  //                 )
+                  //               ],
+                  //             ),
+                  //             verticalSpaceSmall,
+                  //             Row(
+                  //               children: [
+                  //                 Image.asset("assets/icons/location.png"),
+                  //                 horizontalSpaceTiny,
+                  //                 const Text("Dammam , 1 Hour", style: TextStyle(color: kMainGray, fontSize: 11))
+                  //               ],
+                  //             ),
+                  //             verticalSpaceSmall,
+                  //             Row(
+                  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //               children: [
+                  //                 Row(
+                  //                   children: const [
+                  //                     Text('76.00 SR', style: TextStyle(color: kMainColor1, fontSize: 9)),
+                  //                     Text(' / Person', style: TextStyle(color: kMainGray, fontSize: 9)),
+                  //                   ],
+                  //                 ),
+                  //                 Container(
+                  //                   width: 70,
+                  //                   height: 25,
+                  //                   decoration: const BoxDecoration(
+                  //                     borderRadius: BorderRadius.all(Radius.circular(8)),
+                  //                     gradient: kMainGradient,
+                  //                   ),
+                  //                   child: const Text('Book Now', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500),).center(),
+                  //                 ).gestures(onTap: () {
+                  //                   model.navigateTo(view: const ConfirmBookingView());
+                  //                 }),
+                  //               ],
+                  //             ),
+                  //           ],
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // )
                 ],
               ),
             ),
