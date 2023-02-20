@@ -118,33 +118,6 @@ class SignUpView extends HookWidget {
                   .center(),
               verticalSpaceRegular,
 
-              Container(
-                  width: MediaQuery.of(context).size.width - 60,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    color: Colors.transparent,
-                    border: Border.all(
-                      color: Colors.black,
-                    )
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Spacer(),
-                      const Spacer(),
-                      const Spacer(),
-                      const Text('Go To Sign In', style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500),),
-                      const Spacer(),
-                      const Spacer(),
-                      Image.asset("assets/icons/person_signup.png",).padding(horizontal: 15),
-                    ],
-                  )
-              ).gestures(
-                onTap: () {
-                  model.navigateTo(view: const LoginView());
-                },
-              ),
             ],
           ),
         ),
