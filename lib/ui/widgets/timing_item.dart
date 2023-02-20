@@ -1,3 +1,5 @@
+import 'package:goasbar/data_models/experience_response.dart';
+import 'package:goasbar/data_models/timing_response.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/shared/colors.dart';
@@ -6,23 +8,31 @@ import 'package:goasbar/shared/ui_helpers.dart';
 class TimingItem extends StatelessWidget {
   const TimingItem({
     Key? key,
-    this.showBooking
+    this.showBooking,
+    this.experience,
+    this.timing,
+    this.launchMaps,
+    this.deleteTiming,
   }) : super(key: key);
 
   final Function()? showBooking;
+  final Function()? launchMaps;
+  final Function()? deleteTiming;
+  final ExperienceResults? experience;
+  final TimingResponse? timing;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Row(
-          children: const [
+          children: [
             horizontalSpaceRegular,
-            Text("Date : 20 - 06 - 2022", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: kGrayText),),
+            Text("Date : ${timing!.date}", style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: kGrayText),),
             horizontalSpaceSmall,
-            Text("At 1:00 PM", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500,),),
-            Spacer(),
-            Text('CLOSED...', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Colors.redAccent),)
+            Text("At ${timing!.startTime!.substring(0, 5)}", style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500,),),
+            const Spacer(),
+            Text(timing!.status!, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: timing!.status! == "OPEN" ? kMainColor1 : Colors.redAccent),)
           ],
         ),
         verticalSpaceSmall,
@@ -50,7 +60,7 @@ class TimingItem extends StatelessWidget {
                   const Text("Google maps", style: TextStyle(color: kGrayText),)
                 ],
               ),
-            ),
+            ).gestures(onTap: launchMaps),
             horizontalSpaceSmall,
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
@@ -79,8 +89,7 @@ class TimingItem extends StatelessWidget {
                   Image.asset("assets/icons/delete.png", color: Colors.redAccent, height: 18),
                 ],
               ),
-            ).gestures(onTap: () {
-            }),
+            ).gestures(onTap: deleteTiming,),
           ],
         ),
       ],
