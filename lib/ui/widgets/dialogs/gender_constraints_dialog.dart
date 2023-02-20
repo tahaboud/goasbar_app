@@ -15,7 +15,7 @@ class GenderConstraintsDialog extends HookWidget {
   Widget build(BuildContext context) {
     return Container(
       width: screenWidthPercentage(context, percentage: 0.4),
-      height: 125,
+      height: 163,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
@@ -30,6 +30,18 @@ class GenderConstraintsDialog extends HookWidget {
           ).gestures(onTap: () {
             onDialogTap!(DialogResponse(data: 'No constrains',));
           }),
+
+          const Divider(height: 1, thickness: 2),
+
+          Container(
+            height: 40,
+            color : dialogRequest!.data == 'Families' ? kMainDisabledGray : Colors.white,
+            child: const Text('Families')
+                .center(),
+          ).gestures(onTap: () {
+            onDialogTap!(DialogResponse(data: 'Families',));
+          }),
+
           const Divider(height: 1, thickness: 2),
 
           Container(
