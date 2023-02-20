@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/messages_notifications/messages_notifications_view.dart';
 import 'package:goasbar/ui/views/navbar/experience/experience_viewmodel.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:goasbar/ui/widgets/trip_card/trip_card.dart';
+import 'package:goasbar/ui/widgets/user_welcome_widget/user_welcome_widget.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -28,29 +28,7 @@ class ExperienceView extends HookWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 10),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.transparent,
-                        border: Border.all(color: kMainDisabledGray),
-                      ),
-                      child: Row(
-                        children: isUser! ? [
-                          model.isBusy ? Image.asset("assets/images/user.png",)
-                              : ClipRRect(
-                            borderRadius: BorderRadius.circular(30),
-                            child: Image.network("$baseUrl${model.user!.image}", height: 30, ),
-                          ),
-                          horizontalSpaceTiny,
-                          model.isBusy ? const Text('Hi , ') : Text('Hi , ${model.user!.firstName} !'),
-                        ] : [
-                          Image.asset("assets/icons/person_login.png", color: kMainColor1),
-                          horizontalSpaceTiny,
-                          const Text('welcome ,Guest'),
-                        ],
-                      ),
-                    ).gestures(onTap: isUser! ? () {} : () => model.back(),),
+                    UserWelcomeWidget(isUser: isUser).gestures(onTap: isUser! ? () {} : () => model.back(),),
                     const Spacer(),
                     Container(
                       width: 45,
@@ -82,18 +60,16 @@ class ExperienceView extends HookWidget {
                   ),
                 ),
                 verticalSpaceMedium,
-                Expanded(
-                  child: ListView(
-                    physics: const BouncingScrollPhysics(),
-                    shrinkWrap: true,
-                    children: model.isBusy ? [const Loader().center()] : const [
-                      TripItem(),
-                      verticalSpaceRegular,
-                      TripItem(),
-                      verticalSpaceRegular,
-                      TripItem(),
-                    ],
-                  ),
+                model.isBusy ? const Loader().center()
+                    : model.experienceModels!.count == 0
+                    ? const Text('No experience under this category').center() : Expanded(child: ListView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: model.experienceModels!.count,
+                      itemBuilder: (context, index) {
+                        return TripItem(experience: model.experienceModels!.results![index]);
+                      },
+                    )
                 ),
               ],
             ),
