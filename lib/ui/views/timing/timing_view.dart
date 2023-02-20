@@ -1,16 +1,20 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
+import 'package:goasbar/data_models/experience_response.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/timing/timing_viewmodel.dart';
+import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:goasbar/ui/widgets/timing_item.dart';
+import 'package:motion_toast/motion_toast.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter/cupertino.dart';
 
 class TimingView extends HookWidget {
-  const TimingView({Key? key}) : super(key: key);
+  const TimingView({Key? key, this.experience}) : super(key: key);
+  final ExperienceResults? experience;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +41,7 @@ class TimingView extends HookWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(model.formatMonthYear(model.selectedDate), style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
+                    Text(model.formatMonthYear(model.selectedFormattedMonthYearDate), style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
                       decoration: BoxDecoration(
@@ -50,45 +54,85 @@ class TimingView extends HookWidget {
                           Icon(Icons.add, color: kMainColor1, size: 25,)
                         ],
                       ),
-                    ).gestures(onTap: () => model.showNewTimingBottomSheet()),
+                    ).gestures(onTap: () => model.showNewTimingBottomSheet(experienceId: experience!.id,
+                        date: model.selectedFormattedDate
+                        ?? model.formatSelectedDate(date: model.selectedDate))),
                   ],
                 ),
                 verticalSpaceRegular,
                 CalendarDatePicker2(
                   initialValue: [
-                    DateTime(2023, 1, 17),
-                    DateTime.now(),
+                    model.selectedDate,
                   ],
                   config: CalendarDatePicker2Config(
                     disableYearPicker: true,
-                    calendarType: CalendarDatePicker2Type.range,
+                    firstDate: DateTime.now(),
+                    calendarType: CalendarDatePicker2Type.single,
                     selectedDayHighlightColor: kMainColor1,
                     lastMonthIcon: Container(),
                     nextMonthIcon: Container(),
                     controlsHeight: 0
                   ),
-                  onValueChanged: (val) {
-
+                  onValueChanged: (date) {
+                    model.selectDate(date: date[0]);
                   },
                   onDisplayedMonthChanged: (date) {
-                    model.selectDate(date: date);
+                    model.selectFormatMonthYear(date: date);
                   },
                 ),
                 verticalSpaceSmall,
                 const Text('Timings', style: TextStyle(fontSize: 21, fontWeight: FontWeight.w600),).alignment(Alignment.centerLeft),
                 verticalSpaceSmall,
-                TimingItem(showBooking: () => model.showBookingList()),
-                const Divider(thickness: 1, height: 30),
-                const TimingItem(),
-                const Divider(thickness: 1, height: 30),
-                const TimingItem(),
-                verticalSpaceMedium,
+
+                model.isBusy ? const Loader().center() : model.timingListModel!.count! == 0
+                    ? const Text('No Timing Yet') : ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: model.timingListModel!.count,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        TimingItem(launchMaps: experience!.latitude == null ? () {
+                          MotionToast.warning(
+                            title: const Text("Maps Cannot Be launched"),
+                            description: const Text("The provider did not set the location yet."),
+                            animationCurve: Curves.easeIn,
+                            animationDuration: const Duration(milliseconds: 200),
+                          ).show(context);
+                        } : () => model.launchMaps(lat: experience!.latitude, long: experience!.longitude),
+                          timing: model.timingListModel!.results![index], experience: experience!,
+                          showBooking: () => model.showBookingList(),
+                          deleteTiming: () => model.deleteTiming(experienceId: experience!.id, timingId: model.timingListModel!.results![index].id).then((value) {
+                            if (value!) {
+                              MotionToast.success(
+                                title: const Text("Deleting Success"),
+                                description: const Text("Deleting timing has done successfully."),
+                                animationCurve: Curves.easeIn,
+                                animationDuration: const Duration(milliseconds: 200),
+                              ).show(context);
+                            } else {
+                              MotionToast.error(
+                                title: const Text("Deleting Failed"),
+                                description: const Text("An error has occurred, please try again."),
+                                animationCurve: Curves.easeIn,
+                                animationDuration: const Duration(milliseconds: 200),
+                              ).show(context);
+                            }
+                          }),
+                        ),
+                        const Divider(thickness: 1, height: 30),
+                      ],
+                    );
+                  },
+                ),
+
               ],
             ).padding(horizontal: 16, top: 16),
           ),
         ),
       ),
       viewModelBuilder: () => TimingViewModel(),
+      onModelReady: (model) => model.getTimingsList(experienceId: experience!.id),
     );
   }
 }
