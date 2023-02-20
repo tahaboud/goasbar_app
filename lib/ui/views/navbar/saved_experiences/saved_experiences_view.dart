@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/navbar/saved_experiences/saved_experiences_viewmodel.dart';
+import 'package:goasbar/ui/widgets/loader.dart';
+import 'package:goasbar/ui/widgets/saved_experience_card/saved_experience_card.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:goasbar/ui/widgets/saved_experiences.dart';
-import 'package:goasbar/ui/widgets/load_header.dart';
+import 'package:styled_widget/styled_widget.dart';
 
 class SavedExperiencesView extends HookWidget {
   const SavedExperiencesView({Key? key, this.text}) : super(key: key);
@@ -18,15 +20,32 @@ class SavedExperiencesView extends HookWidget {
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(vertical: 20),
             child: Container(
+              height: double.maxFinite,
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: model.isBusy ? LoadHeader(text: text)
-                  : SavedExperiences(text: text, onTap: () => model.back()),
+              child: Column(
+                children: [
+                  verticalSpaceMedium,
+                  Text(text!, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),).alignment(Alignment.centerLeft),
+                  verticalSpaceMedium,
+                  model.isBusy ? const Loader().center() : model.experienceResults!.isEmpty ? const Text('You have no saved experiences').center() : Expanded(child: GridView.builder(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 0.8,
+                    ),
+                    physics: const BouncingScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: model.experienceResults!.length,
+                    itemBuilder: (context, index) {
+                      return SavedExperience(experience: model.experienceResults![index], unFavorite: () => model.updateUserData(index: index));
+                    },)
+                  ),
+                ],
+              ),
             ),
           )
         ),
       ),
       viewModelBuilder: () => SavedExperiencesViewModel(),
-      onModelReady: (model) => model.loadData(),
     );
   }
 }
