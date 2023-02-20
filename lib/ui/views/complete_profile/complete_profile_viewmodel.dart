@@ -1,8 +1,10 @@
+import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/enum/dialog_type.dart';
 import 'package:goasbar/services/validation_service.dart';
+import 'package:goasbar/shared/colors.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -26,6 +28,10 @@ class CompleteProfileViewModel extends BaseViewModel {
 
   void clearAndNavigateTo({view}) {
     _navigationService.clearStackAndShowView(view,);
+  }
+
+  void back() {
+    _navigationService.back();
   }
 
   String? validateEmail ({String? value}) {
@@ -56,15 +62,23 @@ class CompleteProfileViewModel extends BaseViewModel {
   }
 
   void showBirthDayPicker(context) async {
-    DateTime? picked = await showDatePicker(
+    List<DateTime?>? picked = await showCalendarDatePicker2Dialog(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1950),
-      lastDate: DateTime.now(),
+      config: CalendarDatePicker2WithActionButtonsConfig(
+        disableYearPicker: true,
+        firstDate: DateTime.now(),
+        calendarType: CalendarDatePicker2Type.single,
+        selectedDayHighlightColor: kMainColor1,
+      ),
+      initialValue: [
+        DateTime.now(),
+      ],
+
+      dialogSize: const Size(325, 340),
     );
 
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
-    final String formatted = formatter.format(picked!);
+    final String formatted = formatter.format(picked![0]!);
 
     birthDate.text = formatted;
     notifyListeners();
