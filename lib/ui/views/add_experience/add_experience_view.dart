@@ -1,10 +1,13 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/add_experience/add_experience_viewmodel.dart';
 import 'package:goasbar/ui/widgets/dot_item.dart';
 import 'package:goasbar/ui/widgets/info_item.dart';
+import 'package:motion_toast/motion_toast.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -44,8 +47,6 @@ class AddExperienceView extends HookWidget {
               color: Colors.white,
             ),
             child: ListView(
-              // mainAxisAlignment: MainAxisAlignment.start,
-              // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 verticalSpaceSmall,
                 Row(
@@ -80,7 +81,18 @@ class AddExperienceView extends HookWidget {
                 verticalSpaceMedium,
                 const Text('Main image', style: TextStyle(fontWeight: FontWeight.bold),),
                 verticalSpaceSmall,
-                Container(
+                model.mainImage != null ? Container(
+                  height: 100,
+                  width: screenWidthPercentage(context, percentage: 0.4),
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: model.mainImage == null ? const AssetImage("assets/icons/camera.png",)
+                          : FileImage(model.mainImage!) as ImageProvider,
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ).gestures(onTap: () => model.pickMainImage(),) : Container(
                   height: 100,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
@@ -93,7 +105,7 @@ class AddExperienceView extends HookWidget {
                       const Text("upload identity image", style: TextStyle(color: kGrayText,)),
                     ],
                   ).center(),
-                ).gestures(onTap: () => model.pickImage(),),
+                ).gestures(onTap: () => model.pickMainImage(),),
                 verticalSpaceRegular,
                 InfoItem(
                   controller: title,
@@ -156,80 +168,25 @@ class AddExperienceView extends HookWidget {
                   hintText: '0.5 H',
                 ),
                 verticalSpaceRegular,
-                Container(
-                  decoration: BoxDecoration(
-                    color: kTextFiledMainColor,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      verticalSpaceSmall,
-                      Row(
-                        children: const [
-                          horizontalSpaceSmall,
-                          Text("Gender"),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 40,
-                        child: TextField(
-                          readOnly: true,
-                          controller: model.gender,
-                          decoration: InputDecoration(
-                            hintText: 'Male',
-                            hintStyle: const TextStyle(fontSize: 14),
-                            suffixIcon: const Icon(Icons.arrow_drop_down)
-                                .gestures(onTap: () => model.showSelectionDialog(gen: 'Male')),
-                            fillColor: kTextFiledMainColor,
-                            filled: true,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            enabledBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.transparent),
-                            ),
-                            focusedBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.transparent),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                verticalSpaceRegular,
                 verticalSpaceSmall,
                 const Text('What is your experience category?', style: TextStyle(fontWeight: FontWeight.bold),),
                 verticalSpaceRegular,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
+                SizedBox(
+                  height: 45,
+                  child: ListView(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    physics: const BouncingScrollPhysics(),
+                    children: categories.map((category) => Container(
                       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-                      decoration: BoxDecoration(
-                        color: kTextFiledMainColor,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Text('LANDSCAPE').center(),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-                      decoration: BoxDecoration(
-                        color: kTextFiledMainColor,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Text('LANDSCAPE').center(),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-                      decoration: BoxDecoration(
-                        color: kTextFiledMainColor,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Text('LANDSCAPE').center(),
-                    ),
-                  ],
+                      child: Text(category, style: TextStyle(
+                        color: model.selectedExperienceCategory == category ? Colors.white : Colors.black,
+                      ),).center(),
+                    ).backgroundGradient(model.selectedExperienceCategory == category ? kMainGradient : kDisabledGradient, animate: true)
+                        .clipRRect(all: 8,)
+                        .card(margin: const EdgeInsets.only(right: 12),)
+                        .animate(const Duration(milliseconds: 300), Curves.easeIn).gestures(onTap: () => model.updateSelectedExperienceCategory(category: category,)),).toList(),
+                  ),
                 ),
                 verticalSpaceLarge,
                 Container(
@@ -244,7 +201,38 @@ class AddExperienceView extends HookWidget {
                   ),
                 ).gestures(
                   onTap: () {
-                    pageController.jumpToPage(1);
+                    if (title.text.isNotEmpty && age.text.isNotEmpty) {
+                      if (int.parse(age.text) <= 22 && int.parse(age.text) >= 0) {
+                        if (duration.text.isNotEmpty) {
+                          if (double.parse(duration.text) % 0.5 == 0) {
+                            pageController.jumpToPage(1);
+                          } else {
+                            MotionToast.warning(
+                              title: const Text("Warning"),
+                              description: const Text("Duration must be multiple of 0.5h."),
+                              animationCurve: Curves.easeIn,
+                              animationDuration: const Duration(milliseconds: 200),
+                            ).show(context);
+                          }
+                        } else {
+                          pageController.jumpToPage(1);
+                        }
+                      } else {
+                        MotionToast.warning(
+                          title: const Text("Warning"),
+                          description: const Text("Minimum Age must be from 0 to 22."),
+                          animationCurve: Curves.easeIn,
+                          animationDuration: const Duration(milliseconds: 200),
+                        ).show(context);
+                      }
+                    } else {
+                      MotionToast.warning(
+                        title: const Text("Warning"),
+                        description: const Text("Title and Minimum age are required."),
+                        animationCurve: Curves.easeIn,
+                        animationDuration: const Duration(milliseconds: 200),
+                      ).show(context);
+                    }
                   },
                 ),
                 verticalSpaceRegular,
@@ -306,7 +294,18 @@ class AddExperienceView extends HookWidget {
                       const Text("upload identity image", style: TextStyle(color: kGrayText,)),
                     ],
                   ).center(),
-                ).gestures(onTap: () => model.pickImage(),),
+                ).gestures(onTap: () {
+                  if (model.images! < 8) {
+                    model.pickImage();
+                  } else {
+                    MotionToast.warning(
+                      title: const Text("Warning"),
+                      description: const Text("Maximum additional images is 8."),
+                      animationCurve: Curves.easeIn,
+                      animationDuration: const Duration(milliseconds: 200),
+                    ).show(context);
+                  }
+                }),
                 verticalSpaceRegular,
                 const Text('Link for a video of the experience', style: TextStyle(fontWeight: FontWeight.bold),),
                 verticalSpaceSmall,
@@ -317,6 +316,7 @@ class AddExperienceView extends HookWidget {
                 ),
                 verticalSpaceRegular,
                 GridView(
+                  physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
@@ -325,11 +325,11 @@ class AddExperienceView extends HookWidget {
                   ),
                   children: List.generate(model.images!, (index) => Container(
                     height: 70,
+                    margin: const EdgeInsets.symmetric(vertical: 5),
                     width: screenWidthPercentage(context, percentage: 0.4),
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: model.file == null ? const AssetImage("assets/images/profile_image.png",)
-                            : FileImage(model.file!) as ImageProvider,
+                        image: FileImage(model.additionalImages![index]!),
                         fit: BoxFit.cover,
                       ),
                       borderRadius: BorderRadius.circular(15),
@@ -349,7 +349,20 @@ class AddExperienceView extends HookWidget {
                   ),
                 ).gestures(
                   onTap: () {
-                    pageController.jumpToPage(2);
+                    if (link.text.isNotEmpty) {
+                      if (!link.text.contains("www.youtube.com/")) {
+                        MotionToast.warning(
+                          title: const Text("Warning"),
+                          description: const Text("Youtube link is not correct"),
+                          animationCurve: Curves.easeIn,
+                          animationDuration: const Duration(milliseconds: 200),
+                        ).show(context);
+                      } else {
+                        pageController.jumpToPage(2);
+                      }
+                    } else {
+                      pageController.jumpToPage(2);
+                    }
                   },
                 ),
                 verticalSpaceRegular,
@@ -470,7 +483,25 @@ class AddExperienceView extends HookWidget {
                   ),
                 ).gestures(
                   onTap: () {
-                    pageController.jumpToPage(3);
+                    if (description.text.isNotEmpty && activities.text.isNotEmpty) {
+                      if (description.text.length >= 140) {
+                        pageController.jumpToPage(3);
+                      } else {
+                        MotionToast.warning(
+                          title: const Text("Warning"),
+                          description: const Text("Description must be more than 140 characters"),
+                          animationCurve: Curves.easeIn,
+                          animationDuration: const Duration(milliseconds: 200),
+                        ).show(context);
+                      }
+                    } else {
+                      MotionToast.warning(
+                        title: const Text("Warning"),
+                        description: const Text("Description and activities are required"),
+                        animationCurve: Curves.easeIn,
+                        animationDuration: const Duration(milliseconds: 200),
+                      ).show(context);
+                    }
                   },
                 ),
                 verticalSpaceRegular,
@@ -525,7 +556,48 @@ class AddExperienceView extends HookWidget {
                     verticalSpaceSmall,
                     const Text("E.g. lunch meal, coffee, some tools...", style: TextStyle(fontSize: 14, color: kGrayText)),
                     Column(
-                      children: model.providings,
+                      children: [
+                        verticalSpaceSmall,
+                        TextField(
+                          controller: model.providedGoodsController1,
+                          decoration: const InputDecoration(
+                            hintText: "Providing's add-ons",
+                            hintStyle: TextStyle(fontSize: 14),
+                          ),
+                        ),
+                        verticalSpaceSmall,
+                        TextField(
+                          controller: model.providedGoodsController2,
+                          decoration: const InputDecoration(
+                            hintText: "Providing's add-ons",
+                            hintStyle: TextStyle(fontSize: 14),
+                          ),
+                        ),
+                        verticalSpaceSmall,
+                        TextField(
+                          controller: model.providedGoodsController3,
+                          decoration: const InputDecoration(
+                            hintText: "Providing's add-ons",
+                            hintStyle: TextStyle(fontSize: 14),
+                          ),
+                        ),
+                        verticalSpaceSmall,
+                        TextField(
+                          controller: model.providedGoodsController4,
+                          decoration: const InputDecoration(
+                            hintText: "Providing's add-ons",
+                            hintStyle: TextStyle(fontSize: 14),
+                          ),
+                        ),
+                        for (var i = 0; i < model.addedProviding!; i++)
+                          TextField(
+                            controller: model.addedProvidedGoodsControllers[i],
+                            decoration: const InputDecoration(
+                              hintText: "Providing's add-ons",
+                              hintStyle: TextStyle(fontSize: 14),
+                            ),
+                          ).padding(top: 10),
+                      ],
                     ),
                     verticalSpaceRegular,
                     Row(
@@ -555,7 +627,49 @@ class AddExperienceView extends HookWidget {
                     verticalSpaceSmall,
                     const Text("some notes and requirement for safe trip", style: TextStyle(fontSize: 14, color: kGrayText)),
                     Column(
-                      children: model.requirements,
+                      children: [
+                        verticalSpaceSmall,
+                        TextField(
+                          controller: model.requirementsController1,
+                          decoration: const InputDecoration(
+                            hintText: "Providing's add-ons",
+                            hintStyle: TextStyle(fontSize: 14),
+                          ),
+                        ),
+                        verticalSpaceSmall,
+                        TextField(
+                          controller: model.requirementsController2,
+                          decoration: const InputDecoration(
+                            hintText: "Providing's add-ons",
+                            hintStyle: TextStyle(fontSize: 14),
+                          ),
+                        ),
+                        verticalSpaceSmall,
+                        TextField(
+                          controller: model.requirementsController3,
+                          decoration: const InputDecoration(
+                            hintText: "Providing's add-ons",
+                            hintStyle: TextStyle(fontSize: 14),
+                          ),
+                        ),
+                        verticalSpaceSmall,
+                        TextField(
+                          controller: model.requirementsController4,
+                          decoration: const InputDecoration(
+                            hintText: "Providing's add-ons",
+                            hintStyle: TextStyle(fontSize: 14),
+                          ),
+                        ),
+
+                        for (var i = 0; i < model.addedRequirements!; i++)
+                          TextField(
+                            controller: model.addedRequirementsControllers[i],
+                            decoration: const InputDecoration(
+                              hintText: "Providing's add-ons",
+                              hintStyle: TextStyle(fontSize: 14),
+                            ),
+                          ).padding(top: 10),
+                      ],
                     ),
                     verticalSpaceRegular,
                     Row(
@@ -589,6 +703,28 @@ class AddExperienceView extends HookWidget {
                   ),
                 ).gestures(
                   onTap: () {
+                    for (var i = 0; i < model.addedProvidedGoodsControllers.length; i++) {
+                      if (model.addedProvidedGoodsControllers[i].text.isNotEmpty) {
+                        model.providedGoodsText = "${model.addedProvidedGoodsControllers[i].text}\n${model.providedGoodsText}";
+                      }
+                    }
+
+                    if (model.providedGoodsController1.text.isNotEmpty) model.providedGoodsText = "${model.providedGoodsController1.text}\n${model.providedGoodsText}";
+                    if (model.providedGoodsController2.text.isNotEmpty) model.providedGoodsText = "${model.providedGoodsController2.text}\n${model.providedGoodsText}";
+                    if (model.providedGoodsController3.text.isNotEmpty) model.providedGoodsText = "${model.providedGoodsController3.text}\n${model.providedGoodsText}";
+                    if (model.providedGoodsController4.text.isNotEmpty) model.providedGoodsText = "${model.providedGoodsController4.text}\n${model.providedGoodsText}";
+
+                    for (var i = 0; i < model.addedRequirementsControllers.length; i++) {
+                      if (model.addedRequirementsControllers[i].text.isNotEmpty) {
+                        model.requirementsText = "${model.addedRequirementsControllers[i].text}\n";
+                      }
+                    }
+
+                    if (model.requirementsController1.text.isNotEmpty) model.requirementsText = "${model.requirementsController1.text}\n";
+                    if (model.requirementsController2.text.isNotEmpty) model.requirementsText = "${model.requirementsController2.text}\n";
+                    if (model.requirementsController3.text.isNotEmpty) model.requirementsText = "${model.requirementsController3.text}\n";
+                    if (model.requirementsController4.text.isNotEmpty) model.requirementsText = "${model.requirementsController4.text}\n";
+
                     pageController.jumpToPage(4);
                   },
                 ),
@@ -643,7 +779,7 @@ class AddExperienceView extends HookWidget {
                     const Text("City", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                     verticalSpaceSmall,
                     Container(
-                      height: 45,
+                      height: 50,
                       width: screenWidthPercentage(context, percentage: 1),
                       decoration: BoxDecoration(
                         color: kTextFiledMainColor,
@@ -661,32 +797,13 @@ class AddExperienceView extends HookWidget {
                               fontSize: 14,
                             ),
                             onChanged: (value) => model.updateCity(value: value),
-                            items: [
-                              DropdownMenuItem(
-                                value: 'Riyadh',
-                                onTap: () {
-
-                                },
-                                child: const SizedBox(
-                                  child: Text(
-                                    'Riyadh',
-                                    style: TextStyle(fontFamily: 'Cairo'),
-                                  ),
-                                ),
+                            items: cities.map((c) => DropdownMenuItem(
+                              value: c,
+                              onTap: () {},
+                              child: SizedBox(
+                                child: Text(c, style: const TextStyle(fontFamily: 'Cairo'),),
                               ),
-                              DropdownMenuItem(
-                                value: 'Jeddah',
-                                onTap: () {
-
-                                },
-                                child: const SizedBox(
-                                  child: Text(
-                                    'Jeddah',
-                                    style: TextStyle(fontFamily: 'Cairo'),
-                                  ),
-                                ),
-                              ),
-                            ]
+                            )).toList(),
                           ),
                         ),
                       ),
@@ -729,11 +846,13 @@ class AddExperienceView extends HookWidget {
                           child: TextField(
                             maxLines: 10,
                             controller: notes,
+                            maxLength: 1024,
                             decoration: InputDecoration(
                               hintText: "Add Notes...",
                               hintStyle: const TextStyle(fontSize: 14),
                               fillColor: kTextFiledMainColor,
                               filled: true,
+                              counterText: '',
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
@@ -785,7 +904,7 @@ class AddExperienceView extends HookWidget {
                   children: [
                     const Icon(Icons.close, size: 30,).gestures(onTap: () =>model.back(),),
                     horizontalSpaceTiny,
-                    const Text('EXPERIENCE LOCATION', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                    const Text('EXPERIENCE TIMING', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                     Row(
                       children: [
                         Container(
@@ -828,9 +947,9 @@ class AddExperienceView extends HookWidget {
                             decoration: InputDecoration(
                               hintText: '20 Sep 2022',
                               hintStyle: const TextStyle(fontSize: 14),
-                              prefixIcon: Image.asset('assets/icons/birth_date.png').gestures(onTap: () {
-                                model.showStartDatePicker(context);
-                              }),
+                              prefixIcon: Image.asset('assets/icons/birth_date.png').gestures(
+                                onTap: () => model.showStartDatePicker(context),
+                              ),
                               fillColor: kTextFiledMainColor,
                               filled: true,
                               focusedBorder: const OutlineInputBorder(
@@ -890,22 +1009,22 @@ class AddExperienceView extends HookWidget {
                     ),
                   ],
                 ),
-                verticalSpaceRegular,
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    color: kMainColor1.withOpacity(0.3),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      horizontalSpaceSmall,
-                      Text("Offer new timing", style: TextStyle(color: kMainColor1)),
-                      Icon(Icons.add, color: kMainColor1, size: 25,)
-                    ],
-                  ),
-                ).gestures(onTap: () => model.showNewTimingBottomSheet()),
+                // verticalSpaceRegular,
+                // Container(
+                //   padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+                //   decoration: BoxDecoration(
+                //     borderRadius: BorderRadius.circular(30),
+                //     color: kMainColor1.withOpacity(0.3),
+                //   ),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: const [
+                //       horizontalSpaceSmall,
+                //       Text("Offer new timing", style: TextStyle(color: kMainColor1)),
+                //       Icon(Icons.add, color: kMainColor1, size: 25,)
+                //     ],
+                //   ),
+                // ).gestures(onTap: () => model.showNewTimingBottomSheet(date: , experienceId: ,)),
 
                 verticalSpaceRegular,
                 const Text('Pricing', style: TextStyle(fontWeight: FontWeight.bold),),
@@ -943,9 +1062,76 @@ class AddExperienceView extends HookWidget {
                     child: Text('PUBLISH', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
                   ),
                 ).gestures(
-                  onTap: () {
-                    model.back();
-                    model.showPublishSuccessBottomSheet();
+                  onTap: () async {
+                    if (price.text.isNotEmpty && addPeople.text.isNotEmpty && model.startDate.text.isNotEmpty && model.startTime.text.isNotEmpty) {
+                      if (double.parse(price.text) > 1) {
+                        Map<String, dynamic>? body = {};
+                        body.addAll({'title': title.text});
+                        body.addAll({'min_age': age.text});
+                        body.addAll({'description': description.text});
+                        body.addAll({'events': activities.text});
+                        body.addAll({'city': model.city});
+                        body.addAll({'price': price.text});
+
+                        if (model.mainImage != null) {
+                          var pickedFile = await MultipartFile.fromFile(
+                            model.mainImage!.path,
+                            filename: model.mainImage!.path.substring(model.mainImage!.absolute.path.lastIndexOf('/') + 1),
+                          );
+                          body.addAll({'profile_image': pickedFile});
+                        }
+
+                        if (model.images! > 0) {
+                          for (var i = 0; i < model.images!; i++) {
+                            var pickedFile = await MultipartFile.fromFile(
+                              model.additionalImages![i]!.path,
+                              filename: model.additionalImages![i]!.path.substring(model.additionalImages![i]!.absolute.path.lastIndexOf('/') + 1),
+                            );
+                            body.addAll({'image_set[$i]image': pickedFile});
+                          }
+                        }
+
+                        if (model.genderConstraints.text == "No constrains") body.addAll({'gender': 'None',});
+                        if (model.genderConstraints.text == "Families") body.addAll({'gender': 'FAMILIES',});
+                        if (model.genderConstraints.text == "Men Only") body.addAll({'gender': 'MEN',});
+                        if (model.genderConstraints.text == "Women Only") body.addAll({'gender': 'WOMEN',});
+                        if (duration.text.isNotEmpty) body.addAll({'duration': duration.text,});
+                        if (notes.text.isNotEmpty) body.addAll({'location_notes': notes.text,});
+                        if (model.selectedExperienceCategory != null) body.addAll({'categories': model.selectedExperienceCategory,});
+                        if (link.text.isNotEmpty) body.addAll({'youtube_video': link.text});
+                        if (model.providedGoodsText!.isNotEmpty) body.addAll({'provided_goods': model.providedGoodsText});
+                        if (model.requirementsText!.isNotEmpty) body.addAll({'requirements': model.requirementsText});
+
+                        model.createExperience(body: body).then((value) {
+                          if (value != null) {
+                            model.showPublishSuccessBottomSheet().then((value) {
+                              completer(SheetResponse(confirmed: true));
+                            });
+                          } else {
+                            MotionToast.error(
+                              title: const Text("Create Experience Failed"),
+                              description: const Text("An error occurred while creating the experience, please try again."),
+                              animationCurve: Curves.easeIn,
+                              animationDuration: const Duration(milliseconds: 200),
+                            ).show(context);
+                          }
+                        });
+                      } else {
+                        MotionToast.warning(
+                          title: const Text("Warning"),
+                          description: const Text("Price must be more than 1.0 SR"),
+                          animationCurve: Curves.easeIn,
+                          animationDuration: const Duration(milliseconds: 200),
+                        ).show(context);
+                      }
+                    } else {
+                      MotionToast.warning(
+                        title: const Text("Warning"),
+                        description: const Text("All fields are required"),
+                        animationCurve: Curves.easeIn,
+                        animationDuration: const Duration(milliseconds: 200),
+                      ).show(context);
+                    }
                   },
                 ),
                 verticalSpaceRegular,
