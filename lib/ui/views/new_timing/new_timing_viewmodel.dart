@@ -1,10 +1,11 @@
 import 'dart:io';
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/app/app.locator.dart';
+import 'package:goasbar/data_models/timing_model.dart';
 import 'package:goasbar/enum/dialog_type.dart';
 import 'package:goasbar/services/media_service.dart';
+import 'package:goasbar/services/timing_api_service.dart';
 import 'package:goasbar/services/token_service.dart';
 import 'package:goasbar/services/validation_service.dart';
 import 'package:stacked/stacked.dart';
@@ -16,11 +17,13 @@ class NewTimingViewModel extends BaseViewModel {
   final _dialogService = locator<DialogService>();
   final _mediaService = locator<MediaService>();
   final _tokenService = locator<TokenService>();
+  final _timingApiService = locator<TimingApiService>();
 
   TextEditingController startDate = TextEditingController();
   TextEditingController startTime = TextEditingController();
   TextEditingController typeOfIdentity = TextEditingController();
   File? file;
+  String? pickedTimeForRequest;
   int pageIndex = 1;
 
   void navigateTo({view}) {
@@ -76,21 +79,6 @@ class NewTimingViewModel extends BaseViewModel {
     _tokenService.setTokenValue(token);
   }
 
-  void showStartDatePicker(context) async {
-    DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1950),
-      lastDate: DateTime.now(),
-    );
-
-    final DateFormat formatter = DateFormat('dd . MM yyyy');
-    final String formatted = formatter.format(picked!);
-
-    startDate.text = formatted;
-    notifyListeners();
-  }
-
   void showStartTimePicker(context) async {
     TimeOfDay? picked = await showTimePicker(
       context: context,
@@ -98,7 +86,23 @@ class NewTimingViewModel extends BaseViewModel {
     );
 
     String dayPeriod = picked!.period == DayPeriod.pm ? "PM" : "AM";
-    startTime.text = "${picked.hourOfPeriod}:${picked.minute} $dayPeriod";
+    String hour = picked.hourOfPeriod < 10 ? "0${picked.hourOfPeriod}" : "${picked.hourOfPeriod}";
+    String minute = picked.minute < 10 ? "0${picked.minute}" : "${picked.minute}";
+
+    startTime.text = "$hour:$minute $dayPeriod";
+
+    if (picked.period == DayPeriod.am) {
+      pickedTimeForRequest = "$hour:$minute";
+    } else {
+      String hourInPm = "${picked.hourOfPeriod + 12}";
+      pickedTimeForRequest = "$hourInPm:$minute";
+    }
+
     notifyListeners();
+  }
+
+  Future<TimingModel?> createTiming ({Map? body, int? experienceId}) async {
+    String token = await _tokenService.getTokenValue();
+    return await _timingApiService.createTiming(token: token, body: body, experienceId: experienceId);
   }
 }
