@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/auth_response.dart';
 import 'package:goasbar/services/auth_service.dart';
@@ -11,6 +13,10 @@ class SignUpOtpViewModel extends BaseViewModel {
   final _tokenService = locator<TokenService>();
   final _authService = locator<AuthService>();
   AuthResponse? authResponse;
+  Timer? _timer;
+  int start = 90;
+  bool finished = false;
+  String? startStr = '1:30';
 
   void back() {
     _navigationService.back();
@@ -34,5 +40,42 @@ class SignUpOtpViewModel extends BaseViewModel {
       notifyListeners();
       return StatusCode.ok;
     }
+  }
+
+  Future<bool> verifyPhoneNumber({String? phoneNumber}) async {
+    return await _authService.verifyPhoneNumber(phoneNumber: phoneNumber,);
+  }
+
+  void resendCode({String? phoneNumber}) {
+    verifyPhoneNumber(phoneNumber: phoneNumber);
+    const oneSec = Duration(seconds: 1);
+    if (finished) {
+      start = 90;
+      startStr = '1:30';
+      notifyListeners();
+    }
+    _timer = Timer.periodic(oneSec, (Timer timer) {
+      if (start == 0) {
+        timer.cancel();
+        finished = true;
+        notifyListeners();
+      } else {
+        start--;
+        if (start > 59) {
+          if (start - 60 < 10) {
+            startStr = "1:0${start - 60}";
+          } else {
+            startStr = "1:${start - 60}";
+          }
+        } else {
+          if (start < 10) {
+            startStr = "0:0$start";
+          } else {
+            startStr = "0:$start";
+          }
+        }
+        notifyListeners();
+      }
+    },);
   }
 }
