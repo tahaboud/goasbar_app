@@ -84,7 +84,7 @@ class SplashView extends StatelessWidget {
                     style: TextStyle(color: kMainGray, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),
                   ).translate(offset: const Offset(30, 570)),
 
-                  model.isBusy ? const Loader().center() : Container(
+                  !model.isDone ? const SizedBox() : Container(
                     width: MediaQuery.of(context).size.width - 60,
                     height: 50,
                     decoration: const BoxDecoration(
