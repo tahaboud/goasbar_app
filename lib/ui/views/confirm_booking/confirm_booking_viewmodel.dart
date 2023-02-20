@@ -2,18 +2,27 @@ import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/app/app.locator.dart';
+import 'package:goasbar/data_models/timing_list_model.dart';
 import 'package:goasbar/enum/dialog_type.dart';
+import 'package:goasbar/services/timing_api_service.dart';
+import 'package:goasbar/services/token_service.dart';
 import 'package:goasbar/services/validation_service.dart';
+import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
-class ConfirmBookingViewModel extends BaseViewModel {
+class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
+  final int? experienceId;
+  ConfirmBookingViewModel({this.experienceId});
+
   final _navigationService = locator<NavigationService>();
   final _dialogService = locator<DialogService>();
   final _validationService = locator<ValidationService>();
-  int? selectedIndexDate;
-  int? selectedIndexTime;
+  final _tokenService = locator<TokenService>();
+  final _timingApiService = locator<TimingApiService>();
+  TimingListModel? timingListModel;
+  int? selectedIndex;
   int? numberOfGuests = 0;
   TextEditingController birthDate = TextEditingController();
 
@@ -25,20 +34,11 @@ class ConfirmBookingViewModel extends BaseViewModel {
     _navigationService.back();
   }
 
-  void changeSelectionDate({int? index}) {
-    if (selectedIndexDate == index) {
-      selectedIndexDate = null;
+  void changeSelection({int? index}) {
+    if (selectedIndex == index) {
+      selectedIndex = null;
     } else {
-      selectedIndexDate = index;
-    }
-    notifyListeners();
-  }
-
-  void changeSelectionTime({int? index}) {
-    if (selectedIndexTime == index) {
-      selectedIndexTime = null;
-    } else {
-      selectedIndexTime = index;
+      selectedIndex = index;
     }
     notifyListeners();
   }
@@ -84,5 +84,36 @@ class ConfirmBookingViewModel extends BaseViewModel {
       ),
       dialogSize: const Size(325, 350),
     );
+  }
+
+  int formatDay(String date) => int.parse(date.substring(8,10).toString());
+
+  int formatMonth(String date) => int.parse(date.substring(5,7).toString());
+
+  int formatYear(String date) => int.parse(date.substring(0,4).toString());
+
+  formatDate(String? formattedDate) {
+    final int year = formatYear(formattedDate!);
+    final int day = formatDay(formattedDate);
+    final int month = formatMonth(formattedDate);
+    DateTime dateTime = DateTime(year, month, day);
+
+    int date = dateTime.weekday;
+    return weekDays[date];
+  }
+
+  Future<TimingListModel?> getExperiencePublicTimings({int? experienceId}) async {
+    String? token = await _tokenService.getTokenValue();
+    setBusy(true);
+    timingListModel = await _timingApiService.getTimingsList(token: token, experienceId: experienceId,);
+    notifyListeners();
+    setBusy(false);
+
+    return timingListModel;
+  }
+
+  @override
+  Future<TimingListModel?> futureToRun() async {
+    return await getExperiencePublicTimings(experienceId: experienceId);
   }
 }
