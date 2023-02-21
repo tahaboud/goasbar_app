@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:goasbar/data_models/timing_response.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/new_timing/new_timing_viewmodel.dart';
@@ -9,11 +10,12 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class NewTimingView extends HookWidget {
-  const NewTimingView({Key? key, required this.request, required this.completer})
+  NewTimingView({Key? key, required this.request, required this.completer})
       : super(key: key);
 
   final SheetRequest request;
   final Function(SheetResponse) completer;
+  bool? once = true;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,14 @@ class NewTimingView extends HookWidget {
 
     return ViewModelBuilder<NewTimingViewModel>.reactive(
       builder: (context, model, child) {
-        model.startDate.text = request.data;
+        if (!model.isBusy && once!) {
+          model.startDate.text = request.data;
+          if (request.customData is TimingResponse) {
+            model.startTime.text = request.customData.startTime;
+            addPeople.text = request.customData.capacity.toString();
+          }
+          once = false;
+        }
 
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -39,7 +48,7 @@ class NewTimingView extends HookWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Icon(Icons.close, size: 30,).gestures(onTap: () => model.back()),
-                  const Text('NEW TIMING', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  Text(request.customData is TimingResponse ? 'UPDATE TIMING' : 'NEW TIMING', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   horizontalSpaceLarge,
                 ],
               ),
@@ -134,22 +143,58 @@ class NewTimingView extends HookWidget {
               ).gestures(
                 onTap: () {
                   if (model.startDate.text.isNotEmpty && model.startTime.text.isNotEmpty && addPeople.text.isNotEmpty) {
-                    model.createTiming(body: {
-                      "date": model.startDate.text,
-                      "start_time": model.pickedTimeForRequest,
-                      "capacity": addPeople.text,
-                    }, experienceId: request.customData).then((value) {
-                      if (value == null) {
-                        MotionToast.error(
-                          title: const Text("Timing Creation Failed"),
-                          description: const Text("An error has occurred, please try again."),
-                          animationCurve: Curves.easeIn,
-                          animationDuration: const Duration(milliseconds: 200),
-                        ).show(context);
-                      } else {
-                        completer(SheetResponse(confirmed: true));
+                    var body = {};
+                    if (request.customData is TimingResponse) {
+                      if (model.pickedTimeForRequest != null) {
+                        body.addAll({"start_time": model.pickedTimeForRequest});
                       }
-                    });
+                      if (model.startDate.text != request.data) {
+                        body.addAll({"date": model.startDate.text});
+                      }
+                      if (model.startTime.text != request.customData.startTime
+                          || addPeople.text != request.customData.capacity.toString()
+                          || model.startDate.text != request.data) {
+                        var body = {
+                          "date": model.startDate.text,
+                          "start_time": model.pickedTimeForRequest,
+                          "capacity": addPeople.text,
+                        };
+
+                        print(body);
+
+                        model.updateTiming(body: body, timingId: request.customData.id,).then((value) {
+                          if (value == null) {
+                            MotionToast.error(
+                              title: const Text("Timing Update Failed"),
+                              description: const Text("An error has occurred, please try again."),
+                              animationCurve: Curves.easeIn,
+                              animationDuration: const Duration(milliseconds: 200),
+                            ).show(context);
+                          } else {
+                            completer(SheetResponse(confirmed: true));
+                          }
+                        });
+                      }
+                    } else {
+                      var body = {
+                        "date": model.startDate.text,
+                        "start_time": model.pickedTimeForRequest,
+                        "capacity": addPeople.text,
+                      };
+
+                      model.createTiming(body: body, experienceId: request.customData,).then((value) {
+                        if (value == null) {
+                          MotionToast.error(
+                            title: const Text("Timing Creation Failed"),
+                            description: const Text("An error has occurred, please try again."),
+                            animationCurve: Curves.easeIn,
+                            animationDuration: const Duration(milliseconds: 200),
+                          ).show(context);
+                        } else {
+                          completer(SheetResponse(confirmed: true));
+                        }
+                      });
+                    }
                   } else {
                     MotionToast.warning(
                       title: const Text("Warning"),
