@@ -95,7 +95,6 @@ class AuthService {
       ),
       data: formData,
     ).then((response) {
-      print(response.data);
       if (response.statusCode == 201) {
         return UserModel.fromJson(response.data['user']);
       } else {
