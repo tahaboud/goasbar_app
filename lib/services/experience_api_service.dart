@@ -65,9 +65,9 @@ class ExperienceApiService {
     });
   }
 
-  Future<TimingListModel?> getExperiencePublicTimings({String? token, String? experienceId}) async {
+  Future<TimingListModel?> getExperiencePublicTimings({String? token, int? experienceId}) async {
     return http.get(
-      Uri.parse("$baseUrl/api/experience/timing/?$experienceId"),
+      Uri.parse("$baseUrl/api/experience/timing/$experienceId/"),
       headers: {
         "Accept-Language": "en-US",
         "Authorization": "Token $token",
