@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:goasbar/data_models/experience_response.dart';
+import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/confirm_booking/confirm_booking_view.dart';
@@ -13,7 +15,9 @@ import 'package:styled_widget/styled_widget.dart';
 class TripItem extends StatelessWidget {
   const TripItem({
     Key? key,
+    this.experience,
   }) : super(key: key);
+  final ExperienceResults? experience;
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +26,13 @@ class TripItem extends StatelessWidget {
         return Stack(
           children: [
             Container(
+              margin: const EdgeInsets.symmetric(vertical: 10),
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage("assets/images/image${(Random().nextInt(3) + 1)}.png"),
+                  fit: BoxFit.cover,
+                  image: experience!.profileImage != null
+                      ? NetworkImage("$baseUrl${experience!.profileImage}") as ImageProvider
+                      : AssetImage("assets/images/image${(Random().nextInt(3) + 1)}.png"),
                 ),
                 borderRadius: BorderRadius.circular(15),
               ),
@@ -49,11 +57,11 @@ class TripItem extends StatelessWidget {
                   ).height(30)
                       .width(30),
                   horizontalSpaceSmall,
-                  const Chip(
+                  Chip(
                     backgroundColor: kMainColor1,
-                    label: Text('4.8', style: TextStyle(
+                    label: Text(experience!.rate! == "0.00" ? "0.0" : experience!.rate!, style: const TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold)),
-                    avatar: Icon(Icons.star, color: Colors.white, size: 20),
+                    avatar: const Icon(Icons.star, color: Colors.white, size: 20),
                   ),
                 ],
               ),
@@ -82,12 +90,12 @@ class TripItem extends StatelessWidget {
                     Row(
                       children: [
                         horizontalSpaceSmall,
-                        const Text('Dammam Trip', style: TextStyle(fontWeight: FontWeight.bold)),
+                        Text(experience!.title!, style: const TextStyle(fontWeight: FontWeight.bold)),
                         const Spacer(),
                         Row(
-                          children: const [
-                            Text('76.00 SR', style: TextStyle(color: kMainColor1, fontSize: 9)),
-                            Text(' / Person', style: TextStyle(color: kMainGray, fontSize: 9)),
+                          children: [
+                            Text('${experience!.price!} SR', style: const TextStyle(color: kMainColor1, fontSize: 9)),
+                            const Text(' / Person', style: TextStyle(color: kMainGray, fontSize: 9)),
                           ],
                         ),
                         horizontalSpaceSmall,
@@ -99,7 +107,7 @@ class TripItem extends StatelessWidget {
                         horizontalSpaceSmall,
                         Image.asset("assets/icons/location.png"),
                         horizontalSpaceTiny,
-                        const Text("Dammam , 1 Hour", style: TextStyle(color: kMainGray, fontSize: 11))
+                        Text("${experience!.city!}, ${experience!.duration!} ${double.parse(experience!.duration!) >= 2 ? 'Hours' : 'Hour'}", style: const TextStyle(color: kMainGray, fontSize: 11))
                       ],
                     ),
                     verticalSpaceSmall,
@@ -107,7 +115,7 @@ class TripItem extends StatelessWidget {
                       children: [
                         horizontalSpaceSmall,
                         Random().nextInt(100) > 50
-                            ? const Text('Lorem ipsum dolor sit amet', style: TextStyle(color: kMainGray, fontSize: 10))
+                            ? Flexible(child: Text(experience!.description!, style: const TextStyle(overflow: TextOverflow.ellipsis, color: kMainGray, fontSize: 10)))
                             : SizedBox(width: 90, child: Stack(
                           children: [
                             Image.asset("assets/images/user.png", height: 25),
@@ -135,7 +143,7 @@ class TripItem extends StatelessWidget {
                           ),
                           child: const Text('Book Now', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500),).center(),
                         ).gestures(onTap: () {
-                          model.navigateTo(view: const ConfirmBookingView());
+                          model.navigateTo(view: ConfirmBookingView(experience: experience));
                         }),
                         horizontalSpaceSmall,
                       ],
@@ -145,7 +153,7 @@ class TripItem extends StatelessWidget {
               ),
             ),
           ],
-        ).gestures(onTap: () => model.navigateTo(view: const TripDetailView()));
+        ).gestures(onTap: () => model.navigateTo(view: TripDetailView(experience: experience)));
       },
       viewModelBuilder: () => TripCardViewModel(),
     );
