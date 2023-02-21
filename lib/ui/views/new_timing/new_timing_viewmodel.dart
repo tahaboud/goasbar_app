@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:calendar_date_picker2/calendar_date_picker2.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/timing_model.dart';
@@ -8,6 +10,7 @@ import 'package:goasbar/services/media_service.dart';
 import 'package:goasbar/services/timing_api_service.dart';
 import 'package:goasbar/services/token_service.dart';
 import 'package:goasbar/services/validation_service.dart';
+import 'package:goasbar/shared/colors.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -98,6 +101,29 @@ class NewTimingViewModel extends BaseViewModel {
       pickedTimeForRequest = "$hourInPm:$minute";
     }
 
+    notifyListeners();
+  }
+
+  void showStartDatePicker(context) async {
+    List<DateTime?>? picked = await showCalendarDatePicker2Dialog(
+      context: context,
+      config: CalendarDatePicker2WithActionButtonsConfig(
+        disableYearPicker: true,
+        firstDate: DateTime.now(),
+        calendarType: CalendarDatePicker2Type.single,
+        selectedDayHighlightColor: kMainColor1,
+      ),
+      initialValue: [
+        DateTime.now(),
+      ],
+
+      dialogSize: const Size(325, 340),
+    );
+
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String formatted = formatter.format(picked![0]!);
+
+    startDate.text = formatted;
     notifyListeners();
   }
 
