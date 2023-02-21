@@ -54,8 +54,7 @@ class TimingView extends HookWidget {
                           Icon(Icons.add, color: kMainColor1, size: 25,)
                         ],
                       ),
-                    ).gestures(onTap: () => model.showNewTimingBottomSheet(experienceId: experience!.id,
-                        date: model.selectedFormattedDate
+                    ).gestures(onTap: () => model.showNewTimingBottomSheet(date: model.selectedFormattedDate
                         ?? model.formatSelectedDate(date: model.selectedDate))),
                   ],
                 ),
@@ -119,7 +118,9 @@ class TimingView extends HookWidget {
                               ).show(context);
                             }
                           }),
-                        ),
+                        ).gestures(onTap: () => model.showNewTimingBottomSheet(timing: model.timingListModel!.results![index],
+                            date: model.selectedFormattedDate
+                                ?? model.formatSelectedDate(date: model.selectedDate,))),
                         const Divider(thickness: 1, height: 30),
                       ],
                     );
@@ -131,8 +132,7 @@ class TimingView extends HookWidget {
           ),
         ),
       ),
-      viewModelBuilder: () => TimingViewModel(),
-      onModelReady: (model) => model.getTimingsList(experienceId: experience!.id),
+      viewModelBuilder: () => TimingViewModel(experienceId: experience!.id),
     );
   }
 }
