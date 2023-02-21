@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/timing_list_model.dart';
+import 'package:goasbar/data_models/timing_response.dart';
 import 'package:goasbar/enum/bottom_sheet_type.dart';
 import 'package:goasbar/enum/dialog_type.dart';
 import 'package:goasbar/services/timing_api_service.dart';
@@ -11,7 +12,10 @@ import 'package:stacked/stacked.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:stacked_services/stacked_services.dart';
 
-class TimingViewModel extends BaseViewModel {
+class TimingViewModel extends FutureViewModel<dynamic> {
+  final int? experienceId;
+  TimingViewModel({this.experienceId});
+
   final _navigationService = locator<NavigationService>();
   final _dialogService = locator<DialogService>();
   final _bottomSheetService = locator<BottomSheetService>();
@@ -68,14 +72,14 @@ class TimingViewModel extends BaseViewModel {
     );
   }
 
-  showNewTimingBottomSheet({String? date, int? experienceId}) async {
+  showNewTimingBottomSheet({String? date, TimingResponse? timing}) async {
     var response = await _bottomSheetService.showCustomSheet(
       variant: BottomSheetType.newTiming,
       isScrollControlled: true,
       barrierDismissible: true,
       data: date,
       // ignore: deprecated_member_use
-      customData: experienceId,
+      customData: timing ?? experienceId,
     );
 
     if (response!.confirmed) {
@@ -85,10 +89,8 @@ class TimingViewModel extends BaseViewModel {
 
   getTimingsList({int? experienceId}) async {
     String? token = await _tokenService.getTokenValue();
-    setBusy(true);
     timingListModel = await _timingApiService.getTimingsList(token: token, experienceId: experienceId,);
     notifyListeners();
-    setBusy(false);
   }
 
   launchMaps ({double? lat, double? long}) {
@@ -101,5 +103,10 @@ class TimingViewModel extends BaseViewModel {
       getTimingsList(experienceId: experienceId,);
       return value;
     });
+  }
+
+  @override
+  Future futureToRun() async {
+    await getTimingsList(experienceId: experienceId,);
   }
 }
