@@ -1,5 +1,6 @@
 import 'package:flutter/animation.dart';
 import 'package:goasbar/app/app.locator.dart';
+import 'package:goasbar/shared/app_configs.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -24,5 +25,16 @@ class TripDetailViewModel extends BaseViewModel {
 
   void back() {
     _navigationService.back();
+  }
+
+  String formatYear(String date) => date.substring(0,4).toString();
+
+  String formatDay(String date) => date.substring(8,10).toString();
+
+  String formatMonthYear(String? dateTime) {
+    final String year = formatYear(dateTime!);
+    final String day = formatDay(dateTime);
+    final String month = shortMonths[int.parse(dateTime.substring(5,7))];
+    return '$day $month $year';
   }
 }
