@@ -70,7 +70,9 @@ class NewTimingView extends HookWidget {
                       decoration: InputDecoration(
                         hintText: '20 Sep 2022',
                         hintStyle: const TextStyle(fontSize: 14),
-                        prefixIcon: Image.asset('assets/icons/birth_date.png'),
+                        prefixIcon: Image.asset('assets/icons/birth_date.png').gestures(
+                          onTap: () => model.showStartDatePicker(context),
+                        ),
                         fillColor: kTextFiledMainColor,
                         filled: true,
                         focusedBorder: const OutlineInputBorder(
@@ -151,22 +153,18 @@ class NewTimingView extends HookWidget {
                       if (model.startDate.text != request.data) {
                         body.addAll({"date": model.startDate.text});
                       }
+                      if (addPeople.text != request.customData.capacity.toString()) {
+                        body.addAll({"date": model.startDate.text});
+                      }
                       if (model.startTime.text != request.customData.startTime
                           || addPeople.text != request.customData.capacity.toString()
                           || model.startDate.text != request.data) {
-                        var body = {
-                          "date": model.startDate.text,
-                          "start_time": model.pickedTimeForRequest,
-                          "capacity": addPeople.text,
-                        };
-
-                        print(body);
 
                         model.updateTiming(body: body, timingId: request.customData.id,).then((value) {
                           if (value == null) {
                             MotionToast.error(
                               title: const Text("Timing Update Failed"),
-                              description: const Text("An error has occurred, please try again."),
+                              description: const Text("Timing could not be updated"),
                               animationCurve: Curves.easeIn,
                               animationDuration: const Duration(milliseconds: 200),
                             ).show(context);
@@ -174,13 +172,20 @@ class NewTimingView extends HookWidget {
                             completer(SheetResponse(confirmed: true));
                           }
                         });
+                      } else {
+                        MotionToast.warning(
+                          title: const Text("Warning"),
+                          description: const Text("Update the timing first."),
+                          animationCurve: Curves.easeIn,
+                          animationDuration: const Duration(milliseconds: 200),
+                        ).show(context);
                       }
                     } else {
-                      var body = {
+                      body.addAll({
                         "date": model.startDate.text,
                         "start_time": model.pickedTimeForRequest,
                         "capacity": addPeople.text,
-                      };
+                      });
 
                       model.createTiming(body: body, experienceId: request.customData,).then((value) {
                         if (value == null) {
