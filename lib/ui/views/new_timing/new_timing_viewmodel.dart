@@ -105,4 +105,9 @@ class NewTimingViewModel extends BaseViewModel {
     String token = await _tokenService.getTokenValue();
     return await _timingApiService.createTiming(token: token, body: body, experienceId: experienceId);
   }
+
+  Future<TimingModel?> updateTiming ({Map? body, int? timingId}) async {
+    String token = await _tokenService.getTokenValue();
+    return await _timingApiService.updateTiming(token: token, body: body, timingId: timingId);
+  }
 }
