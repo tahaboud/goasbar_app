@@ -27,10 +27,12 @@ class SplashViewModel extends FutureViewModel<dynamic> {
   }
 
   @override
-  Future<dynamic> futureToRun() async {
+  Future<bool?> futureToRun() async {
     setBusy(true);
     if (await checkToken()) {
-      navigateTo(view: const HomeView());
+      Timer(const Duration(milliseconds: 2500), () async {
+        navigateTo(view: const HomeView());
+      },);
     }
     setBusy(false);
     return await checkToken();
