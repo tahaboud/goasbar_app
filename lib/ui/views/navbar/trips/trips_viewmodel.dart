@@ -2,12 +2,20 @@ import 'dart:async';
 
 import 'package:flutter/animation.dart';
 import 'package:goasbar/app/app.locator.dart';
+import 'package:goasbar/data_models/experience_model.dart';
+import 'package:goasbar/data_models/experience_response.dart';
+import 'package:goasbar/services/experience_api_service.dart';
+import 'package:goasbar/services/token_service.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
-class TripsViewModel extends BaseViewModel {
+class TripsViewModel extends FutureViewModel<List<ExperienceResults?>> {
   int index = 1;
   final _navigationService = locator<NavigationService>();
+  final _tokenService = locator<TokenService>();
+  final _experienceApiService = locator<ExperienceApiService>();
+  bool? isTokenExist;
+  ExperienceModel? experienceModels;
 
   void selectCategory({ind}) {
     index = ind;
@@ -22,8 +30,15 @@ class TripsViewModel extends BaseViewModel {
     _navigationService.back();
   }
 
-  loadData() async {
-    setBusy(true);
-    Timer(const Duration(milliseconds: 1000), () { setBusy(false); },);
+  Future<List<ExperienceResults?>> getPublicExperiences({String? query}) async {
+    String? token = await _tokenService.getTokenValue();
+    experienceModels = await _experienceApiService.getPublicExperiences(token: token, query: query);
+    notifyListeners();
+    return experienceModels!.results!;
+  }
+
+  @override
+  Future<List<ExperienceResults?>> futureToRun() async {
+    return getPublicExperiences();
   }
 }
