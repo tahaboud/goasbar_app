@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/home/home_view.dart';
 import 'package:goasbar/ui/views/login/login_view.dart';
-import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:goasbar/ui/widgets/splash_clipper.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/ui/views/splash/splash_viewmodel.dart';
@@ -84,7 +83,7 @@ class SplashView extends StatelessWidget {
                     style: TextStyle(color: kMainGray, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),
                   ).translate(offset: const Offset(30, 570)),
 
-                  !model.isDone ? const SizedBox() : Container(
+                  model.data! ? const SizedBox() : Container(
                     width: MediaQuery.of(context).size.width - 60,
                     height: 50,
                     decoration: const BoxDecoration(
