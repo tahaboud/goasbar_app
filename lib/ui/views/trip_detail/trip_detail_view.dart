@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:goasbar/data_models/experience_response.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/confirm_booking/confirm_booking_view.dart';
@@ -12,7 +13,8 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:goasbar/ui/widgets/dot_item.dart';
 
 class TripDetailView extends HookWidget {
-  const TripDetailView({Key? key}) : super(key: key);
+  const TripDetailView({Key? key, this.experience}) : super(key: key);
+  final ExperienceResults? experience;
 
   @override
   Widget build(BuildContext context) {
@@ -35,11 +37,11 @@ class TripDetailView extends HookWidget {
                       scrollDirection: Axis.horizontal,
                       controller: pageController,
                       onPageChanged: (index) => model.changeIndex(index: index),
-                      children: const [
-                        SliderImageItem(path: 'assets/images/trip_detail.png'),
-                        SliderImageItem(path: 'assets/images/trip_detail.png'),
-                        SliderImageItem(path: 'assets/images/trip_detail.png'),
-                        SliderImageItem(path: 'assets/images/trip_detail.png'),
+                      children: experience!.imageSet!.isEmpty ? const [
+                        SliderImageItem(path: 'assets/images/trip_detail.png', isAsset: true,),
+                      ] : [
+                        for (var image in experience!.imageSet!)
+                          SliderImageItem(path: image.image, isAsset: false,),
                       ],
                     ),
                   ),
@@ -107,10 +109,10 @@ class TripDetailView extends HookWidget {
                               ),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  Icon(Icons.star, color: kStarColor,),
+                                children: [
+                                  const Icon(Icons.star, color: kStarColor,),
                                   horizontalSpaceTiny,
-                                  Text('4.0', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                                  Text(experience!.rate! == "0.00" ? "0.0" : experience!.rate!, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                                 ],
                               ),
                             ).height(40)
@@ -122,20 +124,24 @@ class TripDetailView extends HookWidget {
                                     color: const Color(0xff222222),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
-                                  child: Text('${model.pageIndex + 1} / 04', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),).center(),
+                                  child: Text(experience!.imageSet!.isEmpty ? '1 / 1' : '${model.pageIndex + 1} / ${experience!.imageSet!.length}',
+                                    style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),).center(),
                                 ).width(60)
                                     .height(40)
                                     .opacity(0.6),
                                 horizontalSpaceRegular,
                                 Row(
-                                  children: [
-                                    DotItem(condition: model.pageIndex + 1 == 1),
+                                  children: experience!.imageSet!.isEmpty ? [
+                                    const DotItem(condition: true),
                                     horizontalSpaceSmall,
-                                    DotItem(condition: model.pageIndex + 1 == 2),
-                                    horizontalSpaceSmall,
-                                    DotItem(condition: model.pageIndex + 1 == 3),
-                                    horizontalSpaceSmall,
-                                    DotItem(condition: model.pageIndex + 1 == 4),
+                                  ] : [
+                                    for (var i = 0; i < experience!.imageSet!.length; i++)
+                                      Row(
+                                        children: [
+                                          DotItem(condition: model.pageIndex + 1 == i),
+                                          horizontalSpaceSmall,
+                                        ],
+                                      ),
                                   ],
                                 )
                               ],
@@ -150,7 +156,7 @@ class TripDetailView extends HookWidget {
               ),
             ),
             verticalSpaceRegular,
-            const Text('Get your experience this weekend \nwith amazing trip in Dammam', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 22),)
+            Text('Get your experience this weekend \nwith amazing trip in ${experience!.city}', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 22),)
                 .padding(horizontal: 20),
             verticalSpaceRegular,
             Row(
@@ -158,7 +164,7 @@ class TripDetailView extends HookWidget {
                 const Text('3 reviews'),
                 Image.asset("assets/icons/location.png"),
                 horizontalSpaceTiny,
-                const Text("Dammam , Duration : 2 days", style: TextStyle(color: kMainGray, fontSize: 11)),
+                Text("${experience!.city} , Duration : ${experience!.duration}", style: const TextStyle(color: kMainGray, fontSize: 11)),
                 const Text(" | Start at 9 : 00 AM", style: TextStyle(color: kMainGray, fontSize: 11)),
               ],
             ).padding(horizontal: 20),
@@ -188,7 +194,7 @@ class TripDetailView extends HookWidget {
                     ],
                   ).padding(horizontal: 20),
                   verticalSpaceRegular,
-                  const Text("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum")
+                  Text(experience!.description!)
                       .padding(horizontal: 20),
                   verticalSpaceRegular,
                   Row(
@@ -197,7 +203,7 @@ class TripDetailView extends HookWidget {
                       horizontalSpaceSmall,
                       const Text('Gender', ),
                       horizontalSpaceMedium,
-                      const Text('Valid for All', style: TextStyle(color: kMainDisabledGray),)
+                      Text(experience!.gender! == "None" ?'Valid for All' : experience!.gender!, style: const TextStyle(color: kMainDisabledGray),)
                     ],
                   ).padding(horizontal: 20),
                   verticalSpaceRegular,
@@ -221,7 +227,7 @@ class TripDetailView extends HookWidget {
                   verticalSpaceRegular,
                   Image.asset("assets/images/map.png").padding(horizontal: 20),
                   verticalSpaceRegular,
-                  Row(
+                  experience!.requirements == null && experience!.providedGoods == null ? const SizedBox() : Row(
                     children: [
                       Image.asset("assets/icons/notes.png",),
                       horizontalSpaceSmall,
@@ -229,14 +235,12 @@ class TripDetailView extends HookWidget {
                     ],
                   ).padding(horizontal: 20),
                   verticalSpaceRegular,
-                  const NoteItem(text: 'Lorem ipsum dolor sit amet, consetetur sadipscing , sed diam nonumy eirmod tempor invidunt ut labore',)
+                  experience!.requirements == null ? const SizedBox() : NoteItem(text: experience!.requirements!,)
                       .padding(horizontal: 20),
-                  verticalSpaceSmall,
-                  const NoteItem(text: 'Lorem ipsum dolor sit amet, consetetur sadipscing , sed diam nonumy eirmod tempor invidunt ut labore',)
+                  experience!.requirements == null ? const SizedBox() : verticalSpaceSmall,
+                  experience!.providedGoods == null ? const SizedBox() : NoteItem(text: experience!.providedGoods!,)
                       .padding(horizontal: 20),
-                  verticalSpaceSmall,
-                  const NoteItem(text: 'Lorem ipsum dolor sit amet, consetetur sadipscing , sed diam nonumy eirmod tempor invidunt ut labore',)
-                      .padding(horizontal: 20),
+                  experience!.providedGoods == null ? const SizedBox() : verticalSpaceSmall,
                 ],
               ),
             ),
@@ -247,13 +251,13 @@ class TripDetailView extends HookWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-                      children: const [
-                        Text('100.00 SR', style: TextStyle(color: kMainColor1, fontSize: 18)),
-                        Text(' / Person', style: TextStyle(color: kMainGray, fontSize: 18)),
+                      children: [
+                        Text('${experience!.price!} SR', style: const TextStyle(color: kMainColor1, fontSize: 18)),
+                        const Text(' / Person', style: TextStyle(color: kMainGray, fontSize: 18)),
                       ],
                     ),
                     verticalSpaceTiny,
-                    const Text('20 - 23 November . 2022', style: TextStyle(fontSize: 13, color: kGrayText),)
+                    Text(model.formatMonthYear(experience!.creationDate!.substring(0, 10)), style: const TextStyle(fontSize: 13, color: kGrayText),)
                   ],
                 ),
                 Container(
@@ -266,7 +270,7 @@ class TripDetailView extends HookWidget {
                   child: const Text('Book Now', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),)
                       .center()
                       .gestures(onTap: () {
-                        model.navigateTo(view: const ConfirmBookingView());
+                        model.navigateTo(view: ConfirmBookingView(experience: experience));
                   }),
                 ),
               ],
