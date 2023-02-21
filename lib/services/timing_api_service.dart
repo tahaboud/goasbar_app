@@ -34,6 +34,7 @@ class TimingApiService {
       },
       body: body,
     ).then((response) {
+      print(response.body);
       if (response.statusCode == 200) {
         return TimingModel.fromJson(jsonDecode(response.body));
       } else {
