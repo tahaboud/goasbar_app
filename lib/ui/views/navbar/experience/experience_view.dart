@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/messages_notifications/messages_notifications_view.dart';
@@ -11,8 +12,9 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class ExperienceView extends HookWidget {
-  const ExperienceView({Key? key, this.isUser}) : super(key: key);
+  const ExperienceView({Key? key, this.isUser, this.user}) : super(key: key);
   final bool? isUser;
+  final UserModel? user;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class ExperienceView extends HookWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    UserWelcomeWidget(isUser: isUser).gestures(onTap: isUser! ? () {} : () => model.back(),),
+                    UserWelcomeWidget(isUser: isUser, user: user!,).gestures(onTap: isUser! ? () {} : () => model.back(),),
                     const Spacer(),
                     Container(
                       width: 45,
@@ -61,13 +63,13 @@ class ExperienceView extends HookWidget {
                 ),
                 verticalSpaceMedium,
                 model.isBusy ? const Loader().center()
-                    : model.experienceModels!.count == 0
+                    : !model.dataReady ? const Text('No experience under this category').center() : model.experienceModels!.count == 0
                     ? const Text('No experience under this category').center() : Expanded(child: ListView.builder(
                       physics: const BouncingScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: model.experienceModels!.count,
                       itemBuilder: (context, index) {
-                        return TripItem(experience: model.experienceModels!.results![index]);
+                        return TripItem(experience: model.experienceModels!.results![index], user: user);
                       },
                     )
                 ),
