@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
@@ -21,8 +22,9 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class SettingsView extends HookWidget {
-  const SettingsView({Key? key, this.isUser}) : super(key: key);
+  const SettingsView({Key? key, this.isUser, this.user}) : super(key: key);
   final bool? isUser;
+  final UserModel? user;
 
   @override
   Widget build(BuildContext context) {
