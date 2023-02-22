@@ -82,7 +82,7 @@ class SignUpOtpView extends HookWidget {
                             animationDuration: const Duration(milliseconds: 200),
                           ).show(context);
                         } else {
-                          model.navigateTo(view: const HomeView());
+                          model.navigateTo(view: const HomeView(isUser: true));
                         }
                       });
                     }
