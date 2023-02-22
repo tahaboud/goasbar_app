@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/navbar/saved_experiences/saved_experiences_viewmodel.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
@@ -8,8 +9,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class SavedExperiencesView extends HookWidget {
-  const SavedExperiencesView({Key? key, this.text}) : super(key: key);
+  const SavedExperiencesView({Key? key, this.text, this.user}) : super(key: key);
   final String? text;
+  final UserModel? user;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,7 @@ class SavedExperiencesView extends HookWidget {
       builder: (context, model, child) => Scaffold(
         bottomNavigationBar: const BottomAppBar(),
         body: SafeArea(
-          child: SingleChildScrollView(
+          child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 20),
             child: Container(
               height: double.maxFinite,
