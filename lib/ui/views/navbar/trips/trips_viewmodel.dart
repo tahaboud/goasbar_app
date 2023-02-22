@@ -39,6 +39,6 @@ class TripsViewModel extends FutureViewModel<List<ExperienceResults?>> {
 
   @override
   Future<List<ExperienceResults?>> futureToRun() async {
-    return getPublicExperiences();
+    return await getPublicExperiences();
   }
 }
