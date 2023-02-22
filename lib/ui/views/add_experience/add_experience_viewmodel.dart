@@ -12,6 +12,7 @@ import 'package:goasbar/services/media_service.dart';
 import 'package:goasbar/services/timing_api_service.dart';
 import 'package:goasbar/services/token_service.dart';
 import 'package:goasbar/services/validation_service.dart';
+import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -25,7 +26,6 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   final _experienceApiService = locator<ExperienceApiService>();
   final _timingApiService = locator<TimingApiService>();
   final _mediaService = locator<MediaService>();
-  TextEditingController genderConstraints = TextEditingController(text: 'No constrains');
   TextEditingController gender = TextEditingController();
   File? mainImage;
   List<File?>? additionalImages = [];
@@ -51,6 +51,7 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   TextEditingController providedGoodsController3 = TextEditingController();
   TextEditingController providedGoodsController4 = TextEditingController();
   List<TextEditingController> addedProvidedGoodsControllers = [];
+  String? genderConstraint = genderConstraints[0];
 
   updateSelectedExperienceCategory({String? category}) {
     selectedExperienceCategory = category;
@@ -110,13 +111,8 @@ class AddExperienceInfoViewModel extends BaseViewModel {
     return _validationService.validatePhoneNumber(value);
   }
 
-  void showGenderConstraintsDialog({data}) async{
-    var response = await _dialogService.showCustomDialog(
-      variant: DialogType.genderConstraints,
-      data: genderConstraints.text.isNotEmpty ? genderConstraints.text : data,
-    );
-
-    genderConstraints.text = response!.data;
+  updateGenderConstraint({String? value}) {
+    genderConstraint = value;
     notifyListeners();
   }
 
