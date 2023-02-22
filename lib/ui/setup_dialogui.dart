@@ -4,7 +4,6 @@ import 'package:goasbar/ui/widgets/dialogs/error_dialog.dart';
 import 'package:goasbar/ui/widgets/dialogs/profile_booked/profile_booked_dialog.dart';
 import 'package:goasbar/ui/widgets/dialogs/selection_custom_dialog.dart';
 import 'package:goasbar/ui/widgets/dialogs/type_of_identity_dialog.dart';
-import 'package:goasbar/ui/widgets/dialogs/gender_constraints_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/enum/dialog_type.dart';
@@ -25,9 +24,6 @@ void setupDialogUi() {
 
     DialogType.typeOfIdentity : (BuildContext context, DialogRequest dialogRequest, Function(DialogResponse) completer)
         => Dialog(child: TypeOfIdentityDialog(dialogRequest: dialogRequest, onDialogTap: completer,),),
-
-    DialogType.genderConstraints : (BuildContext context, DialogRequest dialogRequest, Function(DialogResponse) completer)
-        => Dialog(child: GenderConstraintsDialog(dialogRequest: dialogRequest, onDialogTap: completer,),),
 
     DialogType.error : (BuildContext context, DialogRequest dialogRequest, Function(DialogResponse) completer)
         => Dialog(child: ErrorDialog(dialogRequest: dialogRequest, onDialogTap: completer,),),
