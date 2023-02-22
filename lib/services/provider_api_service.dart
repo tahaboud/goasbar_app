@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:goasbar/data_models/public_provider_model.dart';
 import 'package:goasbar/shared/app_configs.dart';
 // ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
@@ -23,7 +24,7 @@ class ProviderApiService {
     });
   }
 
-  Future<ProviderModel?> getProviderInfo({String? token}) async {
+  Future<ProviderModel?> getProviderUserInfo({String? token}) async {
     return http.get(
       Uri.parse("$baseUrl/api/provider/"),
       headers: {
@@ -33,6 +34,22 @@ class ProviderApiService {
     ).then((response) {
       if (response.statusCode == 200) {
         return ProviderModel.fromJson(jsonDecode(response.body));
+      } else {
+        return null;
+      }
+    });
+  }
+
+  Future<PublicProviderModel?> getProviderInfo({String? token, int? providerId}) async {
+    return http.get(
+      Uri.parse("$baseUrl/api/provider/$providerId/"),
+      headers: {
+        "Accept-Language": "en-US",
+        "Authorization": "Token $token",
+      },
+    ).then((response) {
+      if (response.statusCode == 200) {
+        return PublicProviderModel.fromJson(jsonDecode(response.body));
       } else {
         return null;
       }
