@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:goasbar/data_models/experience_response.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/booking_scuccess/booking_success_view.dart';
 import 'package:goasbar/ui/views/checkout/checkout_viewmodel.dart';
+import 'package:goasbar/ui/widgets/info_item.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class CheckoutView extends HookWidget {
-  const CheckoutView({Key? key}) : super(key: key);
+  const CheckoutView({Key? key, this.experience}) : super(key: key);
+  final ExperienceResults? experience;
 
   @override
   Widget build(BuildContext context) {
+    var cardNumber = useTextEditingController();
+    var expiryDate = useTextEditingController();
+    var cvv = useTextEditingController();
+
     return ViewModelBuilder<CheckoutViewModel>.reactive(
       builder: (context, model, child) => Scaffold(
         body: SafeArea(
@@ -37,67 +44,87 @@ class CheckoutView extends HookWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Image.asset("assets/icons/checkout/visa_method.png", width: screenWidthPercentage(context, percentage: 1/5.5),),
-                    Image.asset("assets/icons/checkout/master_card.png", width: screenWidthPercentage(context, percentage: 1/5.5),),
-                    Image.asset("assets/icons/checkout/paypal.png", width: screenWidthPercentage(context, percentage: 1/5.5),),
-                    Image.asset("assets/icons/checkout/apple_pay.png", width: screenWidthPercentage(context, percentage: 1/5.5),),
-                    Image.asset("assets/icons/checkout/stripe.png", width: screenWidthPercentage(context, percentage: 1/5.5),),
+                    Container(
+                      height: 60,
+                      width: 60,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(width: model.selectedPaymentMethod == 1 ? 2 : 1.5, color: model.selectedPaymentMethod == 1 ? Colors.blue : Colors.grey,)
+                      ),
+                      child: Image.asset("assets/icons/checkout/visa.png",).gestures(
+                        onTap: () => model.selectPaymentMethod(value: 1),
+                      ),
+                    ),
+                    Container(
+                      height: 60,
+                      width: 60,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(width: model.selectedPaymentMethod == 2 ? 2 : 1.5, color: model.selectedPaymentMethod == 2 ? Colors.blue : Colors.grey)
+                      ),
+                      child: Image.asset("assets/icons/checkout/master_card.png",).gestures(
+                        onTap: () => model.selectPaymentMethod(value: 2),
+                      ),
+                    ),
+                    Container(
+                      height: 60,
+                      width: 60,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(width: model.selectedPaymentMethod == 3 ? 2 : 1.5, color: model.selectedPaymentMethod == 3 ? Colors.blue : Colors.grey)
+                      ),
+                      child: Image.asset("assets/icons/checkout/paypal.png",).gestures(
+                        onTap: () => model.selectPaymentMethod(value: 3),
+                      ),
+                    ),
+                    Container(
+                      height: 60,
+                      width: 60,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(width: model.selectedPaymentMethod == 4 ? 2 : 1.5, color: model.selectedPaymentMethod == 4 ? Colors.blue : Colors.grey)
+                      ),
+                      child: Image.asset("assets/icons/checkout/apple_pay.png",).gestures(
+                        onTap: () => model.selectPaymentMethod(value: 4),
+                      ),
+                    ),
+                    Container(
+                      height: 60,
+                      width: 60,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(width: model.selectedPaymentMethod == 5 ? 2 : 1.5, color: model.selectedPaymentMethod == 5 ? Colors.blue : Colors.grey),
+                      ),
+                      child: Image.asset("assets/icons/checkout/stripe.png",).gestures(
+                        onTap: () => model.selectPaymentMethod(value: 5),
+                      ),
+                    ),
                   ],
                 ),
                 verticalSpaceMedium,
-                Container(
-                  // height: 100,
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  width: double.maxFinite,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: kTextFiledMainColor,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text('Card Number', style: TextStyle(fontSize: 12),),
-                      verticalSpaceSmall,
-                      Text('8585 9595 7575 6565', style: TextStyle(fontSize: 18),),
-                    ],
-                  ),
+                InfoItem(
+                  controller: cardNumber,
+                  label: 'Card Number',
+                  hintText: '8585 9595 7575 6565',
                 ),
                 verticalSpaceMedium,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      // height: 100,
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    SizedBox(
                       width: screenWidthPercentage(context, percentage: 0.4),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: kTextFiledMainColor,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text('Expiry Date', style: TextStyle(fontSize: 12),),
-                          verticalSpaceSmall,
-                          Text('08/24', style: TextStyle(fontSize: 18),),
-                        ],
+                      child: InfoItem(
+                        controller: expiryDate,
+                        label: 'Expiry Date',
+                        hintText: '08/24',
                       ),
                     ),
-                    Container(
-                      // height: 100,
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    SizedBox(
                       width: screenWidthPercentage(context, percentage: 0.4),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: kTextFiledMainColor,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text('CVV', style: TextStyle(fontSize: 12),),
-                          verticalSpaceSmall,
-                          Text('000', style: TextStyle(fontSize: 18),),
-                        ],
+                      child: InfoItem(
+                        controller: cvv,
+                        label: 'CVV',
+                        hintText: '000',
                       ),
                     ),
                   ],
@@ -116,9 +143,9 @@ class CheckoutView extends HookWidget {
                       verticalSpaceMedium,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          Text('Ticket price', style: TextStyle(fontSize: 16)),
-                          Text('4000.00 SR', style: TextStyle(fontSize: 16)),
+                        children: [
+                          const Text('Ticket price', style: TextStyle(fontSize: 16)),
+                          Text('${experience!.price} SR', style: const TextStyle(fontSize: 16)),
                         ],
                       ),
                       verticalSpaceRegular,
@@ -133,9 +160,9 @@ class CheckoutView extends HookWidget {
                       verticalSpaceTiny,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          Text('Total amount', style: TextStyle(fontSize: 16)),
-                          Text('4000.00 SR', style: TextStyle(fontSize: 16)),
+                        children: [
+                          const Text('Total amount', style: TextStyle(fontSize: 16)),
+                          Text('${experience!.price!} SR', style: const TextStyle(fontSize: 16)),
                         ],
                       ),
                     ],
