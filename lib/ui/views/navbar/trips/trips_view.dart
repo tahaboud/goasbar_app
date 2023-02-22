@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/ui/views/navbar/trips/trips_viewmodel.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
@@ -8,8 +9,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class TripsView extends HookWidget {
-  const TripsView({Key? key, this.text}) : super(key: key);
+  const TripsView({Key? key, this.text, this.user}) : super(key: key);
   final String? text;
+  final UserModel? user;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,7 @@ class TripsView extends HookWidget {
                   verticalSpaceMedium,
                   Text(text!, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),).alignment(Alignment.centerLeft),
                   verticalSpaceMedium,
-                  model.isBusy ? const Loader().center() : model.experienceModels!.count == 0 ? const Text('No trips right now').center() : Expanded(child: ListView.builder(
+                  model.isBusy ? const Loader().center() : model.data == null ? const Text('No trips right now').center() : model.data!.isEmpty ? const Text('No trips right now').center() : Expanded(child: ListView.builder(
                     physics: const BouncingScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: model.experienceModels!.count,
