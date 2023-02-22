@@ -51,3 +51,10 @@ final List<String> weekDays = <String>[
   'FR',
   'SA',
 ];
+
+const genderConstraints = [
+  'No constrains',
+  'Families',
+  'Men Only',
+  'Women Only',
+];
