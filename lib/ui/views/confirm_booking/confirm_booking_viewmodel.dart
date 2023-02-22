@@ -24,7 +24,9 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
   TimingListModel? timingListModel;
   int? selectedIndex;
   int? numberOfGuests = 0;
-  TextEditingController birthDate = TextEditingController();
+  List<TextEditingController> birthDates = [];
+  List<TextEditingController> phones = [];
+  List<TextEditingController> names = [];
 
   void navigateTo({view}) {
     _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
@@ -46,7 +48,18 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
   void incDecrease({int? value}) {
     if (numberOfGuests! > 0 || value! > 0) {
       numberOfGuests = numberOfGuests! + value!;
+
+      if (value == 1) {
+        names.add(TextEditingController());
+        birthDates.add(TextEditingController());
+        phones.add(TextEditingController());
+      } else {
+        names.removeLast();
+        birthDates.removeLast();
+        phones.removeLast();
+      }
     }
+
     notifyListeners();
   }
 
@@ -56,18 +69,25 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
     );
   }
 
-  void showBirthDayPicker(context) async {
-    DateTime? picked = await showDatePicker(
+  void showBirthDayPicker(context, index) async {
+    List<DateTime?>? picked = await showCalendarDatePicker2Dialog(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1950),
-      lastDate: DateTime.now(),
+      config: CalendarDatePicker2WithActionButtonsConfig(
+        disableYearPicker: true,
+        calendarType: CalendarDatePicker2Type.single,
+        selectedDayHighlightColor: kMainColor1,
+      ),
+      initialValue: [
+        DateTime.now(),
+      ],
+
+      dialogSize: const Size(325, 340),
     );
 
-    final DateFormat formatter = DateFormat('dd . MM yyyy');
-    final String formatted = formatter.format(picked!);
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String formatted = formatter.format(picked![0]!);
 
-    birthDate.text = formatted;
+    birthDates[index].text = formatted;
     notifyListeners();
   }
 
