@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/ui/views/home/home_viewmodel.dart';
 import 'package:goasbar/ui/views/must_login_first/must_login_first_view.dart';
 import 'package:goasbar/ui/views/navbar/experience/experience_view.dart';
@@ -11,7 +12,8 @@ import 'package:animations/animations.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
 
 class HomeView extends StatelessWidget {
-  const HomeView({Key? key,}) : super(key: key);
+  const HomeView({Key? key, this.isUser}) : super(key: key);
+  final bool? isUser;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +34,7 @@ class HomeView extends StatelessWidget {
               child: child,
             );
           },
-          child: getViewForIndex(index: model.currentIndex, isUser: model.isTokenExist),
+          child: getViewForIndex(index: model.currentIndex, isUser: isUser, user: model.user),
         ),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
@@ -64,22 +66,22 @@ class HomeView extends StatelessWidget {
         ),
       ),
       viewModelBuilder: () => HomeViewModel(),
-      onModelReady: (model) => model.checkToken(),
+      onModelReady: (model) => model.getUserData(),
     );
   }
 
-  Widget getViewForIndex({int? index, bool? isUser}) {
+  Widget getViewForIndex({int? index, bool? isUser, UserModel? user}) {
     switch (index) {
       case 0:
-        return ExperienceView(isUser: isUser);
+        return ExperienceView(isUser: isUser, user: user);
       case 1:
-        return const SearchView();
+        return SearchView(user: user);
       case 2:
-        return isUser! ? const TripsView(text: "Trips",) : const MustLoginFirstView(text: 'Trips',);
+        return isUser! ? TripsView(text: "Trips", user: user) : const MustLoginFirstView(text: 'Trips');
       case 3:
-        return isUser! ? const SavedExperiencesView(text: 'Saved Experiences',) : const MustLoginFirstView(text: 'Saved Experiences',);
+        return isUser! ? SavedExperiencesView(text: 'Saved Experiences', user: user) : const MustLoginFirstView(text: 'Saved Experiences',);
       case 4:
-        return SettingsView(isUser: isUser);
+        return SettingsView(isUser: isUser, user: user);
       default:
         return Container();
     }
