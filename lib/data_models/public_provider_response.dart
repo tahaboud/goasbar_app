@@ -1,4 +1,4 @@
-class PublicResponse {
+class PublicProviderResponse {
   int? id;
   String? nickname;
   String? email;
@@ -9,7 +9,7 @@ class PublicResponse {
   dynamic facebookAccount;
   dynamic instagramAccount;
 
-  PublicResponse(
+  PublicProviderResponse(
       {this.id,
         this.nickname,
         this.email,
@@ -20,7 +20,7 @@ class PublicResponse {
         this.facebookAccount,
         this.instagramAccount});
 
-  PublicResponse.fromJson(Map<String, dynamic> json) {
+  PublicProviderResponse.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     nickname = json['nickname'];
     email = json['email'];
