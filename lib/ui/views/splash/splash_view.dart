@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
-import 'package:goasbar/ui/views/home/home_view.dart';
 import 'package:goasbar/ui/views/login/login_view.dart';
 import 'package:goasbar/ui/widgets/splash_clipper.dart';
 import 'package:goasbar/shared/colors.dart';
@@ -75,7 +74,7 @@ class SplashView extends StatelessWidget {
                         ]
                     ),
                   ).translate(offset: !model.isDone ? const Offset(-60, 400) : const Offset(30, 400), animate: true, )
-                      .opacity(!model.isDone? 0.0 : 1.0, animate: true)
+                      .opacity(!model.isDone ? 0.0 : 1.0, animate: true)
                       .animate(const Duration(milliseconds: 1000), Curves.easeIn),
 
                   const Text(
@@ -83,7 +82,7 @@ class SplashView extends StatelessWidget {
                     style: TextStyle(color: kMainGray, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),
                   ).translate(offset: const Offset(30, 570)),
 
-                  model.data! ? const SizedBox() : Container(
+                  model.isDone ? const SizedBox() : Container(
                     width: MediaQuery.of(context).size.width - 60,
                     height: 50,
                     decoration: const BoxDecoration(
@@ -95,14 +94,9 @@ class SplashView extends StatelessWidget {
                     ),
                   ).gestures(
                     onTap: () async {
-                      if (await model.checkToken()) {
-                        model.navigateTo(view: const HomeView());
-                      } else {
-                        model.navigateTo(view: const LoginView());
-                      }
+                      model.clearStackAndShowView(view: const LoginView());
                     },
-                  )
-                      .translate(offset: Offset(35, size.height - 30 - 50 ))
+                  ).translate(offset: Offset(35, size.height - 30 - 50 ))
                 ],
               ),
             ),
