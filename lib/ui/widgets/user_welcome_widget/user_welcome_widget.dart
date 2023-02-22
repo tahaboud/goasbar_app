@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
@@ -9,9 +10,11 @@ class UserWelcomeWidget extends StatelessWidget {
   const UserWelcomeWidget({
     Key? key,
     required this.isUser,
+    required this.user,
   }) : super(key: key);
 
   final bool? isUser;
+  final UserModel? user;
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +32,10 @@ class UserWelcomeWidget extends StatelessWidget {
               model.isBusy ? Image.asset("assets/images/user.png",)
                   : ClipRRect(
                 borderRadius: BorderRadius.circular(100),
-                child: Image.network("$baseUrl${model.user!.image}", height: 30, width: 30, fit: BoxFit.cover),
+                child: Image.network("$baseUrl${user!.image}", height: 30, width: 30, fit: BoxFit.cover),
               ),
               horizontalSpaceTiny,
-              model.isBusy ? const Text('Hi , ') : Text('Hi , ${model.user!.firstName} !'),
+              model.isBusy ? const Text('Hi , ') : Text('Hi , ${user!.firstName} !'),
             ] : [
               Image.asset("assets/icons/person_login.png", color: kMainColor1),
               horizontalSpaceTiny,
