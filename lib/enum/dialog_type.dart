@@ -6,5 +6,4 @@ enum DialogType {
   error,
   bookingList,
   profile,
-  genderConstraints,
 }
