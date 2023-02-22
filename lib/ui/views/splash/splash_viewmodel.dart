@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/animation.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/services/token_service.dart';
 import 'package:goasbar/ui/views/home/home_view.dart';
@@ -11,8 +10,8 @@ class SplashViewModel extends FutureViewModel<dynamic> {
   final _navigationService = locator<NavigationService>();
   final _tokenService = locator<TokenService>();
 
-  void navigateTo({view}) {
-    _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
+  void clearStackAndShowView({view}) {
+    _navigationService.clearStackAndShowView(view,);
   }
 
   checkToken () async {
@@ -31,7 +30,7 @@ class SplashViewModel extends FutureViewModel<dynamic> {
     setBusy(true);
     if (await checkToken()) {
       Timer(const Duration(milliseconds: 2500), () async {
-        navigateTo(view: const HomeView());
+        clearStackAndShowView(view: const HomeView(isUser: true));
       },);
     }
     setBusy(false);
