@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/data_models/experience_response.dart';
+import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
@@ -16,12 +17,14 @@ class TripItem extends StatelessWidget {
   const TripItem({
     Key? key,
     this.experience,
+    this.user,
   }) : super(key: key);
   final ExperienceResults? experience;
+  final UserModel? user;
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<TripCardViewModel>.reactive(
+    return ViewModelBuilder<TripItemViewModel>.reactive(
       builder: (context, model, child)  {
         return Stack(
           children: [
@@ -29,8 +32,8 @@ class TripItem extends StatelessWidget {
               margin: const EdgeInsets.symmetric(vertical: 10),
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: experience!.profileImage != null
+                  fit: experience!.profileImage != null ? experience!.profileImage!.contains('/asbar-icon.ico') ? BoxFit.none : BoxFit.cover : BoxFit.contain,
+                  image: experience!.profileImage != null && !experience!.profileImage!.contains('/asbar-icon.ico')
                       ? NetworkImage("$baseUrl${experience!.profileImage}") as ImageProvider
                       : AssetImage("assets/images/image${(Random().nextInt(3) + 1)}.png"),
                 ),
@@ -44,7 +47,7 @@ class TripItem extends StatelessWidget {
               right: 30,
               child: Row(
                 children: [
-                  Container(
+                  model.isBusy ? const SizedBox() : Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
@@ -53,7 +56,7 @@ class TripItem extends StatelessWidget {
                       model.isFav ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
                       color: model.isFav ? Colors.redAccent : Colors.black, size: 20,
                     ).center()
-                        .gestures(onTap: () => model.addFavorites())
+                        .gestures(onTap: () => model.addFavorites(experienceId: experience!.id))
                   ).height(30)
                       .width(30),
                   horizontalSpaceSmall,
@@ -153,9 +156,9 @@ class TripItem extends StatelessWidget {
               ),
             ),
           ],
-        ).gestures(onTap: () => model.navigateTo(view: TripDetailView(experience: experience)));
+        ).gestures(onTap: () => model.navigateTo(view: TripDetailView(experience: experience, user: user)));
       },
-      viewModelBuilder: () => TripCardViewModel(),
+      viewModelBuilder: () => TripItemViewModel(user: user, experience: experience,),
     );
   }
 }
