@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:goasbar/data_models/experience_response.dart';
+import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/confirm_booking/confirm_booking_view.dart';
@@ -13,8 +14,9 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:goasbar/ui/widgets/dot_item.dart';
 
 class TripDetailView extends HookWidget {
-  const TripDetailView({Key? key, this.experience}) : super(key: key);
+  const TripDetailView({Key? key, this.experience, this.user}) : super(key: key);
   final ExperienceResults? experience;
+  final UserModel? user;
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +84,7 @@ class TripDetailView extends HookWidget {
                                 ).height(40)
                                     .width(100),
                                 horizontalSpaceSmall,
-                                Container(
+                                model.isBusy ? const SizedBox() : Container(
                                     decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(10),
@@ -91,7 +93,7 @@ class TripDetailView extends HookWidget {
                                       model.isFav ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
                                       color: model.isFav ? Colors.redAccent : Colors.black, size: 30,
                                     ).center()
-                                        .gestures(onTap: () => model.addFavorites())
+                                        .gestures(onTap: () => model.addFavorites(experienceId: experience!.id))
                                 ).height(40)
                                     .width(40),
                               ],
@@ -161,29 +163,31 @@ class TripDetailView extends HookWidget {
             verticalSpaceRegular,
             Row(
               children: [
+                //TODO : set review
                 const Text('3 reviews'),
                 Image.asset("assets/icons/location.png"),
                 horizontalSpaceTiny,
                 Text("${experience!.city} , Duration : ${experience!.duration}", style: const TextStyle(color: kMainGray, fontSize: 11)),
+                //TODO : set timings (we can have ore than one so how)
                 const Text(" | Start at 9 : 00 AM", style: TextStyle(color: kMainGray, fontSize: 11)),
               ],
             ).padding(horizontal: 20),
-            verticalSpaceRegular,
             Expanded(
               child: ListView(
                 physics: const BouncingScrollPhysics(),
                 shrinkWrap: true,
                 children: [
                   const Divider(height: 1, color: kMainDisabledGray, thickness: 1).padding(horizontal: 20),
-                  verticalSpaceTiny,
+                  verticalSpaceRegular,
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      const Text('Hosted Experience by', style: TextStyle(fontSize: 22)),
-                      Image.asset("assets/images/by_user.png").borderRadius(all: 50).height(50).width(50),
+                      const Text('Hosted Experience by ', style: TextStyle(fontSize: 18)),
+                      model.isBusy ? Image.asset("assets/images/by_user.png").borderRadius(all: 50).height(50).width(50) 
+                          : Text(model.provider!.response!.nickname!, style: const TextStyle(fontSize: 18)),
                     ],
                   ).padding(horizontal: 20),
-                  verticalSpaceTiny,
+                  verticalSpaceRegular,
                   const Divider(height: 10, color: kMainDisabledGray, thickness: 1).padding(horizontal: 20),
                   verticalSpaceRegular,
                   Row(
@@ -203,7 +207,7 @@ class TripDetailView extends HookWidget {
                       horizontalSpaceSmall,
                       const Text('Gender', ),
                       horizontalSpaceMedium,
-                      Text(experience!.gender! == "None" ?'Valid for All' : experience!.gender!, style: const TextStyle(color: kMainDisabledGray),)
+                      Text(experience!.gender! == "None" ? 'Valid for All' : experience!.gender!, style: const TextStyle(color: kMainDisabledGray),)
                     ],
                   ).padding(horizontal: 20),
                   verticalSpaceRegular,
@@ -278,7 +282,7 @@ class TripDetailView extends HookWidget {
           ],
         ),
       ),
-      viewModelBuilder: () => TripDetailViewModel(),
+      viewModelBuilder: () => TripDetailViewModel(user: user, experience: experience),
     );
   }
 }
