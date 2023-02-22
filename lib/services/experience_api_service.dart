@@ -51,13 +51,15 @@ class ExperienceApiService {
 
   Future<ExperienceModel?> getPublicExperiences({String? token, String? query}) async {
     return http.get(
-      Uri.parse("$baseUrl/api/experience/?$query"),
+      Uri.parse(query != null ? "$baseUrl/api/experience/$query" : "$baseUrl/api/experience/"),
       headers: {
         "Accept-Language": "en-US",
         "Authorization": "Token $token",
       },
     ).then((response) {
+      print(response.body);
       if (response.statusCode == 200) {
+
         return ExperienceModel.fromJson(jsonDecode(response.body));
       } else {
         return null;

@@ -31,7 +31,7 @@ class LoginView extends HookWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CloseView(onTap: () async => model.navigateTo(view: const HomeView()),),
+                  CloseView(onTap: () async => model.navigateTo(view: const HomeView(isUser: false)),),
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 20),
                     decoration: BoxDecoration(
@@ -130,7 +130,7 @@ class LoginView extends HookWidget {
                     "password": password.text,
                   }).then((value) {
                     if (value) {
-                      model.clearAndNavigateTo(view: const HomeView());
+                      model.clearAndNavigateTo(view: const HomeView(isUser: true));
                     } else {
                       MotionToast.warning(
                         title: const Text("Login Failed"),
