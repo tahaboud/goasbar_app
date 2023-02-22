@@ -128,26 +128,32 @@ class AddExperienceView extends HookWidget {
                           Text("Gender constrains"),
                         ],
                       ),
-                      SizedBox(
-                        height: 40,
-                        child: TextField(
-                          readOnly: true,
-                          controller: model.genderConstraints,
-                          decoration: InputDecoration(
-                            hintText: "No constrains",
-                            hintStyle: const TextStyle(fontSize: 14),
-                            suffixIcon: const Icon(Icons.arrow_drop_down)
-                                .gestures(onTap: () => model.showGenderConstraintsDialog(data: 'No constrains')),
-                            fillColor: kTextFiledMainColor,
-                            filled: true,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            enabledBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.transparent),
-                            ),
-                            focusedBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.transparent),
+                      Container(
+                        height: 45,
+                        width: screenWidthPercentage(context, percentage: 1),
+                        decoration: BoxDecoration(
+                          color: kTextFiledMainColor,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: ButtonTheme(
+                            alignedDropdown: true,
+                            child: DropdownButton<String>(
+                              value: model.genderConstraint,
+                              iconSize: 24,
+                              icon: (null),
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 14,
+                              ),
+                              onChanged: (value) => model.updateGenderConstraint(value: value),
+                              items: genderConstraints.map((c) => DropdownMenuItem(
+                                value: c,
+                                onTap: () {},
+                                child: SizedBox(
+                                  child: Text(c, style: const TextStyle(fontFamily: 'Cairo'),),
+                                ),
+                              )).toList(),
                             ),
                           ),
                         ),
@@ -1091,10 +1097,11 @@ class AddExperienceView extends HookWidget {
                           }
                         }
 
-                        if (model.genderConstraints.text == "No constrains") body.addAll({'gender': 'None',});
-                        if (model.genderConstraints.text == "Families") body.addAll({'gender': 'FAMILIES',});
-                        if (model.genderConstraints.text == "Men Only") body.addAll({'gender': 'MEN',});
-                        if (model.genderConstraints.text == "Women Only") body.addAll({'gender': 'WOMEN',});
+                        if (model.genderConstraint == "No constrains") body.addAll({'gender': 'None',});
+                        if (model.genderConstraint == "Families") body.addAll({'gender': 'FAMILIES',});
+                        if (model.genderConstraint == "Men Only") body.addAll({'gender': 'MEN',});
+                        if (model.genderConstraint == "Women Only") body.addAll({'gender': 'WOMEN',});
+                        
                         if (duration.text.isNotEmpty) body.addAll({'duration': duration.text,});
                         if (notes.text.isNotEmpty) body.addAll({'location_notes': notes.text,});
                         if (model.selectedExperienceCategory != null) body.addAll({'categories': model.selectedExperienceCategory,});
