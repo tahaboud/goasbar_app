@@ -1,13 +1,13 @@
 import 'package:goasbar/data_models/public_provider_response.dart';
 
 class PublicProviderModel {
-  PublicResponse? response;
+  PublicProviderResponse? response;
 
   PublicProviderModel({this.response});
 
   PublicProviderModel.fromJson(Map<String, dynamic> json) {
     response = json['response'] != null
-        ? PublicResponse.fromJson(json['response'])
+        ? PublicProviderResponse.fromJson(json['response'])
         : null;
   }
 
