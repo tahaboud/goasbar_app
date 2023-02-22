@@ -109,7 +109,7 @@ class BeHostedInfoViewModel extends FutureViewModel<ProviderModel?> {
   @override
   Future<ProviderModel?> futureToRun() async {
     String? token = await _tokenService.getTokenValue();
-    provider = await _providerApiService.getProviderInfo(token: token);
+    provider = await _providerApiService.getProviderUserInfo(token: token);
     if (provider == null) {
       return null;
     }
