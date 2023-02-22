@@ -19,8 +19,6 @@ class ConfirmBookingView extends HookWidget {
   @override
   Widget build(BuildContext context) {
     var coupon = useTextEditingController();
-    var name = useTextEditingController();
-    var phone = useTextEditingController();
 
     return ViewModelBuilder<ConfirmBookingViewModel>.reactive(
       builder: (context, model, child) => Scaffold(
@@ -52,8 +50,8 @@ class ConfirmBookingView extends HookWidget {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: experience!.profileImage != null
+                          fit: experience!.profileImage != null ? experience!.profileImage!.contains('/asbar-icon.ico') ? BoxFit.none : BoxFit.cover : BoxFit.contain,
+                          image: experience!.profileImage != null && !experience!.profileImage!.contains('/asbar-icon.ico')
                               ? NetworkImage("$baseUrl${experience!.profileImage}") as ImageProvider
                               : const AssetImage("assets/images/image4.png"),
                         ),
@@ -197,7 +195,7 @@ class ConfirmBookingView extends HookWidget {
                     ),
                     Row(
                       children: [
-                        IncDecreaseButton(incDecrease: IncDecrease.increase, model: model),
+                        IncDecreaseButton(incDecrease: IncDecrease.increase, model: model,),
                         horizontalSpaceSmall,
                         Text(model.numberOfGuests! < 10 ? '0${model.numberOfGuests}' : '${model.numberOfGuests}', style: const TextStyle(fontSize: 20)),
                         horizontalSpaceSmall,
@@ -207,12 +205,15 @@ class ConfirmBookingView extends HookWidget {
                     ),
                   ],
                 ),
-                if (model.numberOfGuests! > 0)
+                for (var i = 0; i < model.numberOfGuests!; i++)
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       verticalSpaceSmall,
+                      Text("Guest ${i+1}", style: const TextStyle(fontWeight: FontWeight.bold),),
+                      verticalSpaceSmall,
                       TextField(
-                        controller: name,
+                        controller: model.names[i],
                         decoration: InputDecoration(
                           hintText: 'Guest Full Name',
                           hintStyle: const TextStyle(fontSize: 14),
@@ -227,16 +228,16 @@ class ConfirmBookingView extends HookWidget {
                           ),
                         ),
                       ),
-                      verticalSpaceMedium,
+                      verticalSpaceRegular,
                       TextField(
                         readOnly: true,
-                        controller: model.birthDate,
+                        controller: model.birthDates[i],
                         decoration: InputDecoration(
                           hintText: '25 . 10 1998',
                           hintStyle: const TextStyle(fontSize: 14),
                           suffixIcon: Image.asset('assets/icons/birth_date.png')
                               .gestures(onTap: () {
-                            model.showBirthDayPicker(context);
+                            model.showBirthDayPicker(context, i);
                           }),
                           fillColor: kTextFiledGrayColor,
                           filled: true,
@@ -248,9 +249,9 @@ class ConfirmBookingView extends HookWidget {
                           ),
                         ),
                       ),
-                      verticalSpaceMedium,
+                      verticalSpaceRegular,
                       TextFormField(
-                        controller: phone,
+                        controller: model.phones[i],
                         validator: (value) => model.validatePhoneNumber(value: value),
                         keyboardType: TextInputType.number,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -269,6 +270,7 @@ class ConfirmBookingView extends HookWidget {
                           ),
                         ),
                       ),
+                      verticalSpaceRegular,
                     ],
                   ),
                 const Divider(thickness: 1.2, height: 40),
@@ -318,7 +320,7 @@ class ConfirmBookingView extends HookWidget {
                   child: const Text('Continue with payment', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
                 ).gestures(
                   onTap:  () {
-                    model.navigateTo(view: const CheckoutView());
+                    model.navigateTo(view: CheckoutView(experience: experience));
                   },
                 ),
               ],
