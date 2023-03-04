@@ -1,4 +1,4 @@
-const String baseUrl = "http://192.168.1.36:8000";
+const String baseUrl = "http://192.168.1.35:8000";
 
 const cities = [
   "RIYADH",
