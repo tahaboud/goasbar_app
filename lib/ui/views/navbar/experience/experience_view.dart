@@ -30,7 +30,7 @@ class ExperienceView extends HookWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    UserWelcomeWidget(isUser: isUser, user: user!,).gestures(onTap: isUser! ? () {} : () => model.back(),),
+                    UserWelcomeWidget(isUser: isUser, user: user,).gestures(onTap: isUser! ? () {} : () => model.back(),),
                     const Spacer(),
                     Container(
                       width: 45,
