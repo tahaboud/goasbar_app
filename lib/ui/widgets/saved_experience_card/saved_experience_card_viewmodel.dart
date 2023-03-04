@@ -13,7 +13,7 @@ class SavedExperienceCardViewModel extends BaseViewModel {
     function!();
   }
 
-  void navigateTo({view}) {
-    _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
+  navigateTo({view,}) async {
+    await _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
   }
 }
