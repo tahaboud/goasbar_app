@@ -29,13 +29,13 @@ class UserWelcomeWidget extends StatelessWidget {
           ),
           child: Row(
             children: isUser! ? [
-              model.isBusy ? Image.asset("assets/images/user.png",)
+              user == null ? Image.asset("assets/images/user.png",)
                   : ClipRRect(
                 borderRadius: BorderRadius.circular(100),
                 child: Image.network("$baseUrl${user!.image}", height: 30, width: 30, fit: BoxFit.cover),
               ),
               horizontalSpaceTiny,
-              model.isBusy ? const Text('Hi , ') : Text('Hi , ${user!.firstName} !'),
+              user == null ? const Text('Hi , ') : Text('Hi , ${user!.firstName} !'),
             ] : [
               Image.asset("assets/icons/person_login.png", color: kMainColor1),
               horizontalSpaceTiny,
