@@ -55,7 +55,8 @@ class SettingsView extends HookWidget {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(100),
                             image: DecorationImage(
-                              image: NetworkImage("$baseUrl${model.user!.image}",),
+                              image: user != null ? NetworkImage("$baseUrl${user!.image}",)
+                                  : const AssetImage("assets/images/avatar.png") as ImageProvider,
                                   // : FileImage(model.file!) as ImageProvider,
                               fit: BoxFit.cover,
                             ),
@@ -80,7 +81,7 @@ class SettingsView extends HookWidget {
                     ),
                   ),
                   verticalSpaceRegular,
-                  Text(isUser! ? model.user!.firstName! : "Guest user", style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),),
+                  Text(isUser! ? user!.firstName! : "Guest user", style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),),
                   verticalSpaceMedium,
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 15),
@@ -105,13 +106,13 @@ class SettingsView extends HookWidget {
                   verticalSpaceRegular,
                   SettingsCard(
                     item1Image: 'hosted',
-                    item1Title: isUser! ? model.user!.isProvider! ? 'Post new tripe experience' : 'Be Hosted' : 'Be Hosted',
-                    item1Parameter: isUser! ? model.user!.isProvider! ? 'Update Info' : "Apply now" : "Apply now",
-                    onTapParameter: isUser! ? model.user!.isProvider! ? () => model.showGeneralInfoBottomSheet() : () => model.showGeneralInfoBottomSheet() : () {},
+                    item1Title: isUser! ? user!.isProvider! ? 'Post new tripe experience' : 'Be Hosted' : 'Be Hosted',
+                    item1Parameter: isUser! ? user!.isProvider! ? 'Update Info' : "Apply now" : "Apply now",
+                    onTapParameter: isUser! ? user!.isProvider! ? () => model.showGeneralInfoBottomSheet() : () => model.showGeneralInfoBottomSheet() : () {},
                     item2Image: 'security',
                     item2Title: 'Security',
                     item2Parameter: "",
-                    onItem1Tap: model.user!.isProvider! ? () => model.navigateTo(view: const PostExperienceView()) : () => model.showGeneralInfoBottomSheet(),
+                    onItem1Tap: !isUser! ? () {} : user!.isProvider! ? () => model.navigateTo(view: const PostExperienceView()) : () => model.showGeneralInfoBottomSheet(),
                     onItem2Tap: () => model.navigateTo(view: const RequestPasswordView()),
                     isUser: false,
                   ),
@@ -129,7 +130,7 @@ class SettingsView extends HookWidget {
                     isUser: isUser!,
                   ),
                   verticalSpaceMedium,
-                  Container(
+                  !isUser! ? const SizedBox() : Container(
                     height: 50,
                     decoration: const BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -157,14 +158,14 @@ class SettingsView extends HookWidget {
                       }
                     });
                   }),
-                  verticalSpaceLarge,
+                  !isUser! ? const SizedBox() : verticalSpaceLarge,
                 ],
               ),
             ],
           ).padding(horizontal: 20),
         ),
       ),
-      viewModelBuilder: () => SettingsViewModel(),
+      viewModelBuilder: () => SettingsViewModel(user: user),
       onModelReady: (model) => model.loadData(),
     );
   }
