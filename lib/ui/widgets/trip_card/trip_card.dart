@@ -8,6 +8,7 @@ import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/confirm_booking/confirm_booking_view.dart';
+import 'package:goasbar/ui/views/login/login_view.dart';
 import 'package:goasbar/ui/views/trip_detail/trip_detail_view.dart';
 import 'package:goasbar/ui/widgets/trip_card/trip_card_viewmodel.dart';
 import 'package:stacked/stacked.dart';
@@ -32,10 +33,10 @@ class TripItem extends StatelessWidget {
               margin: const EdgeInsets.symmetric(vertical: 10),
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  fit: experience!.profileImage != null ? experience!.profileImage!.contains('/asbar-icon.ico') ? BoxFit.none : BoxFit.cover : BoxFit.contain,
+                  fit: experience!.profileImage != null ? experience!.profileImage!.contains('/asbar-icon.ico') ? BoxFit.cover : BoxFit.cover : BoxFit.contain,
                   image: experience!.profileImage != null && !experience!.profileImage!.contains('/asbar-icon.ico')
                       ? NetworkImage("$baseUrl${experience!.profileImage}") as ImageProvider
-                      : AssetImage("assets/images/image${(Random().nextInt(3) + 1)}.png"),
+                      : const AssetImage("assets/images/image4.png"),
                 ),
                 borderRadius: BorderRadius.circular(15),
               ),
@@ -47,7 +48,7 @@ class TripItem extends StatelessWidget {
               right: 30,
               child: Row(
                 children: [
-                  model.isBusy ? const SizedBox() : Container(
+                  user == null ? const SizedBox() : model.isBusy ? const SizedBox() : Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
@@ -146,7 +147,7 @@ class TripItem extends StatelessWidget {
                           ),
                           child: const Text('Book Now', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500),).center(),
                         ).gestures(onTap: () {
-                          model.navigateTo(view: ConfirmBookingView(experience: experience));
+                          model.navigateTo(view: user == null ? const LoginView() : ConfirmBookingView(experience: experience));
                         }),
                         horizontalSpaceSmall,
                       ],
@@ -156,7 +157,11 @@ class TripItem extends StatelessWidget {
               ),
             ),
           ],
-        ).gestures(onTap: () => model.navigateTo(view: TripDetailView(experience: experience, user: user)));
+        ).gestures(onTap: () async {
+          model.navigateTo(view: TripDetailView(experience: experience, user: user)).then((value) {
+            model.futureToRun();
+          });
+        });
       },
       viewModelBuilder: () => TripItemViewModel(user: user, experience: experience,),
     );
