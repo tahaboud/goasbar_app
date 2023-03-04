@@ -5,7 +5,6 @@ import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/timing_list_model.dart';
 import 'package:goasbar/enum/dialog_type.dart';
 import 'package:goasbar/services/experience_api_service.dart';
-import 'package:goasbar/services/token_service.dart';
 import 'package:goasbar/services/validation_service.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
@@ -19,7 +18,6 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
   final _navigationService = locator<NavigationService>();
   final _dialogService = locator<DialogService>();
   final _validationService = locator<ValidationService>();
-  final _tokenService = locator<TokenService>();
   final _experienceApiService = locator<ExperienceApiService>();
   TimingListModel? timingListModel;
   int? selectedIndex;
@@ -122,9 +120,10 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
     return weekDays[date];
   }
 
+
+
   Future<TimingListModel?> getExperiencePublicTimings({int? experienceId}) async {
-    String? token = await _tokenService.getTokenValue();
-    timingListModel = await _experienceApiService.getExperiencePublicTimings(token: token, experienceId: experienceId,);
+    timingListModel = await _experienceApiService.getExperiencePublicTimings(experienceId: experienceId,);
     notifyListeners();
 
     return timingListModel;
