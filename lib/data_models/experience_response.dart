@@ -4,7 +4,7 @@ class ExperienceResults {
   int? id;
   String? title;
   String? description;
-  List<String>? categories;
+  List<dynamic>? categories;
   String? price;
   dynamic latitude;
   dynamic longitude;
@@ -52,7 +52,7 @@ class ExperienceResults {
     id = json['id'];
     title = json['title'];
     description = json['description'];
-    categories = json['categories'].cast<String>();
+    categories = json['categories'];
     price = json['price'];
     latitude = json['latitude'];
     longitude = json['longitude'];
