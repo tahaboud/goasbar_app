@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/experience_model.dart';
 import 'package:goasbar/services/experience_api_service.dart';
-import 'package:goasbar/services/token_service.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -13,7 +12,6 @@ import 'package:goasbar/shared/app_configs.dart';
 class SearchViewModel extends BaseViewModel {
   int index = 1;
   final _navigationService = locator<NavigationService>();
-  final _tokenService = locator<TokenService>();
   final _experienceApiService = locator<ExperienceApiService>();
   bool? isTokenExist;
   ExperienceModel? experienceModels;
@@ -95,10 +93,9 @@ class SearchViewModel extends BaseViewModel {
   }
 
   getPublicExperiences({String? query}) async {
-    String? token = await _tokenService.getTokenValue();
     setBusy(true);
     experienceModels = null;
-    experienceModels = await _experienceApiService.getPublicExperiences(token: token, query: query);
+    experienceModels = await _experienceApiService.getPublicExperiences(query: query);
     notifyListeners();
     setBusy(false);
     return experienceModels!;
