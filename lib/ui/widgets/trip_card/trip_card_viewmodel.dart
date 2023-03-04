@@ -20,25 +20,30 @@ class TripItemViewModel extends FutureViewModel<bool?> {
 
   void addFavorites({int? experienceId}) {
     isFav = !isFav;
-    updateUserData(experienceId: experienceId);
+    updateUserData(experienceId: experienceId, isRemove: isFav);
     notifyListeners();
   }
 
-  updateUserData({int? experienceId}) async {
+  updateUserData({int? experienceId, bool? isRemove}) async {
     String token = await _tokenService.getTokenValue();
     notifyListeners();
 
     favoriteList = user!.favoriteExperiences;
 
-    favoriteList!.remove(experienceId!);
+    if (!isRemove!) {
+      if (favoriteList!.contains(experienceId!)) favoriteList!.remove(experienceId);
+    } else {
+      if (!favoriteList!.contains(experienceId!)) favoriteList!.add(experienceId);
+    }
+
     notifyListeners();
-    _authService.updateUserData(token: token, body: {
+    _authService.updateFavoritesUser(token: token, body: {
       "favorite_experiences": favoriteList,
     },);
   }
 
-  void navigateTo({view}) {
-    _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
+  navigateTo({view}) async {
+    await _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
   }
 
   bool getIsFav () {
