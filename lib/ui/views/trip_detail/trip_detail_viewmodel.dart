@@ -30,19 +30,24 @@ class TripDetailViewModel extends FutureViewModel<PublicProviderModel?> {
 
   void addFavorites({int? experienceId}) {
     isFav = !isFav;
-    updateUserData(experienceId: experienceId);
+    updateUserData(experienceId: experienceId, isRemove: isFav);
     notifyListeners();
   }
 
-  updateUserData({int? experienceId}) async {
+  updateUserData({int? experienceId, bool? isRemove}) async {
     String token = await _tokenService.getTokenValue();
     notifyListeners();
 
     favoriteList = user!.favoriteExperiences;
 
-    favoriteList!.remove(experienceId!);
+    if (!isRemove!) {
+      if (favoriteList!.contains(experienceId!)) favoriteList!.remove(experienceId);
+    } else {
+      if (!favoriteList!.contains(experienceId!)) favoriteList!.add(experienceId);
+    }
+
     notifyListeners();
-    _authService.updateUserData(token: token, body: {
+    _authService.updateFavoritesUser(token: token, body: {
       "favorite_experiences": favoriteList,
     },);
   }
@@ -87,11 +92,9 @@ class TripDetailViewModel extends FutureViewModel<PublicProviderModel?> {
   }
 
   Future<PublicProviderModel?> getProvider () async {
-    String? token = await _tokenService.getTokenValue();
-    getIsFav();
-    provider = await _providerApiService.getProviderInfo(token: token, providerId: experience!.providerId);
+    if (user != null) getIsFav();
+    provider = await _providerApiService.getProviderInfo(providerId: experience!.providerId);
     notifyListeners();
-    print(provider);
 
     return provider;
   }
