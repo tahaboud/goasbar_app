@@ -7,6 +7,7 @@ import 'package:stacked_services/stacked_services.dart';
 
 class SplashViewModel extends FutureViewModel<dynamic> {
   bool isDone = false;
+  bool isDone2 = false;
   final _navigationService = locator<NavigationService>();
   final _tokenService = locator<TokenService>();
 
@@ -31,6 +32,11 @@ class SplashViewModel extends FutureViewModel<dynamic> {
     if (await checkToken()) {
       Timer(const Duration(milliseconds: 2500), () async {
         clearStackAndShowView(view: const HomeView(isUser: true));
+      },);
+    } else {
+      Timer(const Duration(milliseconds: 2000), () async {
+        isDone2 = true;
+        notifyListeners();
       },);
     }
     setBusy(false);
