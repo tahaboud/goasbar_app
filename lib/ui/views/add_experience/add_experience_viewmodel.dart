@@ -5,6 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/experience_response.dart';
+import 'package:goasbar/data_models/image_set_model.dart';
 import 'package:goasbar/enum/bottom_sheet_type.dart';
 import 'package:goasbar/enum/dialog_type.dart';
 import 'package:goasbar/services/experience_api_service.dart';
@@ -18,6 +19,9 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class AddExperienceInfoViewModel extends BaseViewModel {
+  AddExperienceInfoViewModel({this.experience});
+  final ExperienceResults? experience;
+
   final _navigationService = locator<NavigationService>();
   final _validationService = locator<ValidationService>();
   final _dialogService = locator<DialogService>();
@@ -28,7 +32,7 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   final _mediaService = locator<MediaService>();
   TextEditingController gender = TextEditingController();
   File? mainImage;
-  List<File?>? additionalImages = [];
+  List<ImageSet?>? additionalImages = [];
   int? images = 0;
   int pageIndex = 1;
   int? addedProviding = 0;
@@ -53,9 +57,61 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   List<TextEditingController> addedProvidedGoodsControllers = [];
   String? genderConstraint = genderConstraints[0];
 
-  updateSelectedExperienceCategory({String? category}) {
-    selectedExperienceCategory = category;
+  onStart() {
+    if (experience != null) {
+      setBusy(true);
+      city = getCity();
+      genderConstraint = getGenderConstraint();
+      selectedExperienceCategory = getSelectedExperienceCategory();
+      if (experience!.profileImage != null) mainImage = File(experience!.profileImage!);
+      if (experience!.imageSet!.isNotEmpty) {
+        additionalImages = experience!.imageSet;
+        images = experience!.imageSet!.length;
+      }
+      if (experience!.providedGoods != null) providedGoodsController1.text = experience!.providedGoods!;
+      if (experience!.requirements != null) requirementsController1.text = experience!.requirements!;
+
+      notifyListeners();
+      setBusy(false);
+    }
+  }
+
+  String? getCity() {
+    city = experience != null ? experience!.city : null;
+    return city;
+  }
+
+  updateCity({String? value}) {
+    city = value;
     notifyListeners();
+  }
+
+  String? getGenderConstraint () {
+    genderConstraint = experience != null ? experience!.gender == "None" ? "No constrains"
+      : experience!.gender == "FAMILIES" ? "Families" : experience!.gender == "MEN" ? "Men Only"
+      : "Women Only" : genderConstraints[0];
+    return genderConstraint;
+  }
+
+  updateGenderConstraint({String? value}) {
+    genderConstraint = value;
+    notifyListeners();
+  }
+
+  updateSelectedExperienceCategory({String? category}) {
+    if (selectedExperienceCategory == category) {
+      selectedExperienceCategory = null;
+    } else {
+      selectedExperienceCategory = category;
+    }
+    notifyListeners();
+  }
+
+  String? getSelectedExperienceCategory() {
+    selectedExperienceCategory = experience != null ? experience!.categories!.isNotEmpty
+        ? experience!.categories![0] : null : null;
+
+    return selectedExperienceCategory;
   }
 
   void updateProvidedGoodsText ({String? text}) {
@@ -77,11 +133,6 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   addProvidings() {
     addedProviding = addedProviding! + 1;
     addedProvidedGoodsControllers.add(TextEditingController());
-    notifyListeners();
-  }
-
-  updateCity({String? value}) {
-    city = value;
     notifyListeners();
   }
 
@@ -111,11 +162,6 @@ class AddExperienceInfoViewModel extends BaseViewModel {
     return _validationService.validatePhoneNumber(value);
   }
 
-  updateGenderConstraint({String? value}) {
-    genderConstraint = value;
-    notifyListeners();
-  }
-
   void pickMainImage () async {
     mainImage = await _mediaService.getImage();
     if (mainImage != null) {
@@ -129,7 +175,7 @@ class AddExperienceInfoViewModel extends BaseViewModel {
     if (file != null) {
       if (images! < 8) {
         images = images! + 1;
-        additionalImages!.add(file);
+        additionalImages!.add(ImageSet(image: file.path));
         notifyListeners();
       }
     }
@@ -223,15 +269,38 @@ class AddExperienceInfoViewModel extends BaseViewModel {
     }
   }
 
-  Future<ExperienceResults?> createExperience({Map<String, dynamic>? body}) async {
+  Future<ExperienceResults?> createExperience({Map<String, dynamic>? body, Map<String, dynamic>? timingBody}) async {
     String? token = await _tokenService.getTokenValue();
     return await _experienceApiService.createExperience(token: token, body: body,).then((value) {
       if (value is ExperienceResults) {
-        _timingApiService.createTiming(token: token, experienceId: value.id);
+        _timingApiService.createTiming(token: token, experienceId: value.id, body: timingBody);
         return value;
       } else {
         return null;
       }
+    });
+  }
+
+  Future<ExperienceResults?> updateExperience({Map<String, dynamic>? body, int? experienceId}) async {
+    String? token = await _tokenService.getTokenValue();
+    return await _experienceApiService.updateExperience(token: token, body: body, experienceId: experienceId).then((value) {
+      if (value is ExperienceResults) {
+        return value;
+      } else {
+        return null;
+      }
+    });
+  }
+
+  Future<bool?> deleteExperienceImage({ImageSet? image}) async {
+    String? token = await _tokenService.getTokenValue();
+    setBusy(true);
+    return await _experienceApiService.deleteExperienceImage(token: token, imageId: image!.id).then((value) async {
+      additionalImages!.remove(image);
+      images = images! - 1;
+      notifyListeners();
+      setBusy(false);
+      return value;
     });
   }
 }
