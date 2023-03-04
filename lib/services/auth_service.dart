@@ -80,6 +80,31 @@ class AuthService {
     });
   }
 
+  Future<UserModel?> updateFavoritesUser({String? token, Map<String, dynamic>? body,}) async {
+    Dio dio = Dio();
+    FormData formData = FormData.fromMap(body!);
+
+    return dio.patch(
+      "$baseUrl/api/auth/user/",
+      options: Options(
+        headers: {
+          "Accept-Language": "en-US",
+          "Authorization": "Token $token",
+          "Content-Type": "application/json",
+        },
+      ),
+      data: formData,
+    ).then((response) {
+      print(response.data["user"]['favorite_experiences']);
+      print(body);
+      if (response.statusCode == 201) {
+        return UserModel.fromJson(response.data['user']);
+      } else {
+        return null;
+      }
+    });
+  }
+
   Future<UserModel?> updateUserData({String? token, Map<String, dynamic>? body,}) async {
     Dio dio = Dio();
     FormData formData = FormData.fromMap(body!);
@@ -95,8 +120,8 @@ class AuthService {
       ),
       data: formData,
     ).then((response) {
+      print(response.data);
       if (response.statusCode == 201) {
-        print('update done');
         return UserModel.fromJson(response.data['user']);
       } else {
         return null;
