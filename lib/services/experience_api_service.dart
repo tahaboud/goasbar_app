@@ -49,15 +49,13 @@ class ExperienceApiService {
     });
   }
 
-  Future<ExperienceModel?> getPublicExperiences({String? token, String? query}) async {
+  Future<ExperienceModel?> getPublicExperiences({String? query}) async {
     return http.get(
       Uri.parse(query != null ? "$baseUrl/api/experience/$query" : "$baseUrl/api/experience/"),
       headers: {
         "Accept-Language": "en-US",
-        "Authorization": "Token $token",
       },
     ).then((response) {
-      print(response.body);
       if (response.statusCode == 200) {
 
         return ExperienceModel.fromJson(jsonDecode(response.body));
@@ -67,12 +65,11 @@ class ExperienceApiService {
     });
   }
 
-  Future<TimingListModel?> getExperiencePublicTimings({String? token, int? experienceId}) async {
+  Future<TimingListModel?> getExperiencePublicTimings({int? experienceId}) async {
     return http.get(
       Uri.parse("$baseUrl/api/experience/timing/$experienceId/"),
       headers: {
         "Accept-Language": "en-US",
-        "Authorization": "Token $token",
       },
     ).then((response) {
       if (response.statusCode == 200) {
@@ -100,9 +97,48 @@ class ExperienceApiService {
     });
   }
 
+  Future<ExperienceResults?> updateExperience({String? token, Map<String, dynamic>? body, int? experienceId}) async {
+    Dio dio = Dio();
+    FormData formData = FormData.fromMap(body!);
+
+    return dio.patch(
+      "$baseUrl/api/experience/provider/$experienceId/",
+      options: Options(
+        headers: {
+          "Accept-Language": "en-US",
+          "Authorization": "Token $token",
+          "Content-Type": "multipart/form-data",
+        },
+      ),
+      data: formData,
+    ).then((response) {
+      if (response.statusCode == 200) {
+        return ExperienceResults.fromJson(response.data);
+      } else {
+        return null;
+      }
+    });
+  }
+
   Future<bool?> deleteExperience({String? token, int? experienceId}) async {
     return http.delete(
       Uri.parse("$baseUrl/api/experience/provider/$experienceId/"),
+      headers: {
+        "Accept-Language": "en-US",
+        "Authorization": "Token $token",
+      },
+    ).then((response) {
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+  }
+
+  Future<bool?> deleteExperienceImage({String? token, int? imageId}) async {
+    return http.delete(
+      Uri.parse("$baseUrl/api/experience/images/$imageId/"),
       headers: {
         "Accept-Language": "en-US",
         "Authorization": "Token $token",
