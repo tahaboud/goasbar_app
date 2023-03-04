@@ -174,7 +174,7 @@ class PostExperienceView extends HookWidget {
                                 ),
                                 child: const Text('Update', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
                               ).gestures(onTap: () {
-
+                                model.showAddExperienceInfoBottomSheet(experience: model.experienceModels!.results![index],);
                               }),
                             ],
                           ),
