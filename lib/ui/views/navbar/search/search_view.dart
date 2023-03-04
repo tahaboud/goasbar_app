@@ -4,7 +4,9 @@ import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/confirm_booking/confirm_booking_view.dart';
+import 'package:goasbar/ui/views/login/login_view.dart';
 import 'package:goasbar/ui/views/navbar/search/search_viewmodel.dart';
+import 'package:goasbar/ui/views/trip_detail/trip_detail_view.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:stacked/stacked.dart';
@@ -271,7 +273,6 @@ class SearchView extends HookWidget {
 
                         if (model.category != 'Experience Category') query = '$query&category=${model.category}';
 
-                        print(query.replaceFirst(r'&', '?'));
                         if (query != '') {
                           model.getPublicExperiences(query: query.replaceFirst(r'&', '?')).then((value) {
                             if (value != null) {
@@ -378,12 +379,14 @@ class SearchView extends HookWidget {
                                     ),
                                     child: const Text('Book Now', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500),).center(),
                                   ).gestures(onTap: () {
-                                    model.navigateTo(view: ConfirmBookingView(experience: model.experienceModels!.results![index],));
+                                    model.navigateTo(view: user == null ? const LoginView() : ConfirmBookingView(experience: model.experienceModels!.results![index],));
                                   }),
                                 ],
                               ).padding(horizontal: 8),
                             ],
                           ),
+                        ).gestures(
+                          onTap: () => model.navigateTo(view: TripDetailView(experience: model.experienceModels!.results![index], user: user)),
                         );
                       },
                     ),
