@@ -33,12 +33,13 @@ class SavedExperiencesView extends HookWidget {
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       childAspectRatio: 0.8,
+                      mainAxisSpacing: 10,
                     ),
                     physics: const BouncingScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: model.experienceResults!.length,
                     itemBuilder: (context, index) {
-                      return SavedExperience(experience: model.experienceResults![index], unFavorite: () => model.updateUserData(index: index));
+                      return SavedExperience(experience: model.experienceResults![index], futureToRun: () => model.futureToRun(), unFavorite: () => model.updateUserData(index: index), user: user,);
                     },)
                   ),
                 ],
@@ -47,7 +48,7 @@ class SavedExperiencesView extends HookWidget {
           )
         ),
       ),
-      viewModelBuilder: () => SavedExperiencesViewModel(),
+      viewModelBuilder: () => SavedExperiencesViewModel(user: user),
     );
   }
 }
