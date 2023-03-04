@@ -6,6 +6,7 @@ import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/confirm_booking/confirm_booking_view.dart';
+import 'package:goasbar/ui/views/login/login_view.dart';
 import 'package:goasbar/ui/views/trip_detail/trip_detail_viewmodel.dart';
 import 'package:goasbar/ui/widgets/note_item.dart';
 import 'package:goasbar/ui/widgets/slider_image_item.dart';
@@ -84,7 +85,7 @@ class TripDetailView extends HookWidget {
                                 ).height(40)
                                     .width(100),
                                 horizontalSpaceSmall,
-                                model.isBusy ? const SizedBox() : Container(
+                                user == null ? const SizedBox() : model.isBusy ? const SizedBox() : Container(
                                     decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(10),
@@ -126,7 +127,7 @@ class TripDetailView extends HookWidget {
                                     color: const Color(0xff222222),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
-                                  child: Text(experience!.imageSet!.isEmpty ? '1 / 1' : '${model.pageIndex + 1} / ${experience!.imageSet!.length}',
+                                  child: Text(experience!.imageSet!.isEmpty ? '1 / 1' : '${model.pageIndex} / ${experience!.imageSet!.length}',
                                     style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),).center(),
                                 ).width(60)
                                     .height(40)
@@ -140,7 +141,7 @@ class TripDetailView extends HookWidget {
                                     for (var i = 0; i < experience!.imageSet!.length; i++)
                                       Row(
                                         children: [
-                                          DotItem(condition: model.pageIndex + 1 == i),
+                                          DotItem(condition: model.pageIndex == i + 1),
                                           horizontalSpaceSmall,
                                         ],
                                       ),
@@ -183,7 +184,7 @@ class TripDetailView extends HookWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       const Text('Hosted Experience by ', style: TextStyle(fontSize: 18)),
-                      model.isBusy ? Image.asset("assets/images/by_user.png").borderRadius(all: 50).height(50).width(50) 
+                      !model.dataReady ? Image.asset("assets/images/by_user.png").borderRadius(all: 50).height(50).width(50)
                           : Text(model.provider!.response!.nickname!, style: const TextStyle(fontSize: 18)),
                     ],
                   ).padding(horizontal: 20),
@@ -274,7 +275,7 @@ class TripDetailView extends HookWidget {
                   child: const Text('Book Now', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),)
                       .center()
                       .gestures(onTap: () {
-                        model.navigateTo(view: ConfirmBookingView(experience: experience));
+                        model.navigateTo(view: user == null ? const LoginView() : ConfirmBookingView(experience: experience));
                   }),
                 ),
               ],
