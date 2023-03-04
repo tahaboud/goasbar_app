@@ -4,6 +4,8 @@ import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/booking_scuccess/booking_success_view.dart';
 import 'package:goasbar/ui/views/checkout/checkout_viewmodel.dart';
+import 'package:goasbar/ui/views/custom_ui.dart';
+import 'package:goasbar/ui/views/ready_ui.dart';
 import 'package:goasbar/ui/widgets/info_item.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -181,7 +183,7 @@ class CheckoutView extends HookWidget {
                   child: const Text('Continue with payment', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
                 ).gestures(
                   onTap:  () {
-                    model.navigateTo(view: const BookingSuccessView());
+                    model.navigateTo(view: custom_UI());
                   },
                 ),
               ],
