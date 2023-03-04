@@ -7,6 +7,7 @@
 // ignore_for_file: public_member_api_docs, implementation_imports, depend_on_referenced_packages
 
 import 'package:goasbar/services/auth_service.dart';
+import 'package:goasbar/services/booking_api_service.dart';
 import 'package:goasbar/services/experience_api_service.dart';
 import 'package:goasbar/services/provider_api_service.dart';
 import 'package:goasbar/services/timing_api_service.dart';
@@ -42,4 +43,5 @@ Future<void> setupLocator(
   locator.registerLazySingleton(() => ProviderApiService());
   locator.registerLazySingleton(() => ExperienceApiService());
   locator.registerLazySingleton(() => TimingApiService());
+  locator.registerLazySingleton(() => BookingApiService());
 }
