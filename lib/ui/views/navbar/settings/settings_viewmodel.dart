@@ -12,14 +12,16 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'dart:io';
 
-class SettingsViewModel extends FutureViewModel<dynamic> {
+class SettingsViewModel extends BaseViewModel {
+  final UserModel? user;
+  SettingsViewModel({this.user});
+
   final _navigationService = locator<NavigationService>();
   final _mediaService = locator<MediaService>();
   final _bottomSheetService = locator<BottomSheetService>();
   final _authService = locator<AuthService>();
   final _tokenService = locator<TokenService>();
   File? file;
-  UserModel? user;
   ProviderModel? provider;
 
   void navigateTo({view}) {
@@ -47,7 +49,7 @@ class SettingsViewModel extends FutureViewModel<dynamic> {
   }
 
   showGeneralInfoBottomSheet() async {
-    var response = await _bottomSheetService.showCustomSheet(
+    await _bottomSheetService.showCustomSheet(
       variant: BottomSheetType.beHosted,
       isScrollControlled: true,
       barrierDismissible: true,
@@ -63,25 +65,5 @@ class SettingsViewModel extends FutureViewModel<dynamic> {
 
   clearToken () {
     _tokenService.clearToken();
-  }
-
-  Future<dynamic> getUserInfo() async {
-    String token = await _tokenService.getTokenValue();
-    user = await _authService.getUserData(token: token).then((value) {
-      if (value != null) {
-        user = value;
-        notifyListeners();
-        return user;
-      } else {
-        return null;
-      }
-    });
-
-
-  }
-
-  @override
-  Future futureToRun() {
-    return getUserInfo();
   }
 }
