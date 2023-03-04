@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/animation.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/experience_response.dart';
+import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/services/auth_service.dart';
 import 'package:goasbar/services/experience_api_service.dart';
 import 'package:goasbar/services/token_service.dart';
@@ -10,6 +11,9 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class SavedExperiencesViewModel extends FutureViewModel<List<ExperienceResults?>> {
+  final UserModel? user;
+  SavedExperiencesViewModel({this.user});
+
   final _navigationService = locator<NavigationService>();
   final _tokenService = locator<TokenService>();
   final _experienceApiService = locator<ExperienceApiService>();
@@ -27,18 +31,9 @@ class SavedExperiencesViewModel extends FutureViewModel<List<ExperienceResults?>
   }
 
   Future<List<int>?> getUserData() async {
-    String token = await _tokenService.getTokenValue();
-    return _authService.getUserData(token: token).then((value) {
-      if (value != null) {
-        if (value.favoriteExperiences!.isEmpty) {
-          return [];
-        } else {
-          return value.favoriteExperiences;
-        }
-      } else {
-        return [];
-      }
-    });
+    favoriteList = user!.favoriteExperiences;
+
+    return favoriteList;
   }
 
   updateUserData({int? index}) async {
@@ -46,7 +41,7 @@ class SavedExperiencesViewModel extends FutureViewModel<List<ExperienceResults?>
     favoriteList!.removeAt(index!);
     notifyListeners();
     setBusy(true);
-    _authService.updateUserData(token: token, body: {
+    _authService.updateFavoritesUser(token: token, body: {
       "favorite_experiences": favoriteList,
     },).then((value) {
       if (value != null) {
@@ -60,9 +55,9 @@ class SavedExperiencesViewModel extends FutureViewModel<List<ExperienceResults?>
   Future<List<ExperienceResults?>> getFavoriteExperiences({String? query}) async {
     favoriteList = await getUserData();
     if (favoriteList!.isNotEmpty) {
-      String? token = await _tokenService.getTokenValue();
-      return await _experienceApiService.getPublicExperiences(token: token, query: query).then((value) {
+      return await _experienceApiService.getPublicExperiences(query: query).then((value) {
         if (value != null) {
+          experienceResults = [];
           for (var experience in value.results!) {
             if (favoriteList!.contains(experience.id)) {
               experienceResults!.add(experience);
