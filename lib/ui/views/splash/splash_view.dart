@@ -82,7 +82,7 @@ class SplashView extends StatelessWidget {
                     style: TextStyle(color: kMainGray, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),
                   ).translate(offset: const Offset(30, 570)),
 
-                  model.isDone ? const SizedBox() : Container(
+                  !model.isDone2 ? const SizedBox() : Container(
                     width: MediaQuery.of(context).size.width - 60,
                     height: 50,
                     decoration: const BoxDecoration(
@@ -96,7 +96,8 @@ class SplashView extends StatelessWidget {
                     onTap: () async {
                       model.clearStackAndShowView(view: const LoginView());
                     },
-                  ).translate(offset: Offset(35, size.height - 30 - 50 ))
+                  ).opacity(model.isDone2 ? 1 : 0, animate: true).animate(const Duration(milliseconds: 1000), Curves.easeIn)
+                      .translate(offset: Offset(35, size.height - 30 - 50 ))
                 ],
               ),
             ),
