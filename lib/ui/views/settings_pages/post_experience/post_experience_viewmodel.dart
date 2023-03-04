@@ -29,11 +29,12 @@ class PostExperienceViewModel extends FutureViewModel<List<ExperienceResults>> {
     notifyListeners();
   }
 
-  showAddExperienceInfoBottomSheet() async {
+  showAddExperienceInfoBottomSheet({ExperienceResults? experience}) async {
     var response = await _bottomSheetService.showCustomSheet(
       variant: BottomSheetType.addExperience,
       isScrollControlled: true,
       barrierDismissible: true,
+      data: experience,
     );
 
     if (response!.confirmed) {
