@@ -320,6 +320,7 @@ class ConfirmBookingView extends HookWidget {
                   child: const Text('Continue with payment', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
                 ).gestures(
                   onTap:  () {
+
                     model.navigateTo(view: CheckoutView(experience: experience));
                   },
                 ),
