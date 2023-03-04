@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/data_models/experience_response.dart';
+import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/trip_detail/trip_detail_view.dart';
@@ -13,9 +14,13 @@ class SavedExperience extends StatelessWidget {
     Key? key,
     this.experience,
     this.unFavorite,
+    this.futureToRun,
+    this.user,
   }) : super(key: key);
   final ExperienceResults? experience;
+  final UserModel? user;
   final Function()? unFavorite;
+  final Function()? futureToRun;
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +39,8 @@ class SavedExperience extends StatelessWidget {
                   end: Alignment.bottomCenter,
                 ),
                 image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: experience!.profileImage != null
+                  fit: experience!.profileImage != null ? experience!.profileImage!.contains('/asbar-icon.ico') ? BoxFit.cover : BoxFit.cover : BoxFit.contain,
+                  image: experience!.profileImage != null && !experience!.profileImage!.contains('/asbar-icon.ico')
                       ? NetworkImage("$baseUrl${experience!.profileImage}") as ImageProvider
                       : const AssetImage("assets/images/image4.png"),
                 ),
@@ -79,7 +84,9 @@ class SavedExperience extends StatelessWidget {
               ),
             )
           ],
-        ).center().gestures(onTap: () => model.navigateTo(view: const TripDetailView()));
+        ).center().gestures(onTap: () => model.navigateTo(view: TripDetailView(experience: experience, user: user,),).then((value) {
+          futureToRun!();
+        }));
       },
       viewModelBuilder: () => SavedExperienceCardViewModel(),
     );
