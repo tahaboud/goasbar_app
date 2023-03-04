@@ -34,7 +34,7 @@ class TripsView extends HookWidget {
                     shrinkWrap: true,
                     itemCount: model.experienceModels!.count,
                     itemBuilder: (context, index) {
-                      return TripItem(experience: model.experienceModels!.results![index]);
+                      return TripItem(experience: model.experienceModels!.results![index], user: user,);
                     },)
                   ),
                 ],
