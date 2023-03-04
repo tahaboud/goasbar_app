@@ -40,12 +40,11 @@ class ProviderApiService {
     });
   }
 
-  Future<PublicProviderModel?> getProviderInfo({String? token, int? providerId}) async {
+  Future<PublicProviderModel?> getProviderInfo({int? providerId}) async {
     return http.get(
       Uri.parse("$baseUrl/api/provider/$providerId/"),
       headers: {
         "Accept-Language": "en-US",
-        "Authorization": "Token $token",
       },
     ).then((response) {
       if (response.statusCode == 200) {
