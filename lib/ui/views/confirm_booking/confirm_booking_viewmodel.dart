@@ -2,9 +2,12 @@ import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/app/app.locator.dart';
+import 'package:goasbar/data_models/booking_model.dart';
 import 'package:goasbar/data_models/timing_list_model.dart';
 import 'package:goasbar/enum/dialog_type.dart';
+import 'package:goasbar/services/booking_api_service.dart';
 import 'package:goasbar/services/experience_api_service.dart';
+import 'package:goasbar/services/token_service.dart';
 import 'package:goasbar/services/validation_service.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
@@ -20,7 +23,10 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
   final _validationService = locator<ValidationService>();
   final _experienceApiService = locator<ExperienceApiService>();
   TimingListModel? timingListModel;
+  BookingModel? booking;
   int? selectedIndex;
+  final _tokenService = locator<TokenService>();
+  final _bookingApiService = locator<BookingApiService>();
   int? numberOfGuests = 0;
   List<TextEditingController> birthDates = [];
   List<TextEditingController> phones = [];
@@ -120,7 +126,12 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
     return weekDays[date];
   }
 
+  Future<BookingModel?> createBooking({int? timingId}) async {
+    String? token = await _tokenService.getTokenValue();
+    booking = await _bookingApiService.createBooking(token: token, timingId: timingId,);
 
+    return booking;
+  }
 
   Future<TimingListModel?> getExperiencePublicTimings({int? experienceId}) async {
     timingListModel = await _experienceApiService.getExperiencePublicTimings(experienceId: experienceId,);
