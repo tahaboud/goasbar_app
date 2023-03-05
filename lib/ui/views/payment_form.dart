@@ -373,6 +373,12 @@ class _payment_formState extends State<payment_form> {
     }
   }
 
+
+
+
+
+
+
   Future<void> getpaymentstatus() async {
     var status;
 
@@ -391,8 +397,6 @@ class _payment_formState extends State<payment_form> {
       _resultText = data["result"].toString();
     });
   }
-
-
 
   Future<String> _requestCheckoutId() async {
     var status;
