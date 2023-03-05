@@ -8,6 +8,7 @@ import 'package:goasbar/ui/views/checkout/checkout_view.dart';
 import 'package:goasbar/ui/views/confirm_booking/confirm_booking_viewmodel.dart';
 import 'package:goasbar/ui/widgets/incdecrease_button.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
+import 'package:motion_toast/motion_toast.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -149,7 +150,7 @@ class ConfirmBookingView extends HookWidget {
                               ],
                             ),
                             verticalSpaceSmall,
-                            Text(model.data!.results![index].startTime!, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: index == model.selectedIndex ? Colors.white : kMainColor1)),
+                            Text(model.data!.results![index].startTime!.substring(0, 5), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: index == model.selectedIndex ? Colors.white : kMainColor1)),
                           ],
                         ),
                       ).decorated(border: Border.all(color: Colors.black12, width: model.selectedIndex == index ? 0 : 2),
@@ -320,8 +321,27 @@ class ConfirmBookingView extends HookWidget {
                   child: const Text('Continue with payment', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
                 ).gestures(
                   onTap:  () {
-
-                    model.navigateTo(view: CheckoutView(experience: experience));
+                    if (model.selectedIndex == null)  {
+                      MotionToast.warning(
+                        title: const Text("Warning"),
+                        description: const Text("Select a Timing First."),
+                        animationCurve: Curves.easeIn,
+                        animationDuration: const Duration(milliseconds: 200),
+                      ).show(context);
+                    } else {
+                      model.createBooking(timingId: model.timingListModel!.results![model.selectedIndex!].id).then((value) {
+                        if (value != null) {
+                          model.navigateTo(view: CheckoutView(experience: experience));
+                        } else {
+                          MotionToast.error(
+                            title: const Text("Create Booking Failed"),
+                            description: const Text("An error occurred while creating the booking, please try again."),
+                            animationCurve: Curves.easeIn,
+                            animationDuration: const Duration(milliseconds: 200),
+                          ).show(context);
+                        }
+                      });
+                    }
                   },
                 ),
               ],
