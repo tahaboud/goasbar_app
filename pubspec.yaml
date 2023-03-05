@@ -41,6 +41,8 @@ dependencies:
   get_it: ^7.2.0
   injectable: ^2.1.0
 
+  # hyper pay
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
