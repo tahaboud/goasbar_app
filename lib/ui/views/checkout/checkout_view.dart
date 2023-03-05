@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:goasbar/data_models/experience_response.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
-import 'package:goasbar/ui/views/booking_scuccess/booking_success_view.dart';
 import 'package:goasbar/ui/views/checkout/checkout_viewmodel.dart';
-import 'package:goasbar/ui/views/custom_ui.dart';
-import 'package:goasbar/ui/views/ready_ui.dart';
 import 'package:goasbar/ui/widgets/info_item.dart';
+import 'package:motion_toast/motion_toast.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+
 
 class CheckoutView extends HookWidget {
   const CheckoutView({Key? key, this.experience}) : super(key: key);
@@ -44,7 +43,7 @@ class CheckoutView extends HookWidget {
                 ),
                 verticalSpaceMedium,
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
                       height: 60,
@@ -73,32 +72,10 @@ class CheckoutView extends HookWidget {
                       width: 60,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        border: Border.all(width: model.selectedPaymentMethod == 3 ? 2 : 1.5, color: model.selectedPaymentMethod == 3 ? Colors.blue : Colors.grey)
-                      ),
-                      child: Image.asset("assets/icons/checkout/paypal.png",).gestures(
-                        onTap: () => model.selectPaymentMethod(value: 3),
-                      ),
-                    ),
-                    Container(
-                      height: 60,
-                      width: 60,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(width: model.selectedPaymentMethod == 4 ? 2 : 1.5, color: model.selectedPaymentMethod == 4 ? Colors.blue : Colors.grey)
+                        border: Border.all(width: model.selectedPaymentMethod == 3 ? 2 : 1.5, color: model.selectedPaymentMethod == 4 ? Colors.blue : Colors.grey)
                       ),
                       child: Image.asset("assets/icons/checkout/apple_pay.png",).gestures(
                         onTap: () => model.selectPaymentMethod(value: 4),
-                      ),
-                    ),
-                    Container(
-                      height: 60,
-                      width: 60,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(width: model.selectedPaymentMethod == 5 ? 2 : 1.5, color: model.selectedPaymentMethod == 5 ? Colors.blue : Colors.grey),
-                      ),
-                      child: Image.asset("assets/icons/checkout/stripe.png",).gestures(
-                        onTap: () => model.selectPaymentMethod(value: 5),
                       ),
                     ),
                   ],
@@ -183,7 +160,27 @@ class CheckoutView extends HookWidget {
                   child: const Text('Continue with payment', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
                 ).gestures(
                   onTap:  () {
-                    model.navigateTo(view: custom_UI());
+                    if (cardNumber.text.isNotEmpty && cvv.text.isNotEmpty && expiryDate.text.isNotEmpty) {
+                      model.prepareCheckout(
+                        bookingId: experience!.id,
+                        cardHolder: "cardNumber.text",
+                        cardNumber: cardNumber.text,
+                        cVV: cvv.text,
+                        expiryMonth: expiryDate.text.substring(0, 2),
+                        expiryYear: expiryDate.text.substring(3),
+                        body: {
+                          "payment_method": model.selectedPaymentMethod == 1 ? 'VISA' : model.selectedPaymentMethod == 2 ? 'MADA' : 'APPLEPAY',
+                        },).then((value) {
+                        print("$value 1111111111111");
+                      });
+                    } else {
+                      MotionToast.warning(
+                        title: const Text("Warning"),
+                        description: const Text("All filed must be filled."),
+                        animationCurve: Curves.easeIn,
+                        animationDuration: const Duration(milliseconds: 200),
+                      ).show(context);
+                    }
                   },
                 ),
               ],
