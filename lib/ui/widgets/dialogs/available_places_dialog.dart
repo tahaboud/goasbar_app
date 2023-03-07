@@ -42,9 +42,9 @@ class AvailablePlacesDialog extends HookWidget {
                 ],
               ),
               Row(
-                children: const [
-                  Text("50", style: TextStyle(color: kMainColor1),),
-                  Text("Sit",),
+                children: [
+                  Text(dialogRequest!.data.capacity.toString(), style: const TextStyle(color: kMainColor1),),
+                  const Text(" Sit",),
                   horizontalSpaceMedium,
                 ],
               ),
@@ -61,9 +61,9 @@ class AvailablePlacesDialog extends HookWidget {
                 ],
               ),
               Row(
-                children: const [
-                  Text("13", style: TextStyle(color: kMainColor1),),
-                  Text("Sit",),
+                children: [
+                  Text(dialogRequest!.data.availability.toString(), style: const TextStyle(color: kMainColor1),),
+                  const Text(" Sit",),
                   horizontalSpaceMedium,
                 ],
               )
