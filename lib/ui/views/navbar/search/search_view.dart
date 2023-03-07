@@ -390,7 +390,7 @@ class SearchView extends HookWidget {
                         );
                       },
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
