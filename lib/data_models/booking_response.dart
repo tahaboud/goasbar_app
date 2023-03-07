@@ -1,3 +1,5 @@
+import 'package:goasbar/data_models/affiliate_set_model.dart';
+
 class BookingResponse {
   int? id;
   int? experienceTiming;
@@ -5,7 +7,7 @@ class BookingResponse {
   String? creationDate;
   dynamic cancelationComment;
   String? price;
-  List<dynamic>? affiliateSet;
+  List<AffiliateSet>? affiliateSet;
 
   BookingResponse(
       {this.id,
@@ -24,9 +26,9 @@ class BookingResponse {
     cancelationComment = json['cancelation_comment'];
     price = json['price'];
     if (json['affiliate_set'] != null) {
-      affiliateSet = <Null>[];
+      affiliateSet = <AffiliateSet>[];
       json['affiliate_set'].forEach((v) {
-        affiliateSet!.add(v);
+        affiliateSet!.add(AffiliateSet.fromJson(v));
       });
     }
   }
