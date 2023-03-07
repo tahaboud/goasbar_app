@@ -40,7 +40,7 @@ class ProviderApiService {
     });
   }
 
-  Future<PublicProviderModel?> getProviderInfo({int? providerId}) async {
+  Future<PublicProviderModel?> getPublicProviderInfo({int? providerId}) async {
     return http.get(
       Uri.parse("$baseUrl/api/provider/$providerId/"),
       headers: {
