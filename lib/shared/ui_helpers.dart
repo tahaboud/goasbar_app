@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:motion_toast/motion_toast.dart';
+import 'package:motion_toast/resources/arrays.dart';
 
 const Widget horizontalSpaceTiny = SizedBox(width: 5.0);
 const Widget horizontalSpaceSmall = SizedBox(width: 10.0);
@@ -22,3 +24,42 @@ double screenHeightPercentage(BuildContext context, {double percentage = 1}) =>
 
 double screenWidthPercentage(BuildContext context, {double percentage = 1}) =>
     screenWidth(context) * percentage;
+
+showMotionToast({BuildContext? context, String? title, String? msg, MotionToastType? type}) {
+  if (type == MotionToastType.warning) {
+    MotionToast.warning(
+      title: Text(title!),
+      description: Text(msg!),
+      animationCurve: Curves.easeIn,
+      animationDuration: const Duration(milliseconds: 200),
+    ).show(context!);
+  } else if (type == MotionToastType.success) {
+    MotionToast.success(
+      title: Text(title!),
+      description: Text(msg!),
+      animationCurve: Curves.easeIn,
+      animationDuration: const Duration(milliseconds: 200),
+    ).show(context!);
+  } else if (type == MotionToastType.error) {
+    MotionToast.error(
+      title: Text(title!),
+      description: Text(msg!),
+      animationCurve: Curves.easeIn,
+      animationDuration: const Duration(milliseconds: 200),
+    ).show(context!);
+  } else if (type == MotionToastType.delete) {
+    MotionToast.delete(
+      title: Text(title!),
+      description: Text(msg!),
+      animationCurve: Curves.easeIn,
+      animationDuration: const Duration(milliseconds: 200),
+    ).show(context!);
+  } else {
+    MotionToast.info(
+      title: Text(title!),
+      description: Text(msg!),
+      animationCurve: Curves.easeIn,
+      animationDuration: const Duration(milliseconds: 200),
+    ).show(context!);
+  }
+}
