@@ -2,6 +2,7 @@ import 'package:flutter/animation.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/experience_response.dart';
 import 'package:goasbar/data_models/user_model.dart';
+import 'package:goasbar/enum/bottom_sheet_type.dart';
 import 'package:goasbar/services/auth_service.dart';
 import 'package:goasbar/services/token_service.dart';
 import 'package:stacked/stacked.dart';
@@ -16,6 +17,7 @@ class TripItemViewModel extends FutureViewModel<bool?> {
   final _navigationService = locator<NavigationService>();
   final _tokenService = locator<TokenService>();
   final _authService = locator<AuthService>();
+  final _bottomSheetService = locator<BottomSheetService>();
   List<int>? favoriteList = [];
 
   void addFavorites({int? experienceId}) {
@@ -44,6 +46,19 @@ class TripItemViewModel extends FutureViewModel<bool?> {
 
   navigateTo({view}) async {
     await _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
+  }
+
+  Future showReviewBottomSheet() async {
+    var response = await _bottomSheetService.showCustomSheet(
+      variant: BottomSheetType.review,
+      isScrollControlled: true,
+      barrierDismissible: true,
+      data: user,
+    );
+
+    if (response!.confirmed) {
+      return true;
+    }
   }
 
   bool getIsFav () {
