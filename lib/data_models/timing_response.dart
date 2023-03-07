@@ -4,6 +4,7 @@ class TimingResponse {
   String? date;
   String? startTime;
   int? capacity;
+  int? availability;
   String? status;
 
   TimingResponse(
@@ -12,6 +13,7 @@ class TimingResponse {
         this.date,
         this.startTime,
         this.capacity,
+        this.availability,
         this.status});
 
   TimingResponse.fromJson(Map<String, dynamic> json) {
@@ -22,6 +24,9 @@ class TimingResponse {
     date = json['date'];
     startTime = json['start_time'];
     capacity = json['capacity'];
+    if (json.keys.contains("availability")) {
+      availability = json['availability'];
+    }
     if (json.keys.contains("status")) {
       status = json['status'];
     }
@@ -36,6 +41,9 @@ class TimingResponse {
     data['date'] = date;
     data['start_time'] = startTime;
     data['capacity'] = capacity;
+    if (data.keys.contains("availability")) {
+      data['availability'] = availability;
+    }
     if (data.keys.contains("status")) {
       data['status'] = status;
     }
