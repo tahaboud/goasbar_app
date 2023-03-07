@@ -7,6 +7,7 @@ class Response {
   String? website;
   String? about;
   String? phoneNumber;
+  String? image;
   dynamic docImage;
   String? bankName;
   String? bankAccountNumber;
@@ -25,6 +26,7 @@ class Response {
         this.email,
         this.website,
         this.about,
+        this.image,
         this.phoneNumber,
         this.docImage,
         this.bankName,
@@ -44,6 +46,7 @@ class Response {
     email = json['email'];
     website = json['website'];
     about = json['about'];
+    image = json['image'];
     phoneNumber = json['phone_number'];
     docImage = json['doc_image'];
     bankName = json['bank_name'];
@@ -65,6 +68,7 @@ class Response {
     data['email'] = email;
     data['website'] = website;
     data['about'] = about;
+    data['image'] = image;
     data['phone_number'] = phoneNumber;
     data['doc_image'] = docImage;
     data['bank_name'] = bankName;
