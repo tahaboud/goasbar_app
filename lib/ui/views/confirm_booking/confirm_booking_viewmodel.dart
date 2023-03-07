@@ -25,12 +25,16 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
   TimingListModel? timingListModel;
   BookingModel? booking;
   int? selectedIndex;
+  String? filterDate1 = "1900-01-01";
+  String? filterDate2 = "3000-12-30";
   final _tokenService = locator<TokenService>();
   final _bookingApiService = locator<BookingApiService>();
   int? numberOfGuests = 0;
-  List<TextEditingController> birthDates = [];
+  List<TextEditingController> age = [];
   List<TextEditingController> phones = [];
-  List<TextEditingController> names = [];
+  List<TextEditingController> firstNames = [];
+  List<TextEditingController> lastNames = [];
+  List<TextEditingController> genders = [];
 
   void navigateTo({view}) {
     _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
@@ -54,12 +58,16 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
       numberOfGuests = numberOfGuests! + value!;
 
       if (value == 1) {
-        names.add(TextEditingController());
-        birthDates.add(TextEditingController());
+        firstNames.add(TextEditingController());
+        lastNames.add(TextEditingController());
+        genders.add(TextEditingController());
+        age.add(TextEditingController());
         phones.add(TextEditingController());
       } else {
-        names.removeLast();
-        birthDates.removeLast();
+        firstNames.removeLast();
+        lastNames.removeLast();
+        genders.removeLast();
+        age.removeLast();
         phones.removeLast();
       }
     }
@@ -67,40 +75,29 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
     notifyListeners();
   }
 
-  void showAvailablePlacesDialog({gen}) {
+  void showAvailablePlacesDialog({timingResponse}) {
     _dialogService.showCustomDialog(
       variant: DialogType.availablePlaces,
+      data: timingResponse,
     );
-  }
-
-  void showBirthDayPicker(context, index) async {
-    List<DateTime?>? picked = await showCalendarDatePicker2Dialog(
-      context: context,
-      config: CalendarDatePicker2WithActionButtonsConfig(
-        disableYearPicker: true,
-        calendarType: CalendarDatePicker2Type.single,
-        selectedDayHighlightColor: kMainColor1,
-      ),
-      initialValue: [
-        DateTime.now(),
-      ],
-
-      dialogSize: const Size(325, 340),
-    );
-
-    final DateFormat formatter = DateFormat('yyyy-MM-dd');
-    final String formatted = formatter.format(picked![0]!);
-
-    birthDates[index].text = formatted;
-    notifyListeners();
   }
 
   String? validatePhoneNumber ({String? value}) {
     return _validationService.validatePhoneNumber(value);
   }
 
-  void showAvailableTimingsPicker({context}) {
-    showCalendarDatePicker2Dialog(
+  void showSelectionDialog({gender, int? index}) async {
+    var response = await _dialogService.showCustomDialog(
+      variant: DialogType.selection,
+      data: genders[index!].text.isNotEmpty ? genders[index].text : gender,
+    );
+
+    genders[index].text = response!.data;
+    notifyListeners();
+  }
+
+  void showAvailableTimingsPicker({context}) async {
+    List<DateTime?>? pickedDates = await showCalendarDatePicker2Dialog(
       context: context,
       config: CalendarDatePicker2WithActionButtonsConfig(
         calendarType: CalendarDatePicker2Type.range,
@@ -108,6 +105,22 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
       ),
       dialogSize: const Size(325, 350),
     );
+
+    if (pickedDates!.length > 1) {
+      final DateFormat formatter = DateFormat('yyyy-MM-dd');
+      final String formattedFilter1 = formatter.format(pickedDates[0]!);
+      final String formattedFilter2 = formatter.format(pickedDates[1]!);
+
+      filterDate1 = formattedFilter1;
+      filterDate2 = formattedFilter2;
+
+      notifyListeners();
+    } else {
+      filterDate1 = "1900-01-01";
+      filterDate2 = "3000-12-30";
+
+      notifyListeners();
+    }
   }
 
   int formatDay(String date) => int.parse(date.substring(8,10).toString());
@@ -126,9 +139,9 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
     return weekDays[date];
   }
 
-  Future<BookingModel?> createBooking({int? timingId}) async {
+  Future<BookingModel?> createBooking({int? timingId, Map? body}) async {
     String? token = await _tokenService.getTokenValue();
-    booking = await _bookingApiService.createBooking(token: token, timingId: timingId,);
+    booking = await _bookingApiService.createBooking(token: token, timingId: timingId, body: body);
 
     return booking;
   }
