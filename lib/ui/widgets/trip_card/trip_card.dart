@@ -66,7 +66,7 @@ class TripItem extends StatelessWidget {
                     label: Text(experience!.rate! == "0.00" ? "0.0" : experience!.rate!, style: const TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold)),
                     avatar: const Icon(Icons.star, color: Colors.white, size: 20),
-                  ),
+                  ).gestures(onTap: () => model.showReviewBottomSheet()),
                 ],
               ),
             ),
