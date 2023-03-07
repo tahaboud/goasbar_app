@@ -3,4 +3,5 @@ enum BottomSheetType {
   newTiming,
   addExperience,
   publishSuccess,
+  review,
 }
