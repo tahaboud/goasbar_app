@@ -77,8 +77,6 @@ public class MainActivity extends FlutterActivity implements ITransactionListene
     public void error(
             final String errorCode, final String errorMessage, final Object errorDetails) {
 
-        Log.d("ERRRRRRR", "ERRRRRRR ");
-
         handler.post(
                 new Runnable() {
                     @Override
@@ -90,8 +88,6 @@ public class MainActivity extends FlutterActivity implements ITransactionListene
 
     @Override
     public void success(final Object result) {
-        Log.d("SUCCESS", "SUCCESS " + Result.success(result));
-
         handler.post(
                 new Runnable() {
                     @Override
@@ -323,8 +319,6 @@ public class MainActivity extends FlutterActivity implements ITransactionListene
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d("ACTIVITY REUSLT", "ACTIVITY REUSLT");
-
         switch (resultCode) {
             case CheckoutActivity.RESULT_OK:
                 /* transaction completed */
