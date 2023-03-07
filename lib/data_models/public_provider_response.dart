@@ -4,6 +4,7 @@ class PublicProviderResponse {
   String? email;
   dynamic website;
   String? about;
+  String? image;
   String? phoneNumber;
   dynamic twitterAccount;
   dynamic facebookAccount;
@@ -15,6 +16,7 @@ class PublicProviderResponse {
         this.email,
         this.website,
         this.about,
+        this.image,
         this.phoneNumber,
         this.twitterAccount,
         this.facebookAccount,
@@ -26,6 +28,7 @@ class PublicProviderResponse {
     email = json['email'];
     website = json['website'];
     about = json['about'];
+    image = json['image'];
     phoneNumber = json['phone_number'];
     twitterAccount = json['twitter_account'];
     facebookAccount = json['facebook_account'];
@@ -39,6 +42,7 @@ class PublicProviderResponse {
     data['email'] = email;
     data['website'] = website;
     data['about'] = about;
+    data['image'] = image;
     data['phone_number'] = phoneNumber;
     data['twitter_account'] = twitterAccount;
     data['facebook_account'] = facebookAccount;
