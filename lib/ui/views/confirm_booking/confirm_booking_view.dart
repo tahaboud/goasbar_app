@@ -9,6 +9,7 @@ import 'package:goasbar/ui/views/confirm_booking/confirm_booking_viewmodel.dart'
 import 'package:goasbar/ui/widgets/incdecrease_button.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:motion_toast/motion_toast.dart';
+import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -129,6 +130,8 @@ class ConfirmBookingView extends HookWidget {
                 //   ).alignment(Alignment.centerLeft),
                 // ),
                 model.isBusy ? const SizedBox() : model.data!.count == 0 ? const SizedBox() : verticalSpaceMedium,
+
+
                 model.isBusy ? const Loader().center() : model.data!.count == 0 ? const SizedBox() : SizedBox(
                   height: 82,
                   child: ListView.builder(
@@ -137,30 +140,59 @@ class ConfirmBookingView extends HookWidget {
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
-                      return Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 10),
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                Text(model.formatDate(model.data!.results![index].date!), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: index == model.selectedIndex ? Colors.white : Colors.black)),
-                                horizontalSpaceSmall,
-                                Text(model.data!.results![index].date!.substring(8, 10), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: index == model.selectedIndex ? Colors.white : Colors.black),)
-                              ],
-                            ),
-                            verticalSpaceSmall,
-                            Text(model.data!.results![index].startTime!.substring(0, 5), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: index == model.selectedIndex ? Colors.white : kMainColor1)),
-                          ],
-                        ),
-                      ).decorated(border: Border.all(color: Colors.black12, width: model.selectedIndex == index ? 0 : 2),
-                          borderRadius: BorderRadius.circular(10), color: index == model.selectedIndex ? kMainColor1 : Colors.transparent,
-                          animate: true)
-                          .padding(right: 10)
-                          .animate(const Duration(milliseconds: 300), Curves.easeIn)
-                          .gestures(onTap: () {
-                        model.changeSelection(index: index);
-                      });
+                      if (model.formatYear(model.filterDate1!) <=  model.formatYear(model.data!.results![index].date!)
+                          && model.formatMonth(model.filterDate1!) <=  model.formatMonth(model.data!.results![index].date!)
+                          && model.formatDay(model.filterDate1!) <=  model.formatDay(model.data!.results![index].date!)
+                          && model.formatYear(model.filterDate2!) >=  model.formatYear(model.data!.results![index].date!)
+                          && model.formatMonth(model.filterDate2!) >=  model.formatMonth(model.data!.results![index].date!)
+                          && model.formatDay(model.filterDate2!) >=  model.formatDay(model.data!.results![index].date!)) {
+                        return Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text(model.formatDate(model.data!.results![index].date!), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: index == model.selectedIndex ? Colors.white : Colors.black)),
+                                  horizontalSpaceSmall,
+                                  Text(model.data!.results![index].date!.substring(8, 10), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: index == model.selectedIndex ? Colors.white : Colors.black),)
+                                ],
+                              ),
+                              verticalSpaceSmall,
+                              Text(model.data!.results![index].startTime!.substring(0, 5), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: index == model.selectedIndex ? Colors.white : kMainColor1)),
+                            ],
+                          ),
+                        ).decorated(border: Border.all(color: Colors.black38, width: model.selectedIndex == index ? 0 : 2),
+                            borderRadius: BorderRadius.circular(10), color: index == model.selectedIndex ? kMainColor1 : Colors.transparent,
+                            animate: true)
+                            .padding(right: 10)
+                            .animate(const Duration(milliseconds: 300), Curves.easeIn)
+                            .gestures(onTap: () {
+                          model.changeSelection(index: index);
+                        });
+                      }
+                      else {
+                        return Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text(model.formatDate(model.data!.results![index].date!), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black.withOpacity(0.4))),
+                                  horizontalSpaceSmall,
+                                  Text(model.data!.results![index].date!.substring(8, 10), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black.withOpacity(0.4)),)
+                                ],
+                              ),
+                              verticalSpaceSmall,
+                              Text(model.data!.results![index].startTime!.substring(0, 5), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: kMainColor1.withOpacity(0.4))),
+                            ],
+                          ),
+                        ).decorated(border: Border.all(
+                            color: Colors.black12.withOpacity(0.1), width: 2),
+                            borderRadius: BorderRadius.circular(10),)
+                            .padding(right: 10);
+                      }
                     },
                   ),
                 ),
@@ -177,7 +209,18 @@ class ConfirmBookingView extends HookWidget {
                     Row(
                       children: [
                         const Text('View', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: kMainColor1),).gestures(onTap: () {
-                          model.showAvailablePlacesDialog();
+                          if (model.selectedIndex == null) {
+                            MotionToast.warning(
+                              title: const Text("Warning"),
+                              description: const Text("Select a timing to show available places!."),
+                              animationCurve: Curves.easeIn,
+                              animationDuration: const Duration(milliseconds: 200),
+                            ).show(context);
+                          } else {
+                            model.showAvailablePlacesDialog(
+                              timingResponse: model.data!.results![model.selectedIndex!],
+                            );
+                          }
                         }),
                         horizontalSpaceSmall,
                       ],
@@ -214,9 +257,9 @@ class ConfirmBookingView extends HookWidget {
                       Text("Guest ${i+1}", style: const TextStyle(fontWeight: FontWeight.bold),),
                       verticalSpaceSmall,
                       TextField(
-                        controller: model.names[i],
+                        controller: model.firstNames[i],
                         decoration: InputDecoration(
-                          hintText: 'Guest Full Name',
+                          hintText: 'Guest First Name',
                           hintStyle: const TextStyle(fontSize: 14),
                           // prefixText: 'Saudi Arabia ( +966 ) | ',
                           fillColor: kTextFiledGrayColor,
@@ -231,15 +274,11 @@ class ConfirmBookingView extends HookWidget {
                       ),
                       verticalSpaceRegular,
                       TextField(
-                        readOnly: true,
-                        controller: model.birthDates[i],
+                        controller: model.lastNames[i],
                         decoration: InputDecoration(
-                          hintText: '25 . 10 1998',
+                          hintText: 'Guest Last Name',
                           hintStyle: const TextStyle(fontSize: 14),
-                          suffixIcon: Image.asset('assets/icons/birth_date.png')
-                              .gestures(onTap: () {
-                            model.showBirthDayPicker(context, i);
-                          }),
+                          // prefixText: 'Saudi Arabia ( +966 ) | ',
                           fillColor: kTextFiledGrayColor,
                           filled: true,
                           border: OutlineInputBorder(
@@ -247,6 +286,47 @@ class ConfirmBookingView extends HookWidget {
                           ),
                           enabledBorder: const OutlineInputBorder(
                             borderSide: BorderSide(color: kTextFiledGrayColor),
+                          ),
+                        ),
+                      ),
+                      verticalSpaceRegular,
+                      TextField(
+                        keyboardType: TextInputType.number,
+                        controller: model.age[i],
+                        decoration: InputDecoration(
+                          hintText: 'Guest Age',
+                          hintStyle: const TextStyle(fontSize: 14),
+                          fillColor: kTextFiledGrayColor,
+                          filled: true,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: kTextFiledGrayColor),
+                          ),
+                        ),
+                      ),
+                      verticalSpaceRegular,
+                      SizedBox(
+                        height: 60,
+                        child: TextField(
+                          readOnly: true,
+                          controller: model.genders[i],
+                          decoration: InputDecoration(
+                            hintText: 'Guest Gender',
+                            hintStyle: const TextStyle(fontSize: 14),
+                            suffixIcon: Image.asset('assets/icons/drop_down.png')
+                                .gestures(onTap: () {
+                              model.showSelectionDialog(gender: model.genders[i].text, index: i);
+                            }),
+                            fillColor: kTextFiledGrayColor,
+                            filled: true,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            enabledBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(color: kTextFiledGrayColor),
+                            ),
                           ),
                         ),
                       ),
@@ -322,14 +402,31 @@ class ConfirmBookingView extends HookWidget {
                 ).gestures(
                   onTap:  () {
                     if (model.selectedIndex == null)  {
-                      MotionToast.warning(
-                        title: const Text("Warning"),
-                        description: const Text("Select a Timing First."),
-                        animationCurve: Curves.easeIn,
-                        animationDuration: const Duration(milliseconds: 200),
-                      ).show(context);
+                      showMotionToast(context: context, msg: "Select a Timing First.", title: 'Warning', type: MotionToastType.warning);
                     } else {
-                      model.createBooking(timingId: model.timingListModel!.results![model.selectedIndex!].id).then((value) {
+                      Map? body = {};
+                      if (coupon.text.isNotEmpty) body.addAll({'coupon': coupon.text});
+
+                      for (var i = 0; i < model.numberOfGuests!; i++) {
+                        if (model.firstNames[i].text.isEmpty || model.lastNames[i].text.isEmpty
+                            || model.age[i].text.isEmpty || model.genders[i].text.isEmpty) {
+
+                        }
+                        body.addAll({
+                          "affiliate_set": [
+                            {
+                              "first_name": "jalil",
+                              "last_name": "jalil",
+                              "age": "25",
+                              "gender": "MALE",
+                              "phone_number": "+966${model.phones[i]}"
+                            }
+                          ]
+                        });
+                      }
+
+                      model.createBooking(body: body,
+                          timingId: model.timingListModel!.results![model.selectedIndex!].id).then((value) {
                         if (value != null) {
                           model.navigateTo(view: CheckoutView(experience: experience));
                         } else {
