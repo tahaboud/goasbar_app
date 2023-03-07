@@ -7,6 +7,7 @@ import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/confirm_booking/confirm_booking_view.dart';
 import 'package:goasbar/ui/views/login/login_view.dart';
+import 'package:goasbar/ui/views/provider_profile/provider_profile_view.dart';
 import 'package:goasbar/ui/views/trip_detail/trip_detail_viewmodel.dart';
 import 'package:goasbar/ui/widgets/note_item.dart';
 import 'package:goasbar/ui/widgets/slider_image_item.dart';
@@ -185,7 +186,9 @@ class TripDetailView extends HookWidget {
                     children: [
                       const Text('Hosted Experience by ', style: TextStyle(fontSize: 18)),
                       !model.dataReady ? Image.asset("assets/images/by_user.png").borderRadius(all: 50).height(50).width(50)
-                          : Text(model.provider!.response!.nickname!, style: const TextStyle(fontSize: 18)),
+                          : Text(model.provider!.response!.nickname!, style: const TextStyle(fontSize: 18, color: kMainColor1)).gestures(
+                          onTap: () => model.navigateTo(view: ProviderProfileView(provider: model.provider!.response!, user: user)),
+                      ),
                     ],
                   ).padding(horizontal: 20),
                   verticalSpaceRegular,
