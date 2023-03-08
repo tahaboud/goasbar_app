@@ -11,6 +11,7 @@ import 'package:goasbar/ui/widgets/dot_item.dart';
 import 'package:goasbar/ui/widgets/info_item.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:motion_toast/motion_toast.dart';
+import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -751,25 +752,25 @@ class AddExperienceView extends HookWidget {
                     onTap: () {
                       for (var i = 0; i < model.addedProvidedGoodsControllers.length; i++) {
                         if (model.addedProvidedGoodsControllers[i].text.isNotEmpty) {
-                          model.providedGoodsText = "${model.addedProvidedGoodsControllers[i].text}\n${model.providedGoodsText}";
+                          model.updateProvidedGoodsText(text: "${model.addedProvidedGoodsControllers[i].text}\n${model.providedGoodsText}");
                         }
                       }
 
-                      if (model.providedGoodsController1.text.isNotEmpty) model.providedGoodsText = "${model.providedGoodsController1.text}\n${model.providedGoodsText}";
-                      if (model.providedGoodsController2.text.isNotEmpty) model.providedGoodsText = "${model.providedGoodsController2.text}\n${model.providedGoodsText}";
-                      if (model.providedGoodsController3.text.isNotEmpty) model.providedGoodsText = "${model.providedGoodsController3.text}\n${model.providedGoodsText}";
-                      if (model.providedGoodsController4.text.isNotEmpty) model.providedGoodsText = "${model.providedGoodsController4.text}\n${model.providedGoodsText}";
+                      if (model.providedGoodsController1.text.isNotEmpty) model.updateProvidedGoodsText(text: "${model.providedGoodsController1.text}\n${model.providedGoodsText}");
+                      if (model.providedGoodsController2.text.isNotEmpty) model.updateProvidedGoodsText(text: "${model.providedGoodsController2.text}\n${model.providedGoodsText}");
+                      if (model.providedGoodsController3.text.isNotEmpty) model.updateProvidedGoodsText(text: "${model.providedGoodsController3.text}\n${model.providedGoodsText}");
+                      if (model.providedGoodsController4.text.isNotEmpty) model.updateProvidedGoodsText(text: "${model.providedGoodsController4.text}\n${model.providedGoodsText}");
 
                       for (var i = 0; i < model.addedRequirementsControllers.length; i++) {
                         if (model.addedRequirementsControllers[i].text.isNotEmpty) {
-                          model.requirementsText = "${model.addedRequirementsControllers[i].text}\n";
+                          model.updateRequirementsText(text: "${model.addedRequirementsControllers[i].text}\n${model.requirementsText}");
                         }
                       }
 
-                      if (model.requirementsController1.text.isNotEmpty) model.requirementsText = "${model.requirementsController1.text}\n";
-                      if (model.requirementsController2.text.isNotEmpty) model.requirementsText = "${model.requirementsController2.text}\n";
-                      if (model.requirementsController3.text.isNotEmpty) model.requirementsText = "${model.requirementsController3.text}\n";
-                      if (model.requirementsController4.text.isNotEmpty) model.requirementsText = "${model.requirementsController4.text}\n";
+                      if (model.requirementsController1.text.isNotEmpty) model.updateRequirementsText(text: "${model.requirementsController1.text}\n${model.requirementsText}");
+                      if (model.requirementsController2.text.isNotEmpty) model.updateRequirementsText(text: "${model.requirementsController2.text}\n${model.requirementsText}");
+                      if (model.requirementsController3.text.isNotEmpty) model.updateRequirementsText(text: "${model.requirementsController3.text}\n${model.requirementsText}");
+                      if (model.requirementsController4.text.isNotEmpty) model.updateRequirementsText(text: "${model.requirementsController4.text}\n${model.requirementsText}");
 
                       pageController.jumpToPage(4);
                     },
@@ -1115,67 +1116,113 @@ class AddExperienceView extends HookWidget {
                           Map<String, dynamic>? body = {};
                           Map<String, dynamic>? timingBody = {};
 
-                          body.addAll({'title': title.text});
-                          body.addAll({'min_age': age.text});
-                          body.addAll({'description': description.text});
-                          body.addAll({'events': activities.text});
-                          body.addAll({'city': model.city});
-                          body.addAll({'price': price.text});
-
-                          if (model.mainImage != null) {
-                            if (!model.mainImage!.path.contains("/media/")) {
-                              var pickedFile = await MultipartFile.fromFile(
-                                model.mainImage!.path,
-                                filename: model.mainImage!.path.substring(model.mainImage!.absolute.path.lastIndexOf('/') + 1),
-                              );
-                              body.addAll({'profile_image': pickedFile});
-                            }
-                          }
-
-                          if (model.images! > 0) {
-                            for (var i = 0; i < model.images!; i++) {
-                              if (model.additionalImages![i]!.id == null) {
-                                var pickedFile = await MultipartFile.fromFile(
-                                  model.additionalImages![i]!.image!,
-                                  filename: model.additionalImages![i]!.image!.substring(model.additionalImages![i]!.image!.lastIndexOf('/') + 1),
-                                );
-                                body.addAll({'image_set[$i]image': pickedFile});
-                              }
-                            }
-                          }
-
-                          if (model.genderConstraint == "No constrains") body.addAll({'gender': 'None',});
-                          if (model.genderConstraint == "Families") body.addAll({'gender': 'FAMILIES',});
-                          if (model.genderConstraint == "Men Only") body.addAll({'gender': 'MEN',});
-                          if (model.genderConstraint == "Women Only") body.addAll({'gender': 'WOMEN',});
-
-                          if (duration.text.isNotEmpty) body.addAll({'duration': duration.text,});
-                          if (notes.text.isNotEmpty) body.addAll({'location_notes': notes.text,});
-                          if (model.selectedExperienceCategory != null) body.addAll({'categories': model.selectedExperienceCategory,});
-                          if (link.text.isNotEmpty) body.addAll({'youtube_video': link.text});
-                          if (model.providedGoodsText!.isNotEmpty) body.addAll({'provided_goods': model.providedGoodsText});
-                          if (model.requirementsText!.isNotEmpty) body.addAll({'requirements': model.requirementsText});
-
-                          if (model.startDate.text.isNotEmpty) timingBody.addAll({'date': model.startDate.text});
-                          if (model.startDate.text.isNotEmpty) timingBody.addAll({'start_time': model.startTime.text});
-                          if (addPeople.text.isNotEmpty) timingBody.addAll({'capacity': addPeople.text});
-
                           if (request.data != null) {
-                            model.updateExperience(body: body, experienceId: request.data.id).then((value) {
-                              if (value != null) {
-                                model.showPublishSuccessBottomSheet().then((value) {
-                                  completer(SheetResponse(confirmed: true));
-                                });
-                              } else {
-                                MotionToast.error(
-                                  title: const Text("Update Experience Failed"),
-                                  description: const Text("An error occurred while updating the experience, please try again."),
-                                  animationCurve: Curves.easeIn,
-                                  animationDuration: const Duration(milliseconds: 200),
-                                ).show(context);
+                            if (title.text != request.data.title) body.addAll({'title': title.text});
+                            if (age.text != request.data.minAge.toString()) body.addAll({'min_age': age.text});
+                            if (description.text != request.data.description) body.addAll({'description': description.text});
+                            if (activities.text != request.data.events) body.addAll({'events': activities.text});
+                            if (model.city != model.getCity()) body.addAll({'city': model.city});
+                            if (price.text != request.data.price) body.addAll({'price': price.text});
+
+                            if (model.mainImage != null) {
+                              if (!model.mainImage!.path.contains("/media/")) {
+                                var pickedFile = await MultipartFile.fromFile(
+                                  model.mainImage!.path,
+                                  filename: model.mainImage!.path.substring(model.mainImage!.absolute.path.lastIndexOf('/') + 1),
+                                );
+                                body.addAll({'profile_image': pickedFile});
                               }
-                            });
+                            }
+
+                            if (model.images! > 0) {
+                              for (var i = 0; i < model.images!; i++) {
+                                if (model.additionalImages![i]!.id == null) {
+                                  var pickedFile = await MultipartFile.fromFile(
+                                    model.additionalImages![i]!.image!,
+                                    filename: model.additionalImages![i]!.image!.substring(model.additionalImages![i]!.image!.lastIndexOf('/') + 1),
+                                  );
+                                  body.addAll({'image_set[$i]image': pickedFile});
+                                }
+                              }
+                            }
+
+                            if (model.genderConstraint == "No constrains") body.addAll({'gender': 'None',});
+                            if (model.genderConstraint == "Families") body.addAll({'gender': 'FAMILIES',});
+                            if (model.genderConstraint == "Men Only") body.addAll({'gender': 'MEN',});
+                            if (model.genderConstraint == "Women Only") body.addAll({'gender': 'WOMEN',});
+
+                            if (duration.text.isNotEmpty) body.addAll({'duration': duration.text,});
+                            if (notes.text.isNotEmpty) body.addAll({'location_notes': notes.text,});
+                            if (model.selectedExperienceCategory != null) body.addAll({'categories': [model.selectedExperienceCategory],});
+                            if (link.text.isNotEmpty) body.addAll({'youtube_video': link.text});
+                            body.addAll({'provided_goods': model.providedGoodsText});
+                            body.addAll({'requirements': model.requirementsText});
+
+                            // if (model.startDate.text.isNotEmpty) timingBody.addAll({'date': model.startDate.text});
+                            // if (model.startDate.text.isNotEmpty) timingBody.addAll({'start_time': model.startTime.text});
+                            // if (addPeople.text.isNotEmpty) timingBody.addAll({'capacity': addPeople.text});
+
+                            if (body.isEmpty) {
+                              model.showPublishSuccessBottomSheet().then((value) {
+                                completer(SheetResponse(confirmed: true));
+                              });
+                            } else {
+                              model.updateExperience(body: body, experienceId: request.data.id).then((value) {
+                                if (value != null) {
+                                  model.showPublishSuccessBottomSheet().then((value) {
+                                    completer(SheetResponse(confirmed: true));
+                                  });
+                                } else {
+                                  showMotionToast(context: context, title: 'Update Experience Failed', msg: 'An error occurred while updating the experience, please try again.', type: MotionToastType.error);
+                                }
+                              });
+                            }
                           } else {
+                            body.addAll({'title': title.text});
+                            body.addAll({'min_age': age.text});
+                            body.addAll({'description': description.text});
+                            body.addAll({'events': activities.text});
+                            body.addAll({'city': model.city});
+                            body.addAll({'price': price.text});
+
+                            if (model.mainImage != null) {
+                              if (!model.mainImage!.path.contains("/media/")) {
+                                var pickedFile = await MultipartFile.fromFile(
+                                  model.mainImage!.path,
+                                  filename: model.mainImage!.path.substring(model.mainImage!.absolute.path.lastIndexOf('/') + 1),
+                                );
+                                body.addAll({'profile_image': pickedFile});
+                              }
+                            }
+
+                            if (model.images! > 0) {
+                              for (var i = 0; i < model.images!; i++) {
+                                if (model.additionalImages![i]!.id == null) {
+                                  var pickedFile = await MultipartFile.fromFile(
+                                    model.additionalImages![i]!.image!,
+                                    filename: model.additionalImages![i]!.image!.substring(model.additionalImages![i]!.image!.lastIndexOf('/') + 1),
+                                  );
+                                  body.addAll({'image_set[$i]image': pickedFile});
+                                }
+                              }
+                            }
+
+                            if (model.genderConstraint == "No constrains") body.addAll({'gender': 'None',});
+                            if (model.genderConstraint == "Families") body.addAll({'gender': 'FAMILIES',});
+                            if (model.genderConstraint == "Men Only") body.addAll({'gender': 'MEN',});
+                            if (model.genderConstraint == "Women Only") body.addAll({'gender': 'WOMEN',});
+
+                            if (duration.text.isNotEmpty) body.addAll({'duration': duration.text,});
+                            if (notes.text.isNotEmpty) body.addAll({'location_notes': notes.text,});
+                            if (model.selectedExperienceCategory != null) body.addAll({'categories': model.selectedExperienceCategory,});
+                            if (link.text.isNotEmpty) body.addAll({'youtube_video': link.text});
+                            body.addAll({'provided_goods': model.providedGoodsText});
+                            body.addAll({'requirements': model.requirementsText});
+
+                            if (model.startDate.text.isNotEmpty) timingBody.addAll({'date': model.startDate.text});
+                            if (model.startDate.text.isNotEmpty) timingBody.addAll({'start_time': model.startTime.text});
+                            if (addPeople.text.isNotEmpty) timingBody.addAll({'capacity': addPeople.text});
+
                             model.createExperience(body: body, timingBody: timingBody).then((value) {
                               if (value != null) {
                                 model.showPublishSuccessBottomSheet().then((value) {
