@@ -1,14 +1,25 @@
 // ignore_for_file: depend_on_referenced_packages
 
+import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
+import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/auth_response.dart';
 import 'package:dio/dio.dart';
 import 'package:goasbar/data_models/user_model.dart';
+import 'package:goasbar/services/token_service.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/enum/status_code.dart';
+import 'package:goasbar/shared/ui_helpers.dart';
+import 'package:goasbar/ui/views/splash/splash_view.dart';
 import 'package:http/http.dart' as http;
+import 'package:motion_toast/resources/arrays.dart';
+import 'package:stacked_services/stacked_services.dart';
 
 class AuthService {
+  final _navigationService = locator<NavigationService>();
+  final _tokenService = locator<TokenService>();
+
   Future<dynamic> register({Map? body}) async {
     return http.post(
       Uri.parse("$baseUrl/api/auth/register/"),
@@ -95,8 +106,6 @@ class AuthService {
       ),
       data: formData,
     ).then((response) {
-      print(response.data["user"]['favorite_experiences']);
-      print(body);
       if (response.statusCode == 201) {
         return UserModel.fromJson(response.data['user']);
       } else {
@@ -120,7 +129,6 @@ class AuthService {
       ),
       data: formData,
     ).then((response) {
-      print(response.data);
       if (response.statusCode == 201) {
         return UserModel.fromJson(response.data['user']);
       } else {
@@ -183,6 +191,14 @@ class AuthService {
       else {
         return false;
       }
+    });
+  }
+
+  unAuthClearAndRestart({BuildContext? context}) {
+    showMotionToast(context: context!, type: MotionToastType.error, msg: "Your session has expired, you must login again", title: 'Unauthorized');
+    _tokenService.clearToken();
+    Timer(const Duration(milliseconds: 1000), () {
+      _navigationService.clearStackAndShowView(const SplashView());
     });
   }
 }
