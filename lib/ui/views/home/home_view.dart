@@ -66,7 +66,7 @@ class HomeView extends StatelessWidget {
         ),
       ),
       viewModelBuilder: () => HomeViewModel(),
-      onModelReady: (model) => model.getUserData(),
+      onModelReady: (model) => model.getUserData(context: context),
     );
   }
 
