@@ -1,16 +1,21 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/experience_model.dart';
 import 'package:goasbar/data_models/experience_response.dart';
 import 'package:goasbar/data_models/timing_list_model.dart';
+import 'package:goasbar/services/auth_service.dart';
 import 'package:goasbar/shared/app_configs.dart';
 // ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
-import 'package:goasbar/data_models/provider_model.dart';
 
 class ExperienceApiService {
-  Future<ExperienceResults?> createExperience({String? token, Map<String, dynamic>? body}) async {
+  final _authService = locator<AuthService>();
+
+  Future<ExperienceResults?> createExperience({String? token, Map<String, dynamic>? body, BuildContext? context}) async {
     Dio dio = Dio();
     FormData formData = FormData.fromMap(body!);
 
@@ -27,13 +32,16 @@ class ExperienceApiService {
     ).then((response) {
       if (response.statusCode == 201) {
         return ExperienceResults.fromJson(response.data['response']);
+      } else if (response.statusCode == 401) {
+        _authService.unAuthClearAndRestart(context: context,);
+        return null;
       } else {
         return null;
       }
     });
   }
 
-  Future<ExperienceModel?> getProviderExperiences({String? token}) async {
+  Future<ExperienceModel?> getProviderExperiences({String? token, context}) async {
     return http.get(
       Uri.parse("$baseUrl/api/experience/provider/"),
       headers: {
@@ -43,6 +51,9 @@ class ExperienceApiService {
     ).then((response) {
       if (response.statusCode == 200) {
         return ExperienceModel.fromJson(jsonDecode(response.body));
+      } else if (response.statusCode == 401) {
+        _authService.unAuthClearAndRestart(context: context,);
+        return null;
       } else {
         return null;
       }
@@ -57,7 +68,6 @@ class ExperienceApiService {
       },
     ).then((response) {
       if (response.statusCode == 200) {
-
         return ExperienceModel.fromJson(jsonDecode(response.body));
       } else {
         return null;
@@ -80,29 +90,9 @@ class ExperienceApiService {
     });
   }
 
-  Future<ProviderModel?> updateProvider({String? token, Map? body}) async {
-    return http.patch(
-      Uri.parse("$baseUrl/api/provider/"),
-      headers: {
-        "Accept-Language": "en-US",
-        "Authorization": "Token $token",
-      },
-      body: body,
-    ).then((response) {
-      if (response.statusCode == 200) {
-        return ProviderModel.fromJson(jsonDecode(response.body));
-      } else {
-        return null;
-      }
-    });
-  }
-
-  Future<ExperienceResults?> updateExperience({String? token, Map<String, dynamic>? body, int? experienceId}) async {
+  Future<ExperienceResults?> updateExperience({String? token, Map<String, dynamic>? body, int? experienceId, context}) async {
     Dio dio = Dio();
     FormData formData = FormData.fromMap(body!);
-
-    print("sahaaaa");
-    print(body);
 
     if (body.keys.contains("image")) {
       return dio.patch(
@@ -119,12 +109,14 @@ class ExperienceApiService {
       ).then((response) {
         if (response.statusCode == 200) {
           return ExperienceResults.fromJson(response.data);
+        } else if (response.statusCode == 401) {
+          _authService.unAuthClearAndRestart(context: context,);
+          return null;
         } else {
           return null;
         }
       });
     } else {
-      print("htttp");
       return http.patch(
         Uri.parse("$baseUrl/api/experience/provider/$experienceId/"),
         headers: {
@@ -135,9 +127,11 @@ class ExperienceApiService {
         },
         body: jsonEncode(body),
       ).then((response) {
-        print(response.body);
         if (response.statusCode == 200) {
           return ExperienceResults.fromJson(jsonDecode(response.body));
+        } else if (response.statusCode == 401) {
+          _authService.unAuthClearAndRestart(context: context,);
+          return null;
         } else {
           return null;
         }
@@ -145,7 +139,7 @@ class ExperienceApiService {
     }
   }
 
-  Future<bool?> deleteExperience({String? token, int? experienceId}) async {
+  Future<bool?> deleteExperience({String? token, int? experienceId, context}) async {
     return http.delete(
       Uri.parse("$baseUrl/api/experience/provider/$experienceId/"),
       headers: {
@@ -155,13 +149,16 @@ class ExperienceApiService {
     ).then((response) {
       if (response.statusCode == 200) {
         return true;
+      } else if (response.statusCode == 401) {
+        _authService.unAuthClearAndRestart(context: context,);
+        return null;
       } else {
         return false;
       }
     });
   }
 
-  Future<bool?> deleteExperienceImage({String? token, int? imageId}) async {
+  Future<bool?> deleteExperienceImage({String? token, int? imageId, context}) async {
     return http.delete(
       Uri.parse("$baseUrl/api/experience/images/$imageId/"),
       headers: {
@@ -171,6 +168,9 @@ class ExperienceApiService {
     ).then((response) {
       if (response.statusCode == 200) {
         return true;
+      } else if (response.statusCode == 401) {
+        _authService.unAuthClearAndRestart(context: context,);
+        return null;
       } else {
         return false;
       }
