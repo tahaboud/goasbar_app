@@ -1,11 +1,9 @@
 import 'dart:convert';
 
 import 'package:goasbar/data_models/booking_model.dart';
-import 'package:goasbar/data_models/public_provider_model.dart';
 import 'package:goasbar/shared/app_configs.dart';
 // ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
-import 'package:goasbar/data_models/provider_model.dart';
 
 class BookingApiService {
   Future<BookingModel?> createBooking({String? token, int? timingId, Map? body}) async {
@@ -14,9 +12,12 @@ class BookingApiService {
       headers: {
         "Accept-Language": "en-US",
         "Authorization": "Token $token",
+        "Accept": "Application/json",
+        "Content-Type": "application/json"
       },
-      body: body,
+      body: jsonEncode(body),
     ).then((response) {
+      print(response.body);
       if (response.statusCode == 201) {
         return BookingModel.fromJson(jsonDecode(response.body));
       } else {
