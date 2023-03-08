@@ -1,4 +1,5 @@
 import 'package:flutter/animation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/experience_model.dart';
 import 'package:goasbar/data_models/experience_response.dart';
@@ -28,7 +29,7 @@ class ExperienceViewModel extends FutureViewModel<List<ExperienceResults?>?> {
 
     notifyListeners();
 
-    getPublicExperiences(query: query);
+    getPublicExperiences(query: query,);
   }
 
   void navigateTo({view}) {
@@ -40,7 +41,7 @@ class ExperienceViewModel extends FutureViewModel<List<ExperienceResults?>?> {
   }
 
   Future<List<ExperienceResults?>?> getPublicExperiences({String? query}) async {
-    experienceModels = await _experienceApiService.getPublicExperiences(query: query);
+    experienceModels = await _experienceApiService.getPublicExperiences(query: query,);
     notifyListeners();
     return experienceModels!.results!;
   }
