@@ -8,6 +8,7 @@ import 'package:goasbar/services/auth_service.dart';
 import 'package:goasbar/services/provider_api_service.dart';
 import 'package:goasbar/services/timing_api_service.dart';
 import 'package:goasbar/services/token_service.dart';
+import 'package:goasbar/services/url_service.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -20,6 +21,7 @@ class TripDetailViewModel extends FutureViewModel<PublicProviderModel?> {
   bool isFav = false;
   int pageIndex = 1;
   final _navigationService = locator<NavigationService>();
+  final _urlService = locator<UrlService>();
   final _tokenService = locator<TokenService>();
   final _authService = locator<AuthService>();
   final _timingApiService = locator<TimingApiService>();
@@ -63,6 +65,10 @@ class TripDetailViewModel extends FutureViewModel<PublicProviderModel?> {
 
   void back() {
     _navigationService.back();
+  }
+
+  share({String? link}) {
+    _urlService.launchLink(link: link);
   }
 
   String formatYear(String date) => date.substring(0,4).toString();
