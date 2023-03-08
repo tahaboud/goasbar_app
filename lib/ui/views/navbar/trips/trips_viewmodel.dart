@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/animation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/experience_model.dart';
 import 'package:goasbar/data_models/experience_response.dart';
@@ -28,8 +29,8 @@ class TripsViewModel extends FutureViewModel<List<ExperienceResults?>> {
     _navigationService.back();
   }
 
-  Future<List<ExperienceResults?>> getPublicExperiences({String? query}) async {
-    experienceModels = await _experienceApiService.getPublicExperiences(query: query);
+  Future<List<ExperienceResults?>> getPublicExperiences({String? query,}) async {
+    experienceModels = await _experienceApiService.getPublicExperiences(query: query,);
     notifyListeners();
     return experienceModels!.results!;
   }
