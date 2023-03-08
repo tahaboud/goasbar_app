@@ -146,7 +146,7 @@ class PostExperienceView extends HookWidget {
                                   ],
                                 ),
                               ).gestures(onTap: () {
-                                model.deleteExperience(experienceId: model.data![index].id).then((value) {
+                                model.deleteExperience(experienceId: model.data![index].id, context: context).then((value) {
                                   if (value!) {
                                     // model.deleteIsCollapsedItem(index: index);
                                     MotionToast.success(
@@ -188,7 +188,7 @@ class PostExperienceView extends HookWidget {
           ).padding(horizontal: 16, top: 16),
         ),
       ),
-      viewModelBuilder: () => PostExperienceViewModel(),
+      viewModelBuilder: () => PostExperienceViewModel(context: context),
     );
   }
 }
