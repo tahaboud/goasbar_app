@@ -25,6 +25,12 @@ class UrlService {
     }
   }
 
+  launchLink({String? link}) async {
+    if (!await launchUrl(Uri.parse("https://www.goasbar.com/experience/$link"))) {
+      throw 'Could not launch https://www.goasbar.com/';
+    }
+  }
+
   launchPhoneCall() async {
     final Uri launchUri = Uri(
       scheme: 'tel',
