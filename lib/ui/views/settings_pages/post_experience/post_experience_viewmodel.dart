@@ -9,6 +9,9 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class PostExperienceViewModel extends FutureViewModel<List<ExperienceResults>> {
+  BuildContext? context;
+  PostExperienceViewModel({this.context});
+
   final _navigationService = locator<NavigationService>();
   final _bottomSheetService = locator<BottomSheetService>();
   final _experienceApiService = locator<ExperienceApiService>();
@@ -50,15 +53,15 @@ class PostExperienceViewModel extends FutureViewModel<List<ExperienceResults>> {
     notifyListeners();
   }
 
-  Future<ExperienceModel?> getProviderExperiences() async {
+  Future<ExperienceModel?> getProviderExperiences({context}) async {
     String? token = await _tokenService.getTokenValue();
-    return await _experienceApiService.getProviderExperiences(token: token);
+    return await _experienceApiService.getProviderExperiences(token: token, context: context);
   }
 
-  Future<bool?> deleteExperience({int? experienceId}) async {
+  Future<bool?> deleteExperience({int? experienceId, context}) async {
     String? token = await _tokenService.getTokenValue();
     setBusy(true);
-    return await _experienceApiService.deleteExperience(token: token, experienceId: experienceId).then((value) async {
+    return await _experienceApiService.deleteExperience(context: context, token: token, experienceId: experienceId).then((value) async {
       isCollapsed = [];
       data = await futureToRun();
       setBusy(false);
@@ -68,7 +71,7 @@ class PostExperienceViewModel extends FutureViewModel<List<ExperienceResults>> {
 
   @override
   Future<List<ExperienceResults>> futureToRun() async {
-    experienceModels = await getProviderExperiences();
+    experienceModels = await getProviderExperiences(context: context);
     for (var i = 0; i < experienceModels!.results!.length; i++) {
       isCollapsed.add(false);
     }
