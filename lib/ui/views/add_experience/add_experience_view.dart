@@ -380,7 +380,7 @@ class AddExperienceView extends HookWidget {
                             child: Image.asset("assets/icons/delete.png", color: Colors.redAccent, height: 20,),
                           ),
                         ],
-                      ).gestures(onTap: () => model.deleteExperienceImage(image: model.additionalImages![index]!)) : const SizedBox(),
+                      ).gestures(onTap: () => model.deleteExperienceImage(context: context, image: model.additionalImages![index]!)) : const SizedBox(),
                     )),
                   ),
                   verticalSpaceLarge,
@@ -1167,7 +1167,7 @@ class AddExperienceView extends HookWidget {
                                 completer(SheetResponse(confirmed: true));
                               });
                             } else {
-                              model.updateExperience(body: body, experienceId: request.data.id).then((value) {
+                              model.updateExperience(context: context, body: body, experienceId: request.data.id).then((value) {
                                 if (value != null) {
                                   model.showPublishSuccessBottomSheet().then((value) {
                                     completer(SheetResponse(confirmed: true));
@@ -1223,7 +1223,7 @@ class AddExperienceView extends HookWidget {
                             if (model.startDate.text.isNotEmpty) timingBody.addAll({'start_time': model.startTime.text});
                             if (addPeople.text.isNotEmpty) timingBody.addAll({'capacity': addPeople.text});
 
-                            model.createExperience(body: body, timingBody: timingBody).then((value) {
+                            model.createExperience(context: context, body: body, timingBody: timingBody).then((value) {
                               if (value != null) {
                                 model.showPublishSuccessBottomSheet().then((value) {
                                   completer(SheetResponse(confirmed: true));
