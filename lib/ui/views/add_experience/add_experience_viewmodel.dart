@@ -283,9 +283,9 @@ class AddExperienceInfoViewModel extends BaseViewModel {
     }
   }
 
-  Future<ExperienceResults?> createExperience({Map<String, dynamic>? body, Map<String, dynamic>? timingBody}) async {
+  Future<ExperienceResults?> createExperience({Map<String, dynamic>? body, Map<String, dynamic>? timingBody, BuildContext? context}) async {
     String? token = await _tokenService.getTokenValue();
-    return await _experienceApiService.createExperience(token: token, body: body,).then((value) {
+    return await _experienceApiService.createExperience(token: token, body: body, context: context!).then((value) {
       if (value is ExperienceResults) {
         _timingApiService.createTiming(token: token, experienceId: value.id, body: timingBody);
         return value;
@@ -295,9 +295,9 @@ class AddExperienceInfoViewModel extends BaseViewModel {
     });
   }
 
-  Future<ExperienceResults?> updateExperience({Map<String, dynamic>? body, int? experienceId}) async {
+  Future<ExperienceResults?> updateExperience({Map<String, dynamic>? body, context, int? experienceId}) async {
     String? token = await _tokenService.getTokenValue();
-    return await _experienceApiService.updateExperience(token: token, body: body, experienceId: experienceId).then((value) {
+    return await _experienceApiService.updateExperience(context: context, token: token, body: body, experienceId: experienceId).then((value) {
       if (value is ExperienceResults) {
         return value;
       } else {
@@ -306,10 +306,10 @@ class AddExperienceInfoViewModel extends BaseViewModel {
     });
   }
 
-  Future<bool?> deleteExperienceImage({ImageSet? image}) async {
+  Future<bool?> deleteExperienceImage({ImageSet? image, context}) async {
     String? token = await _tokenService.getTokenValue();
     setBusy(true);
-    return await _experienceApiService.deleteExperienceImage(token: token, imageId: image!.id).then((value) async {
+    return await _experienceApiService.deleteExperienceImage(token: token, imageId: image!.id, context: context,).then((value) async {
       additionalImages!.remove(image);
       images = images! - 1;
       notifyListeners();
