@@ -15,6 +15,9 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class EditProfileViewModel extends FutureViewModel<dynamic> {
+  EditProfileViewModel({this.context});
+  BuildContext? context;
+
   bool isObscure = true;
   TextEditingController gender = TextEditingController();
   TextEditingController birthDate = TextEditingController();
@@ -88,9 +91,9 @@ class EditProfileViewModel extends FutureViewModel<dynamic> {
     }
   }
 
-  Future<dynamic> getUserData() async {
+  Future<dynamic> getUserData({context}) async {
     String token = await _tokenService.getTokenValue();
-    return _authService.getUserData(token: token).then((value) {
+    return _authService.getUserData(token: token, context: context).then((value) {
       if (value != null) {
         user = value;
         notifyListeners();
@@ -101,9 +104,9 @@ class EditProfileViewModel extends FutureViewModel<dynamic> {
     });
   }
 
-  Future<dynamic> updateUserData({Map<String, dynamic>? body}) async {
+  Future<dynamic> updateUserData({Map<String, dynamic>? body, context}) async {
     String token = await _tokenService.getTokenValue();
-    return _authService.updateUserData(token: token, body: body,).then((value) {
+    return _authService.updateUserData(context: context, token: token, body: body,).then((value) {
       if (value != null) {
         user = value;
         notifyListeners();
@@ -116,6 +119,6 @@ class EditProfileViewModel extends FutureViewModel<dynamic> {
 
   @override
   Future futureToRun() {
-    return getUserData();
+    return getUserData(context: context);
   }
 }
