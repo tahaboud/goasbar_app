@@ -287,7 +287,7 @@ class EditProfileView extends HookWidget {
                           }
 
                           if (body != {}) {
-                            model.updateUserData(body: body,).then((value) {
+                            model.updateUserData(context: context, body: body,).then((value) {
                               if (value != null) {
                                 model.back();
                               } else {
@@ -317,7 +317,7 @@ class EditProfileView extends HookWidget {
           ),
         );
       },
-      viewModelBuilder: () => EditProfileViewModel(),
+      viewModelBuilder: () => EditProfileViewModel(context: context),
     );
   }
 }
