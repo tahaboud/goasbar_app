@@ -62,6 +62,8 @@ class AddExperienceInfoViewModel extends BaseViewModel {
       setBusy(true);
       city = getCity();
       genderConstraint = getGenderConstraint();
+      providedGoodsText = getProvidedGoodsText();
+      requirementsText = getRequirementsText();
       selectedExperienceCategory = getSelectedExperienceCategory();
       if (experience!.profileImage != null) mainImage = File(experience!.profileImage!);
       if (experience!.imageSet!.isNotEmpty) {
@@ -114,13 +116,25 @@ class AddExperienceInfoViewModel extends BaseViewModel {
     return selectedExperienceCategory;
   }
 
+  String? getProvidedGoodsText() {
+    providedGoodsText = experience != null ? experience!.providedGoods != null ? experience!.providedGoods! : '' : '';
+
+    return providedGoodsText;
+  }
+
+  String? getRequirementsText() {
+    requirementsText = experience != null ? experience!.requirements != null ? experience!.requirements! : '' : '';
+
+    return requirementsText;
+  }
+
   void updateProvidedGoodsText ({String? text}) {
     providedGoodsText = text;
     notifyListeners();
   }
 
   void updateRequirementsText ({String? text}) {
-    providedGoodsText = text;
+    requirementsText = text;
     notifyListeners();
   }
 
