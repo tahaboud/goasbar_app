@@ -84,7 +84,8 @@ class TripDetailView extends HookWidget {
                                     ],
                                   ),
                                 ).height(40)
-                                    .width(100),
+                                    .width(100)
+                                    .gestures(onTap: () => model.share(link: "experience.slug")),
                                 horizontalSpaceSmall,
                                 user == null ? const SizedBox() : model.isBusy ? const SizedBox() : Container(
                                     decoration: BoxDecoration(
