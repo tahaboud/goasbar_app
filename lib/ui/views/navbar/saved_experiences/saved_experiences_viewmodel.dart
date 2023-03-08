@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/animation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/experience_response.dart';
 import 'package:goasbar/data_models/user_model.dart';
@@ -12,7 +13,7 @@ import 'package:stacked_services/stacked_services.dart';
 
 class SavedExperiencesViewModel extends FutureViewModel<List<ExperienceResults?>> {
   final UserModel? user;
-  SavedExperiencesViewModel({this.user});
+  SavedExperiencesViewModel({this.user, });
 
   final _navigationService = locator<NavigationService>();
   final _tokenService = locator<TokenService>();
@@ -52,10 +53,10 @@ class SavedExperiencesViewModel extends FutureViewModel<List<ExperienceResults?>
     });
   }
 
-  Future<List<ExperienceResults?>> getFavoriteExperiences({String? query}) async {
+  Future<List<ExperienceResults?>> getFavoriteExperiences({String? query,}) async {
     favoriteList = await getUserData();
     if (favoriteList!.isNotEmpty) {
-      return await _experienceApiService.getPublicExperiences(query: query).then((value) {
+      return await _experienceApiService.getPublicExperiences(query: query,).then((value) {
         if (value != null) {
           experienceResults = [];
           for (var experience in value.results!) {
