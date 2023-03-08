@@ -101,23 +101,48 @@ class ExperienceApiService {
     Dio dio = Dio();
     FormData formData = FormData.fromMap(body!);
 
-    return dio.patch(
-      "$baseUrl/api/experience/provider/$experienceId/",
-      options: Options(
+    print("sahaaaa");
+    print(body);
+
+    if (body.keys.contains("image")) {
+      return dio.patch(
+        "$baseUrl/api/experience/provider/$experienceId/",
+        options: Options(
+          headers: {
+            "Accept-Language": "en-US",
+            "Authorization": "Token $token",
+            "Accept": "Application/json",
+            "Content-Type": "application/json"
+          },
+        ),
+        data: formData,
+      ).then((response) {
+        if (response.statusCode == 200) {
+          return ExperienceResults.fromJson(response.data);
+        } else {
+          return null;
+        }
+      });
+    } else {
+      print("htttp");
+      return http.patch(
+        Uri.parse("$baseUrl/api/experience/provider/$experienceId/"),
         headers: {
           "Accept-Language": "en-US",
           "Authorization": "Token $token",
-          "Content-Type": "multipart/form-data",
+          "Accept": "Application/json",
+          "Content-Type": "application/json"
         },
-      ),
-      data: formData,
-    ).then((response) {
-      if (response.statusCode == 200) {
-        return ExperienceResults.fromJson(response.data);
-      } else {
-        return null;
-      }
-    });
+        body: jsonEncode(body),
+      ).then((response) {
+        print(response.body);
+        if (response.statusCode == 200) {
+          return ExperienceResults.fromJson(jsonDecode(response.body));
+        } else {
+          return null;
+        }
+      });
+    }
   }
 
   Future<bool?> deleteExperience({String? token, int? experienceId}) async {
