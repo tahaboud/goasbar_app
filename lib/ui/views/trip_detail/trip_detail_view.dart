@@ -243,11 +243,13 @@ class TripDetailView extends HookWidget {
                     ],
                   ).padding(horizontal: 20),
                   verticalSpaceRegular,
-                  experience!.requirements == null ? const SizedBox() : NoteItem(text: experience!.requirements!,)
-                      .padding(horizontal: 20),
+                  if (experience!.requirements != null)
+                    for (var requirement in experience!.requirements!.split('\n'))
+                      NoteItem(text: requirement,).padding(horizontal: 20),
                   experience!.requirements == null ? const SizedBox() : verticalSpaceSmall,
-                  experience!.providedGoods == null ? const SizedBox() : NoteItem(text: experience!.providedGoods!,)
-                      .padding(horizontal: 20),
+                  if (experience!.providedGoods != null)
+                    for (var providedGood in experience!.providedGoods!.split('\n'))
+                      NoteItem(text: providedGood,).padding(horizontal: 20),
                   experience!.providedGoods == null ? const SizedBox() : verticalSpaceSmall,
                 ],
               ),
