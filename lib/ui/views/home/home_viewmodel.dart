@@ -9,10 +9,10 @@ class HomeViewModel extends IndexTrackingViewModel {
   final _authService = locator<AuthService>();
   UserModel? user;
 
-  Future<UserModel?> getUserData() async {
+  Future<UserModel?> getUserData({context}) async {
     String token = await _tokenService.getTokenValue();
     setBusy(true);
-    return _authService.getUserData(token: token).then((value) {
+    return _authService.getUserData(token: token, context: context).then((value) {
       if (value != null) {
         user = value;
         notifyListeners();
