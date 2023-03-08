@@ -8,7 +8,6 @@ import 'package:goasbar/ui/views/checkout/checkout_view.dart';
 import 'package:goasbar/ui/views/confirm_booking/confirm_booking_viewmodel.dart';
 import 'package:goasbar/ui/widgets/incdecrease_button.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
-import 'package:motion_toast/motion_toast.dart';
 import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -210,12 +209,7 @@ class ConfirmBookingView extends HookWidget {
                       children: [
                         const Text('View', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: kMainColor1),).gestures(onTap: () {
                           if (model.selectedIndex == null) {
-                            MotionToast.warning(
-                              title: const Text("Warning"),
-                              description: const Text("Select a timing to show available places!."),
-                              animationCurve: Curves.easeIn,
-                              animationDuration: const Duration(milliseconds: 200),
-                            ).show(context);
+                            showMotionToast(context: context, type: MotionToastType.warning, title: 'Warning', msg: "Select a timing to show available places!.");
                           } else {
                             model.showAvailablePlacesDialog(
                               timingResponse: model.data!.results![model.selectedIndex!],
@@ -401,43 +395,58 @@ class ConfirmBookingView extends HookWidget {
                   child: const Text('Continue with payment', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
                 ).gestures(
                   onTap:  () {
+                    bool? isOkay = true;
                     if (model.selectedIndex == null)  {
                       showMotionToast(context: context, msg: "Select a Timing First.", title: 'Warning', type: MotionToastType.warning);
                     } else {
-                      Map? body = {};
+                      Map<String, dynamic>? body = {};
+                      List<Map?> affiliateSet = [];
                       if (coupon.text.isNotEmpty) body.addAll({'coupon': coupon.text});
 
                       for (var i = 0; i < model.numberOfGuests!; i++) {
-                        if (model.firstNames[i].text.isEmpty || model.lastNames[i].text.isEmpty
-                            || model.age[i].text.isEmpty || model.genders[i].text.isEmpty) {
-
-                        }
-                        body.addAll({
-                          "affiliate_set": [
-                            {
-                              "first_name": "jalil",
-                              "last_name": "jalil",
-                              "age": "25",
-                              "gender": "MALE",
+                        isOkay = false;
+                        if (model.firstNames[i].text.isEmpty) {
+                          showMotionToast(context: context, msg: "Guest ${i+1} first name is required.", title: 'Warning', type: MotionToastType.warning);
+                        } else if (model.lastNames[i].text.isEmpty) {
+                          showMotionToast(context: context, msg: "Guest ${i+1} last name is required.", title: 'Warning', type: MotionToastType.warning);
+                        } else if (model.age[i].text.isEmpty) {
+                          showMotionToast(context: context, msg: "Guest ${i+1} age is required.", title: 'Warning', type: MotionToastType.warning);
+                        } else if (model.genders[i].text.isEmpty) {
+                          showMotionToast(context: context, msg: "Guest ${i+1} gender name is required.", title: 'Warning', type: MotionToastType.warning);
+                        } else {
+                          isOkay = true;
+                          if (model.phones[i].text.isNotEmpty) {
+                            affiliateSet.add({
+                              "first_name": model.firstNames[i].text,
+                              "last_name": model.lastNames[i].text,
+                              "age": model.age[i].text,
+                              "gender": model.genders[i].text.toUpperCase(),
                               "phone_number": "+966${model.phones[i]}"
-                            }
-                          ]
-                        });
+                            });
+                          } else {
+                            affiliateSet.add({
+                              "first_name": model.firstNames[i].text,
+                              "last_name": model.lastNames[i].text,
+                              "age": model.age[i].text,
+                              "gender": model.genders[i].text.toUpperCase(),
+                            });
+                          }
+                        }
                       }
 
-                      model.createBooking(body: body,
-                          timingId: model.timingListModel!.results![model.selectedIndex!].id).then((value) {
-                        if (value != null) {
-                          model.navigateTo(view: CheckoutView(experience: experience));
-                        } else {
-                          MotionToast.error(
-                            title: const Text("Create Booking Failed"),
-                            description: const Text("An error occurred while creating the booking, please try again."),
-                            animationCurve: Curves.easeIn,
-                            animationDuration: const Duration(milliseconds: 200),
-                          ).show(context);
-                        }
-                      });
+
+                      if (affiliateSet.isNotEmpty) body.addAll({"affiliate_set": affiliateSet,});
+
+                      if (isOkay!) {
+                        model.createBooking(body: body,
+                            timingId: model.timingListModel!.results![model.selectedIndex!].id).then((value) {
+                          if (value != null) {
+                            model.navigateTo(view: CheckoutView(experience: experience));
+                          } else {
+                            showMotionToast(context: context, msg: "An error occurred while creating the booking, please try again.", title: 'Create Booking Failed', type: MotionToastType.error);
+                          }
+                        });
+                      }
                     }
                   },
                 ),
