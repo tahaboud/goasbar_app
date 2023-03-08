@@ -92,10 +92,10 @@ class SearchViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  getPublicExperiences({String? query}) async {
+  getPublicExperiences({String? query,}) async {
     setBusy(true);
     experienceModels = null;
-    experienceModels = await _experienceApiService.getPublicExperiences(query: query);
+    experienceModels = await _experienceApiService.getPublicExperiences(query: query,);
     notifyListeners();
     setBusy(false);
     return experienceModels!;
