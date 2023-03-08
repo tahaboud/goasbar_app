@@ -36,6 +36,17 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
   List<TextEditingController> lastNames = [];
   List<TextEditingController> genders = [];
 
+  Map<String, dynamic> affiliateSetToJson({firstName, lastName, age, gender, phone}) {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['first_name'] = firstName;
+    data['last_name'] = lastName;
+    data['age'] = age;
+    data['gender'] = gender;
+    data['phone_number'] = phone;
+
+    return data;
+  }
+
   void navigateTo({view}) {
     _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
   }
@@ -139,7 +150,7 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
     return weekDays[date];
   }
 
-  Future<BookingModel?> createBooking({int? timingId, Map? body}) async {
+  Future<BookingModel?> createBooking({int? timingId, Map<String, dynamic>? body}) async {
     String? token = await _tokenService.getTokenValue();
     booking = await _bookingApiService.createBooking(token: token, timingId: timingId, body: body);
 
