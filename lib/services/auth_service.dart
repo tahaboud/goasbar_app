@@ -75,7 +75,7 @@ class AuthService {
     });
   }
 
-  Future<UserModel?> getUserData({String? token}) async {
+  Future<UserModel?> getUserData({String? token, context}) async {
     return http.get(
       Uri.parse("$baseUrl/api/auth/user/"),
       headers: {
@@ -85,13 +85,16 @@ class AuthService {
     ).then((response) {
       if (response.statusCode == 200) {
         return UserModel.fromJson(jsonDecode(response.body)['user']);
+      } else if (response.statusCode == 401) {
+        unAuthClearAndRestart(context: context,);
+        return null;
       } else {
         return null;
       }
     });
   }
 
-  Future<UserModel?> updateFavoritesUser({String? token, Map<String, dynamic>? body,}) async {
+  Future<UserModel?> updateFavoritesUser({String? token, Map<String, dynamic>? body, context}) async {
     Dio dio = Dio();
     FormData formData = FormData.fromMap(body!);
 
@@ -108,13 +111,16 @@ class AuthService {
     ).then((response) {
       if (response.statusCode == 201) {
         return UserModel.fromJson(response.data['user']);
+      } else if (response.statusCode == 401) {
+        unAuthClearAndRestart(context: context,);
+        return null;
       } else {
         return null;
       }
     });
   }
 
-  Future<UserModel?> updateUserData({String? token, Map<String, dynamic>? body,}) async {
+  Future<UserModel?> updateUserData({String? token, Map<String, dynamic>? body, context}) async {
     Dio dio = Dio();
     FormData formData = FormData.fromMap(body!);
 
@@ -131,6 +137,9 @@ class AuthService {
     ).then((response) {
       if (response.statusCode == 201) {
         return UserModel.fromJson(response.data['user']);
+      } else if (response.statusCode == 401) {
+        unAuthClearAndRestart(context: context,);
+        return null;
       } else {
         return null;
       }
@@ -176,7 +185,7 @@ class AuthService {
     });
   }
 
-  Future<bool> logout({String? token}) async {
+  Future<bool?> logout({String? token, context}) async {
     return http.post(
       Uri.parse("$baseUrl/api/auth/logout/"),
       headers: {
@@ -187,8 +196,10 @@ class AuthService {
     ).then((response) {
       if (response.statusCode == 204) {
         return true;
-      }
-      else {
+      } else if (response.statusCode == 401) {
+        unAuthClearAndRestart(context: context,);
+        return null;
+      } else {
         return false;
       }
     });
