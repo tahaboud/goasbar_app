@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:goasbar/app/app.locator.dart';
+import 'package:goasbar/data_models/user_model.dart';
+import 'package:goasbar/enum/dialog_type.dart';
 import 'package:goasbar/services/booking_api_service.dart';
 import 'package:goasbar/services/token_service.dart';
 import 'package:goasbar/shared/app_configs.dart';
+import 'package:goasbar/shared/ui_helpers.dart';
+import 'package:goasbar/ui/views/navbar/experience/experience_view.dart';
+import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -13,7 +18,9 @@ class CheckoutViewModel extends BaseViewModel {
   int? selectedPaymentMethod = 1;
   String? checkoutId;
   final _tokenService = locator<TokenService>();
+  final _dialogService = locator<DialogService>();
   final _bookingApiService = locator<BookingApiService>();
+  bool? waitUntilFinish = false;
 
   void navigateTo({view}) {
     _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
@@ -28,21 +35,21 @@ class CheckoutViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future prepareCheckout({int? bookingId, Map? body, String? cardNumber, String? cardHolder,
+  Future prepareCheckout({context, UserModel? user, int? bookingId, Map? body, String? cardNumber, String? cardHolder,
     String? expiryMonth, String? expiryYear, String? cVV,}) async {
 
     String? token = await _tokenService.getTokenValue();
-    await _bookingApiService.prepareCheckout(token: token, bookingId: bookingId, body: body,).then((value) {
+    await _bookingApiService.prepareCheckout(context: context, token: token, bookingId: bookingId, body: body,).then((value) {
       if (value != null) {
-        pay(bookingId: bookingId, token: token, checkoutId: value, cardHolder: cardHolder, cardNumber: cardNumber,
+        pay(context: context, user: user, bookingId: bookingId, token: token, checkoutId: value, cardHolder: cardHolder, cardNumber: cardNumber,
           cVV: cVV, expiryMonth: expiryMonth, expiryYear: "20$expiryYear", brand: body!['payment_method'],);
       } else {
-        print('ya hahahhahahahha');
+
       }
     });
   }
 
-  Future<String?> pay({int? bookingId, String? token, String? checkoutId, String? cardNumber, String? cardHolder,
+  Future<String?> pay({context, UserModel? user, int? bookingId, String? token, String? checkoutId, String? cardNumber, String? cardHolder,
       String? expiryMonth, String? expiryYear, String? cVV, String? brand}) async {
     String transactionStatus;
     try {
@@ -70,9 +77,20 @@ class CheckoutViewModel extends BaseViewModel {
     if (transactionStatus != null ||
         transactionStatus == "success" ||
         transactionStatus == "SYNC") {
-      _bookingApiService.getPaymentStatus(token: token, bookingId: bookingId);
+
+      _dialogService.showCustomDialog(variant: DialogType.waitingUntilPaymentFinished, barrierDismissible: false, );
+
+      bool? bookingState = await _bookingApiService.getPaymentStatus(context: context, token: token, bookingId: bookingId);
+      if (bookingState!) {
+        Navigator.pop(context);
+        //TODO go to bookings page
+        _navigationService.clearTillFirstAndShowView(ExperienceView(user: user!, isUser: true,));
+      } else {
+        Navigator.pop(context);
+        showMotionToast(context: context, title: 'Error Payment', msg: "Payment Failed, Please Retry Payment", type: MotionToastType.error);
+      }
     } else {
-      print("yooooooooooooohooooooooooooooooooo");
+      showMotionToast(context: context, title: 'Error Payment', msg: "Payment Failed, Please Retry Payment", type: MotionToastType.error);
     }
 
     return checkoutId;
