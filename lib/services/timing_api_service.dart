@@ -2,13 +2,17 @@
 
 import 'dart:convert';
 
+import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/timing_list_model.dart';
 import 'package:goasbar/data_models/timing_model.dart';
+import 'package:goasbar/services/auth_service.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:http/http.dart' as http;
 
 class TimingApiService {
-  Future<TimingModel?> createTiming({String? token, Map? body, int? experienceId}) async {
+  final _authService = locator<AuthService>();
+
+  Future<TimingModel?> createTiming({context, String? token, Map? body, int? experienceId}) async {
     return http.post(
       Uri.parse("$baseUrl/api/experience/provider/timing/$experienceId/"),
       headers: {
@@ -17,15 +21,19 @@ class TimingApiService {
       },
       body: body,
     ).then((response) {
+      print(body);
       if (response.statusCode == 201) {
         return TimingModel.fromJson(jsonDecode(response.body));
+      } else if (response.statusCode == 401) {
+        _authService.unAuthClearAndRestart(context: context,);
+        return null;
       } else {
         return null;
       }
     });
   }
 
-  Future<TimingModel?> updateTiming({String? token, Map? body, int? timingId}) async {
+  Future<TimingModel?> updateTiming({String? token, Map? body, int? timingId, context}) async {
     return http.post(
       Uri.parse("$baseUrl/api/experience/provider/timing/$timingId/"),
       headers: {
@@ -37,13 +45,16 @@ class TimingApiService {
       print(response.body);
       if (response.statusCode == 200) {
         return TimingModel.fromJson(jsonDecode(response.body));
+      } else if (response.statusCode == 401) {
+        _authService.unAuthClearAndRestart(context: context,);
+        return null;
       } else {
         return null;
       }
     });
   }
 
-  Future<TimingListModel?> getTimingsList({String? token, int? experienceId}) async {
+  Future<TimingListModel?> getTimingsList({String? token, int? experienceId, context}) async {
     return http.get(
       Uri.parse("$baseUrl/api/experience/provider/timing/$experienceId/"),
       headers: {
@@ -53,13 +64,16 @@ class TimingApiService {
     ).then((response) {
       if (response.statusCode == 200) {
         return TimingListModel.fromJson(jsonDecode(response.body));
+      } else if (response.statusCode == 401) {
+        _authService.unAuthClearAndRestart(context: context,);
+        return null;
       } else {
         return null;
       }
     });
   }
 
-  Future<bool?> deleteTiming({String? token, int? timingId}) async {
+  Future<bool?> deleteTiming({String? token, int? timingId, context}) async {
     return http.delete(
       Uri.parse("$baseUrl/api/experience/provider/timing/$timingId/"),
       headers: {
@@ -69,6 +83,9 @@ class TimingApiService {
     ).then((response) {
       if (response.statusCode == 200) {
         return true;
+      } else if (response.statusCode == 401) {
+        _authService.unAuthClearAndRestart(context: context,);
+        return null;
       } else {
         return false;
       }
