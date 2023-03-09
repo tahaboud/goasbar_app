@@ -160,7 +160,7 @@ class NewTimingView extends HookWidget {
                           || addPeople.text != request.customData.capacity.toString()
                           || model.startDate.text != request.data) {
 
-                        model.updateTiming(body: body, timingId: request.customData.id,).then((value) {
+                        model.updateTiming(context: context, body: body, timingId: request.customData.id,).then((value) {
                           if (value == null) {
                             MotionToast.error(
                               title: const Text("Timing Update Failed"),
@@ -187,7 +187,7 @@ class NewTimingView extends HookWidget {
                         "capacity": addPeople.text,
                       });
 
-                      model.createTiming(body: body, experienceId: request.customData,).then((value) {
+                      model.createTiming(context: context, body: body, experienceId: request.customData,).then((value) {
                         if (value == null) {
                           MotionToast.error(
                             title: const Text("Timing Creation Failed"),
