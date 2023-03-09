@@ -138,8 +138,8 @@ class SettingsView extends HookWidget {
                     ),
                     child: const Text('Logout', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
                   ).gestures(onTap: () {
-                    model.logout().then((value) {
-                      if (value) {
+                    model.logout(context: context).then((value) {
+                      if (value!) {
                         MotionToast.success(
                           title: const Text("Logout Success"),
                           description: const Text("Have a good day, see you later"),
