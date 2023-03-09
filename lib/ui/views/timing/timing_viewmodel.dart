@@ -14,7 +14,8 @@ import 'package:stacked_services/stacked_services.dart';
 
 class TimingViewModel extends FutureViewModel<dynamic> {
   final int? experienceId;
-  TimingViewModel({this.experienceId});
+  BuildContext? context;
+  TimingViewModel({this.experienceId, this.context});
 
   final _navigationService = locator<NavigationService>();
   final _dialogService = locator<DialogService>();
@@ -87,9 +88,9 @@ class TimingViewModel extends FutureViewModel<dynamic> {
     }
   }
 
-  getTimingsList({int? experienceId}) async {
+  getTimingsList({int? experienceId,}) async {
     String? token = await _tokenService.getTokenValue();
-    timingListModel = await _timingApiService.getTimingsList(token: token, experienceId: experienceId,);
+    timingListModel = await _timingApiService.getTimingsList(context: context, token: token, experienceId: experienceId,);
     notifyListeners();
   }
 
@@ -99,7 +100,7 @@ class TimingViewModel extends FutureViewModel<dynamic> {
 
   Future<bool?> deleteTiming({int? timingId, int? experienceId}) async {
     String? token = await _tokenService.getTokenValue();
-    return await _timingApiService.deleteTiming(token: token, timingId: timingId).then((value) {
+    return await _timingApiService.deleteTiming(context: context, token: token, timingId: timingId).then((value) {
       getTimingsList(experienceId: experienceId,);
       return value;
     });
