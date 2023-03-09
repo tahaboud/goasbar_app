@@ -6,4 +6,5 @@ enum DialogType {
   error,
   bookingList,
   profile,
+  waitingUntilPaymentFinished,
 }
