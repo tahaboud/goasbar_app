@@ -59,8 +59,8 @@ class SettingsViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<bool> logout() async {
-    return _authService.logout(token: await _tokenService.getTokenValue());
+  Future<bool?> logout({context}) async {
+    return _authService.logout(context: context, token: await _tokenService.getTokenValue());
   }
 
   clearToken () {
