@@ -7,6 +7,7 @@ import 'package:goasbar/ui/widgets/dialogs/type_of_identity_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/enum/dialog_type.dart';
+import 'package:goasbar/ui/widgets/dialogs/wait_until_payment_fiished_dialog.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 void setupDialogUi() {
@@ -33,6 +34,9 @@ void setupDialogUi() {
 
     DialogType.profile : (BuildContext context, DialogRequest dialogRequest, Function(DialogResponse) completer)
         => Dialog(child: ProfileBookedDialog(dialogRequest: dialogRequest, onDialogTap: completer,),),
+
+    DialogType.waitingUntilPaymentFinished : (BuildContext context, DialogRequest dialogRequest, Function(DialogResponse) completer)
+        => Dialog(child: WaitingUntilPaymentFinishedDialog(dialogRequest: dialogRequest, onDialogTap: completer,),),
   };
 
   dialogService.registerCustomDialogBuilders(builders);
