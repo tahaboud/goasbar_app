@@ -379,7 +379,7 @@ class SearchView extends HookWidget {
                                     ),
                                     child: const Text('Book Now', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500),).center(),
                                   ).gestures(onTap: () {
-                                    model.navigateTo(view: user == null ? const LoginView() : ConfirmBookingView(experience: model.experienceModels!.results![index],));
+                                    model.navigateTo(view: user == null ? const LoginView() : ConfirmBookingView(experience: model.experienceModels!.results![index], user: user,));
                                   }),
                                 ],
                               ).padding(horizontal: 8),
