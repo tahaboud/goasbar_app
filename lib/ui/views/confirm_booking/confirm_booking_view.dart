@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:goasbar/data_models/experience_response.dart';
+import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/enum/incdecrease.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
@@ -14,8 +15,9 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class ConfirmBookingView extends HookWidget {
-  const ConfirmBookingView({Key? key, this.experience}) : super(key: key);
+  const ConfirmBookingView({Key? key, this.experience, this.user}) : super(key: key);
   final ExperienceResults? experience;
+  final UserModel? user;
 
   @override
   Widget build(BuildContext context) {
@@ -438,10 +440,10 @@ class ConfirmBookingView extends HookWidget {
                       if (affiliateSet.isNotEmpty) body.addAll({"affiliate_set": affiliateSet,});
 
                       if (isOkay!) {
-                        model.createBooking(body: body,
+                        model.createBooking(context: context, body: body,
                             timingId: model.timingListModel!.results![model.selectedIndex!].id).then((value) {
                           if (value != null) {
-                            model.navigateTo(view: CheckoutView(experience: experience));
+                            model.navigateTo(view: CheckoutView(experience: experience, user: user,));
                           } else {
                             showMotionToast(context: context, msg: "An error occurred while creating the booking, please try again.", title: 'Create Booking Failed', type: MotionToastType.error);
                           }
