@@ -1,3 +1,4 @@
+import 'package:goasbar/shared/app_configs.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UrlService {
@@ -26,7 +27,7 @@ class UrlService {
   }
 
   launchLink({String? link}) async {
-    if (!await launchUrl(Uri.parse("https://www.goasbar.com/experience/$link"))) {
+    if (!await launchUrl(Uri.parse("$baseUrl/experience/$link"))) {
       throw 'Could not launch https://www.goasbar.com/';
     }
   }
