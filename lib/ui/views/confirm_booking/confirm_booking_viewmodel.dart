@@ -150,9 +150,9 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
     return weekDays[date];
   }
 
-  Future<BookingModel?> createBooking({int? timingId, Map<String, dynamic>? body}) async {
+  Future<BookingModel?> createBooking({int? timingId, Map<String, dynamic>? body, context}) async {
     String? token = await _tokenService.getTokenValue();
-    booking = await _bookingApiService.createBooking(token: token, timingId: timingId, body: body);
+    booking = await _bookingApiService.createBooking(context: context, token: token, timingId: timingId, body: body);
 
     return booking;
   }
