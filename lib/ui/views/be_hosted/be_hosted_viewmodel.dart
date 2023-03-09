@@ -12,6 +12,9 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class BeHostedInfoViewModel extends FutureViewModel<ProviderModel?> {
+  BeHostedInfoViewModel({this.context});
+  BuildContext? context;
+
   final _navigationService = locator<NavigationService>();
   final _validationService = locator<ValidationService>();
   final _dialogService = locator<DialogService>();
@@ -92,16 +95,16 @@ class BeHostedInfoViewModel extends FutureViewModel<ProviderModel?> {
     return temp;
   }
 
-  Future<ProviderModel?> beHostedProvider({Map? body}) async {
+  Future<ProviderModel?> beHostedProvider({Map? body, context}) async {
     String? token = await _tokenService.getTokenValue();
-    provider = await _providerApiService.createProvider(token: token, body: body,);
+    provider = await _providerApiService.createProvider(context: context, token: token, body: body,);
 
     return provider;
   }
 
   Future<ProviderModel?> updateProvider({Map? body}) async {
     String? token = await _tokenService.getTokenValue();
-    provider = await _providerApiService.updateProvider(token: token, body: body,);
+    provider = await _providerApiService.updateProvider(context: context, token: token, body: body,);
 
     return provider;
   }
@@ -109,7 +112,7 @@ class BeHostedInfoViewModel extends FutureViewModel<ProviderModel?> {
   @override
   Future<ProviderModel?> futureToRun() async {
     String? token = await _tokenService.getTokenValue();
-    provider = await _providerApiService.getProviderUserInfo(token: token);
+    provider = await _providerApiService.getProviderUserInfo(context: context, token: token);
     if (provider == null) {
       return null;
     }
