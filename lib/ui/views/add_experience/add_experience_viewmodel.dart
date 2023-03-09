@@ -32,6 +32,8 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   final _mediaService = locator<MediaService>();
   TextEditingController gender = TextEditingController();
   File? mainImage;
+  bool? isProfileImageFromLocal = false;
+  bool? isHasAdditionalImagesFromLocal = false;
   List<ImageSet?>? additionalImages = [];
   int? images = 0;
   int pageIndex = 1;
@@ -62,16 +64,48 @@ class AddExperienceInfoViewModel extends BaseViewModel {
       setBusy(true);
       city = getCity();
       genderConstraint = getGenderConstraint();
-      providedGoodsText = getProvidedGoodsText();
-      requirementsText = getRequirementsText();
       selectedExperienceCategory = getSelectedExperienceCategory();
       if (experience!.profileImage != null) mainImage = File(experience!.profileImage!);
       if (experience!.imageSet!.isNotEmpty) {
         additionalImages = experience!.imageSet;
         images = experience!.imageSet!.length;
       }
-      if (experience!.providedGoods != null) providedGoodsController1.text = experience!.providedGoods!;
-      if (experience!.requirements != null) requirementsController1.text = experience!.requirements!;
+
+      if (experience!.providedGoods != null) {
+        for (var providedGood in experience!.providedGoods!.split('\n')) {
+          if (providedGood.isNotEmpty) {
+            if (providedGoodsController1.text.isEmpty) {
+              providedGoodsController1.text = providedGood;
+            } else if (providedGoodsController2.text.isEmpty) {
+              providedGoodsController2.text = providedGood;
+            } else if (providedGoodsController3.text.isEmpty) {
+              providedGoodsController3.text = providedGood;
+            } else if (providedGoodsController4.text.isEmpty) {
+              providedGoodsController4.text = providedGood;
+            } else {
+              addProvidings(text: providedGood);
+            }
+          }
+        }
+      }
+
+      if (experience!.requirements != null) {
+        for (var requirement in experience!.requirements!.split('\n')) {
+          if (requirement.isNotEmpty) {
+            if (requirementsController1.text.isEmpty) {
+              requirementsController1.text = requirement;
+            } else if (requirementsController2.text.isEmpty) {
+              requirementsController2.text = requirement;
+            } else if (requirementsController3.text.isEmpty) {
+              requirementsController3.text = requirement;
+            } else if (requirementsController4.text.isEmpty) {
+              requirementsController4.text = requirement;
+            } else {
+              addRequirements(text: requirement);
+            }
+          }
+        }
+      }
 
       notifyListeners();
       setBusy(false);
@@ -116,18 +150,6 @@ class AddExperienceInfoViewModel extends BaseViewModel {
     return selectedExperienceCategory;
   }
 
-  String? getProvidedGoodsText() {
-    providedGoodsText = experience != null ? experience!.providedGoods != null ? experience!.providedGoods! : '' : '';
-
-    return providedGoodsText;
-  }
-
-  String? getRequirementsText() {
-    requirementsText = experience != null ? experience!.requirements != null ? experience!.requirements! : '' : '';
-
-    return requirementsText;
-  }
-
   void updateProvidedGoodsText ({String? text}) {
     providedGoodsText = text;
     notifyListeners();
@@ -138,15 +160,15 @@ class AddExperienceInfoViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  addRequirements() {
+  addRequirements({text}) {
     addedRequirements = addedRequirements! + 1;
-    addedRequirementsControllers.add(TextEditingController());
+    addedRequirementsControllers.add(TextEditingController(text: text));
     notifyListeners();
   }
 
-  addProvidings() {
+  addProvidings({text}) {
     addedProviding = addedProviding! + 1;
-    addedProvidedGoodsControllers.add(TextEditingController());
+    addedProvidedGoodsControllers.add(TextEditingController(text: text));
     notifyListeners();
   }
 
@@ -179,6 +201,7 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   void pickMainImage () async {
     mainImage = await _mediaService.getImage();
     if (mainImage != null) {
+      isProfileImageFromLocal = true;
       notifyListeners();
     }
   }
@@ -189,6 +212,7 @@ class AddExperienceInfoViewModel extends BaseViewModel {
     if (file != null) {
       if (images! < 8) {
         images = images! + 1;
+        isHasAdditionalImagesFromLocal = true;
         additionalImages!.add(ImageSet(image: file.path));
         notifyListeners();
       }
@@ -249,8 +273,12 @@ class AddExperienceInfoViewModel extends BaseViewModel {
     if (picked.period == DayPeriod.am) {
       pickedTimeForRequest = "$hour:$minute";
     } else {
-      String hourInPm = "${picked.hourOfPeriod + 12}";
-      pickedTimeForRequest = "$hourInPm:$minute";
+      if (picked.hourOfPeriod == 12) {
+        pickedTimeForRequest = "00:$minute";
+      } else {
+        String hourInPm = "${picked.hourOfPeriod + 12}";
+        pickedTimeForRequest = "$hourInPm:$minute";
+      }
     }
 
     notifyListeners();
@@ -283,11 +311,11 @@ class AddExperienceInfoViewModel extends BaseViewModel {
     }
   }
 
-  Future<ExperienceResults?> createExperience({Map<String, dynamic>? body, Map<String, dynamic>? timingBody, BuildContext? context}) async {
+  Future<ExperienceResults?> createExperience({context, Map<String, dynamic>? body, Map<String, dynamic>? timingBody,}) async {
     String? token = await _tokenService.getTokenValue();
     return await _experienceApiService.createExperience(token: token, body: body, context: context!).then((value) {
       if (value is ExperienceResults) {
-        _timingApiService.createTiming(token: token, experienceId: value.id, body: timingBody);
+        _timingApiService.createTiming(context: context, token: token, experienceId: value.id, body: timingBody);
         return value;
       } else {
         return null;
@@ -295,9 +323,9 @@ class AddExperienceInfoViewModel extends BaseViewModel {
     });
   }
 
-  Future<ExperienceResults?> updateExperience({Map<String, dynamic>? body, context, int? experienceId}) async {
+  Future<ExperienceResults?> updateExperience({bool? hasImages, Map<String, dynamic>? body, context, int? experienceId}) async {
     String? token = await _tokenService.getTokenValue();
-    return await _experienceApiService.updateExperience(context: context, token: token, body: body, experienceId: experienceId).then((value) {
+    return await _experienceApiService.updateExperience(context: context, hasImages: hasImages, token: token, body: body, experienceId: experienceId).then((value) {
       if (value is ExperienceResults) {
         return value;
       } else {
