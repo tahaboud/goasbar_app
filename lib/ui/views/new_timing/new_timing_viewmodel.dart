@@ -97,8 +97,12 @@ class NewTimingViewModel extends BaseViewModel {
     if (picked.period == DayPeriod.am) {
       pickedTimeForRequest = "$hour:$minute";
     } else {
-      String hourInPm = "${picked.hourOfPeriod + 12}";
-      pickedTimeForRequest = "$hourInPm:$minute";
+      if (picked.hourOfPeriod == 12) {
+        pickedTimeForRequest = "00:$minute";
+      } else {
+        String hourInPm = "${picked.hourOfPeriod + 12}";
+        pickedTimeForRequest = "$hourInPm:$minute";
+      }
     }
 
     notifyListeners();
@@ -127,13 +131,13 @@ class NewTimingViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<TimingModel?> createTiming ({Map? body, int? experienceId}) async {
+  Future<TimingModel?> createTiming ({Map? body, int? experienceId, context}) async {
     String token = await _tokenService.getTokenValue();
-    return await _timingApiService.createTiming(token: token, body: body, experienceId: experienceId);
+    return await _timingApiService.createTiming(context: context, token: token, body: body, experienceId: experienceId);
   }
 
-  Future<TimingModel?> updateTiming ({Map? body, int? timingId}) async {
+  Future<TimingModel?> updateTiming ({Map? body, int? timingId, context}) async {
     String token = await _tokenService.getTokenValue();
-    return await _timingApiService.updateTiming(token: token, body: body, timingId: timingId);
+    return await _timingApiService.updateTiming(context: context, token: token, body: body, timingId: timingId);
   }
 }
