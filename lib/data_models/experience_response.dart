@@ -11,6 +11,7 @@ class ExperienceResults {
   int? minAge;
   String? locationNotes;
   String? city;
+  String? slug;
   String? profileImage;
   String? providedGoods;
   String? events;
@@ -35,6 +36,7 @@ class ExperienceResults {
         this.minAge,
         this.locationNotes,
         this.city,
+        this.slug,
         this.profileImage,
         this.providedGoods,
         this.events,
@@ -59,6 +61,7 @@ class ExperienceResults {
     minAge = json['min_age'];
     locationNotes = json['location_notes'];
     city = json['city'];
+    slug = json['slug'];
     profileImage = json['profile_image'];
     providedGoods = json['provided_goods'];
     events = json['events'];
@@ -92,6 +95,7 @@ class ExperienceResults {
     data['min_age'] = minAge;
     data['location_notes'] = locationNotes;
     data['city'] = city;
+    data['slug'] = slug;
     data['profile_image'] = profileImage;
     data['provided_goods'] = providedGoods;
     data['events'] = events;
