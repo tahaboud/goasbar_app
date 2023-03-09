@@ -132,7 +132,7 @@ class TimingView extends HookWidget {
           ),
         ),
       ),
-      viewModelBuilder: () => TimingViewModel(experienceId: experience!.id),
+      viewModelBuilder: () => TimingViewModel(experienceId: experience!.id, context: context),
     );
   }
 }
