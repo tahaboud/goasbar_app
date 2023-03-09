@@ -85,7 +85,7 @@ class TripDetailView extends HookWidget {
                                   ),
                                 ).height(40)
                                     .width(100)
-                                    .gestures(onTap: () => model.share(link: "experience.slug")),
+                                    .gestures(onTap: () => model.share(link: experience!.slug)),
                                 horizontalSpaceSmall,
                                 user == null ? const SizedBox() : model.isBusy ? const SizedBox() : Container(
                                     decoration: BoxDecoration(
@@ -96,7 +96,7 @@ class TripDetailView extends HookWidget {
                                       model.isFav ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
                                       color: model.isFav ? Colors.redAccent : Colors.black, size: 30,
                                     ).center()
-                                        .gestures(onTap: () => model.addFavorites(experienceId: experience!.id))
+                                        .gestures(onTap: () => model.addFavorites(context: context, experienceId: experience!.id))
                                 ).height(40)
                                     .width(40),
                               ],
@@ -171,8 +171,6 @@ class TripDetailView extends HookWidget {
                 Image.asset("assets/icons/location.png"),
                 horizontalSpaceTiny,
                 Text("${experience!.city} , Duration : ${experience!.duration}", style: const TextStyle(color: kMainGray, fontSize: 11)),
-                //TODO : set timings (we can have ore than one so how)
-                const Text(" | Start at 9 : 00 AM", style: TextStyle(color: kMainGray, fontSize: 11)),
               ],
             ).padding(horizontal: 20),
             Expanded(
@@ -243,14 +241,15 @@ class TripDetailView extends HookWidget {
                       const Text('Notes & Requirement',),
                     ],
                   ).padding(horizontal: 20),
-                  verticalSpaceRegular,
                   if (experience!.requirements != null)
                     for (var requirement in experience!.requirements!.split('\n'))
-                      NoteItem(text: requirement,).padding(horizontal: 20),
+                      if (requirement.isNotEmpty)
+                        NoteItem(text: requirement,).padding(horizontal: 20),
                   experience!.requirements == null ? const SizedBox() : verticalSpaceSmall,
                   if (experience!.providedGoods != null)
                     for (var providedGood in experience!.providedGoods!.split('\n'))
-                      NoteItem(text: providedGood,).padding(horizontal: 20),
+                      if (providedGood.isNotEmpty)
+                        NoteItem(text: providedGood,).padding(horizontal: 20),
                   experience!.providedGoods == null ? const SizedBox() : verticalSpaceSmall,
                 ],
               ),
@@ -281,7 +280,7 @@ class TripDetailView extends HookWidget {
                   child: const Text('Book Now', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),)
                       .center()
                       .gestures(onTap: () {
-                        model.navigateTo(view: user == null ? const LoginView() : ConfirmBookingView(experience: experience));
+                        model.navigateTo(view: user == null ? const LoginView() : ConfirmBookingView(experience: experience, user: user,));
                   }),
                 ),
               ],
