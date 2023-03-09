@@ -20,13 +20,13 @@ class TripItemViewModel extends FutureViewModel<bool?> {
   final _bottomSheetService = locator<BottomSheetService>();
   List<int>? favoriteList = [];
 
-  void addFavorites({int? experienceId}) {
+  void addFavorites({int? experienceId, context}) {
     isFav = !isFav;
-    updateUserData(experienceId: experienceId, isRemove: isFav);
+    updateUserData(context: context, experienceId: experienceId, isRemove: isFav);
     notifyListeners();
   }
 
-  updateUserData({int? experienceId, bool? isRemove}) async {
+  updateUserData({int? experienceId, bool? isRemove, context}) async {
     String token = await _tokenService.getTokenValue();
     notifyListeners();
 
@@ -39,7 +39,7 @@ class TripItemViewModel extends FutureViewModel<bool?> {
     }
 
     notifyListeners();
-    _authService.updateFavoritesUser(token: token, body: {
+    _authService.updateFavoritesUser(context: context, token: token, body: {
       "favorite_experiences": favoriteList,
     },);
   }
