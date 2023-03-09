@@ -90,11 +90,11 @@ class ExperienceApiService {
     });
   }
 
-  Future<ExperienceResults?> updateExperience({String? token, Map<String, dynamic>? body, int? experienceId, context}) async {
-    Dio dio = Dio();
-    FormData formData = FormData.fromMap(body!);
+  Future<ExperienceResults?> updateExperience({String? token, bool? hasImages, Map<String, dynamic>? body, int? experienceId, context}) async {
+    if (hasImages!) {
+      Dio dio = Dio();
+      FormData formData = FormData.fromMap(body!);
 
-    if (body.keys.contains("image")) {
       return dio.patch(
         "$baseUrl/api/experience/provider/$experienceId/",
         options: Options(
