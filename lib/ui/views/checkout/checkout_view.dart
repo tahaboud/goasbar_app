@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:goasbar/data_models/experience_response.dart';
+import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/checkout/checkout_viewmodel.dart';
 import 'package:goasbar/ui/widgets/info_item.dart';
-import 'package:motion_toast/motion_toast.dart';
+import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-
 class CheckoutView extends HookWidget {
-  const CheckoutView({Key? key, this.experience}) : super(key: key);
+  const CheckoutView({Key? key, this.experience, this.user}) : super(key: key);
   final ExperienceResults? experience;
+  final UserModel? user;
 
   @override
   Widget build(BuildContext context) {
@@ -162,6 +163,8 @@ class CheckoutView extends HookWidget {
                   onTap:  () {
                     if (cardNumber.text.isNotEmpty && cvv.text.isNotEmpty && expiryDate.text.isNotEmpty) {
                       model.prepareCheckout(
+                        context: context,
+                        user: user,
                         bookingId: experience!.id,
                         cardHolder: "cardNumber.text",
                         cardNumber: cardNumber.text,
@@ -170,16 +173,9 @@ class CheckoutView extends HookWidget {
                         expiryYear: expiryDate.text.substring(3),
                         body: {
                           "payment_method": model.selectedPaymentMethod == 1 ? 'VISA' : model.selectedPaymentMethod == 2 ? 'MADA' : 'APPLEPAY',
-                        },).then((value) {
-                        print("$value 1111111111111");
-                      });
+                        },);
                     } else {
-                      MotionToast.warning(
-                        title: const Text("Warning"),
-                        description: const Text("All filed must be filled."),
-                        animationCurve: Curves.easeIn,
-                        animationDuration: const Duration(milliseconds: 200),
-                      ).show(context);
+                      showMotionToast(context: context, title: 'Warning', msg: "All filed must be filled.", type: MotionToastType.warning);
                     }
                   },
                 ),
