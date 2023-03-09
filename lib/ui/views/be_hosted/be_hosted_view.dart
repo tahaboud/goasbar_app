@@ -145,7 +145,7 @@ class BeHostedView extends HookWidget {
                     });
                   }
 
-                  model.beHostedProvider(body: body,).then((value) {
+                  model.beHostedProvider(context: context, body: body,).then((value) {
                     if (value != null) {
                       model.back();
                     } else {
@@ -191,7 +191,7 @@ class BeHostedView extends HookWidget {
           ],
         ).height(screenHeightPercentage(context, percentage: 0.85));
       },
-      viewModelBuilder: () => BeHostedInfoViewModel(),
+      viewModelBuilder: () => BeHostedInfoViewModel(context: context),
     );
   }
 }
