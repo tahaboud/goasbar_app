@@ -12,6 +12,7 @@ class ProviderPublicExperienceResults {
   int? minAge;
   dynamic locationNotes;
   String? city;
+  String? slug;
   String? profileImage;
   dynamic providedGoods;
   String? events;
@@ -35,6 +36,7 @@ class ProviderPublicExperienceResults {
         this.minAge,
         this.locationNotes,
         this.city,
+        this.slug,
         this.profileImage,
         this.providedGoods,
         this.events,
@@ -63,6 +65,7 @@ class ProviderPublicExperienceResults {
     minAge = json['min_age'];
     locationNotes = json['location_notes'];
     city = json['city'];
+    slug = json['slug'];
     profileImage = json['profile_image'];
     providedGoods = json['provided_goods'];
     events = json['events'];
@@ -90,6 +93,7 @@ class ProviderPublicExperienceResults {
     data['min_age'] = minAge;
     data['location_notes'] = locationNotes;
     data['city'] = city;
+    data['slug'] = slug;
     data['profile_image'] = profileImage;
     data['provided_goods'] = providedGoods;
     data['events'] = events;
