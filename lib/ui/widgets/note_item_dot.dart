@@ -9,7 +9,7 @@ class NoteItemDot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(10)),)
-        .height(10)
-        .width(10);
+        .height(8)
+        .width(8);
   }
 }
