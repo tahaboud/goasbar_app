@@ -39,7 +39,7 @@ class SavedExperiencesView extends HookWidget {
                     shrinkWrap: true,
                     itemCount: model.experienceResults!.length,
                     itemBuilder: (context, index) {
-                      return SavedExperience(experience: model.experienceResults![index], futureToRun: () => model.futureToRun(), unFavorite: () => model.updateUserData(index: index), user: user,);
+                      return SavedExperience(experience: model.experienceResults![index], futureToRun: () => model.futureToRun(), unFavorite: () => model.updateUserData(context: context, index: index), user: user,);
                     },)
                   ),
                 ],
