@@ -57,7 +57,7 @@ class TripItem extends StatelessWidget {
                       model.isFav ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
                       color: model.isFav ? Colors.redAccent : Colors.black, size: 20,
                     ).center()
-                        .gestures(onTap: () => model.addFavorites(experienceId: experience!.id))
+                        .gestures(onTap: () => model.addFavorites(context: context, experienceId: experience!.id))
                   ).height(30)
                       .width(30),
                   horizontalSpaceSmall,
@@ -147,7 +147,7 @@ class TripItem extends StatelessWidget {
                           ),
                           child: const Text('Book Now', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500),).center(),
                         ).gestures(onTap: () {
-                          model.navigateTo(view: user == null ? const LoginView() : ConfirmBookingView(experience: experience));
+                          model.navigateTo(view: user == null ? const LoginView() : ConfirmBookingView(experience: experience, user: user,));
                         }),
                         horizontalSpaceSmall,
                       ],
