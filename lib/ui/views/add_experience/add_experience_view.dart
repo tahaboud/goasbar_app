@@ -108,7 +108,7 @@ class AddExperienceView extends HookWidget {
                     width: screenWidthPercentage(context, percentage: 0.4),
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: request.data != null ? NetworkImage('$baseUrl${model.mainImage!.path}') as ImageProvider
+                        image: model.isProfileImageFromLocal! ? FileImage(model.mainImage!) : request.data != null ? NetworkImage('$baseUrl${model.mainImage!.path}') as ImageProvider
                             : FileImage(model.mainImage!),
                         fit: BoxFit.cover,
                       ),
@@ -662,7 +662,7 @@ class AddExperienceView extends HookWidget {
                           horizontalSpaceSmall,
                           const Text("Add more", style: TextStyle(color: kMainColor1),),
                         ],
-                      ).gestures(onTap: () => model.addProvidings()),
+                      ).gestures(onTap: () => model.addProvidings(text: '')),
                     ],
                   ),
                   verticalSpaceMedium,
@@ -734,7 +734,7 @@ class AddExperienceView extends HookWidget {
                           horizontalSpaceSmall,
                           const Text("Add more", style: TextStyle(color: kMainColor1),),
                         ],
-                      ).gestures(onTap: () => model.addRequirements()),
+                      ).gestures(onTap: () => model.addRequirements(text: '')),
                     ],
                   ),
                   verticalSpaceLarge,
@@ -750,20 +750,13 @@ class AddExperienceView extends HookWidget {
                     ),
                   ).gestures(
                     onTap: () {
-                      for (var i = 0; i < model.addedProvidedGoodsControllers.length; i++) {
-                        if (model.addedProvidedGoodsControllers[i].text.isNotEmpty) {
-                          model.updateProvidedGoodsText(text: "${model.addedProvidedGoodsControllers[i].text}\n${model.providedGoodsText}");
-                        }
-                      }
-
                       if (model.providedGoodsController1.text.isNotEmpty) model.updateProvidedGoodsText(text: "${model.providedGoodsController1.text}\n${model.providedGoodsText}");
                       if (model.providedGoodsController2.text.isNotEmpty) model.updateProvidedGoodsText(text: "${model.providedGoodsController2.text}\n${model.providedGoodsText}");
                       if (model.providedGoodsController3.text.isNotEmpty) model.updateProvidedGoodsText(text: "${model.providedGoodsController3.text}\n${model.providedGoodsText}");
                       if (model.providedGoodsController4.text.isNotEmpty) model.updateProvidedGoodsText(text: "${model.providedGoodsController4.text}\n${model.providedGoodsText}");
-
-                      for (var i = 0; i < model.addedRequirementsControllers.length; i++) {
-                        if (model.addedRequirementsControllers[i].text.isNotEmpty) {
-                          model.updateRequirementsText(text: "${model.addedRequirementsControllers[i].text}\n${model.requirementsText}");
+                      for (var i = 0; i < model.addedProvidedGoodsControllers.length; i++) {
+                        if (model.addedProvidedGoodsControllers[i].text.isNotEmpty) {
+                          model.updateProvidedGoodsText(text: "${model.addedProvidedGoodsControllers[i].text}\n${model.providedGoodsText}");
                         }
                       }
 
@@ -771,6 +764,11 @@ class AddExperienceView extends HookWidget {
                       if (model.requirementsController2.text.isNotEmpty) model.updateRequirementsText(text: "${model.requirementsController2.text}\n${model.requirementsText}");
                       if (model.requirementsController3.text.isNotEmpty) model.updateRequirementsText(text: "${model.requirementsController3.text}\n${model.requirementsText}");
                       if (model.requirementsController4.text.isNotEmpty) model.updateRequirementsText(text: "${model.requirementsController4.text}\n${model.requirementsText}");
+                      for (var i = 0; i < model.addedRequirementsControllers.length; i++) {
+                        if (model.addedRequirementsControllers[i].text.isNotEmpty) {
+                          model.updateRequirementsText(text: "${model.addedRequirementsControllers[i].text}\n${model.requirementsText}");
+                        }
+                      }
 
                       pageController.jumpToPage(4);
                     },
@@ -1121,10 +1119,10 @@ class AddExperienceView extends HookWidget {
                             if (age.text != request.data.minAge.toString()) body.addAll({'min_age': age.text});
                             if (description.text != request.data.description) body.addAll({'description': description.text});
                             if (activities.text != request.data.events) body.addAll({'events': activities.text});
-                            if (model.city != model.getCity()) body.addAll({'city': model.city});
+                            if (model.city != request.data.city) body.addAll({'city': model.city});
                             if (price.text != request.data.price) body.addAll({'price': price.text});
 
-                            if (model.mainImage != null) {
+                            if (model.isProfileImageFromLocal!) {
                               if (!model.mainImage!.path.contains("/media/")) {
                                 var pickedFile = await MultipartFile.fromFile(
                                   model.mainImage!.path,
@@ -1134,7 +1132,7 @@ class AddExperienceView extends HookWidget {
                               }
                             }
 
-                            if (model.images! > 0) {
+                            if (model.images! > 0 && model.isHasAdditionalImagesFromLocal!) {
                               for (var i = 0; i < model.images!; i++) {
                                 if (model.additionalImages![i]!.id == null) {
                                   var pickedFile = await MultipartFile.fromFile(
@@ -1159,7 +1157,7 @@ class AddExperienceView extends HookWidget {
                             body.addAll({'requirements': model.requirementsText});
 
                             // if (model.startDate.text.isNotEmpty) timingBody.addAll({'date': model.startDate.text});
-                            // if (model.startDate.text.isNotEmpty) timingBody.addAll({'start_time': model.startTime.text});
+                            // if (model.startDate.text.isNotEmpty) timingBody.addAll({'start_time': model.pickedTimeForRequest});
                             // if (addPeople.text.isNotEmpty) timingBody.addAll({'capacity': addPeople.text});
 
                             if (body.isEmpty) {
@@ -1167,7 +1165,10 @@ class AddExperienceView extends HookWidget {
                                 completer(SheetResponse(confirmed: true));
                               });
                             } else {
-                              model.updateExperience(context: context, body: body, experienceId: request.data.id).then((value) {
+                              model.updateExperience(
+                                hasImages: model.isProfileImageFromLocal! || model.isHasAdditionalImagesFromLocal!,
+                                context: context, body: body, experienceId: request.data.id,
+                              ).then((value) {
                                 if (value != null) {
                                   model.showPublishSuccessBottomSheet().then((value) {
                                     completer(SheetResponse(confirmed: true));
@@ -1220,7 +1221,7 @@ class AddExperienceView extends HookWidget {
                             body.addAll({'requirements': model.requirementsText});
 
                             if (model.startDate.text.isNotEmpty) timingBody.addAll({'date': model.startDate.text});
-                            if (model.startDate.text.isNotEmpty) timingBody.addAll({'start_time': model.startTime.text});
+                            if (model.startDate.text.isNotEmpty) timingBody.addAll({'start_time': model.pickedTimeForRequest});
                             if (addPeople.text.isNotEmpty) timingBody.addAll({'capacity': addPeople.text});
 
                             model.createExperience(context: context, body: body, timingBody: timingBody).then((value) {
