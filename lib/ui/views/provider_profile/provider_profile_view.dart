@@ -6,6 +6,9 @@ import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/provider_profile/provider_profile_viewmodel.dart';
+import 'package:goasbar/ui/widgets/booking_card/booking_card.dart';
+import 'package:goasbar/ui/widgets/booking_card_for_provider/booking_card_for_provider.dart';
+import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -57,12 +60,55 @@ class ProviderProfileView extends HookWidget {
                 verticalSpaceTiny,
                 Row(
                   children: [
-                    const Icon(Icons.star_border_outlined, color: kMainColor1, size: 28,).padding(all: 0,),
+                    const Icon(Icons.email_outlined, color: kMainColor1, size: 28,).padding(all: 0,),
                     horizontalSpaceTiny,
-                    //TODO add reviews
-                    Text("23 Review", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: kGrayText),),
+
+                    Text(provider!.email!, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: kGrayText),),
                   ],
                 ),
+                verticalSpaceTiny,
+                Row(
+                  children: [
+                    const Icon(Icons.phone, color: kMainColor1, size: 28,).padding(all: 0,),
+                    horizontalSpaceTiny,
+
+                    Text(provider!.phoneNumber!, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: kGrayText),),
+                  ],
+                ),
+                provider!.website != null ? verticalSpaceTiny : const SizedBox(),
+                provider!.website != null ? Row(
+                  children: [
+                    const Icon(Icons.link, color: kMainColor1, size: 28,).padding(all: 0,),
+                    horizontalSpaceTiny,
+
+                    Text(provider!.website!, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: kGrayText),),
+                  ],
+                ) : const SizedBox(),
+                provider!.instagramAccount != null ? verticalSpaceTiny : const SizedBox(),
+                provider!.instagramAccount != null ? Row(
+                  children: [
+                    const Icon(Icons.link, color: kMainColor1, size: 28,).padding(all: 0,),
+                    horizontalSpaceTiny,
+
+                    Text(provider!.instagramAccount!, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: kGrayText),),
+                  ],
+                ) : const SizedBox(),
+                provider!.facebookAccount != null ? verticalSpaceTiny : const SizedBox(),
+                provider!.facebookAccount != null ? Row(
+                  children: [
+                    const Icon(Icons.link, color: kMainColor1, size: 28,).padding(all: 0,),
+                    horizontalSpaceTiny,
+                    Text(provider!.facebookAccount!, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: kGrayText),),
+                  ],
+                ) : const SizedBox(),
+                provider!.twitterAccount != null ? verticalSpaceTiny : const SizedBox(),
+                provider!.twitterAccount != null ? Row(
+                  children: [
+                    const Icon(Icons.link, color: kMainColor1, size: 28,).padding(all: 0,),
+                    horizontalSpaceTiny,
+                    Text(provider!.twitterAccount!, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: kGrayText),),
+                  ],
+                ) : const SizedBox(),
                 const Divider(color: kMainColor1, height: 40, thickness: 1.2),
                 const Text("Bio", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
                 verticalSpaceSmall,
@@ -70,19 +116,19 @@ class ProviderProfileView extends HookWidget {
                 verticalSpaceMedium,
                 const Text("Hosted Trips", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
                 verticalSpaceSmall,
-                //TODO Complete ui
-                // SizedBox(
-                //   height: 255,
-                //   child: ListView.builder(
-                //     shrinkWrap: true,
-                //     physics: const BouncingScrollPhysics(),
-                //     scrollDirection: Axis.horizontal,
-                //     itemCount: 5,
-                //     itemBuilder: (context, index) {
-                //       return TripItem(experience: , user: user);
-                //     },
-                //   ),
-                // ),
+                // TODO Complete ui
+                SizedBox(
+                  height: 255,
+                  child: model.isBusy ? const Loader().center() : model.data == null ? Text('No trips by ${provider!.nickname} right now').center() : model.data!.isEmpty ? Text('No trips by ${provider!.nickname} right now').center() : ListView.builder(
+                    shrinkWrap: true,
+                    physics: const BouncingScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: model.data!.length,
+                    itemBuilder: (context, index) {
+                      return BookingItemForProviderView(user: user, providerPublicExperience: model.data![index],);
+                    },
+                  ),
+                ),
                 verticalSpaceMedium,
                 const Text("Reviews", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
                 verticalSpaceSmall,
@@ -127,7 +173,7 @@ class ProviderProfileView extends HookWidget {
                 //TODO add review comment
                 SizedBox(
                   width: screenWidthPercentage(context, percentage: 0.85),
-                  child: Text(
+                  child: const Text(
                     'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et',
                     overflow: TextOverflow.clip,
                     style: TextStyle(color: Colors.black54),
@@ -154,7 +200,7 @@ class ProviderProfileView extends HookWidget {
           ),
         ),
       ),
-      viewModelBuilder: () => ProviderProfileViewModel(),
+      viewModelBuilder: () => ProviderProfileViewModel(providerId: provider!.id),
     );
   }
 }
