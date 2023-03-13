@@ -25,6 +25,7 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
   TimingListModel? timingListModel;
   BookingModel? booking;
   int? selectedIndex;
+  bool? isClicked = false;
   String? filterDate1 = "1900-01-01";
   String? filterDate2 = "3000-12-30";
   final _tokenService = locator<TokenService>();
@@ -35,6 +36,11 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
   List<TextEditingController> firstNames = [];
   List<TextEditingController> lastNames = [];
   List<TextEditingController> genders = [];
+
+  updateIsClicked({value}) {
+    isClicked = value;
+    notifyListeners();
+  }
 
   Map<String, dynamic> affiliateSetToJson({firstName, lastName, age, gender, phone}) {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -151,6 +157,7 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
   }
 
   Future<BookingModel?> createBooking({int? timingId, Map<String, dynamic>? body, context}) async {
+    updateIsClicked(value: true);
     String? token = await _tokenService.getTokenValue();
     booking = await _bookingApiService.createBooking(context: context, token: token, timingId: timingId, body: body);
 
