@@ -40,7 +40,7 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   int? addedProviding = 0;
   int? addedRequirements = 0;
   String? city = "RIYADH";
-  String? selectedExperienceCategory;
+  List<dynamic>? selectedExperienceCategory = [];
   String? providedGoodsText = '';
   String? requirementsText = '';
   String? pickedTimeForRequest;
@@ -58,6 +58,12 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   TextEditingController providedGoodsController4 = TextEditingController();
   List<TextEditingController> addedProvidedGoodsControllers = [];
   String? genderConstraint = genderConstraints[0];
+  bool? isClicked = false;
+
+  updateIsClicked({value}) {
+    isClicked = value;
+    notifyListeners();
+  }
 
   onStart() {
     if (experience != null) {
@@ -135,17 +141,17 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   }
 
   updateSelectedExperienceCategory({String? category}) {
-    if (selectedExperienceCategory == category) {
-      selectedExperienceCategory = null;
+    if (selectedExperienceCategory!.contains(category)) {
+      selectedExperienceCategory!.remove(category);
     } else {
-      selectedExperienceCategory = category;
+      selectedExperienceCategory!.add(category);
     }
     notifyListeners();
   }
 
-  String? getSelectedExperienceCategory() {
+  List<dynamic>? getSelectedExperienceCategory() {
     selectedExperienceCategory = experience != null ? experience!.categories!.isNotEmpty
-        ? experience!.categories![0] : null : null;
+        ? experience!.categories! : [] : [];
 
     return selectedExperienceCategory;
   }
@@ -312,6 +318,7 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   }
 
   Future<ExperienceResults?> createExperience({context, Map<String, dynamic>? body, Map<String, dynamic>? timingBody,}) async {
+    updateIsClicked(value: true);
     String? token = await _tokenService.getTokenValue();
     return await _experienceApiService.createExperience(token: token, body: body, context: context!).then((value) {
       if (value is ExperienceResults) {
@@ -324,6 +331,7 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   }
 
   Future<ExperienceResults?> updateExperience({bool? hasImages, Map<String, dynamic>? body, context, int? experienceId}) async {
+    updateIsClicked(value: true);
     String? token = await _tokenService.getTokenValue();
     return await _experienceApiService.updateExperience(context: context, hasImages: hasImages, token: token, body: body, experienceId: experienceId).then((value) {
       if (value is ExperienceResults) {
