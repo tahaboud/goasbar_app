@@ -5,6 +5,7 @@ import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/checkout/checkout_viewmodel.dart';
 import 'package:goasbar/ui/widgets/info_item.dart';
+import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -158,7 +159,7 @@ class CheckoutView extends HookWidget {
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                     gradient: kMainGradient,
                   ),
-                  child: const Text('Continue with payment', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
+                  child: model.isClicked! ? const Loader().center() :const Text('Continue with payment', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
                 ).gestures(
                   onTap:  () {
                     if (cardNumber.text.isNotEmpty && cvv.text.isNotEmpty && expiryDate.text.isNotEmpty) {
