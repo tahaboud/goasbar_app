@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:goasbar/data_models/experience_response.dart';
 import 'package:goasbar/data_models/user_model.dart';
+import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/confirm_booking/confirm_booking_view.dart';
@@ -183,14 +184,15 @@ class TripDetailView extends HookWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      const Text('Hosted Experience by ', style: TextStyle(fontSize: 18)),
+                      const Text('Hosted Experience by', style: TextStyle(fontSize: 18)),
+                      horizontalSpaceSmall,
                       !model.dataReady ? Image.asset("assets/images/by_user.png").borderRadius(all: 50).height(50).width(50)
-                          : Text(model.provider!.response!.nickname!, style: const TextStyle(fontSize: 18, color: kMainColor1)).gestures(
+                          : Image.network("$baseUrl${model.provider!.response!.image}", height: 35,).clipRRect(all: 30).gestures(
                           onTap: () => model.navigateTo(view: ProviderProfileView(provider: model.provider!.response!, user: user)),
                       ),
                     ],
                   ).padding(horizontal: 20),
-                  verticalSpaceRegular,
+                  verticalSpaceSmall,
                   const Divider(height: 10, color: kMainDisabledGray, thickness: 1).padding(horizontal: 20),
                   verticalSpaceRegular,
                   Row(
