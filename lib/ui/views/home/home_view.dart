@@ -12,59 +12,62 @@ import 'package:animations/animations.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
 
 class HomeView extends StatelessWidget {
-  const HomeView({Key? key, this.isUser}) : super(key: key);
+  const HomeView({Key? key, this.isUser, this.index = 0}) : super(key: key);
   final bool? isUser;
+  final int? index;
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<HomeViewModel>.reactive(
-      builder: (context, model, child) => Scaffold(
-        body: model.isBusy ? const Loader() : PageTransitionSwitcher(
-          duration: const Duration(milliseconds: 300),
-          reverse: model.reverse,
-          transitionBuilder: (
-              Widget child,
-              Animation<double> animation,
-              Animation<double> secondaryAnimation,
-              ) {
-            return SharedAxisTransition(
-              animation: animation,
-              secondaryAnimation: secondaryAnimation,
-              transitionType: SharedAxisTransitionType.horizontal,
-              child: child,
-            );
-          },
-          child: getViewForIndex(index: model.currentIndex, isUser: isUser, user: model.user),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.white,
-          currentIndex: model.currentIndex,
-          onTap: model.setIndex,
-          items: [
-            BottomNavigationBarItem(
-              label: 'Experience',
-              icon: Image.asset("assets/icons/navbar/experience.png"),
-            ),
-            BottomNavigationBarItem(
-              label: 'Search',
-              icon: Image.asset("assets/icons/navbar/search.png"),
-            ),
-            BottomNavigationBarItem(
-              label: 'Trips',
-              icon: Image.asset("assets/icons/navbar/trips.png"),
-            ),
-            BottomNavigationBarItem(
-              label: 'Saved',
-              icon: Image.asset("assets/icons/navbar/saved.png"),
-            ),
-            BottomNavigationBarItem(
-              label: 'Settings',
-              icon: Image.asset("assets/icons/navbar/settings.png"),
-            ),
-          ],
-        ),
-      ),
+      builder: (context, model, child) {
+        return Scaffold(
+          body: model.isBusy ? const Loader() : PageTransitionSwitcher(
+            duration: const Duration(milliseconds: 300),
+            reverse: model.reverse,
+            transitionBuilder: (
+                Widget child,
+                Animation<double> animation,
+                Animation<double> secondaryAnimation,
+                ) {
+              return SharedAxisTransition(
+                animation: animation,
+                secondaryAnimation: secondaryAnimation,
+                transitionType: SharedAxisTransitionType.horizontal,
+                child: child,
+              );
+            },
+            child: getViewForIndex(index: model.currentIndex, isUser: isUser, user: model.user,),
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            backgroundColor: Colors.white,
+            currentIndex: model.currentIndex,
+            onTap: model.setIndex,
+            items: [
+              BottomNavigationBarItem(
+                label: 'Experience',
+                icon: Image.asset("assets/icons/navbar/experience.png"),
+              ),
+              BottomNavigationBarItem(
+                label: 'Search',
+                icon: Image.asset("assets/icons/navbar/search.png"),
+              ),
+              BottomNavigationBarItem(
+                label: 'Trips',
+                icon: Image.asset("assets/icons/navbar/trips.png"),
+              ),
+              BottomNavigationBarItem(
+                label: 'Saved',
+                icon: Image.asset("assets/icons/navbar/saved.png"),
+              ),
+              BottomNavigationBarItem(
+                label: 'Settings',
+                icon: Image.asset("assets/icons/navbar/settings.png"),
+              ),
+            ],
+          ),
+        );
+      },
       viewModelBuilder: () => HomeViewModel(),
       onModelReady: (model) => model.getUserData(context: context),
     );
