@@ -23,6 +23,12 @@ class SettingsViewModel extends BaseViewModel {
   final _tokenService = locator<TokenService>();
   File? file;
   ProviderModel? provider;
+  bool? isClicked = false;
+
+  updateIsClicked({value}) {
+    isClicked = value;
+    notifyListeners();
+  }
 
   void navigateTo({view}) {
     _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
@@ -60,6 +66,7 @@ class SettingsViewModel extends BaseViewModel {
   }
 
   Future<bool?> logout({context}) async {
+    updateIsClicked(value: true);
     return _authService.logout(context: context, token: await _tokenService.getTokenValue());
   }
 
