@@ -7,7 +7,7 @@ import 'package:goasbar/services/booking_api_service.dart';
 import 'package:goasbar/services/token_service.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
-import 'package:goasbar/ui/views/navbar/experience/experience_view.dart';
+import 'package:goasbar/ui/views/bookings_list/bookings_list_view.dart';
 import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -21,6 +21,7 @@ class CheckoutViewModel extends BaseViewModel {
   final _dialogService = locator<DialogService>();
   final _bookingApiService = locator<BookingApiService>();
   bool? waitUntilFinish = false;
+  bool? isClicked = false;
 
   void navigateTo({view}) {
     _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
@@ -35,16 +36,21 @@ class CheckoutViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+  updateIsClicked({value}) {
+    isClicked = value;
+    notifyListeners();
+  }
+
   Future prepareCheckout({context, UserModel? user, int? bookingId, Map? body, String? cardNumber, String? cardHolder,
     String? expiryMonth, String? expiryYear, String? cVV,}) async {
 
+    updateIsClicked(value: true);
     String? token = await _tokenService.getTokenValue();
     await _bookingApiService.prepareCheckout(context: context, token: token, bookingId: bookingId, body: body,).then((value) {
+      updateIsClicked(value: false);
       if (value != null) {
         pay(context: context, user: user, bookingId: bookingId, token: token, checkoutId: value, cardHolder: cardHolder, cardNumber: cardNumber,
           cVV: cVV, expiryMonth: expiryMonth, expiryYear: "20$expiryYear", brand: body!['payment_method'],);
-      } else {
-
       }
     });
   }
@@ -84,7 +90,7 @@ class CheckoutViewModel extends BaseViewModel {
       if (bookingState!) {
         Navigator.pop(context);
         //TODO go to bookings page
-        _navigationService.clearTillFirstAndShowView(ExperienceView(user: user!, isUser: true,));
+        _navigationService.clearTillFirstAndShowView(BookingsListView(user: user!, ));
       } else {
         Navigator.pop(context);
         showMotionToast(context: context, title: 'Error Payment', msg: "Payment Failed, Please Retry Payment", type: MotionToastType.error);
