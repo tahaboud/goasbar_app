@@ -100,7 +100,10 @@ class TimingView extends HookWidget {
                           ).show(context);
                         } : () => model.launchMaps(lat: experience!.latitude, long: experience!.longitude),
                           timing: model.timingListModel!.results![index], experience: experience!,
-                          showBooking: () => model.showBookingList(),
+                          bookings: model.timingListModel!.results![index].availability != null
+                              ? model.timingListModel!.results![index].capacity! - model.timingListModel!.results![index].availability!
+                              : 0,
+                          showBooking: () => model.showBookingList(timingId: model.timingListModel!.results![index].id, experienceId: experience!.id),
                           deleteTiming: () => model.deleteTiming(experienceId: experience!.id, timingId: model.timingListModel!.results![index].id).then((value) {
                             if (value!) {
                               MotionToast.success(
