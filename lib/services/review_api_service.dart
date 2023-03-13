@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:goasbar/app/app.locator.dart';
+import 'package:goasbar/data_models/review_model.dart';
 import 'package:goasbar/data_models/timing_list_model.dart';
 import 'package:goasbar/data_models/timing_model.dart';
 import 'package:goasbar/services/auth_service.dart';
@@ -13,7 +14,7 @@ class ReviewApiService {
   final _authService = locator<AuthService>();
 
   //TODO add review model
-  Future<TimingModel?> createReview({context, String? token, Map? body, int? bookingId}) async {
+  Future<ReviewModel?> createReview({context, String? token, Map? body, int? bookingId}) async {
     return http.post(
       Uri.parse("$baseUrl/api/review/$bookingId/"),
       headers: {
@@ -22,7 +23,28 @@ class ReviewApiService {
       },
       body: body,
     ).then((response) {
+      print(response.body);
       if (response.statusCode == 201) {
+        return ReviewModel.fromJson(jsonDecode(response.body));
+      } else if (response.statusCode == 401) {
+        _authService.unAuthClearAndRestart(context: context,);
+        return null;
+      } else {
+        return null;
+      }
+    });
+  }
+
+  Future<TimingModel?> updateReview({String? token, Map? body, int? reviewId, context}) async {
+    return http.post(
+      Uri.parse("$baseUrl/api/review/$reviewId/"),
+      headers: {
+        "Accept-Language": "en-US",
+        "Authorization": "Token $token",
+      },
+      body: body,
+    ).then((response) {
+      if (response.statusCode == 200) {
         return TimingModel.fromJson(jsonDecode(response.body));
       } else if (response.statusCode == 401) {
         _authService.unAuthClearAndRestart(context: context,);
@@ -33,43 +55,9 @@ class ReviewApiService {
     });
   }
 
-  Future<TimingModel?> updateTiming({String? token, Map? body, int? timingId}) async {
-    return http.post(
-      Uri.parse("$baseUrl/api/experience/provider/timing/$timingId/"),
-      headers: {
-        "Accept-Language": "en-US",
-        "Authorization": "Token $token",
-      },
-      body: body,
-    ).then((response) {
-      print(response.body);
-      if (response.statusCode == 200) {
-        return TimingModel.fromJson(jsonDecode(response.body));
-      } else {
-        return null;
-      }
-    });
-  }
-
-  Future<TimingListModel?> getTimingsList({String? token, int? experienceId}) async {
-    return http.get(
-      Uri.parse("$baseUrl/api/experience/provider/timing/$experienceId/"),
-      headers: {
-        "Accept-Language": "en-US",
-        "Authorization": "Token $token",
-      },
-    ).then((response) {
-      if (response.statusCode == 200) {
-        return TimingListModel.fromJson(jsonDecode(response.body));
-      } else {
-        return null;
-      }
-    });
-  }
-
-  Future<bool?> deleteTiming({String? token, int? timingId}) async {
+  Future<bool?> deleteReview({String? token, int? reviewId, context}) async {
     return http.delete(
-      Uri.parse("$baseUrl/api/experience/provider/timing/$timingId/"),
+      Uri.parse("$baseUrl/api/review/$reviewId/"),
       headers: {
         "Accept-Language": "en-US",
         "Authorization": "Token $token",
@@ -77,6 +65,9 @@ class ReviewApiService {
     ).then((response) {
       if (response.statusCode == 200) {
         return true;
+      } else if (response.statusCode == 401) {
+        _authService.unAuthClearAndRestart(context: context,);
+        return null;
       } else {
         return false;
       }
