@@ -1,6 +1,7 @@
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/ui/widgets/dot_item.dart';
 import 'package:goasbar/ui/widgets/info_item.dart';
+import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ class BillingInfo extends StatelessWidget {
     this.onTapBack,
     this.showErrorDialog,
     this.onTapSubmit,
+    this.isClicked,
   }) : super(key: key);
 
   final TextEditingController twitter;
@@ -29,6 +31,7 @@ class BillingInfo extends StatelessWidget {
   final Function()? onTapBack;
   final Function? showErrorDialog;
   final Function()? onTapSubmit;
+  final bool? isClicked;
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +122,7 @@ class BillingInfo extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(10)),
               gradient: kMainGradient,
             ),
-            child: const Center(
+            child: isClicked! ? const Loader().center() : const Center(
               child: Text('SUBMIT', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
             ),
           ).gestures(
