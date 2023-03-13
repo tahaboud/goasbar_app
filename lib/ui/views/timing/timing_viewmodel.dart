@@ -67,9 +67,11 @@ class TimingViewModel extends FutureViewModel<dynamic> {
     notifyListeners();
   }
 
-  showBookingList() {
+  showBookingList({int? timingId, int? experienceId}) {
     _dialogService.showCustomDialog(
       variant: DialogType.bookingList,
+      data: timingId,
+      customData: experienceId,
     );
   }
 
