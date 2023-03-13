@@ -1,6 +1,7 @@
 import 'package:goasbar/services/booking_api_service.dart';
 import 'package:goasbar/services/experience_api_service.dart';
 import 'package:goasbar/services/media_service.dart';
+import 'package:goasbar/services/review_api_service.dart';
 import 'package:goasbar/ui/views/home/home_view.dart';
 import 'package:goasbar/ui/views/login/login_view.dart';
 import 'package:goasbar/ui/views/splash/splash_view.dart';
@@ -28,6 +29,7 @@ import 'package:stacked_services/stacked_services.dart';
     LazySingleton(classType: ExperienceApiService),
     LazySingleton(classType: TimingApiService),
     LazySingleton(classType: BookingApiService),
+    LazySingleton(classType: ReviewApiService),
   ],
   routes: [
     MaterialRoute(
