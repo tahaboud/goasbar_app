@@ -20,22 +20,45 @@ class AuthService {
   final _navigationService = locator<NavigationService>();
   final _tokenService = locator<TokenService>();
 
-  Future<dynamic> register({Map? body}) async {
-    return http.post(
-      Uri.parse("$baseUrl/api/auth/register/"),
-      headers: {
-        "Accept-Language": "en-US",
-      },
-      body: body,
-    ).then((response) {
-      if (response.statusCode == 200) {
-        return AuthResponse.fromJson(jsonDecode(response.body));
-      } if (response.statusCode == 429) {
-        return StatusCode.throttled;
-      } else {
-        return null;
-      }
-    });
+  Future<dynamic> register({Map<String, dynamic>? body, bool? hasImage}) async {
+    if (hasImage!) {
+      Dio dio = Dio();
+      FormData formData = FormData.fromMap(body!);
+
+      return dio.post(
+        "$baseUrl/api/auth/register/",
+        options: Options(
+          headers: {
+            "Accept-Language": "en-US",
+          },
+        ),
+        data: formData,
+      ).then((response) {
+        if (response.statusCode == 200) {
+          return AuthResponse.fromJson(response.data);
+        } if (response.statusCode == 429) {
+          return StatusCode.throttled;
+        } else {
+          return null;
+        }
+      });
+    } else {
+      return http.post(
+        Uri.parse("$baseUrl/api/auth/register/"),
+        headers: {
+          "Accept-Language": "en-US",
+        },
+        body: body,
+      ).then((response) {
+        if (response.statusCode == 200) {
+          return AuthResponse.fromJson(jsonDecode(response.body));
+        } if (response.statusCode == 429) {
+          return StatusCode.throttled;
+        } else {
+          return null;
+        }
+      });
+    }
   }
 
   Future<bool> verifyPhoneNumber({String? phoneNumber}) async {
