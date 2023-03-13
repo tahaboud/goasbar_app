@@ -15,7 +15,7 @@ class ProfileBookedDialog extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<ProfileBookedViewModel>.reactive(
+    return ViewModelBuilder<ProfileBookedDialogViewModel>.reactive(
       builder: (context, model, child) {
         return Dialog(
           insetPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
@@ -50,7 +50,7 @@ class ProfileBookedDialog extends HookWidget {
                   ],
                 ),
                 verticalSpaceMedium,
-                const Text("Anas Abdeldjalil", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),).alignment(Alignment.centerLeft),
+                Text("${dialogRequest!.data.firstName} ${dialogRequest!.data.lastName}", style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),).alignment(Alignment.centerLeft),
                 verticalSpaceSmall,
                 const Text("- - - - - - - - - - - - - - - - - - - - - - - - -", style: TextStyle(color: kGrayText, fontSize: 20, fontWeight: FontWeight.bold),).alignment(Alignment.centerLeft),
                 verticalSpaceMedium,
@@ -65,6 +65,7 @@ class ProfileBookedDialog extends HookWidget {
                           children: const [
                             Text("Issue number", style: TextStyle(color: kGrayText, fontWeight: FontWeight.bold),),
                             verticalSpaceTiny,
+                            //TODO issue number
                             Text("12 . 05 . 2022 , 09:00 PM"),
                           ],
                         ),
@@ -74,6 +75,7 @@ class ProfileBookedDialog extends HookWidget {
                           children: const [
                             Text("City", style: TextStyle(color: kGrayText, fontWeight: FontWeight.bold),),
                             verticalSpaceTiny,
+                            //TODO city
                             Text("Jeddah"),
                           ],
                         ),
@@ -83,6 +85,7 @@ class ProfileBookedDialog extends HookWidget {
                           children: const [
                             Text("Email", style: TextStyle(color: kGrayText, fontWeight: FontWeight.bold),),
                             verticalSpaceTiny,
+                            //TODO email
                             Text("Exemple@emailcom"),
                           ],
                         )
@@ -93,19 +96,19 @@ class ProfileBookedDialog extends HookWidget {
                       children: [
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text("Age", style: TextStyle(color: kGrayText, fontWeight: FontWeight.bold),),
+                          children: [
+                            const Text("Age", style: TextStyle(color: kGrayText, fontWeight: FontWeight.bold),),
                             verticalSpaceTiny,
-                            Text("29"),
+                            Text(dialogRequest!.data.age.toString()),
                           ],
                         ),
                         verticalSpaceMedium,
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text("Phone Number", style: TextStyle(color: kGrayText, fontWeight: FontWeight.bold),),
+                          children: [
+                            const Text("Phone Number", style: TextStyle(color: kGrayText, fontWeight: FontWeight.bold),),
                             verticalSpaceTiny,
-                            Text("+213699414965"),
+                            Text(dialogRequest!.data.phoneNumber),
                           ],
                         ),
                         verticalSpaceMedium,
@@ -114,6 +117,7 @@ class ProfileBookedDialog extends HookWidget {
                           children: const [
                             Text("Affiliate", style: TextStyle(color: kGrayText, fontWeight: FontWeight.bold),),
                             verticalSpaceTiny,
+                            //TODO add if affiliate
                             Text("No", style: TextStyle(color: Colors.redAccent),),
                           ],
                         )
@@ -148,7 +152,7 @@ class ProfileBookedDialog extends HookWidget {
                   onTap: () async {
                     model.back();
                     model.back();
-                    model.showNewTimingBottomSheet();
+                    model.showNewTimingBottomSheet(experienceId: dialogRequest!.customData!);
                   },
                 ),
               ],
@@ -156,7 +160,7 @@ class ProfileBookedDialog extends HookWidget {
           ),
         ).height(60 + 62 * 7);
       },
-      viewModelBuilder: () => ProfileBookedViewModel(),
+      viewModelBuilder: () => ProfileBookedDialogViewModel(),
     );
   }
 }
