@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/shared/app_configs.dart';
@@ -46,12 +47,13 @@ class CompleteProfileView extends HookWidget {
                       color: kMainDisabledGray,
                       width: 5,
                     ),
-                    image: const DecorationImage(
-                      image: AssetImage("assets/images/profile_image.png"),
-                    )
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: model.file != null ? FileImage(model.file!) as ImageProvider
+                          : const AssetImage("assets/images/profile_image.png"),
+                    ),
                   ),
-                  // child: Image.asset("assets/images/profile_image.png"),
-                ),
+                ).gestures(onTap: () => model.pickImage()),
                 verticalSpaceMedium,
                 TextField(
                   controller: firstName,
@@ -262,7 +264,8 @@ class CompleteProfileView extends HookWidget {
                       && lastName.text.isNotEmpty && password.text.isNotEmpty
                       && rePassword.text.isNotEmpty && model.birthDate.text.isNotEmpty
                       && model.gender.text.isNotEmpty ? () async {
-                    Map body = {
+
+                    Map<String, dynamic> body = {
                       "username": "${firstName.text}_${lastName.text}",
                       "email": email.text,
                       "password": password.text,
@@ -274,7 +277,17 @@ class CompleteProfileView extends HookWidget {
                       "verification_code": "",
                       "city": model.city,
                     };
-                    model.navigateTo(view: SignUpView(body: body,));
+
+                    if (model.file != null) {
+                      var pickedFile = await MultipartFile.fromFile(
+                        model.file!.path,
+                        filename: model.file!.path.substring(model.file!.absolute.path.lastIndexOf('/') + 1),
+                      );
+
+                      body.addAll({"image": pickedFile,});
+                    }
+
+                    model.navigateTo(view: SignUpView(body: body, hasImage: model.hasImage));
                   } : () {},
                 ),
               ],
