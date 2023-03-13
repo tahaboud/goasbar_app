@@ -1,5 +1,5 @@
 import 'package:goasbar/ui/widgets/dialogs/available_places_dialog.dart';
-import 'package:goasbar/ui/widgets/dialogs/booking_list_dialog.dart';
+import 'package:goasbar/ui/widgets/dialogs/booking_list/booking_list_dialog.dart';
 import 'package:goasbar/ui/widgets/dialogs/error_dialog.dart';
 import 'package:goasbar/ui/widgets/dialogs/profile_booked/profile_booked_dialog.dart';
 import 'package:goasbar/ui/widgets/dialogs/selection_custom_dialog.dart';
