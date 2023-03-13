@@ -3,6 +3,7 @@ import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
+import 'package:goasbar/ui/views/bookings_list/bookings_list_view.dart';
 import 'package:goasbar/ui/views/edit_profile/edit_profile_view.dart';
 import 'package:goasbar/ui/views/login/login_view.dart';
 import 'package:goasbar/ui/views/navbar/settings/settings_viewmodel.dart';
@@ -110,6 +111,7 @@ class SettingsView extends HookWidget {
                     item1Parameter: isUser! ? user!.isProvider! ? 'Update Info' : "Apply now" : "Apply now",
                     onTapParameter: isUser! ? user!.isProvider! ? () => model.showGeneralInfoBottomSheet() : () => model.showGeneralInfoBottomSheet() : () {},
                     item2Image: 'security',
+                    additionalParameterOnTap: () => model.navigateTo(view: BookingsListView(user: user!,)),
                     item2Title: 'Security',
                     item2Parameter: "",
                     onItem1Tap: !isUser! ? () {} : user!.isProvider! ? () => model.navigateTo(view: const PostExperienceView()) : () => model.showGeneralInfoBottomSheet(),
@@ -118,7 +120,7 @@ class SettingsView extends HookWidget {
                   ),
                   verticalSpaceRegular,
                   SettingsCard(
-                    onTapPaymentParameter: () => model.navigateTo(view: const PaymentMethodView()),
+                    additionalParameterOnTap: () => model.navigateTo(view: const PaymentMethodView()),
                     item1Image: 'support',
                     item1Title: 'Help & Support',
                     item1Parameter: "",
@@ -136,9 +138,10 @@ class SettingsView extends HookWidget {
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                       color: Colors.redAccent,
                     ),
-                    child: const Text('Logout', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
+                    child: model.isClicked! ? const Loader().center() : const Text('Logout', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
                   ).gestures(onTap: () {
                     model.logout(context: context).then((value) {
+                      model.updateIsClicked(value: false);
                       if (value!) {
                         MotionToast.success(
                           title: const Text("Logout Success"),
