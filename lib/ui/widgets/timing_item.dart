@@ -11,6 +11,7 @@ class TimingItem extends StatelessWidget {
     this.showBooking,
     this.experience,
     this.timing,
+    this.bookings,
     this.launchMaps,
     this.deleteTiming,
   }) : super(key: key);
@@ -20,6 +21,7 @@ class TimingItem extends StatelessWidget {
   final Function()? deleteTiming;
   final ExperienceResults? experience;
   final TimingResponse? timing;
+  final int? bookings;
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +74,7 @@ class TimingItem extends StatelessWidget {
                 children: [
                   Image.asset("assets/icons/booking_places.png", color: kMainColor1),
                   horizontalSpaceSmall,
-                  const Text("05 Booking", style: TextStyle(color: kGrayText),)
+                  Text("$bookings Booking", style: const TextStyle(color: kGrayText),)
                 ],
               ),
             ).gestures(onTap: showBooking),
