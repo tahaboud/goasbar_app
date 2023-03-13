@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/auth_response.dart';
 import 'package:goasbar/services/auth_service.dart';
@@ -26,10 +27,12 @@ class SignUpOtpViewModel extends BaseViewModel {
     _navigationService.clearStackAndShowView(view,);
   }
 
-  Future<StatusCode> register({Map? body}) async {
+  Future<StatusCode> register({Map<String, dynamic>? body, bool? hasImage}) async {
     dynamic response = await _authService.register(
+      hasImage: hasImage,
       body: body,
     );
+
     if (response == null) {
       return StatusCode.other;
     } else if (response == StatusCode.throttled) {
