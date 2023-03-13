@@ -29,6 +29,12 @@ class EditProfileViewModel extends FutureViewModel<dynamic> {
   final _tokenService = locator<TokenService>();
   File? file;
   UserModel? user;
+  bool? isClicked = false;
+
+  updateIsClicked({value}) {
+    isClicked = value;
+    notifyListeners();
+  }
 
   void changeObscure() {
     isObscure = !isObscure;
@@ -105,6 +111,8 @@ class EditProfileViewModel extends FutureViewModel<dynamic> {
   }
 
   Future<dynamic> updateUserData({Map<String, dynamic>? body, context}) async {
+    updateIsClicked(value: true);
+
     String token = await _tokenService.getTokenValue();
     return _authService.updateUserData(context: context, token: token, body: body,).then((value) {
       if (value != null) {
