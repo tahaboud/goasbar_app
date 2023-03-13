@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:goasbar/app/app.locator.dart';
+import 'package:goasbar/data_models/provider_public_experience_model.dart';
 import 'package:goasbar/data_models/public_provider_model.dart';
 import 'package:goasbar/services/auth_service.dart';
 import 'package:goasbar/shared/app_configs.dart';
@@ -59,6 +60,21 @@ class ProviderApiService {
     ).then((response) {
       if (response.statusCode == 200) {
         return PublicProviderModel.fromJson(jsonDecode(response.body));
+      } else {
+        return null;
+      }
+    });
+  }
+
+  Future<ProviderPublicExperienceModel?> getProviderPublicExperiences({int? providerId}) async {
+    return http.get(
+      Uri.parse("$baseUrl/api/experience/provider/public/$providerId/"),
+      headers: {
+        "Accept-Language": "en-US",
+      },
+    ).then((response) {
+      if (response.statusCode == 200) {
+        return ProviderPublicExperienceModel.fromJson(jsonDecode(response.body));
       } else {
         return null;
       }
