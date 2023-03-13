@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/services/auth_service.dart';
