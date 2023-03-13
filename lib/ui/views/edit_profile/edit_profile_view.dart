@@ -4,6 +4,7 @@ import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/edit_profile/edit_profile_viewmodel.dart';
+import 'package:goasbar/ui/views/home/home_viewmodel.dart';
 import 'package:goasbar/ui/widgets/info_item.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:motion_toast/motion_toast.dart';
@@ -261,7 +262,7 @@ class EditProfileView extends HookWidget {
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                           gradient: kMainGradient,
                         ),
-                        child: const Text('SUBMIT', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
+                        child: model.isClicked! ? const Loader().center() : const Text('SUBMIT', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
                       ).gestures(
                         onTap: firstName.text != model.user!.firstName!
                             || lastName.text != model.user!.lastName!
@@ -287,7 +288,8 @@ class EditProfileView extends HookWidget {
                           }
 
                           if (body != {}) {
-                            model.updateUserData(context: context, body: body,).then((value) {
+                            model.updateUserData(context: context, body: body,).then((value) async {
+                              model.updateIsClicked(value: false);
                               if (value != null) {
                                 model.back();
                               } else {
