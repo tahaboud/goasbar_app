@@ -25,6 +25,12 @@ class BeHostedInfoViewModel extends FutureViewModel<ProviderModel?> {
   File? file;
   int pageIndex = 1;
   ProviderModel? provider;
+  bool? isClicked = false;
+
+  updateIsClicked({value}) {
+    isClicked = value;
+    notifyListeners();
+  }
 
   void navigateTo({view}) {
     _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
@@ -96,6 +102,7 @@ class BeHostedInfoViewModel extends FutureViewModel<ProviderModel?> {
   }
 
   Future<ProviderModel?> beHostedProvider({Map? body, context}) async {
+    updateIsClicked(value: true);
     String? token = await _tokenService.getTokenValue();
     provider = await _providerApiService.createProvider(context: context, token: token, body: body,);
 
