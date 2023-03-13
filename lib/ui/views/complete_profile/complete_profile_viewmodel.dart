@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/enum/dialog_type.dart';
+import 'package:goasbar/services/media_service.dart';
 import 'package:goasbar/services/validation_service.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:stacked/stacked.dart';
@@ -16,6 +19,17 @@ class CompleteProfileViewModel extends BaseViewModel {
   final _dialogService = locator<DialogService>();
   final _validationService = locator<ValidationService>();
   String? city = "RIYADH";
+  File? file;
+  bool? hasImage = false;
+  final _mediaService = locator<MediaService>();
+
+  Future pickImage () async {
+    file = await _mediaService.getImage();
+    if (file != null) {
+      hasImage = true;
+      notifyListeners();
+    }
+  }
 
   void changeObscure() {
     isObscure = !isObscure;
