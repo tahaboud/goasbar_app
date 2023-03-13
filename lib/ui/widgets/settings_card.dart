@@ -13,7 +13,7 @@ class SettingsCard extends StatelessWidget {
     this.item2Parameter,
     this.item2Title,
     this.onTapParameter,
-    this.onTapPaymentParameter,
+    this.additionalParameterOnTap,
     this.onItem1Tap,
     this.onItem2Tap,
     this.isUser,
@@ -27,7 +27,7 @@ class SettingsCard extends StatelessWidget {
   final Function()? onTapParameter;
   final Function()? onItem1Tap;
   final Function()? onItem2Tap;
-  final Function()? onTapPaymentParameter;
+  final Function()? additionalParameterOnTap;
   final bool? isUser;
 
   @override
@@ -48,8 +48,10 @@ class SettingsCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          isUser! ? SettingsCardItem(image: "wallet", title: "Add payment method", parameter: "Add more", onTapParameter: onTapPaymentParameter,) : Container(),
+          isUser! ? SettingsCardItem(image: "wallet", title: "Add payment method", parameter: "Add more", onTapParameter: additionalParameterOnTap,) : Container(),
           isUser! ? verticalSpaceRegular : Container(),
+          item1Image == "hosted" ? const SettingsCardItem(image: "hosted", title: "Bookings List", parameter: "",).gestures(onTap: additionalParameterOnTap) : Container(),
+          item1Image == "hosted" ? verticalSpaceRegular : Container(),
           SettingsCardItem(image: item1Image, title: item1Title, parameter: item1Parameter, onTapParameter: onTapParameter).gestures(onTap: onItem1Tap),
           verticalSpaceRegular,
           SettingsCardItem(image: item2Image, title: item2Title, parameter: item2Parameter).gestures(onTap: onItem2Tap),
