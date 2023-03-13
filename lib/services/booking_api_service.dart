@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/booking_model.dart';
+import 'package:goasbar/data_models/bookings_list_model.dart';
+import 'package:goasbar/data_models/provider_timing_booking.dart';
 import 'package:goasbar/services/auth_service.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
@@ -43,7 +45,6 @@ class BookingApiService {
       },
       body: body,
     ).then((response) {
-      print(jsonDecode(response.body));
       if (response.statusCode == 200) {
         return jsonDecode(response.body)['checkoutId'];
       } else if (response.statusCode == 401) {
@@ -68,6 +69,65 @@ class BookingApiService {
         if (jsonDecode(response.body)['response'] == "Booking is confirmed") {
           return true;
         }
+      } else if (response.statusCode == 401) {
+        _authService.unAuthClearAndRestart(context: context,);
+        return null;
+      } else {
+        return false;
+      }
+    });
+  }
+
+  Future<BookingsListModel?> getUserBookings({context, String? token}) async {
+    return http.get(
+      Uri.parse("$baseUrl/api/booking/"),
+      headers: {
+        "Accept-Language": "en-US",
+        "Authorization": "Token $token",
+      },
+    ).then((response) {
+      if (response.statusCode == 200) {
+        return BookingsListModel.fromJson(jsonDecode(response.body));
+      } else if (response.statusCode == 401) {
+        _authService.unAuthClearAndRestart(context: context,);
+        return null;
+      } else {
+        return null;
+      }
+    });
+  }
+
+  Future<ProviderTimingBooking?> getProviderTimingBookings({context, String? token, int? timingId}) async {
+    print(timingId);
+    return http.get(
+      Uri.parse("$baseUrl/api/booking/provider/$timingId/"),
+      headers: {
+        "Accept-Language": "en-US",
+        "Authorization": "Token $token",
+      },
+    ).then((response) {
+      print(response.body);
+      if (response.statusCode == 200) {
+        return ProviderTimingBooking.fromJson(jsonDecode(response.body));
+      } else if (response.statusCode == 401) {
+        _authService.unAuthClearAndRestart(context: context,);
+        return null;
+      } else {
+        return null;
+      }
+    });
+  }
+
+  Future<bool?> deleteBooking({String? token, int? bookingId, context}) async {
+    return http.delete(
+      Uri.parse("$baseUrl/api/booking/$bookingId/"),
+      headers: {
+        "Accept-Language": "en-US",
+        "Authorization": "Token $token",
+      },
+    ).then((response) {
+      if (response.statusCode == 200) {
+        return true;
       } else if (response.statusCode == 401) {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
