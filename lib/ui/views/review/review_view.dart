@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:goasbar/data_models/review_model.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/review/review_viewmodel.dart';
+import 'package:goasbar/ui/widgets/loader.dart';
+import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -135,13 +138,25 @@ class ReviewView extends HookWidget {
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   gradient: kMainGradient,
                 ),
-                child: const Center(
+                child: model.isClicked! ? const Loader().center() : const Center(
                   child: Text('Submit', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
                 ),
               ).gestures(
                 onTap: () {
-                  // TODO create review
-                  // model.;
+                  Map? body = {
+                    "rate": model.rating.toString(),
+                  };
+
+                  if (comment.text.isNotEmpty) body.addAll({'comment': comment.text});
+
+                  model.createReview(context: context, bookingId: request.customData, body: body).then((value) {
+                    model.updateIsClicked(value: false);
+                    if (value is ReviewModel) {
+                      completer(SheetResponse(confirmed: true));
+                    } else {
+                      showMotionToast(context: context, title: 'Error', msg: 'An error occurred while sending the rate, please try again', type: MotionToastType.error);
+                    }
+                  });
                   completer(SheetResponse(confirmed: true));
                 },
               ),
