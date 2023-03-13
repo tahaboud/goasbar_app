@@ -208,11 +208,11 @@ class AddExperienceView extends HookWidget {
                       children: categories.map((category) => model.isBusy ? const Loader().center() : Container(
                         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                         child: Text(category, style: TextStyle(
-                          color:  model.selectedExperienceCategory == category
+                          color: model.selectedExperienceCategory != null && model.selectedExperienceCategory!.contains(category)
                               ? Colors.white : Colors.black,
                         ),).center(),
                       ).backgroundGradient(
-                          model.selectedExperienceCategory == category
+                          model.selectedExperienceCategory != null && model.selectedExperienceCategory!.contains(category)
                               ? kMainGradient : kDisabledGradient, animate: true)
                           .clipRRect(all: 8,)
                           .card(margin: const EdgeInsets.only(right: 12),)
@@ -1103,7 +1103,7 @@ class AddExperienceView extends HookWidget {
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                       gradient: kMainGradient,
                     ),
-                    child: const Center(
+                    child: model.isClicked! ? const Loader().center() : const Center(
                       child: Text('PUBLISH', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
                     ),
                   ).gestures(
@@ -1151,7 +1151,7 @@ class AddExperienceView extends HookWidget {
 
                             if (duration.text.isNotEmpty) body.addAll({'duration': duration.text,});
                             if (notes.text.isNotEmpty) body.addAll({'location_notes': notes.text,});
-                            if (model.selectedExperienceCategory != null) body.addAll({'categories': [model.selectedExperienceCategory],});
+                            if (model.selectedExperienceCategory != []) body.addAll({'categories': model.selectedExperienceCategory,});
                             if (link.text.isNotEmpty) body.addAll({'youtube_video': link.text});
                             body.addAll({'provided_goods': model.providedGoodsText});
                             body.addAll({'requirements': model.requirementsText});
@@ -1169,6 +1169,7 @@ class AddExperienceView extends HookWidget {
                                 hasImages: model.isProfileImageFromLocal! || model.isHasAdditionalImagesFromLocal!,
                                 context: context, body: body, experienceId: request.data.id,
                               ).then((value) {
+                                model.updateIsClicked(value: false);
                                 if (value != null) {
                                   model.showPublishSuccessBottomSheet().then((value) {
                                     completer(SheetResponse(confirmed: true));
@@ -1215,7 +1216,7 @@ class AddExperienceView extends HookWidget {
 
                             if (duration.text.isNotEmpty) body.addAll({'duration': duration.text,});
                             if (notes.text.isNotEmpty) body.addAll({'location_notes': notes.text,});
-                            if (model.selectedExperienceCategory != null) body.addAll({'categories': model.selectedExperienceCategory,});
+                            if (model.selectedExperienceCategory != []) body.addAll({'categories': model.selectedExperienceCategory,});
                             if (link.text.isNotEmpty) body.addAll({'youtube_video': link.text});
                             body.addAll({'provided_goods': model.providedGoodsText});
                             body.addAll({'requirements': model.requirementsText});
@@ -1225,6 +1226,7 @@ class AddExperienceView extends HookWidget {
                             if (addPeople.text.isNotEmpty) timingBody.addAll({'capacity': addPeople.text});
 
                             model.createExperience(context: context, body: body, timingBody: timingBody).then((value) {
+                              model.updateIsClicked(value: false);
                               if (value != null) {
                                 model.showPublishSuccessBottomSheet().then((value) {
                                   completer(SheetResponse(confirmed: true));
