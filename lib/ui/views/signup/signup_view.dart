@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/faqs/faqs_view.dart';
-import 'package:goasbar/ui/views/login/login_view.dart';
 import 'package:goasbar/ui/views/signup/signup_viewmodel.dart';
 import 'package:goasbar/ui/views/signup_otp/signup_otp_view.dart';
 import 'package:motion_toast/motion_toast.dart';
@@ -11,8 +10,9 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class SignUpView extends HookWidget {
-  const SignUpView({Key? key, this.body}) : super(key: key);
-  final Map? body;
+  const SignUpView({Key? key, this.body, this.hasImage}) : super(key: key);
+  final Map<String, dynamic>? body;
+  final bool? hasImage;
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +101,7 @@ class SignUpView extends HookWidget {
                 onTap: phone.text.isNotEmpty ? () {
                   model.verifyPhoneNumber(phoneNumber: "+966${phone.text}").then((value) {
                     if (value) {
-                      model.navigateTo(view: SignUpOtpView(phone: phone.text, body: body,));
+                      model.navigateTo(view: SignUpOtpView(phone: phone.text, body: body, hasImage: hasImage));
                     } else {
                       MotionToast.error(
                         title: const Text("Verification Code Not Sent"),
