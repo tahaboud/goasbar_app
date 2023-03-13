@@ -104,6 +104,7 @@ class BeHostedView extends HookWidget {
               bankName: bankName,
               bankAccountNumber: bankAccountNumber,
               iban: iban,
+              isClicked: model.isClicked!,
               onTapBack: () => model.back(),
               showErrorDialog: () => model.showErrorDialog(),
               onTapSubmit: () {
@@ -146,6 +147,7 @@ class BeHostedView extends HookWidget {
                   }
 
                   model.beHostedProvider(context: context, body: body,).then((value) {
+                    model.updateIsClicked(value: false);
                     if (value != null) {
                       model.back();
                     } else {
