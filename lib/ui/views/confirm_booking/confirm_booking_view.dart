@@ -394,7 +394,7 @@ class ConfirmBookingView extends HookWidget {
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                     gradient: kMainGradient,
                   ),
-                  child: const Text('Continue with payment', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
+                  child: model.isClicked! ? const Loader().center() :const Text('Continue with payment', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
                 ).gestures(
                   onTap:  () {
                     bool? isOkay = true;
@@ -440,8 +440,8 @@ class ConfirmBookingView extends HookWidget {
                       if (affiliateSet.isNotEmpty) body.addAll({"affiliate_set": affiliateSet,});
 
                       if (isOkay!) {
-                        model.createBooking(context: context, body: body,
-                            timingId: model.timingListModel!.results![model.selectedIndex!].id).then((value) {
+                        model.createBooking(context: context, body: body, timingId: model.timingListModel!.results![model.selectedIndex!].id).then((value) {
+                          model.updateIsClicked(value: false);
                           if (value != null) {
                             model.navigateTo(view: CheckoutView(experience: experience, user: user,));
                           } else {
