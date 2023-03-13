@@ -11,9 +11,10 @@ import 'package:pinput/pinput.dart';
 import 'package:goasbar/enum/status_code.dart';
 
 class SignUpOtpView extends HookWidget {
-  const SignUpOtpView({Key? key, this.phone, this.body}) : super(key: key);
+  const SignUpOtpView({Key? key, this.phone, this.body, this.hasImage}) : super(key: key);
   final String? phone;
-  final Map? body;
+  final bool? hasImage;
+  final Map<String, dynamic>? body;
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +67,7 @@ class SignUpOtpView extends HookWidget {
                       body!["phone_number"] = "+966$phone";
                       body!["verification_code"] = code;
 
-                      model.register(body: body,).then((value) {
+                      model.register(body: body!, hasImage: hasImage).then((value) {
                         if (value == StatusCode.throttled) {
                           MotionToast.error(
                             title: const Text("Register Failed"),
