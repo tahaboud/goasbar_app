@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "59603340838",
+    "firebase_url": "https://asbar-49052-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "asbar-49052",
+    "storage_bucket": "asbar-49052.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:59603340838:android:e840927f8209419071e0e7",
+        "android_client_info": {
+          "package_name": "com.goasbar.goAsbar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "59603340838-dlh2lr090in5hrr340r54ujbp8eegqfi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7WqF8Ec0871gynwuVpdibYLeiCpCm9UI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "59603340838-dlh2lr090in5hrr340r54ujbp8eegqfi.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "59603340838-kpf3hb640jt3dg1qlftg5s64ctqgqb0t.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.goasbar.goAsbar"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
