@@ -40,7 +40,7 @@ class ExperienceView extends HookWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Image.asset("assets/icons/messages.png",),
-                    ).gestures(onTap: () => model.navigateTo(view: const MessagesNotificationsView()),),
+                    ).gestures(onTap: () => model.navigateTo(view: MessagesNotificationsView(user: user!)),),
                     horizontalSpaceSmall,
                   ],
                 ),
