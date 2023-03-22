@@ -6,6 +6,7 @@ import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
+import 'package:goasbar/ui/views/chat_with_agency/chat_with_agency_view.dart';
 import 'package:goasbar/ui/views/confirm_booking/confirm_booking_view.dart';
 import 'package:goasbar/ui/views/login/login_view.dart';
 import 'package:goasbar/ui/views/provider_profile/provider_profile_view.dart';
@@ -222,7 +223,7 @@ class TripDetailView extends HookWidget {
                       horizontalSpaceSmall,
                       const Text('Have great communication',),
                       const Spacer(),
-                      const Text('Start Chat', style: TextStyle(color: kMainColor1,),)
+                      const Text('Start Chat', style: TextStyle(color: kMainColor1,),).gestures(onTap: () => model.navigateTo(view: ChatWithAgencyView(providerId: experience!.providerId, userId: user!.id))),
                     ],
                   ).padding(horizontal: 20),
                   verticalSpaceRegular,
