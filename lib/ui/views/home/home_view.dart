@@ -10,6 +10,7 @@ import 'package:goasbar/ui/views/navbar/trips/trips_view.dart';
 import 'package:stacked/stacked.dart';
 import 'package:animations/animations.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
+import 'package:styled_widget/styled_widget.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({Key? key, this.isUser, this.index = 0}) : super(key: key);
@@ -21,7 +22,7 @@ class HomeView extends StatelessWidget {
     return ViewModelBuilder<HomeViewModel>.reactive(
       builder: (context, model, child) {
         return Scaffold(
-          body: model.isBusy ? const Loader() : PageTransitionSwitcher(
+          body: !model.thereIsConnection! ? const Text('No Internet Connection, please check your internet').center() : model.isBusy ? const Loader() : PageTransitionSwitcher(
             duration: const Duration(milliseconds: 300),
             reverse: model.reverse,
             transitionBuilder: (
@@ -69,7 +70,7 @@ class HomeView extends StatelessWidget {
         );
       },
       viewModelBuilder: () => HomeViewModel(),
-      onModelReady: (model) => model.getUserData(context: context),
+      onModelReady: (model) => model.getConnectivityStatus(context: context),
     );
   }
 
