@@ -64,12 +64,15 @@ class MessagesView extends HookWidget {
                 for (var chat in chats) {
                   Map<String, dynamic> data = chat.data()! as Map<String, dynamic>;
 
+                  int? providerId = user!.id == data["members"][1] ? int.parse(data["members"][0]) : int.parse(data["members"][1]);
+                  String? providerName = user!.id == data["members"][1] ? data["member_names"][0] : data["member_names"][1];
+
                   messagesItems.add(
                     ChatItem(
                       isUser: !user!.isProvider!,
-                      receiverName: user!.id == data["members"][1] ? data["member_names"][0] : data["member_names"][1],
-                      receiverId: user!.id == data["members"][1] ? int.parse(data["members"][0]) : int.parse(data["members"][1]),
-                      onTap: () => model.navigateTo(view: const ChatWithAgencyView()),
+                      receiverName: providerName,
+                      receiverId: providerId,
+                      onTap: () => model.navigateTo(view: ChatWithAgencyView(userId: user!.id, providerId: providerId, providerName: providerName,)),
                     ),
                   );
                 }
