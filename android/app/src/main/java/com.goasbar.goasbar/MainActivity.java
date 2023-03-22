@@ -1,4 +1,4 @@
-package com.goasbar.goasbar;
+package com.goasbar.goAsbar;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -164,7 +164,7 @@ public class MainActivity extends FlutterActivity implements ITransactionListene
 
             try {
                 PaymentParams paymentParams = new PaymentParams(checkoutid,"STC_PAY");
-                paymentParams.setShopperResultUrl("com.goasbar.goasbar://result");
+                paymentParams.setShopperResultUrl("com.goasbar.goAsbar://result");
                 Transaction transaction = new Transaction(paymentParams);
 
                 paymentProvider.setThreeDSWorkflowListener(new ThreeDSWorkflowListener() {
@@ -189,7 +189,7 @@ public class MainActivity extends FlutterActivity implements ITransactionListene
                 try {
                     TokenPaymentParams paymentParams = new TokenPaymentParams(checkoutid, token, " ",cvv);
 
-                    paymentParams.setShopperResultUrl("com.goasbar.goasbar://result");
+                    paymentParams.setShopperResultUrl("com.goasbar.goAsbar://result");
 
                     Transaction transaction = new Transaction(paymentParams);
 
@@ -259,7 +259,7 @@ public class MainActivity extends FlutterActivity implements ITransactionListene
                             cvv
                     );
 
-                    paymentParams.setShopperResultUrl("com.goasbar.goasbar://result");
+                    paymentParams.setShopperResultUrl("com.goasbar.goAsbar://result");
 
                     Transaction transaction = new Transaction(paymentParams);
 
@@ -375,7 +375,7 @@ public class MainActivity extends FlutterActivity implements ITransactionListene
 
         super.onNewIntent(intent);
 
-        if (intent.getScheme().equals("com.goasbar.goasbar")) {
+        if (intent.getScheme().equals("com.goasbar.goAsbar")) {
 
             success("success");
 
