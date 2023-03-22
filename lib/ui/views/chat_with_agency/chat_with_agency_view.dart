@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/chat_with_agency/chat_with_agency_viewmodel.dart';
+import 'package:goasbar/ui/views/stream_messages/stream_messages_view.dart';
+import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class ChatWithAgencyView extends HookWidget {
-  const ChatWithAgencyView({Key? key}) : super(key: key);
+  const ChatWithAgencyView({Key? key, this.userId, this.providerId}) : super(key: key);
+  final int? providerId;
+  final int? userId;
 
   @override
   Widget build(BuildContext context) {
@@ -36,170 +40,14 @@ class ChatWithAgencyView extends HookWidget {
                 ),
                 verticalSpaceMedium,
                 Expanded(
-                  child: ListView(
-                    physics: const BouncingScrollPhysics(),
-                    shrinkWrap: true,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Image.asset("assets/images/user.png"),
-                          horizontalSpaceSmall,
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                child: const Text("Hello sir").padding(horizontal: 20, vertical: 10),
-                              ).decorated(
-                                color: kAgencyColor,
-                                borderRadius: const BorderRadius.only(
-                                  topRight: Radius.circular(20),
-                                  bottomRight: Radius.circular(20),
-                                  topLeft: Radius.circular(5),
-                                  bottomLeft: Radius.circular(5),
-                                ),
-                              ),
-                              verticalSpaceTiny,
-                              SizedBox(
-                                child: const Text("Did you arrive in my Home address").padding(horizontal: 20, vertical: 10),
-                              ).decorated(
-                                color: kAgencyColor,
-                                borderRadius: const BorderRadius.only(
-                                  topRight: Radius.circular(20),
-                                  bottomRight: Radius.circular(20),
-                                  topLeft: Radius.circular(5),
-                                  bottomLeft: Radius.circular(20),
-                                ),
-                              ),
-                              verticalSpaceTiny,
-                              Row(
-                                children: [
-                                  const Text('15 m', style: TextStyle(color: kMainGray, fontSize: 13),),
-                                  horizontalSpaceSmall,
-                                  Image.asset("assets/icons/sms.png"),
-                                ],
-                              ),
-                              verticalSpaceSmall,
-                            ],
-                          )
-                        ],
-                      ),
-
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          SizedBox(
-                            child: const Text("Hello sir", style: TextStyle(color: Colors.white),).padding(horizontal: 20, vertical: 10),
-                          ).decorated(
-                            color: kMainColor1,
-                            borderRadius: const BorderRadius.only(
-                              topRight: Radius.circular(20),
-                              bottomRight: Radius.circular(5),
-                              topLeft: Radius.circular(20),
-                              bottomLeft: Radius.circular(20),
-                            ),
-                          ),
-                          verticalSpaceTiny,
-                          SizedBox(
-                            child: const Text("Did you arrive in my Home address", style: TextStyle(color: Colors.white),).padding(horizontal: 20, vertical: 10),
-                          ).decorated(
-                            color: kMainColor1,
-                            borderRadius: const BorderRadius.only(
-                              topRight: Radius.circular(5),
-                              bottomRight: Radius.circular(5),
-                              topLeft: Radius.circular(20),
-                              bottomLeft: Radius.circular(20),
-                            ),
-                          ),
-                          verticalSpaceTiny,
-                          const Text('Seen . 27m', style: TextStyle(color: kMainGray, fontSize: 13),),
-                          verticalSpaceSmall,
-                        ],
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Image.asset("assets/images/user.png"),
-                          horizontalSpaceSmall,
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                child: const Text("Hello sir").padding(horizontal: 20, vertical: 10),
-                              ).decorated(
-                                color: kAgencyColor,
-                                borderRadius: const BorderRadius.only(
-                                  topRight: Radius.circular(20),
-                                  bottomRight: Radius.circular(20),
-                                  topLeft: Radius.circular(5),
-                                  bottomLeft: Radius.circular(5),
-                                ),
-                              ),
-                              verticalSpaceTiny,
-                              SizedBox(
-                                child: const Text("Did you arrive in my Home address").padding(horizontal: 20, vertical: 10),
-                              ).decorated(
-                                color: kAgencyColor,
-                                borderRadius: const BorderRadius.only(
-                                  topRight: Radius.circular(20),
-                                  bottomRight: Radius.circular(20),
-                                  topLeft: Radius.circular(5),
-                                  bottomLeft: Radius.circular(20),
-                                ),
-                              ),
-                              verticalSpaceTiny,
-                              Row(
-                                children: [
-                                  const Text('15 m', style: TextStyle(color: kMainGray, fontSize: 13),),
-                                  horizontalSpaceSmall,
-                                  Image.asset("assets/icons/sms.png"),
-                                ],
-                              ),
-                              verticalSpaceSmall,
-                            ],
-                          ),
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          SizedBox(
-                            child: const Text("Hello sir", style: TextStyle(color: Colors.white),).padding(horizontal: 20, vertical: 10),
-                          ).decorated(
-                            color: kMainColor1,
-                            borderRadius: const BorderRadius.only(
-                              topRight: Radius.circular(20),
-                              bottomRight: Radius.circular(5),
-                              topLeft: Radius.circular(20),
-                              bottomLeft: Radius.circular(20),
-                            ),
-                          ),
-                          verticalSpaceTiny,
-                          SizedBox(
-                            child: const Text("Did you arrive in my Home address", style: TextStyle(color: Colors.white),).padding(horizontal: 20, vertical: 10),
-                          ).decorated(
-                            color: kMainColor1,
-                            borderRadius: const BorderRadius.only(
-                              topRight: Radius.circular(5),
-                              bottomRight: Radius.circular(5),
-                              topLeft: Radius.circular(20),
-                              bottomLeft: Radius.circular(20),
-                            ),
-                          ),
-                          verticalSpaceTiny,
-                          const Text('Seen . 27m', style: TextStyle(color: kMainGray, fontSize: 13),),
-                          verticalSpaceSmall,
-                        ],
-                      ),
-                    ],
-                  ),
+                  child: model.isBusy ? const Loader().center() : StreamMessagesView(chatId: model.chatTokenProvider!.chatId!, providerId: providerId),
                 ),
                 TextField(
                   controller: message,
                   decoration: InputDecoration(
                     hintText: 'Type Something...',
                     hintStyle: const TextStyle(fontSize: 14),
-                    suffixIcon: Image.asset("assets/icons/import.png").gestures(onTap: () => model.upload()),
+                    suffixIcon: Image.asset("assets/icons/import.png").gestures(onTap: () => model.sendMessage(providerId: providerId!.toString(), message: message, userId: userId!.toString())),
                     icon: Image.asset("assets/icons/file.png").gestures(onTap: () => model.file()),
                     fillColor: kTextFiledGrayColor,
                     filled: true,
@@ -217,7 +65,70 @@ class ChatWithAgencyView extends HookWidget {
           ),
         ),
       ),
-      viewModelBuilder: () => ChatWithAgencyViewModel(),
+      viewModelBuilder: () => ChatWithAgencyViewModel(context: context, providerId: providerId),
+    );
+  }
+}
+
+class SeenWidgetSender extends StatelessWidget {
+  const SeenWidgetSender({
+    Key? key,
+    this.time,
+  }) : super(key: key);
+  final String? time;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Text(time!, style: const TextStyle(color: kMainGray, fontSize: 13),),
+        horizontalSpaceSmall,
+        Image.asset("assets/icons/sms.png"),
+      ],
+    );
+  }
+}
+
+class SeenWidgetMe extends StatelessWidget {
+  const SeenWidgetMe({
+    Key? key,
+    this.time,
+  }) : super(key: key);
+  final String? time;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(time!, style: const TextStyle(color: kMainGray, fontSize: 13),).padding(horizontal: 5);
+  }
+}
+
+class MessageBubble extends StatelessWidget {
+  const MessageBubble({
+    Key? key,
+    this.message,
+    this.isSender,
+  }) : super(key: key);
+  final String? message;
+  final bool? isSender;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: screenWidthPercentage(context, percentage: 0.8),
+      child: Text(
+        message!,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(color: isSender! ? Colors.black : Colors.white),
+        textAlign: isSender! ? TextAlign.left : TextAlign.right,
+      ).padding(horizontal: 20, vertical: 10),
+    ).decorated(
+      color: isSender! ? kAgencyColor : kMainColor1,
+      borderRadius: BorderRadius.only(
+        topRight: isSender! ? const Radius.circular(20) : const Radius.circular(5),
+        bottomRight: isSender! ? const Radius.circular(20) : const Radius.circular(5),
+        topLeft: isSender! ? const Radius.circular(5) : const Radius.circular(20),
+        bottomLeft: isSender! ? const Radius.circular(5) : const Radius.circular(20),
+      ),
     );
   }
 }
