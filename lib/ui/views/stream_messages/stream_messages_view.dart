@@ -2,8 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
-import 'package:goasbar/ui/views/chat_with_agency/chat_with_agency_view.dart';
 import 'package:goasbar/ui/views/stream_messages/stream_messages_viewmodel.dart';
+import 'package:goasbar/ui/widgets/message_bubble.dart';
+import 'package:goasbar/ui/widgets/seen_widget.dart';
+import 'package:goasbar/ui/widgets/seen_widget_sender.dart';
 import 'package:stacked/stacked.dart';
 
 class StreamMessagesView extends HookWidget {
