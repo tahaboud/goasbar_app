@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:goasbar/app/app.locator.dart';
@@ -5,10 +6,15 @@ import 'package:goasbar/app/app.router.dart';
 import 'package:goasbar/ui/setup_bottomsheet_ui.dart';
 import 'package:goasbar/ui/setup_dialogui.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   setupLocator();
   setupDialogUi();
