@@ -9,9 +9,10 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class ChatWithAgencyView extends HookWidget {
-  const ChatWithAgencyView({Key? key, this.userId, this.providerId}) : super(key: key);
+  const ChatWithAgencyView({Key? key, this.userId, this.providerId, this.providerName}) : super(key: key);
   final int? providerId;
   final int? userId;
+  final String? providerName;
 
   @override
   Widget build(BuildContext context) {
@@ -35,12 +36,12 @@ class ChatWithAgencyView extends HookWidget {
                           model.back();
                         }
                     ),
-                    const Text('E-salam Agency', style: TextStyle(fontSize: 21),),
+                    Text(providerName!, style: const TextStyle(fontSize: 21),),
                   ],
                 ),
                 verticalSpaceMedium,
                 Expanded(
-                  child: model.isBusy ? const Loader().center() : StreamMessagesView(chatId: model.chatTokenProvider!.chatId!, providerId: providerId),
+                  child: !model.dataReady ? const Loader().center() : StreamMessagesView(chatId: model.chatTokenProvider!.chatId!, providerId: providerId),
                 ),
                 TextField(
                   controller: message,
