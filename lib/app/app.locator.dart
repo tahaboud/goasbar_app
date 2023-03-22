@@ -8,6 +8,8 @@
 
 import 'package:goasbar/services/auth_service.dart';
 import 'package:goasbar/services/booking_api_service.dart';
+import 'package:goasbar/services/chat_api_service.dart';
+import 'package:goasbar/services/connectivity_service.dart';
 import 'package:goasbar/services/experience_api_service.dart';
 import 'package:goasbar/services/provider_api_service.dart';
 import 'package:goasbar/services/review_api_service.dart';
@@ -46,4 +48,6 @@ Future<void> setupLocator(
   locator.registerLazySingleton(() => TimingApiService());
   locator.registerLazySingleton(() => BookingApiService());
   locator.registerLazySingleton(() => ReviewApiService());
+  locator.registerLazySingleton(() => ChatApiService());
+  locator.registerLazySingleton(() => ConnectivityService());
 }
