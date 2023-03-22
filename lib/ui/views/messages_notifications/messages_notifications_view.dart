@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/messages_notifications/messages_notifications_viewmodel.dart';
 import 'package:goasbar/ui/views/messages/messages_view.dart';
@@ -9,7 +10,8 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class MessagesNotificationsView extends HookWidget {
-  const MessagesNotificationsView({Key? key}) : super(key: key);
+  const MessagesNotificationsView({Key? key, this.user}) : super(key: key);
+  final UserModel? user;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +53,7 @@ class MessagesNotificationsView extends HookWidget {
                   ],
                 ),
                 verticalSpaceMedium,
-                model.indexTab == 1 ? const MessagesView() : const NotificationsView(),
+                model.indexTab == 1 ? MessagesView(user: user!) : const NotificationsView(),
               ],
             ),
           ),
