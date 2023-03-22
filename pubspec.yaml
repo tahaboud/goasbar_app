@@ -42,7 +42,12 @@ dependencies:
   get_it: ^7.2.0
   injectable: ^2.1.0
 
-  # hyper pay
+  # chat firebase
+  cloud_firestore: ^4.4.5
+  firebase_core: ^2.8.0
+
+  # connectivity
+  connectivity_plus: ^3.0.3
 
 dev_dependencies:
   flutter_test:
