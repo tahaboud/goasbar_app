@@ -106,8 +106,28 @@ class AuthService {
         "Authorization": "Token $token",
       },
     ).then((response) {
+      print(response.body);
       if (response.statusCode == 200) {
         return UserModel.fromJson(jsonDecode(response.body)['user']);
+      } else if (response.statusCode == 401) {
+        unAuthClearAndRestart(context: context,);
+        return null;
+      } else {
+        return null;
+      }
+    });
+  }
+
+  Future<String?> getUserPicture({String? token, context, int? userId}) async {
+    return http.get(
+      Uri.parse("$baseUrl/api/auth/user-picture/$userId/"),
+      headers: {
+        "Accept-Language": "en-US",
+        "Authorization": "Token $token",
+      },
+    ).then((response) {
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body)['response']["image"];
       } else if (response.statusCode == 401) {
         unAuthClearAndRestart(context: context,);
         return null;
