@@ -16,11 +16,11 @@ class ProfileBookedViewModel extends BaseViewModel {
     _navigationService.back();
   }
 
-  showProfile({user, experienceId}) {
+  showProfile({booking, experienceId, index}) {
     _dialogService.showCustomDialog(
       variant: DialogType.profile,
-      data: user,
-      customData: experienceId,
+      data: booking,
+      customData: {"experienceId": experienceId, "index": index,},
     );
   }
 }
