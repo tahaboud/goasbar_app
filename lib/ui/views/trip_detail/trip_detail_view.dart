@@ -168,8 +168,7 @@ class TripDetailView extends HookWidget {
             verticalSpaceRegular,
             Row(
               children: [
-                //TODO : set review
-                const Text('3 reviews'),
+                Text(experience!.reviews! > 1 ? '${experience!.reviews} reviews' : '${experience!.reviews} review'),
                 Image.asset("assets/icons/location.png"),
                 horizontalSpaceTiny,
                 Text("${experience!.city} , Duration : ${experience!.duration}", style: const TextStyle(color: kMainGray, fontSize: 11)),
