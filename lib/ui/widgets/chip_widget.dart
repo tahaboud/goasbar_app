@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:goasbar/ui/views/messages_notifications/messages_notifications_viewmodel.dart';
+import 'package:goasbar/ui/views/chats_notifications/chats_notifications_viewmodel.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class ChipWidget extends StatelessWidget {
@@ -8,7 +8,7 @@ class ChipWidget extends StatelessWidget {
     this.model,
     this.index,
   }) : super(key: key);
-  final MessagesNotificationsViewModel? model;
+  final ChatsNotificationsViewModel? model;
   final int? index;
 
   @override
