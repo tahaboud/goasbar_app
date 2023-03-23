@@ -17,6 +17,7 @@ class ExperienceResults {
   String? events;
   String? requirements;
   String? rate;
+  int? reviews;
   String? duration;
   int? providerId;
   String? gender;
@@ -42,6 +43,7 @@ class ExperienceResults {
         this.events,
         this.requirements,
         this.rate,
+        this.reviews,
         this.duration,
         this.providerId,
         this.gender,
@@ -67,6 +69,7 @@ class ExperienceResults {
     events = json['events'];
     requirements = json['requirements'];
     rate = json['rate'];
+    reviews = json['reviews'];
     duration = json['duration'];
     providerId = json['provider_id'];
     gender = json['gender'];
@@ -101,6 +104,7 @@ class ExperienceResults {
     data['events'] = events;
     data['requirements'] = requirements;
     data['rate'] = rate;
+    data['reviews'] = reviews;
     data['duration'] = duration;
     data['provider_id'] = providerId;
     data['gender'] = gender;
