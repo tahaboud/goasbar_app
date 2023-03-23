@@ -6,7 +6,6 @@ import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/provider_profile/provider_profile_viewmodel.dart';
-import 'package:goasbar/ui/widgets/booking_card/booking_card.dart';
 import 'package:goasbar/ui/widgets/booking_card_for_provider/booking_card_for_provider.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:stacked/stacked.dart';
