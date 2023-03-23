@@ -4,6 +4,7 @@ import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/bookings_list/bookings_list_viewmodel.dart';
 import 'package:goasbar/ui/widgets/booking_card/booking_card.dart';
+import 'package:goasbar/ui/widgets/creation_aware_item.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked/stacked.dart';
@@ -45,15 +46,18 @@ class BookingsListView extends HookWidget {
                       shrinkWrap: true,
                       itemCount: model.data!.length,
                       itemBuilder: (ctx, index) {
-                        return BookingItem(bookingsList: model.data![index], user: user, onDelete: () {
-                          model.deleteBooking(context: context, bookingId: model.data![index]!.id).then((value) {
-                            if (value != null) {
-                              if (value) {
-                                showMotionToast(context: context, title: 'Deleted Booking Successfully', msg: "The booking is deleted, you will receive your refund", type: MotionToastType.success);
+                        return CreationAwareListItem(
+                          itemCreated: () => model.getUserBookingsFromNextPage(index: index + 1),
+                          child: BookingItem(bookingsList: model.data![index], user: user, onDelete: () {
+                            model.deleteBooking(context: context, bookingId: model.data![index]!.id).then((value) {
+                              if (value != null) {
+                                if (value) {
+                                  showMotionToast(context: context, title: 'Deleted Booking Successfully', msg: "The booking is deleted, you will receive your refund", type: MotionToastType.success);
+                                }
                               }
-                            }
-                          });
-                        });
+                            });
+                          }),
+                        );
                       },
                     )
                 ),
