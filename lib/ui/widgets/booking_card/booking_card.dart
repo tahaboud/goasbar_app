@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:goasbar/data_models/bookings_list_response.dart';
 import 'package:goasbar/data_models/user_model.dart';
-import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/widgets/booking_card/booking_card_viewmodel.dart';
@@ -48,15 +47,8 @@ class BookingItem extends StatelessWidget {
                   || (model.formatDay(bookingsList!.experienceTiming!.date!) < model.formatDayFromToday()
                       && model.formatMonth(bookingsList!.experienceTiming!.date!) <= model.formatMonthFromToday()
                       && model.formatYear(bookingsList!.experienceTiming!.date!) <= model.formatYearFromToday()) ? Row(
-                children: [
-                  const Chip(
-                    backgroundColor: kMainColor1,
-                    label: Text('Review', style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold)),
-                    avatar: Icon(Icons.star, color: Colors.white, size: 20),
-                  ).gestures(onTap: () => model.showReviewBottomSheet(bookingId: bookingsList!.id)),
-                  horizontalSpaceSmall,
-                  const Chip(
+                children: const [
+                  Chip(
                     backgroundColor: Colors.redAccent,
                     label: Text("COMPLETED", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                   ),
@@ -115,17 +107,23 @@ class BookingItem extends StatelessWidget {
                     Row(
                       children: [
                         horizontalSpaceSmall,
-                        SizedBox(width: 90, child: Stack(
-                          children: [
-                            //TODO show users pictures
-                            Image.network("$baseUrl${user!.image}", height: 25,).clipRRect(all: 30),
-                            for (var affiliate in bookingsList!.affiliateSet!)
-                              Positioned(
-                                left: 20,
-                                child: Image.asset("assets/images/user.png", height: 25),
-                              ),
-                          ],
-                        ),),
+                        Container(
+                          width: 70,
+                          height: 25,
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(35)),
+                            color: kMainColor1,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Icon(Icons.star, color: Colors.white, size: 15),
+                              horizontalSpaceTiny,
+                              const Text('Review', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500),).center(),
+                            ],
+                          ),
+                        ).gestures(onTap: () => model.showReviewBottomSheet(bookingId: bookingsList!.id)),
                         const Spacer(),
                         Container(
                           width: 70,
