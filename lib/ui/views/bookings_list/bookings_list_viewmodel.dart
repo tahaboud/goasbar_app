@@ -17,6 +17,7 @@ class BookingsListViewModel extends FutureViewModel<List<BookingsListResults?>?>
   final _tokenService = locator<TokenService>();
   bool? isTokenExist;
   BookingsListModel? bookingsListModel;
+  int pageNumber = 1;
 
   void navigateTo({view}) {
     _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
@@ -36,9 +37,20 @@ class BookingsListViewModel extends FutureViewModel<List<BookingsListResults?>?>
     });
   }
 
+  Future getUserBookingsFromNextPage({int? index}) async {
+    if (index! % 10 == 0) {
+      String? token = await _tokenService.getTokenValue();
+      pageNumber++;
+      print("index : $index");
+      BookingsListModel? bookingResults = await _bookingApiService.getUserBookings(token: token, context: context, page: pageNumber);
+      bookingsListModel!.results!.addAll(bookingResults!.results!);
+      notifyListeners();
+    }
+  }
+
   Future<List<BookingsListResults?>?> getUserBookings() async {
     String? token = await _tokenService.getTokenValue();
-    bookingsListModel = await _bookingApiService.getUserBookings(token: token, context: context);
+    bookingsListModel = await _bookingApiService.getUserBookings(token: token, context: context, page: pageNumber);
     notifyListeners();
     return bookingsListModel!.results!;
   }
