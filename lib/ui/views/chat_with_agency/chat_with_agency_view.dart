@@ -49,7 +49,7 @@ class ChatWithAgencyView extends HookWidget {
                     hintText: 'Type Something...',
                     hintStyle: const TextStyle(fontSize: 14),
                     suffixIcon: Image.asset("assets/icons/import.png").gestures(onTap: () => model.sendMessage(providerId: providerId!.toString(), message: message, userId: userId!.toString())),
-                    icon: Image.asset("assets/icons/file.png").gestures(onTap: () => model.file()),
+                    // icon: Image.asset("assets/icons/file.png").gestures(onTap: () => model.file()),
                     fillColor: kTextFiledGrayColor,
                     filled: true,
                     border: OutlineInputBorder(
