@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
-import 'package:goasbar/ui/views/messages_notifications/messages_notifications_viewmodel.dart';
-import 'package:goasbar/ui/views/messages/messages_view.dart';
+import 'package:goasbar/ui/views/chats/chats_view.dart';
+import 'package:goasbar/ui/views/chats_notifications/chats_notifications_viewmodel.dart';
 import 'package:goasbar/ui/views/notifications/notifications_view.dart';
 import 'package:goasbar/ui/widgets/chip_widget.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-class MessagesNotificationsView extends HookWidget {
-  const MessagesNotificationsView({Key? key, this.user}) : super(key: key);
+class ChatsNotificationsView extends HookWidget {
+  const ChatsNotificationsView({Key? key, this.user}) : super(key: key);
   final UserModel? user;
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<MessagesNotificationsViewModel>.reactive(
+    return ViewModelBuilder<ChatsNotificationsViewModel>.reactive(
       builder: (context, model, child) => Scaffold(
         body: SafeArea(
           child: SingleChildScrollView(
@@ -53,13 +53,13 @@ class MessagesNotificationsView extends HookWidget {
                   ],
                 ),
                 verticalSpaceMedium,
-                model.indexTab == 1 ? MessagesView(user: user!) : const NotificationsView(),
+                model.indexTab == 1 ? ChatsView(user: user!) : const NotificationsView(),
               ],
             ),
           ),
         ),
       ),
-      viewModelBuilder: () => MessagesNotificationsViewModel(),
+      viewModelBuilder: () => ChatsNotificationsViewModel(),
     );
   }
 }
