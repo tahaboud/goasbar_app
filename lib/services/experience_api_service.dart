@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/experience_model.dart';
 import 'package:goasbar/data_models/experience_response.dart';
+import 'package:goasbar/data_models/provider_public_experience_model.dart';
 import 'package:goasbar/data_models/timing_list_model.dart';
 import 'package:goasbar/services/auth_service.dart';
 import 'package:goasbar/shared/app_configs.dart';
