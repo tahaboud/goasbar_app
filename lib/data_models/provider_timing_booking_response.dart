@@ -1,15 +1,16 @@
 import 'package:goasbar/data_models/affiliate_set_model.dart';
+import 'package:goasbar/data_models/experience_timing_model.dart';
 import 'package:goasbar/data_models/user_for_provider_timing_booking.dart';
 
 class ProviderTimingBookingResults {
   int? id;
-  int? experienceTiming;
+  ExperienceTiming? experienceTiming;
   UserForProviderTimingBooking? user;
   String? status;
   String? creationDate;
   dynamic cancelationComment;
   String? price;
-  List<dynamic>? affiliateSet;
+  List<AffiliateSet>? affiliateSet;
 
   ProviderTimingBookingResults(
       {this.id,
@@ -23,7 +24,9 @@ class ProviderTimingBookingResults {
 
   ProviderTimingBookingResults.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    experienceTiming = json['experience_timing'];
+    experienceTiming = json['experience_timing'] != null
+        ? ExperienceTiming.fromJson(json['experience_timing'])
+        : null;
     user = json['user'] != null ? UserForProviderTimingBooking.fromJson(json['user']) : null;
     status = json['status'];
     creationDate = json['creation_date'];
@@ -40,7 +43,9 @@ class ProviderTimingBookingResults {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
-    data['experience_timing'] = experienceTiming;
+    if (experienceTiming != null) {
+      data['experience_timing'] = experienceTiming!.toJson();
+    }
     if (user != null) {
       data['user'] = user!.toJson();
     }
