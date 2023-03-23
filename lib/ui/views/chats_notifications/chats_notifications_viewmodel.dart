@@ -3,7 +3,7 @@ import 'package:goasbar/app/app.locator.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
-class MessagesNotificationsViewModel extends BaseViewModel {
+class ChatsNotificationsViewModel extends BaseViewModel {
   final _navigationService = locator<NavigationService>();
   int indexTab = 1;
 
