@@ -4,7 +4,6 @@ import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/edit_profile/edit_profile_viewmodel.dart';
-import 'package:goasbar/ui/views/home/home_viewmodel.dart';
 import 'package:goasbar/ui/widgets/info_item.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:motion_toast/motion_toast.dart';
