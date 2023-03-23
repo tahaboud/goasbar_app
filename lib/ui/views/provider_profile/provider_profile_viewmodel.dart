@@ -14,7 +14,7 @@ class ProviderProfileViewModel extends FutureViewModel<List<ProviderPublicExperi
   final _providerApiService = locator<ProviderApiService>();
   ProviderPublicExperienceModel? providerPublicExperience;
 
-  void navigateTo({view}) {
+  dynamic navigateTo({view}) {
     _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
   }
 
