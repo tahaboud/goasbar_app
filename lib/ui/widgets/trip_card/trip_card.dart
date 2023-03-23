@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/data_models/experience_response.dart';
@@ -118,25 +116,7 @@ class TripItem extends StatelessWidget {
                     Row(
                       children: [
                         horizontalSpaceSmall,
-                        Random().nextInt(100) > 50
-                            ? Flexible(child: Text(experience!.description!, style: const TextStyle(overflow: TextOverflow.ellipsis, color: kMainGray, fontSize: 10)))
-                            : SizedBox(width: 90, child: Stack(
-                          children: [
-                            Image.asset("assets/images/user.png", height: 25),
-                            Positioned(
-                              left: 20,
-                              child: Image.asset("assets/images/user.png", height: 25),
-                            ),
-                            Positioned(
-                              left: 40,
-                              child: Image.asset("assets/images/user.png", height: 25),
-                            ),
-                            Positioned(
-                              left: 60,
-                              child: Image.asset("assets/images/user.png", height: 25),
-                            ),
-                          ],
-                        ),),
+                        Flexible(child: Text(experience!.description!, style: const TextStyle(overflow: TextOverflow.ellipsis, color: kMainGray, fontSize: 10))),
                         const Spacer(),
                         Container(
                           width: 70,
