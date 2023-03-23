@@ -4,7 +4,10 @@ class UserForProviderTimingBooking {
   String? lastName;
   String? phoneNumber;
   String? gender;
+  String? image;
   int? age;
+  String? city;
+  String? email;
 
   UserForProviderTimingBooking(
       {this.id,
@@ -12,7 +15,10 @@ class UserForProviderTimingBooking {
         this.lastName,
         this.phoneNumber,
         this.gender,
-        this.age});
+        this.image,
+        this.age,
+        this.city,
+        this.email});
 
   UserForProviderTimingBooking.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -20,7 +26,10 @@ class UserForProviderTimingBooking {
     lastName = json['last_name'];
     phoneNumber = json['phone_number'];
     gender = json['gender'];
+    image = json['image'];
     age = json['age'];
+    city = json['city'];
+    email = json['email'];
   }
 
   Map<String, dynamic> toJson() {
@@ -30,7 +39,10 @@ class UserForProviderTimingBooking {
     data['last_name'] = lastName;
     data['phone_number'] = phoneNumber;
     data['gender'] = gender;
+    data['image'] = image;
     data['age'] = age;
+    data['city'] = city;
+    data['email'] = email;
     return data;
   }
 }
