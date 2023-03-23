@@ -14,6 +14,7 @@ class ProviderPublicExperienceResults {
   String? city;
   String? slug;
   String? profileImage;
+  String? providerNickname;
   dynamic providedGoods;
   String? events;
   dynamic requirements;
@@ -38,6 +39,7 @@ class ProviderPublicExperienceResults {
         this.city,
         this.slug,
         this.profileImage,
+        this.providerNickname,
         this.providedGoods,
         this.events,
         this.requirements,
@@ -67,6 +69,7 @@ class ProviderPublicExperienceResults {
     city = json['city'];
     slug = json['slug'];
     profileImage = json['profile_image'];
+    providerNickname = json['provider_nickname'];
     providedGoods = json['provided_goods'];
     events = json['events'];
     requirements = json['requirements'];
@@ -95,6 +98,7 @@ class ProviderPublicExperienceResults {
     data['city'] = city;
     data['slug'] = slug;
     data['profile_image'] = profileImage;
+    data['provider_nickname'] = providerNickname;
     data['provided_goods'] = providedGoods;
     data['events'] = events;
     data['requirements'] = requirements;
