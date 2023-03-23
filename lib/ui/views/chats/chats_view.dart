@@ -5,21 +5,21 @@ import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/chat_with_agency/chat_with_agency_view.dart';
-import 'package:goasbar/ui/views/messages/messages_viewmodel.dart';
+import 'package:goasbar/ui/views/chats/chats_viewmodel.dart';
 import 'package:goasbar/ui/widgets/chat_item/chat_item.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:stacked/stacked.dart';
 
-class MessagesView extends HookWidget {
-  const MessagesView({Key? key, this.user,}) : super(key: key,);
+class ChatsView extends HookWidget {
+  const ChatsView({Key? key, this.user,}) : super(key: key,);
   final UserModel? user;
 
   @override
   Widget build(BuildContext context) {
     var search = useTextEditingController();
 
-    return ViewModelBuilder<MessagesViewModel>.reactive(
+    return ViewModelBuilder<ChatsViewModel>.reactive(
       builder: (context, model, child) {
         return model.isBusy ? const Loader() : Column(
           children: [
@@ -90,8 +90,7 @@ class MessagesView extends HookWidget {
           ],
         );
       },
-      viewModelBuilder: () => MessagesViewModel(),
-      onModelReady: (model) => model.loadData(),
+      viewModelBuilder: () => ChatsViewModel(),
     );
   }
 }
