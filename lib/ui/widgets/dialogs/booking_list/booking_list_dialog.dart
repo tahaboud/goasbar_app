@@ -45,7 +45,7 @@ class BookingListDialog extends HookWidget {
                     itemBuilder: (context, index) {
                       return Column(
                         children: [
-                          ProfileBookedView(user: model.data![index]!.user, experienceId: dialogRequest!.customData),
+                          ProfileBookedView(booking: model.data![index]!, experienceId: dialogRequest!.customData, index: index,),
                           const Divider(height: 30, thickness: 1,),
                         ],
                       );
@@ -55,7 +55,7 @@ class BookingListDialog extends HookWidget {
               ],
             ),
           ),
-        ).height(60 + 62 * 7);
+        ).height(62 * 7);
       },
       viewModelBuilder: () => BookingListViewModel(context: context, timingId: dialogRequest!.data,),
     );
