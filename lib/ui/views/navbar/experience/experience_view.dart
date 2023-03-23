@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
-import 'package:goasbar/ui/views/messages_notifications/messages_notifications_view.dart';
+import 'package:goasbar/ui/views/chats_notifications/chats_notifications_view.dart';
 import 'package:goasbar/ui/views/navbar/experience/experience_viewmodel.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:goasbar/ui/widgets/trip_card/trip_card.dart';
@@ -40,7 +40,7 @@ class ExperienceView extends HookWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Image.asset("assets/icons/messages.png",),
-                    ).gestures(onTap: () => model.navigateTo(view: MessagesNotificationsView(user: user!)),),
+                    ).gestures(onTap: () => model.navigateTo(view: ChatsNotificationsView(user: user!)),),
                     horizontalSpaceSmall,
                   ],
                 ),
