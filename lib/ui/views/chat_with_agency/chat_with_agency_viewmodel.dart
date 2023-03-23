@@ -6,6 +6,7 @@ import 'package:goasbar/services/token_service.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ChatWithAgencyViewModel extends FutureViewModel<ChatTokenProviderModel?> {
   ChatWithAgencyViewModel({this.context, this.providerId});
@@ -36,7 +37,33 @@ class ChatWithAgencyViewModel extends FutureViewModel<ChatTokenProviderModel?> {
     String token = await _tokenService.getTokenValue();
     chatTokenProvider = await _chatApiService.getUserFireStoreTokenAndProviderChatId(context: context, token: token, providerId: providerId);
     notifyListeners();
-    return chatTokenProvider!;
+    return await auth(token: chatTokenProvider!.fireStoreToken).then((value) {
+      if (value != null) {
+        return chatTokenProvider;
+      } else {
+        return null;
+      }
+    });
+  }
+
+  Future<UserCredential?> auth({token}) async {
+    try {
+      final userCredential = await FirebaseAuth.instance.signInWithCustomToken(token);
+      print("Sign-in successful.");
+      return userCredential;
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case "invalid-custom-token":
+          print("The supplied token is not a Firebase custom auth token.");
+          return null;
+        case "custom-token-mismatch":
+          print("The supplied token is for a different Firebase project.");
+          return null;
+        default:
+          print("Unkown error.");
+          return null;
+      }
+    }
   }
 
   file() {
