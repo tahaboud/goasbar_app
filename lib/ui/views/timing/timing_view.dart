@@ -7,6 +7,7 @@ import 'package:goasbar/ui/views/timing/timing_viewmodel.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:goasbar/ui/widgets/timing_item.dart';
 import 'package:motion_toast/motion_toast.dart';
+import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -91,14 +92,8 @@ class TimingView extends HookWidget {
                   itemBuilder: (context, index) {
                     return Column(
                       children: [
-                        TimingItem(launchMaps: experience!.latitude == null ? () {
-                          MotionToast.warning(
-                            title: const Text("Maps Cannot Be launched"),
-                            description: const Text("The provider did not set the location yet."),
-                            animationCurve: Curves.easeIn,
-                            animationDuration: const Duration(milliseconds: 200),
-                          ).show(context);
-                        } : () => model.launchMaps(lat: experience!.latitude, long: experience!.longitude),
+                        TimingItem(launchMaps: experience!.latitude == null ? () => showMotionToast(title: "Maps Cannot Be launched", context: context, msg: "The provider did not set the location yet.", type: MotionToastType.warning)
+                            : () => model.launchMaps(lat: experience!.latitude, long: experience!.longitude),
                           timing: model.timingListModel!.results![index], experience: experience!,
                           bookings: model.timingListModel!.results![index].availability != null
                               ? model.timingListModel!.results![index].capacity! - model.timingListModel!.results![index].availability!
@@ -106,19 +101,9 @@ class TimingView extends HookWidget {
                           showBooking: () => model.showBookingList(timingId: model.timingListModel!.results![index].id, experienceId: experience!.id),
                           deleteTiming: () => model.deleteTiming(experienceId: experience!.id, timingId: model.timingListModel!.results![index].id).then((value) {
                             if (value!) {
-                              MotionToast.success(
-                                title: const Text("Deleting Success"),
-                                description: const Text("Deleting timing has done successfully."),
-                                animationCurve: Curves.easeIn,
-                                animationDuration: const Duration(milliseconds: 200),
-                              ).show(context);
+                              showMotionToast(title: "Deleting Success", context: context, msg: "Deleting timing has done successfully.", type: MotionToastType.success);
                             } else {
-                              MotionToast.error(
-                                title: const Text("Deleting Failed"),
-                                description: const Text("An error has occurred, please try again."),
-                                animationCurve: Curves.easeIn,
-                                animationDuration: const Duration(milliseconds: 200),
-                              ).show(context);
+                              showMotionToast(title: "Deleting Failed", context: context, msg: "An error has occurred, please try again.", type: MotionToastType.error);
                             }
                           }),
                         ).gestures(onTap: () => model.showNewTimingBottomSheet(timing: model.timingListModel!.results![index],
