@@ -4,7 +4,7 @@ import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/widgets/creation_aware_item.dart';
 import 'package:goasbar/ui/widgets/dialogs/booking_list/booking_list_dialog_viewmodel.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
-import 'package:goasbar/ui/widgets/profile_booked/profile_booked.dart';
+import 'package:goasbar/ui/widgets/profile_booked/profile_booked_view.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:styled_widget/styled_widget.dart';
