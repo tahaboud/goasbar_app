@@ -7,6 +7,7 @@ import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/provider_profile/provider_profile_viewmodel.dart';
 import 'package:goasbar/ui/widgets/booking_card_for_provider/booking_card_for_provider.dart';
+import 'package:goasbar/ui/widgets/creation_aware_item.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -124,7 +125,10 @@ class ProviderProfileView extends HookWidget {
                     scrollDirection: Axis.horizontal,
                     itemCount: model.data!.length,
                     itemBuilder: (context, index) {
-                      return BookingItemForProviderView(user: user, providerPublicExperience: model.data![index],);
+                      return CreationAwareListItem(
+                        itemCreated: () => model.getProviderPublicExperiencesFromNextPage(index: index + 1),
+                        child: BookingItemForProviderView(user: user, providerPublicExperience: model.data![index],),
+                      );
                     },
                   ),
                 ),
