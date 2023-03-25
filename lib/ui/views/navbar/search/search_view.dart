@@ -7,6 +7,7 @@ import 'package:goasbar/ui/views/confirm_booking/confirm_booking_view.dart';
 import 'package:goasbar/ui/views/login/login_view.dart';
 import 'package:goasbar/ui/views/navbar/search/search_viewmodel.dart';
 import 'package:goasbar/ui/views/trip_detail/trip_detail_view.dart';
+import 'package:goasbar/ui/widgets/creation_aware_item.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:stacked/stacked.dart';
@@ -297,96 +298,106 @@ class SearchView extends HookWidget {
                     height: 255,
                     child: ListView.builder(
                       shrinkWrap: true,
+                      padding: const EdgeInsets.symmetric(vertical: 2),
                       physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
                       itemCount: model.experienceModels!.count,
                       itemBuilder: (context, index) {
-                        return Container(
-                          height: 250,
-                          width: 200,
-                          margin: const EdgeInsets.symmetric(horizontal: 10),
-
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Colors.white,
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Colors.black12,
-                                blurRadius: 1,
-                                offset: Offset(0, 0),
-                                spreadRadius: 1,
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: 200,
-                                height: 150,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: model.experienceModels!.results![index].profileImage != null
-                                        ? NetworkImage("$baseUrl${model.experienceModels!.results![index].profileImage}") as ImageProvider
-                                        : const AssetImage("assets/images/image4.png"),
-                                  ),
+                        return CreationAwareListItem(
+                          itemCreated: () => model.getPublicExperiencesFromNextPage(index: index + 1),
+                          child: Container(
+                            height: 250,
+                            width: 200,
+                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              color: Colors.white,
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  blurRadius: 1,
+                                  offset: Offset(0, 0),
+                                  spreadRadius: 1,
                                 ),
-                              ).center(),
-                              verticalSpaceSmall,
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  SizedBox(
-                                    width: 120,
-                                    child: Text(model.experienceModels!.results![index].title!, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.bold)),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(model.experienceModels!.results![index].rate!),
-                                      horizontalSpaceTiny,
-                                      const Icon(Icons.star, color: kStarColor,)
-                                    ],
-                                  )
-                                ],
-                              ).padding(horizontal: 8),
-                              verticalSpaceSmall,
-                              Row(
-                                children: [
-                                  Image.asset("assets/icons/location.png"),
-                                  horizontalSpaceTiny,
-                                  Text("${model.experienceModels!.results![index].city!} , ${model.experienceModels!.results![index].duration!} ${double.parse(model.experienceModels!.results![index].duration!) >= 2 ? 'Hours' : 'Hour'}", style: const TextStyle(color: kMainGray, fontSize: 11))
-                                ],
-                              ).padding(horizontal: 8),
-                              verticalSpaceSmall,
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text('${model.experienceModels!.results![index].price!} SR', style: const TextStyle(color: kMainColor1, fontSize: 9)),
-                                      const Text(' / Person', style: TextStyle(color: kMainGray, fontSize: 9)),
-                                    ],
-                                  ),
-                                  Container(
-                                    width: 70,
-                                    height: 25,
-                                    decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                                      gradient: kMainGradient,
+                              ],
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: 200,
+                                  height: 150,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    image: DecorationImage(
+                                      fit: model.experienceModels!.results![index].profileImage != null ? model.experienceModels!.results![index].profileImage!.contains('/asbar-icon.ico') ? BoxFit.none : BoxFit.cover : BoxFit.contain,
+                                      image: model.experienceModels!.results![index].profileImage != null && !model.experienceModels!.results![index].profileImage!.contains('/asbar-icon.ico')
+                                          ? NetworkImage("$baseUrl${model.experienceModels!.results![index].profileImage}") as ImageProvider
+                                          : const AssetImage("assets/images/image4.png"),
                                     ),
-                                    child: const Text('Book Now', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500),).center(),
-                                  ).gestures(onTap: () {
-                                    model.navigateTo(view: user == null ? const LoginView() : ConfirmBookingView(experience: model.experienceModels!.results![index], user: user,));
-                                  }),
-                                ],
-                              ).padding(horizontal: 8),
-                            ],
+                                  ),
+                                ).center(),
+                                verticalSpaceSmall,
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width: 120,
+                                      child: Text(model.experienceModels!.results![index].title!, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.bold)),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(model.experienceModels!.results![index].rate!),
+                                        horizontalSpaceTiny,
+                                        const Icon(Icons.star, color: kStarColor,)
+                                      ],
+                                    )
+                                  ],
+                                ).padding(horizontal: 8),
+                                verticalSpaceSmall,
+                                Row(
+                                  children: [
+                                    Image.asset("assets/icons/location.png"),
+                                    horizontalSpaceTiny,
+                                    SizedBox(
+                                      width: 160,
+                                      child: Text(
+                                        "${model.experienceModels!.results![index].city!}, ${model.experienceModels!.results![index].duration!} ${double.parse(model.experienceModels!.results![index].duration!) >= 2 ? 'Hours' : 'Hour'}",
+                                        style: const TextStyle(color: kMainGray, fontSize: 11),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ).padding(horizontal: 8),
+                                verticalSpaceSmall,
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text('${model.experienceModels!.results![index].price!} SR', style: const TextStyle(color: kMainColor1, fontSize: 9)),
+                                        const Text(' / Person', style: TextStyle(color: kMainGray, fontSize: 9)),
+                                      ],
+                                    ),
+                                    Container(
+                                      width: 70,
+                                      height: 25,
+                                      decoration: const BoxDecoration(
+                                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                                        gradient: kMainGradient,
+                                      ),
+                                      child: const Text('Book Now', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500),).center(),
+                                    ).gestures(onTap: () {
+                                      model.navigateTo(view: user == null ? const LoginView() : ConfirmBookingView(experience: model.experienceModels!.results![index], user: user,));
+                                    }),
+                                  ],
+                                ).padding(horizontal: 8),
+                              ],
+                            ),
+                          ).gestures(
+                            onTap: () => model.navigateTo(view: TripDetailView(experience: model.experienceModels!.results![index], user: user)),
                           ),
-                        ).gestures(
-                          onTap: () => model.navigateTo(view: TripDetailView(experience: model.experienceModels!.results![index], user: user)),
                         );
                       },
                     ),
