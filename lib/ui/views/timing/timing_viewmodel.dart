@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/app/app.locator.dart';
+import 'package:goasbar/data_models/experience_response.dart';
 import 'package:goasbar/data_models/timing_list_model.dart';
 import 'package:goasbar/data_models/timing_response.dart';
 import 'package:goasbar/enum/bottom_sheet_type.dart';
@@ -13,9 +14,9 @@ import 'package:maps_launcher/maps_launcher.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class TimingViewModel extends FutureViewModel<dynamic> {
-  final int? experienceId;
+  final ExperienceResults? experience;
   BuildContext? context;
-  TimingViewModel({this.experienceId, this.context});
+  TimingViewModel({this.experience, this.context});
 
   final _navigationService = locator<NavigationService>();
   final _dialogService = locator<DialogService>();
@@ -27,6 +28,7 @@ class TimingViewModel extends FutureViewModel<dynamic> {
   DateTime selectedDate = DateTime.now();
   DateTime selectedFormattedMonthYearDate = DateTime.now();
   String? selectedFormattedDate;
+  int pageNumber = 1;
 
   void navigateTo({view}) {
     _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
@@ -67,11 +69,11 @@ class TimingViewModel extends FutureViewModel<dynamic> {
     notifyListeners();
   }
 
-  showBookingList({int? timingId, int? experienceId}) {
+  showBookingList({int? timingId}) {
     _dialogService.showCustomDialog(
       variant: DialogType.bookingList,
       data: timingId,
-      customData: experienceId,
+      customData: experience,
     );
   }
 
@@ -82,17 +84,28 @@ class TimingViewModel extends FutureViewModel<dynamic> {
       barrierDismissible: true,
       data: date,
       // ignore: deprecated_member_use
-      customData: timing ?? experienceId,
+      customData: timing ?? experience!,
     );
 
     if (response!.confirmed) {
-      getTimingsList(experienceId: experienceId,);
+      getTimingsList();
     }
   }
 
-  getTimingsList({int? experienceId,}) async {
+  Future getTimingsListFromNextPage({int? index}) async {
+    if (index! % 10 == 0) {
+      String? token = await _tokenService.getTokenValue();
+      pageNumber++;
+      print("index : $index");
+      TimingListModel? timingList = await _timingApiService.getTimingsList(context: context, token: token, experienceId: experience!.id, page: pageNumber);
+      timingListModel!.results!.addAll(timingList!.results!);
+      notifyListeners();
+    }
+  }
+
+  getTimingsList() async {
     String? token = await _tokenService.getTokenValue();
-    timingListModel = await _timingApiService.getTimingsList(context: context, token: token, experienceId: experienceId,);
+    timingListModel = await _timingApiService.getTimingsList(context: context, token: token, experienceId: experience!.id, page: pageNumber);
     notifyListeners();
   }
 
@@ -103,13 +116,15 @@ class TimingViewModel extends FutureViewModel<dynamic> {
   Future<bool?> deleteTiming({int? timingId, int? experienceId}) async {
     String? token = await _tokenService.getTokenValue();
     return await _timingApiService.deleteTiming(context: context, token: token, timingId: timingId).then((value) {
-      getTimingsList(experienceId: experienceId,);
+      if (value != null && value) {
+        getTimingsList();
+      }
       return value;
     });
   }
 
   @override
   Future futureToRun() async {
-    await getTimingsList(experienceId: experienceId,);
+    await getTimingsList();
   }
 }
