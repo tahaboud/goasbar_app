@@ -76,7 +76,7 @@ class AddExperienceView extends HookWidget {
                     children: [
                       const Icon(Icons.close, size: 30,).gestures(onTap: () =>model.back(),),
                       horizontalSpaceTiny,
-                      const Text('EXPERIENCE INFORMATION', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      const Text('EXPERIENCE INFORMATION', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                       Row(
                         children: [
                           Container(
@@ -285,7 +285,7 @@ class AddExperienceView extends HookWidget {
                     children: [
                       const Icon(Icons.close, size: 30,).gestures(onTap: () =>model.back(),),
                       horizontalSpaceTiny,
-                      const Text('SHOWCASE EXPERIENCE', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      const Text('SHOWCASE EXPERIENCE', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                       Row(
                         children: [
                           Container(
@@ -431,7 +431,7 @@ class AddExperienceView extends HookWidget {
                     children: [
                       const Icon(Icons.close, size: 30,).gestures(onTap: () =>model.back(),),
                       horizontalSpaceTiny,
-                      const Text('EXPERIENCE BRIEF', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      const Text('EXPERIENCE BRIEF', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                       Row(
                         children: [
                           Container(
@@ -570,7 +570,7 @@ class AddExperienceView extends HookWidget {
                     children: [
                       const Icon(Icons.close, size: 30,).gestures(onTap: () =>model.back(),),
                       horizontalSpaceTiny,
-                      const Text('PROVIDING & REQUIREMENTS', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      const Text('PROVIDING & REQUIREMENTS', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                       Row(
                         children: [
                           Container(
@@ -792,7 +792,7 @@ class AddExperienceView extends HookWidget {
                     children: [
                       const Icon(Icons.close, size: 30,).gestures(onTap: () =>model.back(),),
                       horizontalSpaceTiny,
-                      const Text('EXPERIENCE LOCATION', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      const Text('EXPERIENCE LOCATION', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                       Row(
                         children: [
                           Container(
@@ -949,7 +949,7 @@ class AddExperienceView extends HookWidget {
                     children: [
                       const Icon(Icons.close, size: 30,).gestures(onTap: () =>model.back(),),
                       horizontalSpaceTiny,
-                      const Text('EXPERIENCE TIMING', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      const Text('EXPERIENCE TIMING', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                       Row(
                         children: [
                           Container(
