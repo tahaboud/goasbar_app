@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/widgets/creation_aware_item.dart';
-import 'package:goasbar/ui/widgets/dialogs/booking_list/booking_list_viewmodel.dart';
+import 'package:goasbar/ui/widgets/dialogs/booking_list/booking_list_dialog_viewmodel.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:goasbar/ui/widgets/profile_booked/profile_booked.dart';
 import 'package:stacked/stacked.dart';
@@ -17,7 +17,7 @@ class BookingListDialog extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<BookingListViewModel>.reactive(
+    return ViewModelBuilder<BookingListDialogViewModel>.reactive(
       builder: (context, model, child) {
         return Dialog(
           shape: RoundedRectangleBorder(
@@ -61,7 +61,7 @@ class BookingListDialog extends HookWidget {
           ),
         ).height(62 * 7);
       },
-      viewModelBuilder: () => BookingListViewModel(context: context, timingId: dialogRequest!.data,),
+      viewModelBuilder: () => BookingListDialogViewModel(context: context, timingId: dialogRequest!.data,),
     );
   }
 }
