@@ -39,7 +39,7 @@ class SettingsView extends HookWidget {
                 children: [
                   Image.asset("assets/icons/navbar/settings.png",),
                   horizontalSpaceMedium,
-                  const Text("Customize your preferences", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),)
+                  const Text("Customize your preferences", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),)
                 ],
               ),
               verticalSpaceLarge,
