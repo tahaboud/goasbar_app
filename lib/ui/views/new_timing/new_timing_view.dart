@@ -5,6 +5,7 @@ import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/new_timing/new_timing_viewmodel.dart';
 import 'package:motion_toast/motion_toast.dart';
+import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -53,7 +54,7 @@ class NewTimingView extends HookWidget {
                 ],
               ),
               verticalSpaceLarge,
-              const Text('DAMMAM TRIP', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),),
+              Text(request.customData!.title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22),),
               const Divider(thickness: 1.2, height: 40),
               verticalSpaceRegular,
               const Text('Date start', style: TextStyle(fontWeight: FontWeight.bold),),
@@ -62,7 +63,7 @@ class NewTimingView extends HookWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(
-                    height: 50,
+                    height: 58,
                     width: screenWidthPercentage(context, percentage: 0.42),
                     child: TextField(
                       controller: model.startDate,
@@ -85,7 +86,7 @@ class NewTimingView extends HookWidget {
                     ),
                   ),
                   SizedBox(
-                    height: 50,
+                    height: 58,
                     width: screenWidthPercentage(context, percentage: 0.42),
                     child: TextField(
                       controller: model.startTime,
@@ -111,7 +112,7 @@ class NewTimingView extends HookWidget {
               const Text('Capacity ( people ) Trip', style: TextStyle(fontWeight: FontWeight.bold),),
               verticalSpaceSmall,
               SizedBox(
-                height: 50,
+                height: 58,
                 child: TextField(
                   controller: addPeople,
                   keyboardType: TextInputType.number,
@@ -187,26 +188,16 @@ class NewTimingView extends HookWidget {
                         "capacity": addPeople.text,
                       });
 
-                      model.createTiming(context: context, body: body, experienceId: request.customData,).then((value) {
+                      model.createTiming(context: context, body: body, experienceId: request.customData.id,).then((value) {
                         if (value == null) {
-                          MotionToast.error(
-                            title: const Text("Timing Creation Failed"),
-                            description: const Text("An error has occurred, please try again."),
-                            animationCurve: Curves.easeIn,
-                            animationDuration: const Duration(milliseconds: 200),
-                          ).show(context);
+                          showMotionToast(context: context, type: MotionToastType.error, title: "Timing Creation Failed", msg: "An error has occurred, please try again.");
                         } else {
                           completer(SheetResponse(confirmed: true));
                         }
                       });
                     }
                   } else {
-                    MotionToast.warning(
-                      title: const Text("Warning"),
-                      description: const Text("All files are mandatory."),
-                      animationCurve: Curves.easeIn,
-                      animationDuration: const Duration(milliseconds: 200),
-                    ).show(context);
+                    showMotionToast(context: context, type: MotionToastType.warning, title: "Warning", msg: "All files are mandatory.");
                   }
                 },
               ),
