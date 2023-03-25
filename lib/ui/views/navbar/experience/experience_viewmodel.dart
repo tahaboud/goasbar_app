@@ -13,6 +13,7 @@ class ExperienceViewModel extends FutureViewModel<List<ExperienceResults?>?> {
   final _experienceApiService = locator<ExperienceApiService>();
   bool? isTokenExist;
   ExperienceModel? experienceModels;
+  int pageNumber = 1;
 
   void selectCategory({ind}) {
     index = ind;
@@ -27,9 +28,10 @@ class ExperienceViewModel extends FutureViewModel<List<ExperienceResults?>?> {
       query = "?gender=WOMEN";
     }
 
+    pageNumber = 1;
     notifyListeners();
 
-    getPublicExperiences(query: query,);
+    getPublicExperiences(query: query, page: pageNumber);
   }
 
   void navigateTo({view}) {
@@ -40,14 +42,24 @@ class ExperienceViewModel extends FutureViewModel<List<ExperienceResults?>?> {
     _navigationService.back();
   }
 
-  Future<List<ExperienceResults?>?> getPublicExperiences({String? query}) async {
-    experienceModels = await _experienceApiService.getPublicExperiences(query: query,);
+  Future getPublicExperiencesFromNextPage({int? index}) async {
+    if (index! % 10 == 0) {
+      pageNumber++;
+      print("index : $index");
+      ExperienceModel? experienceModelsList = await _experienceApiService.getPublicExperiences(page: pageNumber);
+      experienceModels!.results!.addAll(experienceModelsList!.results!);
+      notifyListeners();
+    }
+  }
+
+  Future<List<ExperienceResults?>?> getPublicExperiences({String? query, int? page}) async {
+    experienceModels = await _experienceApiService.getPublicExperiences(query: query, page: page);
     notifyListeners();
     return experienceModels!.results!;
   }
 
   @override
   Future<List<ExperienceResults?>?> futureToRun() async {
-    return await getPublicExperiences();
+    return await getPublicExperiences(page: pageNumber);
   }
 }
