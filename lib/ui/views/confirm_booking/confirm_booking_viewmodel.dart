@@ -176,7 +176,7 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
   }
 
   Future<TimingListModel?> getExperiencePublicTimings() async {
-    timingListModel = await _experienceApiService.getExperiencePublicTimings(experienceId: experienceId,);
+    timingListModel = await _experienceApiService.getExperiencePublicTimings(experienceId: experienceId, page: pageNumber);
     notifyListeners();
 
     return timingListModel;
