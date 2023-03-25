@@ -52,7 +52,7 @@ class ProfileBookedDialog extends HookWidget {
                 verticalSpaceMedium,
                 Text("${dialogRequest!.data.user!.firstName} ${dialogRequest!.data.user!.lastName}", style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),).alignment(Alignment.centerLeft),
                 verticalSpaceSmall,
-                const Text("- - - - - - - - - - - - - - - - - - - - - - - - -", style: TextStyle(color: kGrayText, fontSize: 20, fontWeight: FontWeight.bold),).alignment(Alignment.centerLeft),
+                const Text("- - - - - - - - - - - - - - - - - - - - - - -", style: TextStyle(color: kGrayText, fontSize: 20, fontWeight: FontWeight.bold),).alignment(Alignment.centerLeft),
                 verticalSpaceMedium,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -148,13 +148,13 @@ class ProfileBookedDialog extends HookWidget {
                   onTap: () async {
                     model.back();
                     model.back();
-                    model.showNewTimingBottomSheet(experienceId: dialogRequest!.customData!['experienceId']);
+                    model.showNewTimingBottomSheet(experience: dialogRequest!.customData!['experience']);
                   },
                 ),
               ],
             ),
           ),
-        ).height(60 + 62 * 7);
+        ).height(screenHeightPercentage(context, percentage: 0.65));
       },
       viewModelBuilder: () => ProfileBookedDialogViewModel(),
     );
