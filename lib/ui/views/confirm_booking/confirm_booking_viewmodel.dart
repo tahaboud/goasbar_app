@@ -36,6 +36,7 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
   List<TextEditingController> firstNames = [];
   List<TextEditingController> lastNames = [];
   List<TextEditingController> genders = [];
+  int pageNumber = 1;
 
   updateIsClicked({value}) {
     isClicked = value;
@@ -164,7 +165,17 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
     return booking;
   }
 
-  Future<TimingListModel?> getExperiencePublicTimings({int? experienceId}) async {
+  Future getExperiencePublicTimingsFromNextPage({int? index}) async {
+    if (index! % 10 == 0) {
+      pageNumber++;
+      print("index : $index");
+      TimingListModel? timingList = await _experienceApiService.getExperiencePublicTimings(experienceId: experienceId, page: pageNumber);
+      timingListModel!.results!.addAll(timingList!.results!);
+      notifyListeners();
+    }
+  }
+
+  Future<TimingListModel?> getExperiencePublicTimings() async {
     timingListModel = await _experienceApiService.getExperiencePublicTimings(experienceId: experienceId,);
     notifyListeners();
 
@@ -173,6 +184,6 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
 
   @override
   Future<TimingListModel?> futureToRun() async {
-    return await getExperiencePublicTimings(experienceId: experienceId);
+    return await getExperiencePublicTimings();
   }
 }
