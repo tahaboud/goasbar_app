@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
+import 'package:goasbar/ui/widgets/creation_aware_item.dart';
 import 'package:goasbar/ui/widgets/dialogs/booking_list/booking_list_viewmodel.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:goasbar/ui/widgets/profile_booked/profile_booked.dart';
@@ -43,11 +44,14 @@ class BookingListDialog extends HookWidget {
                     physics: const BouncingScrollPhysics(),
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
-                      return Column(
-                        children: [
-                          ProfileBookedView(booking: model.data![index]!, experienceId: dialogRequest!.customData, index: index,),
-                          const Divider(height: 30, thickness: 1,),
-                        ],
+                      return CreationAwareListItem(
+                        itemCreated: () => model.getProviderTimingBookingsFromNextPage(index: index + 1),
+                        child: Column(
+                          children: [
+                            ProfileBookedView(booking: model.data![index]!, experience: dialogRequest!.customData, index: index,),
+                            const Divider(height: 30, thickness: 1,),
+                          ],
+                        ),
                       );
                     },
                   ),
