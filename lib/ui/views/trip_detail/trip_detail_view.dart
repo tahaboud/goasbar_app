@@ -43,7 +43,11 @@ class TripDetailView extends HookWidget {
                       scrollDirection: Axis.horizontal,
                       controller: pageController,
                       onPageChanged: (index) => model.changeIndex(index: index),
-                      children: experience!.imageSet!.isEmpty ? const [
+                      children: experience!.imageSet!.isEmpty ? experience!.profileImage != null ? experience!.profileImage!.contains('/asbar-icon.ico') ? const [
+                        SliderImageItem(path: 'assets/images/trip_detail.png', isAsset: true,),
+                      ] : [
+                        SliderImageItem(path: experience!.profileImage, isAsset: false,),
+                      ] : const [
                         SliderImageItem(path: 'assets/images/trip_detail.png', isAsset: true,),
                       ] : [
                         for (var image in experience!.imageSet!)
@@ -171,7 +175,7 @@ class TripDetailView extends HookWidget {
                 Text(experience!.reviews! > 1 ? '${experience!.reviews} reviews' : '${experience!.reviews} review'),
                 Image.asset("assets/icons/location.png"),
                 horizontalSpaceTiny,
-                Text("${experience!.city} , Duration : ${experience!.duration}", style: const TextStyle(color: kMainGray, fontSize: 11)),
+                Text("${experience!.city} , Duration : ${experience!.duration} ${double.parse(experience!.duration!) <= 1 ? "Hour" : "Hours"}", style: const TextStyle(color: kMainGray, fontSize: 11)),
               ],
             ).padding(horizontal: 20),
             Expanded(
