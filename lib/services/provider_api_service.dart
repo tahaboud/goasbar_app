@@ -66,9 +66,9 @@ class ProviderApiService {
     });
   }
 
-  Future<ProviderPublicExperienceModel?> getProviderPublicExperiences({int? providerId}) async {
+  Future<ProviderPublicExperienceModel?> getProviderPublicExperiences({int? providerId, int? page}) async {
     return http.get(
-      Uri.parse("$baseUrl/api/experience/provider/public/$providerId/"),
+      Uri.parse("$baseUrl/api/experience/provider/public/$providerId/?page=$page"),
       headers: {
         "Accept-Language": "en-US",
       },
