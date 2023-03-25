@@ -53,10 +53,10 @@ class SavedExperiencesViewModel extends FutureViewModel<List<ExperienceResults?>
     });
   }
 
-  Future<List<ExperienceResults?>> getFavoriteExperiences({String? query,}) async {
+  Future<List<ExperienceResults?>> getFavoriteExperiences() async {
     favoriteList = await getUserData();
     if (favoriteList!.isNotEmpty) {
-      return await _experienceApiService.getPublicExperiences(query: query,).then((value) {
+      return await _experienceApiService.getPublicExperiences(page: 1).then((value) {
         if (value != null) {
           experienceResults = [];
           for (var experience in value.results!) {
