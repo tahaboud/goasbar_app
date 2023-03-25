@@ -50,7 +50,7 @@ class GeneralInfo extends StatelessWidget {
             children: [
               const Icon(Icons.close, size: 30,).gestures(onTap: onTapBack),
               horizontalSpaceTiny,
-              const Text('GENERAL INFORMATION', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              const Text('GENERAL INFORMATION', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
               Row(
                 children: [
                   Container(
