@@ -97,10 +97,10 @@ class BookingApiService {
     });
   }
 
-  Future<ProviderTimingBooking?> getProviderTimingBookings({context, String? token, int? timingId}) async {
+  Future<ProviderTimingBooking?> getProviderTimingBookings({context, String? token, int? timingId, int? page}) async {
     print(timingId);
     return http.get(
-      Uri.parse("$baseUrl/api/booking/provider/$timingId/"),
+      Uri.parse("$baseUrl/api/booking/provider/$timingId/?page=$page"),
       headers: {
         "Accept-Language": "en-US",
         "Authorization": "Token $token",
@@ -126,6 +126,7 @@ class BookingApiService {
         "Authorization": "Token $token",
       },
     ).then((response) {
+      print(response.body);
       if (response.statusCode == 200) {
         return true;
       } else if (response.statusCode == 401) {
