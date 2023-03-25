@@ -116,7 +116,6 @@ class ProviderProfileView extends HookWidget {
                 verticalSpaceMedium,
                 const Text("Hosted Trips", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
                 verticalSpaceSmall,
-                // TODO Complete ui
                 SizedBox(
                   height: 255,
                   child: model.isBusy ? const Loader().center() : model.data == null ? Text('No trips by ${provider!.nickname} right now').center() : model.data!.isEmpty ? Text('No trips by ${provider!.nickname} right now').center() : ListView.builder(
@@ -162,7 +161,7 @@ class ProviderProfileView extends HookWidget {
                         SizedBox(
                           width: screenWidthPercentage(context, percentage: 0.7),
                           child: const Text(
-                            //TODO review date
+                            //TODO review date waiting anas
                             '25.05.2022',
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(color: kGrayText, fontSize: 12),
@@ -173,7 +172,7 @@ class ProviderProfileView extends HookWidget {
                   ],
                 ),
                 verticalSpaceSmall,
-                //TODO add review comment
+                //TODO add review comment waiting anas
                 SizedBox(
                   width: screenWidthPercentage(context, percentage: 0.85),
                   child: const Text(
