@@ -4,9 +4,9 @@ import 'package:goasbar/data_models/experience_response.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/timing/timing_viewmodel.dart';
+import 'package:goasbar/ui/widgets/creation_aware_item.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:goasbar/ui/widgets/timing_item.dart';
-import 'package:motion_toast/motion_toast.dart';
 import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -90,27 +90,30 @@ class TimingView extends HookWidget {
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: model.timingListModel!.count,
                   itemBuilder: (context, index) {
-                    return Column(
-                      children: [
-                        TimingItem(launchMaps: experience!.latitude == null ? () => showMotionToast(title: "Maps Cannot Be launched", context: context, msg: "The provider did not set the location yet.", type: MotionToastType.warning)
-                            : () => model.launchMaps(lat: experience!.latitude, long: experience!.longitude),
-                          timing: model.timingListModel!.results![index], experience: experience!,
-                          bookings: model.timingListModel!.results![index].availability != null
-                              ? model.timingListModel!.results![index].capacity! - model.timingListModel!.results![index].availability!
-                              : 0,
-                          showBooking: () => model.showBookingList(timingId: model.timingListModel!.results![index].id, experienceId: experience!.id),
-                          deleteTiming: () => model.deleteTiming(experienceId: experience!.id, timingId: model.timingListModel!.results![index].id).then((value) {
-                            if (value!) {
-                              showMotionToast(title: "Deleting Success", context: context, msg: "Deleting timing has done successfully.", type: MotionToastType.success);
-                            } else {
-                              showMotionToast(title: "Deleting Failed", context: context, msg: "An error has occurred, please try again.", type: MotionToastType.error);
-                            }
-                          }),
-                        ).gestures(onTap: () => model.showNewTimingBottomSheet(timing: model.timingListModel!.results![index],
-                            date: model.selectedFormattedDate
-                                ?? model.formatSelectedDate(date: model.selectedDate,))),
-                        const Divider(thickness: 1, height: 30),
-                      ],
+                    return CreationAwareListItem(
+                      itemCreated: () => model.getTimingsListFromNextPage(index: index + 1),
+                      child: Column(
+                        children: [
+                          TimingItem(launchMaps: experience!.latitude == null ? () => showMotionToast(title: "Maps Cannot Be launched", context: context, msg: "The provider did not set the location yet.", type: MotionToastType.warning)
+                              : () => model.launchMaps(lat: experience!.latitude, long: experience!.longitude),
+                            timing: model.timingListModel!.results![index], experience: experience!,
+                            bookings: model.timingListModel!.results![index].availability != null
+                                ? model.timingListModel!.results![index].capacity! - model.timingListModel!.results![index].availability!
+                                : 0,
+                            showBooking: () => model.showBookingList(timingId: model.timingListModel!.results![index].id,),
+                            deleteTiming: () => model.deleteTiming(experienceId: experience!.id, timingId: model.timingListModel!.results![index].id).then((value) {
+                              if (value!) {
+                                showMotionToast(title: "Deleting Success", context: context, msg: "Deleting timing has done successfully.", type: MotionToastType.success);
+                              } else {
+                                showMotionToast(title: "Deleting Failed", context: context, msg: "An error has occurred, please try again.", type: MotionToastType.error);
+                              }
+                            }),
+                          ).gestures(onTap: () => model.showNewTimingBottomSheet(timing: model.timingListModel!.results![index],
+                              date: model.selectedFormattedDate
+                                  ?? model.formatSelectedDate(date: model.selectedDate,))),
+                          const Divider(thickness: 1, height: 30),
+                        ],
+                      ),
                     );
                   },
                 ),
@@ -120,7 +123,7 @@ class TimingView extends HookWidget {
           ),
         ),
       ),
-      viewModelBuilder: () => TimingViewModel(experienceId: experience!.id, context: context),
+      viewModelBuilder: () => TimingViewModel(experience: experience!, context: context),
     );
   }
 }
