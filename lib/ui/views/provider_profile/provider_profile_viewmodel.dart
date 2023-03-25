@@ -13,6 +13,7 @@ class ProviderProfileViewModel extends FutureViewModel<List<ProviderPublicExperi
   final _navigationService = locator<NavigationService>();
   final _providerApiService = locator<ProviderApiService>();
   ProviderPublicExperienceModel? providerPublicExperience;
+  int pageNumber = 1;
 
   dynamic navigateTo({view}) {
     _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
@@ -26,8 +27,18 @@ class ProviderProfileViewModel extends FutureViewModel<List<ProviderPublicExperi
     _navigationService.back();
   }
 
+  Future getProviderPublicExperiencesFromNextPage({int? index}) async {
+    if (index! % 10 == 0) {
+      pageNumber++;
+      print("index : $index");
+      ProviderPublicExperienceModel? providerPublicExperienceList = await _providerApiService.getProviderPublicExperiences(providerId: providerId, page: pageNumber);
+      providerPublicExperience!.results!.addAll(providerPublicExperienceList!.results!);
+      notifyListeners();
+    }
+  }
+
   Future<List<ProviderPublicExperienceResults>?>? getProviderPublicExperiences() async {
-    providerPublicExperience = await _providerApiService.getProviderPublicExperiences(providerId: providerId);
+    providerPublicExperience = await _providerApiService.getProviderPublicExperiences(providerId: providerId, page: pageNumber);
     notifyListeners();
     return providerPublicExperience!.results!;
   }
