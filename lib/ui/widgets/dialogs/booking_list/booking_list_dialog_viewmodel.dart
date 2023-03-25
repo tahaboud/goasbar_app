@@ -6,8 +6,8 @@ import 'package:goasbar/services/booking_api_service.dart';
 import 'package:goasbar/services/token_service.dart';
 import 'package:stacked/stacked.dart';
 
-class BookingListViewModel extends FutureViewModel<List<ProviderTimingBookingResults?>> {
-  BookingListViewModel({this.context, this.timingId});
+class BookingListDialogViewModel extends FutureViewModel<List<ProviderTimingBookingResults?>> {
+  BookingListDialogViewModel({this.context, this.timingId});
   final int? timingId;
   BuildContext? context;
 
