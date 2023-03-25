@@ -6,7 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/experience_model.dart';
 import 'package:goasbar/data_models/experience_response.dart';
-import 'package:goasbar/data_models/provider_public_experience_model.dart';
 import 'package:goasbar/data_models/timing_list_model.dart';
 import 'package:goasbar/services/auth_service.dart';
 import 'package:goasbar/shared/app_configs.dart';
@@ -42,9 +41,9 @@ class ExperienceApiService {
     });
   }
 
-  Future<ExperienceModel?> getProviderExperiences({String? token, context}) async {
+  Future<ExperienceModel?> getProviderExperiences({String? token, context, int? page}) async {
     return http.get(
-      Uri.parse("$baseUrl/api/experience/provider/"),
+      Uri.parse("$baseUrl/api/experience/provider/?page=$page"),
       headers: {
         "Accept-Language": "en-US",
         "Authorization": "Token $token",
@@ -61,9 +60,9 @@ class ExperienceApiService {
     });
   }
 
-  Future<ExperienceModel?> getPublicExperiences({String? query}) async {
+  Future<ExperienceModel?> getPublicExperiences({String? query, int? page}) async {
     return http.get(
-      Uri.parse(query != null ? "$baseUrl/api/experience/$query" : "$baseUrl/api/experience/"),
+      Uri.parse(query != null && query.isNotEmpty ? "$baseUrl/api/experience/$query&page=$page" : "$baseUrl/api/experience/?page=$page"),
       headers: {
         "Accept-Language": "en-US",
       },
@@ -76,9 +75,9 @@ class ExperienceApiService {
     });
   }
 
-  Future<TimingListModel?> getExperiencePublicTimings({int? experienceId}) async {
+  Future<TimingListModel?> getExperiencePublicTimings({int? experienceId, int? page}) async {
     return http.get(
-      Uri.parse("$baseUrl/api/experience/timing/$experienceId/"),
+      Uri.parse("$baseUrl/api/experience/timing/$experienceId/?page=$page"),
       headers: {
         "Accept-Language": "en-US",
       },
