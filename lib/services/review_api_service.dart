@@ -4,7 +4,6 @@ import 'dart:convert';
 
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/review_model.dart';
-import 'package:goasbar/data_models/timing_list_model.dart';
 import 'package:goasbar/data_models/timing_model.dart';
 import 'package:goasbar/services/auth_service.dart';
 import 'package:goasbar/shared/app_configs.dart';
@@ -13,7 +12,6 @@ import 'package:http/http.dart' as http;
 class ReviewApiService {
   final _authService = locator<AuthService>();
 
-  //TODO add review model
   Future<ReviewModel?> createReview({context, String? token, Map? body, int? bookingId}) async {
     return http.post(
       Uri.parse("$baseUrl/api/review/$bookingId/"),
