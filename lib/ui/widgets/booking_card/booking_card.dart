@@ -47,17 +47,13 @@ class BookingItem extends StatelessWidget {
                   || (model.formatDay(bookingsList!.experienceTiming!.date!) < model.formatDayFromToday()
                       && model.formatMonth(bookingsList!.experienceTiming!.date!) <= model.formatMonthFromToday()
                       && model.formatYear(bookingsList!.experienceTiming!.date!) <= model.formatYearFromToday()) ? Row(
-                children: const [
+                children: [
                   Chip(
-                    backgroundColor: Colors.redAccent,
-                    label: Text("COMPLETED", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                    backgroundColor: bookingsList!.status! == "CONFIRMED" ? kMainColor1 : Colors.redAccent,
+                    label: Text(bookingsList!.status! == "CONFIRMED" ? "COMPLETED" : bookingsList!.status!, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                   ),
                 ],
-              ) : Chip(
-                backgroundColor: kMainColor1,
-                label: Text(bookingsList!.status!, style: const TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.bold)),
-              ),
+              ) : const SizedBox(),
             ),
             Positioned(
               bottom: 25,
