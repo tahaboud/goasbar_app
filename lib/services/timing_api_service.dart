@@ -21,6 +21,7 @@ class TimingApiService {
       },
       body: body,
     ).then((response) {
+      print(response.body);
       if (response.statusCode == 201) {
         return TimingModel.fromJson(jsonDecode(response.body));
       } else if (response.statusCode == 401) {
@@ -52,9 +53,9 @@ class TimingApiService {
     });
   }
 
-  Future<TimingListModel?> getTimingsList({String? token, int? experienceId, context}) async {
+  Future<TimingListModel?> getTimingsList({String? token, int? experienceId, context, int? page}) async {
     return http.get(
-      Uri.parse("$baseUrl/api/experience/provider/timing/$experienceId/"),
+      Uri.parse("$baseUrl/api/experience/provider/timing/$experienceId/?page=$page"),
       headers: {
         "Accept-Language": "en-US",
         "Authorization": "Token $token",
