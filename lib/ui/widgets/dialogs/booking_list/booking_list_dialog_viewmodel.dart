@@ -29,7 +29,7 @@ class BookingListDialogViewModel extends FutureViewModel<List<ProviderTimingBook
 
   Future<List<ProviderTimingBookingResults?>> getProviderTimingBookings() async {
     String? token = await _tokenService.getTokenValue();
-    providerTimingBooking = await _bookingApiService.getProviderTimingBookings(context: context, token: token, timingId: timingId,);
+    providerTimingBooking = await _bookingApiService.getProviderTimingBookings(context: context, token: token, timingId: timingId, page: pageNumber);
     notifyListeners();
 
     return providerTimingBooking!.results!;
