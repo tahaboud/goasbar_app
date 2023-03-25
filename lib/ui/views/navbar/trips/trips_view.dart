@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/ui/views/navbar/trips/trips_viewmodel.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
+import 'package:goasbar/ui/widgets/creation_aware_item.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:goasbar/ui/widgets/trip_card/trip_card.dart';
 import 'package:stacked/stacked.dart';
@@ -34,7 +35,10 @@ class TripsView extends HookWidget {
                     shrinkWrap: true,
                     itemCount: model.experienceModels!.count,
                     itemBuilder: (context, index) {
-                      return TripItem(experience: model.experienceModels!.results![index], user: user,);
+                      return CreationAwareListItem(
+                        itemCreated: () => model.getPublicExperiencesFromNextPage(index: index + 1),
+                        child: TripItem(experience: model.experienceModels!.results![index], user: user,),
+                      );
                     },)
                   ),
                 ],
