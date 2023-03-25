@@ -157,7 +157,6 @@ class ReviewView extends HookWidget {
                       showMotionToast(context: context, title: 'Error', msg: 'An error occurred while sending the rate, please try again', type: MotionToastType.error);
                     }
                   });
-                  completer(SheetResponse(confirmed: true));
                 },
               ),
               verticalSpaceRegular,
