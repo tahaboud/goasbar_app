@@ -138,8 +138,6 @@ class ConfirmBookingView extends HookWidget {
                 //   ).alignment(Alignment.centerLeft),
                 // ),
                 model.isBusy ? const SizedBox() : model.data!.count == 0 ? const SizedBox() : verticalSpaceMedium,
-
-
                 model.isBusy ? const Loader().center() : model.data!.count == 0 ? const SizedBox() : SizedBox(
                   height: 82,
                   child: ListView.builder(
