@@ -4,6 +4,7 @@ import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/chats_notifications/chats_notifications_view.dart';
 import 'package:goasbar/ui/views/navbar/experience/experience_viewmodel.dart';
+import 'package:goasbar/ui/widgets/creation_aware_item.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:goasbar/ui/widgets/trip_card/trip_card.dart';
 import 'package:goasbar/ui/widgets/user_welcome_widget/user_welcome_widget.dart';
@@ -69,7 +70,10 @@ class ExperienceView extends HookWidget {
                       shrinkWrap: true,
                       itemCount: model.experienceModels!.count,
                       itemBuilder: (context, index) {
-                        return TripItem(experience: model.experienceModels!.results![index], user: user);
+                        return CreationAwareListItem(
+                          itemCreated: () => model.getPublicExperiencesFromNextPage(index: index + 1),
+                          child: TripItem(experience: model.experienceModels!.results![index], user: user),
+                        );
                       },
                     )
                 ),
