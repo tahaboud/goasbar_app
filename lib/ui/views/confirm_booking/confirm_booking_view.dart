@@ -7,6 +7,7 @@ import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/checkout/checkout_view.dart';
 import 'package:goasbar/ui/views/confirm_booking/confirm_booking_viewmodel.dart';
+import 'package:goasbar/ui/widgets/creation_aware_item.dart';
 import 'package:goasbar/ui/widgets/incdecrease_button.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:motion_toast/resources/arrays.dart';
@@ -68,7 +69,13 @@ class ConfirmBookingView extends HookWidget {
                           children: [
                             Image.asset("assets/icons/location.png"),
                             horizontalSpaceTiny,
-                            Text("${experience!.city!} , ${experience!.duration!} ${double.parse(experience!.duration!) >= 2 ? 'Hours' : 'Hour'}", style: const TextStyle(color: kMainGray, fontSize: 11))
+                            SizedBox(
+                              width: 160,
+                              child: Text(
+                                "${experience!.city!} , ${experience!.duration!} ${double.parse(experience!.duration!) >= 2 ? 'Hours' : 'Hour'}",
+                                style: const TextStyle(color: kMainGray, fontSize: 11),
+                              ),
+                            ),
                           ],
                         ),
                         verticalSpaceMedium,
@@ -141,15 +148,16 @@ class ConfirmBookingView extends HookWidget {
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
-                      if (model.formatYear(model.filterDate1!) <=  model.formatYear(model.data!.results![index].date!)
-                          && model.formatMonth(model.filterDate1!) <=  model.formatMonth(model.data!.results![index].date!)
-                          && model.formatDay(model.filterDate1!) <=  model.formatDay(model.data!.results![index].date!)
-                          && model.formatYear(model.filterDate2!) >=  model.formatYear(model.data!.results![index].date!)
-                          && model.formatMonth(model.filterDate2!) >=  model.formatMonth(model.data!.results![index].date!)
-                          && model.formatDay(model.filterDate2!) >=  model.formatDay(model.data!.results![index].date!)) {
-                        return Container(
+                      return CreationAwareListItem(
+                        itemCreated: () => model.getExperiencePublicTimingsFromNextPage(index: index + 1),
+                        child: (model.formatYear(model.filterDate1!) <=  model.formatYear(model.data!.results![index].date!)
+                            && model.formatMonth(model.filterDate1!) <=  model.formatMonth(model.data!.results![index].date!)
+                            && model.formatDay(model.filterDate1!) <=  model.formatDay(model.data!.results![index].date!)
+                            && model.formatYear(model.filterDate2!) >=  model.formatYear(model.data!.results![index].date!)
+                            && model.formatMonth(model.filterDate2!) >=  model.formatMonth(model.data!.results![index].date!)
+                            && model.formatDay(model.filterDate2!) >=  model.formatDay(model.data!.results![index].date!)) ? Container(
                           margin: const EdgeInsets.symmetric(horizontal: 10),
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                           child: Column(
                             children: [
                               Row(
@@ -170,12 +178,9 @@ class ConfirmBookingView extends HookWidget {
                             .animate(const Duration(milliseconds: 300), Curves.easeIn)
                             .gestures(onTap: () {
                           model.changeSelection(index: index);
-                        });
-                      }
-                      else {
-                        return Container(
+                        }) : Container(
                           margin: const EdgeInsets.symmetric(horizontal: 10),
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                           child: Column(
                             children: [
                               Row(
@@ -191,9 +196,9 @@ class ConfirmBookingView extends HookWidget {
                           ),
                         ).decorated(border: Border.all(
                             color: Colors.black12.withOpacity(0.1), width: 2),
-                            borderRadius: BorderRadius.circular(10),)
-                            .padding(right: 10);
-                      }
+                          borderRadius: BorderRadius.circular(10),)
+                            .padding(right: 10),
+                      );
                     },
                   ),
                 ),
@@ -423,7 +428,7 @@ class ConfirmBookingView extends HookWidget {
                               "last_name": model.lastNames[i].text,
                               "age": model.age[i].text,
                               "gender": model.genders[i].text.toUpperCase(),
-                              "phone_number": "+966${model.phones[i]}"
+                              "phone_number": "+966${model.phones[i].text}"
                             });
                           } else {
                             affiliateSet.add({
