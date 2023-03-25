@@ -4,6 +4,7 @@ import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
+import 'package:goasbar/ui/views/booking_for_provider_detail/booking_for_provider_detail_view.dart';
 import 'package:goasbar/ui/views/trip_detail/trip_detail_view.dart';
 import 'package:goasbar/ui/widgets/booking_card_for_provider/booking_card_for_provider_viewmodel.dart';
 import 'package:stacked/stacked.dart';
@@ -112,9 +113,9 @@ class BookingItemForProviderView extends StatelessWidget {
             ),
           ],
         ).gestures(onTap: () async {
-          // model.navigateTo(view: TripDetailView(experience: providerPublicExperience, user: user)).then((value) {
-          //   model.futureToRun();
-          // });
+          model.navigateTo(view: BookingForProviderDetailView(providerPublicExperience: providerPublicExperience, user: user)).then((value) {
+            model.futureToRun();
+          });
         });
       },
       viewModelBuilder: () => BookingItemForProviderViewModel(user: user),
