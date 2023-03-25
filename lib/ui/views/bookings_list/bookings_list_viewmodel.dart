@@ -31,7 +31,9 @@ class BookingsListViewModel extends FutureViewModel<List<BookingsListResults?>?>
     String? token = await _tokenService.getTokenValue();
     setBusy(true);
     return await _bookingApiService.deleteBooking(context: context, token: token, bookingId: bookingId).then((value) async {
-      data = await futureToRun();
+      if (value != null && value) {
+        data = await futureToRun();
+      }
       setBusy(false);
       return value;
     });
