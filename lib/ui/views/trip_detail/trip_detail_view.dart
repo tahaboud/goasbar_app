@@ -13,6 +13,7 @@ import 'package:goasbar/ui/views/provider_profile/provider_profile_view.dart';
 import 'package:goasbar/ui/views/trip_detail/trip_detail_viewmodel.dart';
 import 'package:goasbar/ui/widgets/note_item.dart';
 import 'package:goasbar/ui/widgets/slider_image_item.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:goasbar/ui/widgets/dot_item.dart';
@@ -230,16 +231,34 @@ class TripDetailView extends HookWidget {
                     ],
                   ).padding(horizontal: 20),
                   verticalSpaceRegular,
-                  Row(
+                  model.kGooglePlex == null ? const SizedBox() : Row(
                     children: [
                       Image.asset("assets/icons/starting_point.png",),
                       horizontalSpaceSmall,
                       const Text('Starting Point',),
                     ],
                   ).padding(horizontal: 20),
-                  verticalSpaceRegular,
-                  Image.asset("assets/images/map.png").padding(horizontal: 20),
-                  verticalSpaceRegular,
+                  model.kGooglePlex == null ? const SizedBox() : verticalSpaceRegular,
+                  model.isBusy ? const SizedBox() : model.kGooglePlex == null ? const SizedBox() : Container(
+                    height: 300,
+                    width: screenWidthPercentage(context, percentage: 0.9),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10)
+                    ),
+                    child: GoogleMap(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      mapType: MapType.normal,
+                      initialCameraPosition: model.kGooglePlex!,
+                      onMapCreated: (GoogleMapController controller) {
+                        model.controller.complete(controller);
+                      },
+                      markers: model.customMarkers.toSet(),
+                      myLocationEnabled: true,
+                      myLocationButtonEnabled: false,
+                      zoomControlsEnabled: false,
+                    ),
+                  ),
+                  model.kGooglePlex == null ? const SizedBox() : verticalSpaceRegular,
                   experience!.requirements == null && experience!.providedGoods == null ? const SizedBox() : Row(
                     children: [
                       Image.asset("assets/icons/notes.png",),
