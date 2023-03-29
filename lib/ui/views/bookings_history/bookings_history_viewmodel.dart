@@ -7,9 +7,9 @@ import 'package:goasbar/services/token_service.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
-class BookingsListViewModel extends FutureViewModel<List<BookingsListResults?>?> {
+class BookingsHistoryViewModel extends FutureViewModel<List<BookingsListResults?>?> {
   BuildContext? context;
-  BookingsListViewModel({this.context});
+  BookingsHistoryViewModel({this.context});
 
   int index = 1;
   final _navigationService = locator<NavigationService>();
