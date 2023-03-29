@@ -13,15 +13,22 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class ReviewView extends HookWidget {
-  const ReviewView({Key? key, required this.request, required this.completer})
+  ReviewView({Key? key, required this.request, required this.completer})
       : super(key: key);
 
   final SheetRequest request;
   final Function(SheetResponse) completer;
 
+  bool? once = true;
+
   @override
   Widget build(BuildContext context) {
     var comment = useTextEditingController();
+    if (request.data['review'] != null && once!) {
+      if (request.data['review'].comment != null) comment.text = request.data['review'].comment;
+
+      once = false;
+    }
 
     return ViewModelBuilder<ReviewViewModel>.reactive(
       builder: (context, model, child) => Container(
@@ -35,9 +42,13 @@ class ReviewView extends HookWidget {
           child: Column(
             children: [
               verticalSpaceRegular,
-              const Icon(Icons.close, size: 30,).gestures(onTap: () =>model.back(),).alignment(Alignment.centerLeft),
-              verticalSpaceRegular,
-              const Text('Leave your feedback', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)).alignment(Alignment.centerLeft),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('Leave your feedback', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)).alignment(Alignment.centerLeft),
+                  const Icon(Icons.close, size: 30,).gestures(onTap: () =>model.back(),).alignment(Alignment.centerLeft),
+                ],
+              ),
               verticalSpaceMedium,
               Row(
                 children: [
@@ -47,7 +58,7 @@ class ReviewView extends HookWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(100),
                       image: DecorationImage(
-                        image: request.data != null ? NetworkImage("$baseUrl${request.data!.image}",)
+                        image: request.data['user'] != null ? NetworkImage("$baseUrl${request.data!['user'].image}",)
                             : const AssetImage("assets/images/avatar.png") as ImageProvider,
                         // : FileImage(model.file!) as ImageProvider,
                         fit: BoxFit.cover,
@@ -59,7 +70,7 @@ class ReviewView extends HookWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        request.data != null ? "${request.data.firstName} ${request.data.lastName}" : "",
+                        request.data['user'] != null ? "${request.data['user'].firstName} ${request.data['user'].lastName}" : "",
                         style: const TextStyle(fontWeight: FontWeight.bold,),
                       ),
                       verticalSpaceTiny,
@@ -82,14 +93,15 @@ class ReviewView extends HookWidget {
                 decoration: InputDecoration(
                   hintText: 'Describe your experience (optional)',
                   hintStyle: const TextStyle(fontSize: 14),
-                  fillColor: kTextFiledGrayColor,
+                  fillColor: Colors.white,
                   filled: true,
                   counterStyle: const TextStyle(color: kMainColor1),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(color: Colors.black)
                   ),
                   enabledBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(color: kTextFiledGrayColor),
+                    borderSide: BorderSide(color: Colors.black, ),
                   ),
                 ),
               ),
@@ -112,7 +124,7 @@ class ReviewView extends HookWidget {
                     ),
                     verticalSpaceSmall,
                     RatingBar.builder(
-                      initialRating: 0,
+                      initialRating: request.data['review'] != null ? double.parse(request.data['review'].rate) : 0,
                       minRating: 0,
                       direction: Axis.horizontal,
                       allowHalfRating: true,
@@ -143,20 +155,41 @@ class ReviewView extends HookWidget {
                 ),
               ).gestures(
                 onTap: () {
-                  Map? body = {
-                    "rate": model.rating.toString(),
-                  };
+                  if (request.data['review'] != null) {
+                    Map? body = {};
 
-                  if (comment.text.isNotEmpty) body.addAll({'comment': comment.text});
+                    if (model.ratingHasChanged!) body.addAll({"rate": model.rating.toString(),});
 
-                  model.createReview(context: context, bookingId: request.customData, body: body).then((value) {
-                    model.updateIsClicked(value: false);
-                    if (value is ReviewModel) {
-                      completer(SheetResponse(confirmed: true));
+                    if (comment.text != request.data['review'].comment && comment.text.isNotEmpty) body.addAll({'comment': comment.text});
+
+                    if (body.isNotEmpty) {
+                      model.updateReview(context: context, reviewId: request.data['review'].id, body: body).then((value) {
+                        model.updateIsClicked(value: false);
+                        if (value is ReviewModel) {
+                          completer(SheetResponse(confirmed: true));
+                        } else {
+                          showMotionToast(context: context, title: 'Error', msg: 'An error occurred while updating the review, please try again', type: MotionToastType.error);
+                        }
+                      });
                     } else {
-                      showMotionToast(context: context, title: 'Error', msg: 'An error occurred while sending the rate, please try again', type: MotionToastType.error);
+                      completer(SheetResponse(confirmed: false));
                     }
-                  });
+                  } else {
+                    Map? body = {
+                      "rate": model.rating.toString(),
+                    };
+
+                    if (comment.text.isNotEmpty) body.addAll({'comment': comment.text});
+
+                    model.createReview(context: context, bookingId: request.customData, body: body).then((value) {
+                      model.updateIsClicked(value: false);
+                      if (value is ReviewModel) {
+                        completer(SheetResponse(confirmed: true));
+                      } else {
+                        showMotionToast(context: context, title: 'Error', msg: 'An error occurred while sending the rate, please try again', type: MotionToastType.error);
+                      }
+                    });
+                  }
                 },
               ),
               verticalSpaceRegular,
@@ -164,7 +197,7 @@ class ReviewView extends HookWidget {
           ),
         ),
       ).height(screenHeightPercentage(context, percentage: 0.85)),
-      viewModelBuilder: () => ReviewViewModel(),
+      viewModelBuilder: () => ReviewViewModel(review: request.data['review']),
     );
   }
 }
