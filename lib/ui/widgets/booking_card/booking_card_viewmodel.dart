@@ -1,5 +1,6 @@
 import 'package:flutter/animation.dart';
 import 'package:goasbar/app/app.locator.dart';
+import 'package:goasbar/data_models/review_model_booking_history.dart';
 import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/enum/bottom_sheet_type.dart';
 import 'package:stacked/stacked.dart';
@@ -26,17 +27,19 @@ class BookingItemViewModel extends BaseViewModel {
   int formatYear(String date) => int.parse(date.substring(0,4).toString());
   int formatYearFromToday() => DateTime.now().year;
 
-  Future showReviewBottomSheet({int? bookingId}) async {
+  Future showReviewBottomSheet({int? bookingId, ReviewModelBookingHistory? review}) async {
     var response = await _bottomSheetService.showCustomSheet(
       variant: BottomSheetType.review,
       isScrollControlled: true,
       barrierDismissible: true,
-      data: user,
+      data: {"user": user, "review": review},
       customData: bookingId,
     );
 
     if (response!.confirmed) {
       return true;
+    } else {
+      return false;
     }
   }
 }
