@@ -6,7 +6,6 @@ import 'package:goasbar/ui/views/faqs/faqs_view.dart';
 import 'package:goasbar/ui/views/forget_password/forget_password_view.dart';
 import 'package:goasbar/ui/views/home/home_view.dart';
 import 'package:goasbar/ui/views/login/login_viewmodel.dart';
-import 'package:goasbar/ui/views/signup/signup_view.dart';
 import 'package:goasbar/ui/widgets/close_view.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:stacked/stacked.dart';
