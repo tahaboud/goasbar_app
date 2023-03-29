@@ -94,7 +94,8 @@ class TimingView extends HookWidget {
                       itemCreated: () => model.getTimingsListFromNextPage(index: index + 1),
                       child: Column(
                         children: [
-                          TimingItem(launchMaps: experience!.latitude == null ? () => showMotionToast(title: "Maps Cannot Be launched", context: context, msg: "The provider did not set the location yet.", type: MotionToastType.warning)
+                          TimingItem(launchMaps: experience!.latitude != null && experience!.longitude != null
+                              ? () {}
                               : () => model.launchMaps(lat: experience!.latitude, long: experience!.longitude),
                             timing: model.timingListModel!.results![index], experience: experience!,
                             bookings: model.timingListModel!.results![index].availability != null
