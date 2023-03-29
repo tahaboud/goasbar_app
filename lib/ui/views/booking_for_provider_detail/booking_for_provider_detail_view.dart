@@ -3,14 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:goasbar/data_models/provider_public_experience_response.dart';
 import 'package:goasbar/data_models/user_model.dart';
-import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/booking_for_provider_detail/booking_for_provider_detail_viewmodel.dart';
 import 'package:goasbar/ui/views/chat_with_agency/chat_with_agency_view.dart';
-import 'package:goasbar/ui/views/provider_profile/provider_profile_view.dart';
 import 'package:goasbar/ui/widgets/note_item.dart';
 import 'package:goasbar/ui/widgets/slider_image_item.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:goasbar/ui/widgets/dot_item.dart';
@@ -180,21 +179,7 @@ class BookingForProviderDetailView extends HookWidget {
                 physics: const BouncingScrollPhysics(),
                 shrinkWrap: true,
                 children: [
-                  const Divider(height: 1, color: kMainDisabledGray, thickness: 1).padding(horizontal: 20),
-                  verticalSpaceRegular,
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const Text('Hosted Experience by', style: TextStyle(fontSize: 18)),
-                      horizontalSpaceSmall,
-                      !model.dataReady ? Image.asset("assets/images/by_user.png").borderRadius(all: 50).height(50).width(50)
-                          : Image.network("$baseUrl${model.provider!.response!.image}", height: 35,).clipRRect(all: 30).gestures(
-                          onTap: () => model.navigateTo(view: ProviderProfileView(provider: model.provider!.response!, user: user)),
-                      ),
-                    ],
-                  ).padding(horizontal: 20),
-                  verticalSpaceSmall,
-                  const Divider(height: 10, color: kMainDisabledGray, thickness: 1).padding(horizontal: 20),
+                  const Divider(height: 5, color: kMainDisabledGray, thickness: 1).padding(horizontal: 20),
                   verticalSpaceRegular,
                   Row(
                     children: [
@@ -227,16 +212,34 @@ class BookingForProviderDetailView extends HookWidget {
                     ],
                   ).padding(horizontal: 20),
                   verticalSpaceRegular,
-                  Row(
+                  model.kGooglePlex == null ? const SizedBox() : Row(
                     children: [
                       Image.asset("assets/icons/starting_point.png",),
                       horizontalSpaceSmall,
                       const Text('Starting Point',),
                     ],
                   ).padding(horizontal: 20),
-                  verticalSpaceRegular,
-                  Image.asset("assets/images/map.png").padding(horizontal: 20),
-                  verticalSpaceRegular,
+                  model.kGooglePlex == null ? const SizedBox() : verticalSpaceRegular,
+                  model.isBusy ? const SizedBox() : model.kGooglePlex == null ? const SizedBox() : Container(
+                    height: 300,
+                    width: screenWidthPercentage(context, percentage: 0.9),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                    child: GoogleMap(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      mapType: MapType.normal,
+                      initialCameraPosition: model.kGooglePlex!,
+                      onMapCreated: (GoogleMapController controller) {
+                        model.controller.complete(controller);
+                      },
+                      markers: model.customMarkers.toSet(),
+                      myLocationEnabled: true,
+                      myLocationButtonEnabled: false,
+                      zoomControlsEnabled: false,
+                    ),
+                  ),
+                  model.kGooglePlex == null ? const SizedBox() : verticalSpaceRegular,
                   providerPublicExperience!.requirements == null && providerPublicExperience!.providedGoods == null ? const SizedBox() : Row(
                     children: [
                       Image.asset("assets/icons/notes.png",),
