@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/animation.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/experience_response.dart';
@@ -8,6 +10,7 @@ import 'package:goasbar/services/provider_api_service.dart';
 import 'package:goasbar/services/token_service.dart';
 import 'package:goasbar/services/url_service.dart';
 import 'package:goasbar/shared/app_configs.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -25,6 +28,10 @@ class TripDetailViewModel extends FutureViewModel<PublicProviderModel?> {
   final _providerApiService = locator<ProviderApiService>();
   PublicProviderModel? provider;
   List<int>? favoriteList = [];
+  CameraPosition? kGooglePlex;
+  Completer<GoogleMapController> controller = Completer();
+  List<Marker> customMarkers = [];
+  LatLng? latLon;
 
   void addFavorites({int? experienceId, context}) {
     isFav = !isFav;
@@ -86,9 +93,30 @@ class TripDetailViewModel extends FutureViewModel<PublicProviderModel?> {
     return isFav;
   }
 
+  mapToMarkers(LatLng latLng) {
+    customMarkers.add(Marker(
+      markerId: const MarkerId("markerId"),
+      position: latLng,
+    ));
+
+    notifyListeners();
+  }
+
+  setMapAndMarker() {
+    if (experience!.latitude != null && experience!.longitude != null) {
+      kGooglePlex = CameraPosition(
+        target: LatLng(experience!.latitude, experience!.longitude),
+        zoom: 13.4746,
+      );
+
+      mapToMarkers(LatLng(experience!.latitude, experience!.longitude));
+    }
+  }
+
   Future<PublicProviderModel?> getProvider () async {
     if (user != null) getIsFav();
     provider = await _providerApiService.getPublicProviderInfo(providerId: experience!.providerId);
+    setMapAndMarker();
     notifyListeners();
 
     return provider;
