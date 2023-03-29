@@ -1,4 +1,4 @@
-import 'package:goasbar/data_models/review_response.dart';
+import 'package:goasbar/data_models/review_models/review_response.dart';
 
 class ReviewModel {
   ReviewResponse? response;
