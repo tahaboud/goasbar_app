@@ -1,10 +1,8 @@
 // ignore_for_file: depend_on_referenced_packages
-
 import 'dart:convert';
-
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/review_model.dart';
-import 'package:goasbar/data_models/timing_model.dart';
+import 'package:goasbar/data_models/review_models/reviews_list_model.dart';
 import 'package:goasbar/services/auth_service.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:http/http.dart' as http;
@@ -33,8 +31,8 @@ class ReviewApiService {
     });
   }
 
-  Future<TimingModel?> updateReview({String? token, Map? body, int? reviewId, context}) async {
-    return http.post(
+  Future<ReviewModel?> updateReview({String? token, Map? body, int? reviewId, context}) async {
+    return http.patch(
       Uri.parse("$baseUrl/api/review/$reviewId/"),
       headers: {
         "Accept-Language": "en-US",
@@ -42,11 +40,28 @@ class ReviewApiService {
       },
       body: body,
     ).then((response) {
+      print(body);
+      print(response.body);
       if (response.statusCode == 200) {
-        return TimingModel.fromJson(jsonDecode(response.body));
+        return ReviewModel.fromJson(jsonDecode(response.body));
       } else if (response.statusCode == 401) {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
+      } else {
+        return null;
+      }
+    });
+  }
+
+  Future<ReviewsModelList?> getReviews({String? query, int? experienceId, int? page}) async {
+    return http.get(
+      Uri.parse("$baseUrl/api/review/$experienceId/?page=$page"),
+      headers: {
+        "Accept-Language": "en-US",
+      },
+    ).then((response) {
+      if (response.statusCode == 200) {
+        return ReviewsModelList.fromJson(jsonDecode(response.body));
       } else {
         return null;
       }
