@@ -131,56 +131,56 @@ class ProviderProfileView extends HookWidget {
                     },
                   ),
                 ),
-                verticalSpaceMedium,
-                const Text("Reviews", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                verticalSpaceSmall,
-                Row(
-                  children: [
-                    Container(
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
-                        image: DecorationImage(
-                          image: user != null ? NetworkImage("$baseUrl${user!.image}",)
-                              : const AssetImage("assets/images/avatar.png") as ImageProvider,
-                          // : FileImage(model.file!) as ImageProvider,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    horizontalSpaceSmall,
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          user != null ? "${user!.firstName} ${user!.lastName}" : "",
-                          style: const TextStyle(fontWeight: FontWeight.bold,),
-                        ),
-                        verticalSpaceTiny,
-                        SizedBox(
-                          width: screenWidthPercentage(context, percentage: 0.7),
-                          child: const Text(
-                            //TODO review date waiting anas
-                            '25.05.2022',
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(color: kGrayText, fontSize: 12),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                verticalSpaceSmall,
-                //TODO add review comment waiting anas
-                SizedBox(
-                  width: screenWidthPercentage(context, percentage: 0.85),
-                  child: const Text(
-                    'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et',
-                    overflow: TextOverflow.clip,
-                    style: TextStyle(color: Colors.black54),
-                  ),
-                ),
+                // verticalSpaceMedium,
+                // const Text("Reviews", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                // verticalSpaceSmall,
+                // Row(
+                //   children: [
+                //     Container(
+                //       height: 40,
+                //       width: 40,
+                //       decoration: BoxDecoration(
+                //         borderRadius: BorderRadius.circular(100),
+                //         image: DecorationImage(
+                //           image: user != null ? NetworkImage("$baseUrl${user!.image}",)
+                //               : const AssetImage("assets/images/avatar.png") as ImageProvider,
+                //           // : FileImage(model.file!) as ImageProvider,
+                //           fit: BoxFit.cover,
+                //         ),
+                //       ),
+                //     ),
+                //     horizontalSpaceSmall,
+                //     Column(
+                //       crossAxisAlignment: CrossAxisAlignment.start,
+                //       children: [
+                //         Text(
+                //           user != null ? "${user!.firstName} ${user!.lastName}" : "",
+                //           style: const TextStyle(fontWeight: FontWeight.bold,),
+                //         ),
+                //         verticalSpaceTiny,
+                //         SizedBox(
+                //           width: screenWidthPercentage(context, percentage: 0.7),
+                //           child: const Text(
+                //             //TODO review date waiting anas
+                //             '25.05.2022',
+                //             overflow: TextOverflow.ellipsis,
+                //             style: TextStyle(color: kGrayText, fontSize: 12),
+                //           ),
+                //         ),
+                //       ],
+                //     ),
+                //   ],
+                // ),
+                // verticalSpaceSmall,
+                // //TODO add review comment waiting anas
+                // SizedBox(
+                //   width: screenWidthPercentage(context, percentage: 0.85),
+                //   child: const Text(
+                //     'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et',
+                //     overflow: TextOverflow.clip,
+                //     style: TextStyle(color: Colors.black54),
+                //   ),
+                // ),
                 const Divider(color: kMainColor1, height: 40, thickness: 1.2),
                 Row(
                   children: [
