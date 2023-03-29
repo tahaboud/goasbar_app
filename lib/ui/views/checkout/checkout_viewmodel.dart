@@ -7,7 +7,7 @@ import 'package:goasbar/services/booking_api_service.dart';
 import 'package:goasbar/services/token_service.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
-import 'package:goasbar/ui/views/bookings_list/bookings_list_view.dart';
+import 'package:goasbar/ui/views/bookings_history/bookings_history_view.dart';
 import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -90,7 +90,7 @@ class CheckoutViewModel extends BaseViewModel {
       if (bookingState!) {
         Navigator.pop(context);
         //TODO go to bookings page
-        _navigationService.clearTillFirstAndShowView(BookingsListView(user: user!, ));
+        _navigationService.clearTillFirstAndShowView(BookingsHistoryView(user: user!, ));
       } else {
         Navigator.pop(context);
         showMotionToast(context: context, title: 'Error Payment', msg: "Payment Failed, Please Retry Payment", type: MotionToastType.error);
