@@ -15,6 +15,7 @@ import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class AddExperienceView extends HookWidget {
   AddExperienceView({Key? key, required this.request, required this.completer})
@@ -866,19 +867,47 @@ class AddExperienceView extends HookWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text("City Dammam - Rue 14"),
+                            SizedBox(
+                              width: screenWidthPercentage(context, percentage: 0.55),
+                              child: Text(model.address != null ? "${model.address!.thoroughfare!} - ${model.address!.locality!}" : "Street Name"),
+                            ),
                             Row(
                               children: [
                                 Image.asset("assets/icons/map_link.png", color: kMainColor1),
                                 horizontalSpaceSmall,
                                 const Text("Google maps", style: TextStyle(color: kGrayText),),
                               ],
-                            )
+                            ).gestures(onTap: () {
+                              if (model.latLon != null) {
+                                model.launchMaps(latLon: model.latLon);
+                              }
+                            }),
                           ],
                         ),
                       ),
-                      verticalSpaceRegular,
-                      Image.asset("assets/images/map.png"),
+                      model.kGooglePlex == null ? const SizedBox() : verticalSpaceRegular,
+                      model.isBusy ? const SizedBox() : model.kGooglePlex == null ? const SizedBox() : Container(
+                        height: 300,
+                        width: screenWidthPercentage(context, percentage: 0.9),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                        child: GoogleMap(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          mapType: MapType.normal,
+                          initialCameraPosition: model.kGooglePlex!,
+                          onMapCreated: (GoogleMapController controller) {
+                            model.controller.complete(controller);
+                          },
+                          onTap: (latLon) {
+                            model.getTappedPosition(latLon);
+                          },
+                          markers: model.customMarkers.toSet(),
+                          myLocationEnabled: true,
+                          myLocationButtonEnabled: false,
+                          zoomControlsEnabled: false,
+                        ),
+                      ),
                       verticalSpaceRegular,
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1153,6 +1182,13 @@ class AddExperienceView extends HookWidget {
                             if (notes.text.isNotEmpty) body.addAll({'location_notes': notes.text,});
                             if (model.selectedExperienceCategory != []) body.addAll({'categories': model.selectedExperienceCategory,});
                             if (link.text.isNotEmpty) body.addAll({'youtube_video': link.text});
+                            if (model.latLon != null ) {
+                              if (model.latLon!.latitude != request.data!.latitude
+                                  && model.latLon!.longitude != request.data!.longitude) {
+                                body.addAll({'longitude': model.latLon!.longitude,});
+                                body.addAll({'latitude': model.latLon!.latitude,});
+                              }
+                            }
                             body.addAll({'provided_goods': model.providedGoodsText});
                             body.addAll({'requirements': model.requirementsText});
 
@@ -1214,6 +1250,11 @@ class AddExperienceView extends HookWidget {
                             if (model.genderConstraint == "Men Only") body.addAll({'gender': 'MEN',});
                             if (model.genderConstraint == "Women Only") body.addAll({'gender': 'WOMEN',});
 
+                            if (duration.text.isNotEmpty) body.addAll({'duration': duration.text,});
+                            if (model.latLon != null) {
+                              body.addAll({'longitude': model.latLon!.longitude,});
+                              body.addAll({'latitude': model.latLon!.latitude,});
+                            }
                             if (duration.text.isNotEmpty) body.addAll({'duration': duration.text,});
                             if (notes.text.isNotEmpty) body.addAll({'location_notes': notes.text,});
                             if (model.selectedExperienceCategory != []) body.addAll({'categories': model.selectedExperienceCategory,});
