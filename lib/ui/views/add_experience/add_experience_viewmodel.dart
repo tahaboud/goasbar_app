@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
@@ -15,8 +16,11 @@ import 'package:goasbar/services/token_service.dart';
 import 'package:goasbar/services/validation_service.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:geocoding/geocoding.dart';
 
 class AddExperienceInfoViewModel extends BaseViewModel {
   AddExperienceInfoViewModel({this.experience});
@@ -59,15 +63,71 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   List<TextEditingController> addedProvidedGoodsControllers = [];
   String? genderConstraint = genderConstraints[0];
   bool? isClicked = false;
+  CameraPosition? kGooglePlex;
+  Completer<GoogleMapController> controller = Completer();
+  List<Marker> customMarkers = [];
+  LatLng? latLon;
+  Placemark? address;
+
+  Future getAddressFromCoordinates({LatLng? latLng})async {
+    List<Placemark> placemarks = await placemarkFromCoordinates(latLng!.latitude, latLng.longitude);
+    address = placemarks[0];
+
+    notifyListeners();
+  }
+
+  launchMaps ({LatLng? latLon}) {
+    MapsLauncher.launchCoordinates(latLon!.latitude, latLon.longitude);
+  }
 
   updateIsClicked({value}) {
     isClicked = value;
     notifyListeners();
   }
 
+  getTappedPosition(LatLng latLong) async {
+    final CameraPosition position = CameraPosition(
+      target: latLong,
+      zoom: 16.151926040649414,
+    );
+
+    mapToMarkers(latLong);
+    latLon = latLong;
+
+    getAddressFromCoordinates(latLng: latLon);
+
+    final GoogleMapController ctr = await controller.future;
+    ctr.animateCamera(CameraUpdate.newCameraPosition(position));
+
+    notifyListeners();
+  }
+
+  mapToMarkers(LatLng latLng) {
+    customMarkers.add(Marker(
+      markerId: const MarkerId("markerId"),
+      position: latLng,
+    ));
+
+    notifyListeners();
+  }
+
   onStart() {
     if (experience != null) {
       setBusy(true);
+      if (experience!.latitude != null && experience!.longitude != null) latLon = LatLng(experience!.latitude, experience!.longitude);
+      if (experience!.latitude != null && experience!.longitude != null) {
+        kGooglePlex = CameraPosition(
+          target: LatLng(experience!.latitude, experience!.longitude),
+          zoom: 13.4746,
+        );
+        mapToMarkers(LatLng(experience!.latitude, experience!.longitude));
+        getAddressFromCoordinates(latLng: LatLng(experience!.latitude, experience!.longitude));
+      } else {
+        kGooglePlex = const CameraPosition(
+          target: LatLng(24.720495, 46.675468),
+          zoom: 13.4746,
+        );
+      }
       city = getCity();
       genderConstraint = getGenderConstraint();
       selectedExperienceCategory = getSelectedExperienceCategory();
