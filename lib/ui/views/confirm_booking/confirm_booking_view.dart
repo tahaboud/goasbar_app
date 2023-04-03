@@ -148,12 +148,23 @@ class ConfirmBookingView extends HookWidget {
                     itemBuilder: (context, index) {
                       return CreationAwareListItem(
                         itemCreated: () => model.getExperiencePublicTimingsFromNextPage(index: index + 1),
-                        child: (model.formatYear(model.filterDate1!) <=  model.formatYear(model.data!.results![index].date!)
-                            && model.formatMonth(model.filterDate1!) <=  model.formatMonth(model.data!.results![index].date!)
-                            && model.formatDay(model.filterDate1!) <=  model.formatDay(model.data!.results![index].date!)
-                            && model.formatYear(model.filterDate2!) >=  model.formatYear(model.data!.results![index].date!)
-                            && model.formatMonth(model.filterDate2!) >=  model.formatMonth(model.data!.results![index].date!)
-                            && model.formatDay(model.filterDate2!) >=  model.formatDay(model.data!.results![index].date!)) ? Container(
+                        child: ((model.formatYear(model.filterDate1!) < model.formatYear(model.data!.results![index].date!)
+                            && model.formatYear(model.filterDate2!) > model.formatYear(model.data!.results![index].date!))
+
+                            || (model.formatYear(model.filterDate2!) == model.formatYear(model.data!.results![index].date!)
+                            && model.formatYear(model.filterDate1!) < model.formatYear(model.data!.results![index].date!)
+                            && model.formatMonth(model.filterDate2!) >= model.formatMonth(model.data!.results![index].date!)
+                            && model.formatDay(model.filterDate2!) >= model.formatDay(model.data!.results![index].date!))
+
+                            || (model.formatYear(model.filterDate1!) == model.formatYear(model.data!.results![index].date!)
+                            && model.formatYear(model.filterDate2!) > model.formatYear(model.data!.results![index].date!)
+                            && model.formatMonth(model.filterDate1!) <= model.formatMonth(model.data!.results![index].date!)
+                            && model.formatDay(model.filterDate1!) <= model.formatDay(model.data!.results![index].date!))
+
+                            || (model.formatMonth(model.filterDate1!) <= model.formatMonth(model.data!.results![index].date!)
+                            && model.formatDay(model.filterDate1!) <= model.formatDay(model.data!.results![index].date!)
+                            && model.formatMonth(model.filterDate2!) >= model.formatMonth(model.data!.results![index].date!)
+                            && model.formatDay(model.filterDate2!) >= model.formatDay(model.data!.results![index].date!))) ? Container(
                           margin: const EdgeInsets.symmetric(horizontal: 10),
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                           child: Column(
@@ -192,9 +203,7 @@ class ConfirmBookingView extends HookWidget {
                               Text(model.data!.results![index].startTime!.substring(0, 5), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: kMainColor1.withOpacity(0.4))),
                             ],
                           ),
-                        ).decorated(border: Border.all(
-                            color: Colors.black12.withOpacity(0.1), width: 2),
-                          borderRadius: BorderRadius.circular(10),)
+                        ).decorated(border: Border.all(color: Colors.black12.withOpacity(0.1), width: 2), borderRadius: BorderRadius.circular(10),)
                             .padding(right: 10),
                       );
                     },
