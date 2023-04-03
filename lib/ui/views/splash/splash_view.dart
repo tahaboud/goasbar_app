@@ -16,9 +16,10 @@ class SplashView extends StatelessWidget {
     return ViewModelBuilder<SplashViewModel>.reactive(
       builder: (context, model, child) => Scaffold(
         body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SizedBox(
-              height: 650,
+              height: screenHeightPercentage(context, percentage: 0.9),
               child: Stack(
                 children: [
                   Image.asset(
@@ -82,25 +83,26 @@ class SplashView extends StatelessWidget {
                     style: TextStyle(color: kMainGray, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),
                   ).translate(offset: const Offset(30, 570)),
 
-                  !model.isDone2 ? const SizedBox() : Container(
-                    width: MediaQuery.of(context).size.width - 60,
-                    height: 50,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      gradient: kMainGradient,
-                    ),
-                    child: const Center(
-                      child: Text('Get Started', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
-                    ).gestures(onTap: () => print('sssss')),
-                  ).gestures(
-                    onTap: () async {
-                      model.clearStackAndShowView(view: const LoginView());
-                    },
-                  ).opacity(model.isDone2 ? 1 : 0, animate: true).animate(const Duration(milliseconds: 1000), Curves.easeIn)
-                      .translate(offset: Offset(30, size.height - 30 - 50 ))
+
                 ],
               ),
             ),
+            !model.isDone2 ? const SizedBox() : Container(
+              width: MediaQuery.of(context).size.width - 60,
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              height: 50,
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                gradient: kMainGradient,
+              ),
+              child: const Center(
+                child: Text('Get Started', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+              ),
+            ).gestures(
+              onTap: () async {
+                model.clearStackAndShowView(view: const LoginView());
+              },
+            ).opacity(model.isDone2 ? 1 : 0, animate: true).animate(const Duration(milliseconds: 1000), Curves.easeIn)
 
           ],
         ),
