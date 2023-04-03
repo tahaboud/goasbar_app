@@ -34,7 +34,7 @@ class ChatWithAgencyViewModel extends FutureViewModel<ChatTokenProviderModel?> {
   }
 
   Future<ChatTokenProviderModel?> getUserFireStoreTokenAndProviderChatId() async {
-    String token = await _tokenService.getTokenValue();
+    String? token = await _tokenService.getTokenValue();
     chatTokenProvider = await _chatApiService.getUserFireStoreTokenAndProviderChatId(context: context, token: token, providerId: providerId);
     notifyListeners();
     return await auth(token: chatTokenProvider!.fireStoreToken).then((value) {
