@@ -26,7 +26,7 @@ class ChatItemViewModel extends FutureViewModel<String?> {
   }
 
   Future<String?> getUserPicture({context}) async {
-    String token = await _tokenService.getTokenValue();
+    String? token = await _tokenService.getTokenValue();
     return await _authService.getUserPicture(context: context, token: token, userId: id);
   }
 
