@@ -98,7 +98,7 @@ class EditProfileViewModel extends FutureViewModel<dynamic> {
   }
 
   Future<dynamic> getUserData({context}) async {
-    String token = await _tokenService.getTokenValue();
+    String? token = await _tokenService.getTokenValue();
     return _authService.getUserData(token: token, context: context).then((value) {
       if (value != null) {
         user = value;
@@ -113,7 +113,7 @@ class EditProfileViewModel extends FutureViewModel<dynamic> {
   Future<dynamic> updateUserData({Map<String, dynamic>? body, context}) async {
     updateIsClicked(value: true);
 
-    String token = await _tokenService.getTokenValue();
+    String? token = await _tokenService.getTokenValue();
     return _authService.updateUserData(context: context, token: token, body: body,).then((value) {
       if (value != null) {
         user = value;
