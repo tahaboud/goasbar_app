@@ -79,7 +79,6 @@ class CompleteProfileViewModel extends BaseViewModel {
     List<DateTime?>? picked = await showCalendarDatePicker2Dialog(
       context: context,
       config: CalendarDatePicker2WithActionButtonsConfig(
-        firstDate: DateTime.now(),
         calendarType: CalendarDatePicker2Type.single,
         selectedDayHighlightColor: kMainColor1,
       ),
