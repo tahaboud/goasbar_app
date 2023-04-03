@@ -14,6 +14,12 @@ class LoginViewModel extends BaseViewModel {
   final _tokenService = locator<TokenService>();
   final _authService = locator<AuthService>();
   AuthResponse? authResponse;
+  bool? isClicked = false;
+
+  updateIsClicked({value}) {
+    isClicked = value;
+    notifyListeners();
+  }
 
   void changeObscure() {
     isObscure = !isObscure;
@@ -38,6 +44,7 @@ class LoginViewModel extends BaseViewModel {
   }
 
   Future<bool> login({Map? body}) async {
+    updateIsClicked(value: true);
     authResponse = await _authService.login(
       body: body,
     );
