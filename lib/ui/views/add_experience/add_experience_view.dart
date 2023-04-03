@@ -868,13 +868,13 @@ class AddExperienceView extends HookWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             SizedBox(
-                              width: screenWidthPercentage(context, percentage: 0.55),
+                              width: screenWidthPercentage(context, percentage: 0.5),
                               child: Text(model.address != null ? "${model.address!.thoroughfare!} - ${model.address!.locality!}" : "Street Name"),
                             ),
                             Row(
                               children: [
                                 Image.asset("assets/icons/map_link.png", color: kMainColor1),
-                                horizontalSpaceSmall,
+                                horizontalSpaceTiny,
                                 const Text("Google maps", style: TextStyle(color: kGrayText),),
                               ],
                             ).gestures(onTap: () {
