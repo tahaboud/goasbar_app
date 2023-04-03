@@ -38,7 +38,7 @@ class SavedExperiencesViewModel extends FutureViewModel<List<ExperienceResults?>
   }
 
   updateUserData({int? index, context}) async {
-    String token = await _tokenService.getTokenValue();
+    String? token = await _tokenService.getTokenValue();
     favoriteList!.removeAt(index!);
     notifyListeners();
     setBusy(true);
