@@ -19,8 +19,8 @@ class TokenService {
     await prefs.setString('token', token);
   }
 
-  Future<String> getTokenValue() async {
+  Future<String?> getTokenValue() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('token')!;
+    return prefs.getString('token');
   }
 }
