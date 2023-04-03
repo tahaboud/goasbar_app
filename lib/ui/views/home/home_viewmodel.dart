@@ -14,7 +14,7 @@ class HomeViewModel extends IndexTrackingViewModel {
   bool? thereIsConnection = true;
 
   Future<UserModel?> getUserData({context}) async {
-    String token = await _tokenService.getTokenValue();
+    String? token = await _tokenService.getTokenValue();
     setBusy(true);
     return _authService.getUserData(token: token, context: context).then((value) {
       if (value != null) {
