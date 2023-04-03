@@ -27,7 +27,7 @@ class TripItemViewModel extends FutureViewModel<bool?> {
   }
 
   updateUserData({int? experienceId, bool? isRemove, context}) async {
-    String token = await _tokenService.getTokenValue();
+    String? token = await _tokenService.getTokenValue();
     notifyListeners();
 
     favoriteList = user!.favoriteExperiences;
