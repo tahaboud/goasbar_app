@@ -70,7 +70,7 @@ class HomeView extends StatelessWidget {
         );
       },
       viewModelBuilder: () => HomeViewModel(),
-      onModelReady: (model) => model.getConnectivityStatus(context: context),
+      onModelReady: (model) => !isUser! ? {} : model.getConnectivityStatus(context: context),
     );
   }
 
