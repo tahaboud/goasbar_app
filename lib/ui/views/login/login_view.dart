@@ -7,6 +7,7 @@ import 'package:goasbar/ui/views/forget_password/forget_password_view.dart';
 import 'package:goasbar/ui/views/home/home_view.dart';
 import 'package:goasbar/ui/views/login/login_viewmodel.dart';
 import 'package:goasbar/ui/widgets/close_view.dart';
+import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -116,7 +117,7 @@ class LoginView extends HookWidget {
                     const Spacer(),
                     const Spacer(),
                     const Spacer(),
-                    const Text('Continue', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),),
+                    model.isClicked! ? const Loader().center() : const Text('Continue', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),),
                     const Spacer(),
                     const Spacer(),
                     Image.asset("assets/icons/person_login.png",).padding(horizontal: 15),
@@ -128,6 +129,7 @@ class LoginView extends HookWidget {
                     "email": userName.text,
                     "password": password.text,
                   }).then((value) {
+                    model.updateIsClicked(value: false);
                     if (value) {
                       model.clearAndNavigateTo(view: const HomeView(isUser: true));
                     } else {
