@@ -4,11 +4,11 @@ import 'package:string_validator/string_validator.dart';
 class ValidationService {
   String? passwordValidation(String? value) {
     if (value!.isEmpty) {
-      return tr("emptyStringValidation");
+      return tr("Empty field");
     } else if (value.length < 4) {
-      return tr("biggerThan4");
+      return tr("Must be more than 4 letters");
     } else if (!isNumeric(value)) {
-      return tr("onlyNumbers");
+      return tr("Only Numbers");
     } else {
       return null;
     }
@@ -16,11 +16,11 @@ class ValidationService {
 
   String? rePasswordValidation({String? password, String? rePassword}) {
     if (rePassword!.isEmpty) {
-      return tr("emptyStringValidation");
+      return tr("Empty field");
     } else if (rePassword.length < 4) {
-      return tr("biggerThan4");
+      return tr("Must be more than 4 letters");
     } else if (!isNumeric(rePassword)) {
-      return tr("onlyNumbers");
+      return tr("Only Numbers");
     } else if (password != rePassword) {
       return tr("Password does not match");
     } else{
@@ -30,7 +30,7 @@ class ValidationService {
 
   String? validatePhoneNumber (String? value) {
     if (value!.isEmpty) {
-      return tr("emptyStringValidation");
+      return tr("Empty field");
     } else {
       const pattern = r'^[5][0-9]{8}$';
       final regExp = RegExp(pattern);
@@ -45,7 +45,7 @@ class ValidationService {
 
   String? validateEmail (String? value) {
     if (value!.isEmpty) {
-      return tr("emptyStringValidation");
+      return tr("Empty field");
     } else {
       const pattern = r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$';
       final regExp = RegExp(pattern);
