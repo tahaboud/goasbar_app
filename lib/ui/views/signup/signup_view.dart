@@ -4,6 +4,7 @@ import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/faqs/faqs_view.dart';
 import 'package:goasbar/ui/views/signup/signup_viewmodel.dart';
 import 'package:goasbar/ui/views/signup_otp/signup_otp_view.dart';
+import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -57,12 +58,14 @@ class SignUpView extends HookWidget {
                   .center(),
               verticalSpaceTiny,
               TextFormField(
+                maxLength: 9,
                 controller: phone,
                 validator: (value) => model.validatePhoneNumber(value: value),
                 keyboardType: TextInputType.number,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 decoration: InputDecoration(
                   hintText: 'xx x - xx x - xx x',
+                  counterText: '',
                   hintStyle: const TextStyle(fontSize: 14),
                   // prefixText: 'Saudi Arabia ( +966 ) | ',
                   prefixIcon: const Text('Saudi Arabia ( +966 )  |', style: TextStyle(color: kMainGray, fontSize: 14),).padding(vertical: 20, horizontal: 10),
@@ -77,7 +80,6 @@ class SignUpView extends HookWidget {
                 ),
               ),
               verticalSpaceMedium,
-
               Container(
                 width: MediaQuery.of(context).size.width - 60,
                 height: 50,
@@ -91,7 +93,7 @@ class SignUpView extends HookWidget {
                     const Spacer(),
                     const Spacer(),
                     const Spacer(),
-                    const Text('Send Verification Code', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),),
+                    model.isClicked! ? const Loader().center() : const Text('Send Verification Code', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),),
                     const Spacer(),
                     const Spacer(),
                     Image.asset("assets/icons/person_login.png",).padding(horizontal: 15),
@@ -100,6 +102,7 @@ class SignUpView extends HookWidget {
               ).gestures(
                 onTap: phone.text.isNotEmpty ? () {
                   model.verifyPhoneNumber(phoneNumber: "+966${phone.text}").then((value) {
+                    model.updateIsClicked(value: false);
                     if (value) {
                       model.navigateTo(view: SignUpOtpView(phone: phone.text, body: body, hasImage: hasImage));
                     } else {
@@ -114,10 +117,6 @@ class SignUpView extends HookWidget {
                 } : () {},
               ),
               verticalSpaceRegular,
-              const Text("Already have an account ?", style: TextStyle(color: Color(0xff647382), fontWeight: FontWeight.w500, fontSize: 15),)
-                  .center(),
-              verticalSpaceRegular,
-
             ],
           ),
         ),
