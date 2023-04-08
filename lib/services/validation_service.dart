@@ -7,8 +7,6 @@ class ValidationService {
       return tr("Empty field");
     } else if (value.length < 4) {
       return tr("Must be more than 4 letters");
-    } else if (!isNumeric(value)) {
-      return tr("Only Numbers");
     } else {
       return null;
     }
@@ -19,8 +17,6 @@ class ValidationService {
       return tr("Empty field");
     } else if (rePassword.length < 4) {
       return tr("Must be more than 4 letters");
-    } else if (!isNumeric(rePassword)) {
-      return tr("Only Numbers");
     } else if (password != rePassword) {
       return tr("Password does not match");
     } else{
