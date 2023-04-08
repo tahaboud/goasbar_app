@@ -90,7 +90,7 @@ class SignUpOtpView extends HookWidget {
                   },
                 ),
                 const Spacer(),
-                Text('New code ${model.startStr}', style: const TextStyle(color: kMainGray),).gestures(onTap: () {
+                Text('New code ${model.startStr}', style: TextStyle(color: model.start == 90 ? Colors.black : kMainGray),).gestures(onTap: () {
                   model.resendCode(phoneNumber: "+966$phone");
                 }),
                 verticalSpaceMedium,
