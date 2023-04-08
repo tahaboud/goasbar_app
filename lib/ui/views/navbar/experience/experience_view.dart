@@ -3,6 +3,7 @@ import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/chats_notifications/chats_notifications_view.dart';
+import 'package:goasbar/ui/views/login/login_view.dart';
 import 'package:goasbar/ui/views/navbar/experience/experience_viewmodel.dart';
 import 'package:goasbar/ui/widgets/creation_aware_item.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
@@ -41,7 +42,7 @@ class ExperienceView extends HookWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Image.asset("assets/icons/messages.png",),
-                    ).gestures(onTap: () => model.navigateTo(view: ChatsNotificationsView(user: user!)),),
+                    ).gestures(onTap: () => model.navigateTo(view: user == null ? const LoginView() : ChatsNotificationsView(user: user!)),),
                     horizontalSpaceSmall,
                   ],
                 ),
