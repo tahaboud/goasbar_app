@@ -34,7 +34,8 @@ class AuthService {
         ),
         data: formData,
       ).then((response) {
-        if (response.statusCode == 200) {
+        print(response.data);
+        if (response.statusCode == 201) {
           return AuthResponse.fromJson(response.data);
         } if (response.statusCode == 429) {
           return StatusCode.throttled;
@@ -50,7 +51,8 @@ class AuthService {
         },
         body: body,
       ).then((response) {
-        if (response.statusCode == 200) {
+        print(response.body);
+        if (response.statusCode == 201) {
           return AuthResponse.fromJson(jsonDecode(response.body));
         } if (response.statusCode == 429) {
           return StatusCode.throttled;
@@ -72,7 +74,8 @@ class AuthService {
         "language_code": "en",
       },
     ).then((response) {
-
+      print(response.body);
+      print(phoneNumber);
       if (response.statusCode == 200) {
         return true;
       } else {
@@ -89,6 +92,7 @@ class AuthService {
       },
       body: body,
     ).then((response) async {
+      print(response.body);
       if (response.statusCode == 200) {
         return AuthResponse.fromJson(jsonDecode(response.body));
       }
