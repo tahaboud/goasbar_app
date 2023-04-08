@@ -42,9 +42,6 @@ class ProviderApiService {
     ).then((response) {
       if (response.statusCode == 200) {
         return ProviderModel.fromJson(jsonDecode(response.body));
-      } else if (response.statusCode == 401) {
-        _authService.unAuthClearAndRestart(context: context,);
-        return null;
       } else {
         return null;
       }
