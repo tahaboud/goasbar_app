@@ -17,14 +17,14 @@ class SupportViewModel extends BaseViewModel {
   }
 
   void launchWebSite() {
-    _urlService.launchWebsite();
+    _urlService.launchLink(link: "https://www.goasbar.com/");
   }
 
   void launchEmail() {
-    _urlService.launchEmail();
+    _urlService.launchEmail(email: "contact@goasbar.com");
   }
 
   void launchPhoneCall() {
-    _urlService.launchPhoneCall();
+    _urlService.launchPhoneCall(phoneNumber: "+966 (483) -565 9898");
   }
 }
