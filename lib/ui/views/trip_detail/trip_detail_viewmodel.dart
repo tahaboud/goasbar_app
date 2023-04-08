@@ -71,7 +71,7 @@ class TripDetailViewModel extends FutureViewModel<PublicProviderModel?> {
   }
 
   share({String? link}) {
-    _urlService.launchLink(link: link);
+    _urlService.launchExperienceLink(link: link);
   }
 
   String formatYear(String date) => date.substring(0,4).toString();
