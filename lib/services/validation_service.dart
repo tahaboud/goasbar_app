@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:string_validator/string_validator.dart';
 
 class ValidationService {
   String? passwordValidation(String? value) {
