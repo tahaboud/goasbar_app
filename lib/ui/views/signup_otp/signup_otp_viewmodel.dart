@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:dio/dio.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/auth_response.dart';
 import 'package:goasbar/services/auth_service.dart';
@@ -28,21 +26,23 @@ class SignUpOtpViewModel extends BaseViewModel {
   }
 
   Future<StatusCode> register({Map<String, dynamic>? body, bool? hasImage}) async {
-    dynamic response = await _authService.register(
+    return await _authService.register(
       hasImage: hasImage,
       body: body,
-    );
+    ).then((response) {
+      if (response == null) {
+        return StatusCode.other;
+      } else if (response == StatusCode.throttled) {
+        return StatusCode.throttled;
+      } else {
+        authResponse = response;
+        _tokenService.setTokenValue(authResponse!.token!);
+        notifyListeners();
+        return StatusCode.ok;
+      }
+    });
 
-    if (response == null) {
-      return StatusCode.other;
-    } else if (response == StatusCode.throttled) {
-      return StatusCode.throttled;
-    } else {
-      authResponse = response;
-      _tokenService.setTokenValue(authResponse!.token!);
-      notifyListeners();
-      return StatusCode.ok;
-    }
+
   }
 
   Future<bool> verifyPhoneNumber({String? phoneNumber}) async {
@@ -52,15 +52,12 @@ class SignUpOtpViewModel extends BaseViewModel {
   void resendCode({String? phoneNumber}) {
     verifyPhoneNumber(phoneNumber: phoneNumber);
     const oneSec = Duration(seconds: 1);
-    if (finished) {
-      start = 90;
-      startStr = '1:30';
-      notifyListeners();
-    }
     _timer = Timer.periodic(oneSec, (Timer timer) {
       if (start == 0) {
         timer.cancel();
         finished = true;
+        start = 90;
+        startStr = '1:30';
         notifyListeners();
       } else {
         start--;
