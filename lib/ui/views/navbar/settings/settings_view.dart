@@ -16,7 +16,7 @@ import 'package:goasbar/ui/views/settings_pages/privacy/privacy_view.dart';
 import 'package:goasbar/ui/views/settings_pages/support/support_view.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:goasbar/ui/widgets/settings_card.dart';
-import 'package:motion_toast/motion_toast.dart';
+import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -56,7 +56,7 @@ class SettingsView extends HookWidget {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(100),
                             image: DecorationImage(
-                              image: user != null ? NetworkImage("$baseUrl${user!.image}",)
+                              image: model.user != null ? NetworkImage("$baseUrl${model.user!.image}",)
                                   : const AssetImage("assets/images/avatar.png") as ImageProvider,
                                   // : FileImage(model.file!) as ImageProvider,
                               fit: BoxFit.cover,
@@ -82,7 +82,7 @@ class SettingsView extends HookWidget {
                     ),
                   ),
                   verticalSpaceRegular,
-                  Text(isUser! ? user!.firstName! : "Guest user", style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),),
+                  Text(isUser! ? model.user!.firstName! : "Guest user", style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),),
                   verticalSpaceMedium,
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 15),
@@ -91,7 +91,7 @@ class SettingsView extends HookWidget {
                       border: Border.all(width: 1, color: isUser! ? kMainColor1 : Colors.black),
                     ),
                     child: Text(isUser! ? "Edit Your Profile" : "Get Your Information", style: TextStyle(color: isUser! ? kMainColor1 : Colors.black),).center(),
-                  ).gestures(onTap: isUser! ? () => model.navigateTo(view: EditProfileView()) : () => model.navigateTo(view: const LoginView()),),
+                  ).gestures(onTap: isUser! ? () => model.navigateToWithResponse(view: EditProfileView()) : () => model.navigateTo(view: const LoginView()),),
                   verticalSpaceRegular,
                   SettingsCard(
                     item1Image: 'notification',
@@ -107,14 +107,14 @@ class SettingsView extends HookWidget {
                   verticalSpaceRegular,
                   SettingsCard(
                     item1Image: 'hosted',
-                    item1Title: isUser! ? user!.isProvider! ? 'Post new tripe experience' : 'Be Hosted' : 'Be Hosted',
-                    item1Parameter: isUser! ? user!.isProvider! ? 'Update Info' : "Apply now" : "Apply now",
-                    onTapParameter: isUser! ? user!.isProvider! ? () => model.showGeneralInfoBottomSheet() : () => model.showGeneralInfoBottomSheet() : () {model.navigateTo(view: const LoginView());},
+                    item1Title: isUser! ? model.user!.isProvider! ? 'Post new tripe experience' : 'Be Hosted' : 'Be Hosted',
+                    item1Parameter: isUser! ? model.user!.isProvider! ? 'Update Info' : "Apply now" : "Apply now",
+                    onTapParameter: isUser! ? model.user!.isProvider! ? () => model.showGeneralInfoBottomSheet() : () => model.showGeneralInfoBottomSheet() : () {model.navigateTo(view: const LoginView());},
                     item2Image: 'security',
-                    additionalParameterOnTap: isUser! ? () => model.navigateTo(view: BookingsHistoryView(user: user!,)) : () {},
+                    additionalParameterOnTap: isUser! ? () => model.navigateTo(view: BookingsHistoryView(user: model.user!,)) : () {},
                     item2Title: 'Security',
                     item2Parameter: "",
-                    onItem1Tap: !isUser! ? () {model.navigateTo(view: const LoginView());} : user!.isProvider! ? () => model.navigateTo(view: const PostExperienceView()) : () => model.showGeneralInfoBottomSheet(),
+                    onItem1Tap: !isUser! ? () {model.navigateTo(view: const LoginView());} : model.user!.isProvider! ? () => model.navigateTo(view: const PostExperienceView()) : () => model.showGeneralInfoBottomSheet(),
                     onItem2Tap: () => model.navigateTo(view: const RequestPasswordView()),
                     isUser: false,
                   ),
@@ -143,21 +143,11 @@ class SettingsView extends HookWidget {
                     model.logout(context: context).then((value) {
                       model.updateIsClicked(value: false);
                       if (value!) {
-                        MotionToast.success(
-                          title: const Text("Logout Success"),
-                          description: const Text("Have a good day, see you later"),
-                          animationCurve: Curves.easeIn,
-                          animationDuration: const Duration(milliseconds: 200),
-                        ).show(context);
+                        showMotionToast(context: context, title: 'Logout Success', msg: "Have a good day, see you later", type: MotionToastType.error);
                         model.clearToken();
                         model.clearAndNavigateTo(view: const LoginView());
                       } else {
-                        MotionToast.warning(
-                          title: const Text("Logout Failed"),
-                          description: const Text("An error has occurred, please try again"),
-                          animationCurve: Curves.easeIn,
-                          animationDuration: const Duration(milliseconds: 200),
-                        ).show(context);
+                        showMotionToast(context: context, title: 'Logout Failed', msg: "An error has occurred, please try again", type: MotionToastType.error);
                       }
                     });
                   }),
@@ -168,8 +158,7 @@ class SettingsView extends HookWidget {
           ).padding(horizontal: 20),
         ),
       ),
-      viewModelBuilder: () => SettingsViewModel(user: user),
-      onModelReady: (model) => model.loadData(),
+      viewModelBuilder: () => SettingsViewModel(context: context, isUser: isUser!),
     );
   }
 }
