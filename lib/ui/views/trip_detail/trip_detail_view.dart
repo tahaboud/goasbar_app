@@ -227,7 +227,7 @@ class TripDetailView extends HookWidget {
                       horizontalSpaceSmall,
                       const Text('Have great communication',),
                       const Spacer(),
-                      const Text('Start Chat', style: TextStyle(color: kMainColor1,),).gestures(onTap: () => model.navigateTo(view: ChatWithAgencyView(providerId: experience!.providerId, userId: user!.id, providerName: "Provider",))),
+                      const Text('Start Chat', style: TextStyle(color: kMainColor1,),).gestures(onTap: () => model.navigateTo(view: user == null ? const LoginView() : ChatWithAgencyView(providerId: experience!.providerId, userId: user!.id, providerName: "Provider",))),
                     ],
                   ).padding(horizontal: 20),
                   verticalSpaceRegular,
