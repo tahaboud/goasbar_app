@@ -57,7 +57,7 @@ class LoginView extends HookWidget {
               TextField(
                 controller: userName,
                 decoration: InputDecoration(
-                  hintText: 'User name or email',
+                  hintText: 'Email',
                   hintStyle: const TextStyle(fontSize: 14),
                   prefixIcon: const Icon(Icons.alternate_email_outlined, size: 16, ),
                   fillColor: kTextFiledGrayColor,
