@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/data_models/public_provider_response.dart';
 import 'package:goasbar/data_models/user_model.dart';
-import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/provider_profile/provider_profile_viewmodel.dart';
@@ -65,7 +64,7 @@ class ProviderProfileView extends HookWidget {
 
                     Text(provider!.email!, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: kGrayText),),
                   ],
-                ),
+                ).gestures(onTap: () => model.launchEmail(email: provider!.email)),
                 verticalSpaceTiny,
                 Row(
                   children: [
@@ -74,7 +73,7 @@ class ProviderProfileView extends HookWidget {
 
                     Text(provider!.phoneNumber!, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: kGrayText),),
                   ],
-                ),
+                ).gestures(onTap: () => model.launchPhoneCall(phoneNumber: provider!.phoneNumber!)),
                 provider!.website != null ? verticalSpaceTiny : const SizedBox(),
                 provider!.website != null ? Row(
                   children: [
@@ -83,7 +82,7 @@ class ProviderProfileView extends HookWidget {
 
                     Text(provider!.website!, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: kGrayText),),
                   ],
-                ) : const SizedBox(),
+                ).gestures(onTap: () => model.launchLink(link: provider!.website)) : const SizedBox(),
                 provider!.instagramAccount != null ? verticalSpaceTiny : const SizedBox(),
                 provider!.instagramAccount != null ? Row(
                   children: [
@@ -92,7 +91,7 @@ class ProviderProfileView extends HookWidget {
 
                     Text(provider!.instagramAccount!, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: kGrayText),),
                   ],
-                ) : const SizedBox(),
+                ).gestures(onTap: () => model.launchLink(link: provider!.instagramAccount)) : const SizedBox(),
                 provider!.facebookAccount != null ? verticalSpaceTiny : const SizedBox(),
                 provider!.facebookAccount != null ? Row(
                   children: [
@@ -100,7 +99,7 @@ class ProviderProfileView extends HookWidget {
                     horizontalSpaceTiny,
                     Text(provider!.facebookAccount!, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: kGrayText),),
                   ],
-                ) : const SizedBox(),
+                ).gestures(onTap: () => model.launchLink(link: provider!.facebookAccount)) : const SizedBox(),
                 provider!.twitterAccount != null ? verticalSpaceTiny : const SizedBox(),
                 provider!.twitterAccount != null ? Row(
                   children: [
@@ -108,7 +107,7 @@ class ProviderProfileView extends HookWidget {
                     horizontalSpaceTiny,
                     Text(provider!.twitterAccount!, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: kGrayText),),
                   ],
-                ) : const SizedBox(),
+                ).gestures(onTap: () => model.launchLink(link: provider!.twitterAccount)) : const SizedBox(),
                 const Divider(color: kMainColor1, height: 40, thickness: 1.2),
                 const Text("Bio", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
                 verticalSpaceSmall,
