@@ -7,6 +7,7 @@ import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/booking_for_provider_detail/booking_for_provider_detail_viewmodel.dart';
 import 'package:goasbar/ui/views/chat_with_agency/chat_with_agency_view.dart';
+import 'package:goasbar/ui/views/login/login_view.dart';
 import 'package:goasbar/ui/widgets/note_item.dart';
 import 'package:goasbar/ui/widgets/slider_image_item.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -208,7 +209,7 @@ class BookingForProviderDetailView extends HookWidget {
                       horizontalSpaceSmall,
                       const Text('Have great communication',),
                       const Spacer(),
-                      const Text('Start Chat', style: TextStyle(color: kMainColor1,),).gestures(onTap: () => model.navigateTo(view: ChatWithAgencyView(providerId: providerPublicExperience!.providerId, userId: user!.id, providerName: "Provider",))),
+                      const Text('Start Chat', style: TextStyle(color: kMainColor1,),).gestures(onTap: () => model.navigateTo(view: user == null ? const LoginView() : ChatWithAgencyView(providerId: providerPublicExperience!.providerId, userId: user!.id, providerName: "Provider",))),
                     ],
                   ).padding(horizontal: 20),
                   verticalSpaceRegular,
