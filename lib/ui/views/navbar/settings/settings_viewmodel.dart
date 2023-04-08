@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/animation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/provider_model.dart';
 import 'package:goasbar/data_models/user_model.dart';
@@ -12,9 +13,10 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'dart:io';
 
-class SettingsViewModel extends BaseViewModel {
-  final UserModel? user;
-  SettingsViewModel({this.user});
+class SettingsViewModel extends FutureViewModel<UserModel?> {
+  BuildContext? context;
+  bool? isUser;
+  SettingsViewModel({this.context, this.isUser});
 
   final _navigationService = locator<NavigationService>();
   final _mediaService = locator<MediaService>();
@@ -24,10 +26,17 @@ class SettingsViewModel extends BaseViewModel {
   File? file;
   ProviderModel? provider;
   bool? isClicked = false;
+  UserModel? user;
 
   updateIsClicked({value}) {
     isClicked = value;
     notifyListeners();
+  }
+
+  void navigateToWithResponse({view}) {
+    _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300))!.then((value) {
+      futureToRun();
+    });
   }
 
   void navigateTo({view}) {
@@ -42,11 +51,6 @@ class SettingsViewModel extends BaseViewModel {
     _navigationService.back();
   }
 
-  loadData() async {
-    setBusy(true);
-    Timer(const Duration(milliseconds: 1000), () { setBusy(false); },);
-  }
-
   Future pickImage () async {
     file = await _mediaService.getImage();
     if (file != null) {
@@ -55,12 +59,16 @@ class SettingsViewModel extends BaseViewModel {
   }
 
   showGeneralInfoBottomSheet() async {
-    await _bottomSheetService.showCustomSheet(
+    var response = await _bottomSheetService.showCustomSheet(
       variant: BottomSheetType.beHosted,
       isScrollControlled: true,
       barrierDismissible: true,
       data: user,
     );
+
+    if (response!.confirmed) {
+      futureToRun();
+    }
 
     notifyListeners();
   }
@@ -72,5 +80,17 @@ class SettingsViewModel extends BaseViewModel {
 
   clearToken () {
     _tokenService.clearToken();
+  }
+
+  Future<UserModel?> getUserData() async {
+    String? token = await _tokenService.getTokenValue();
+    user = await _authService.getUserData(token: token, context: context);
+    notifyListeners();
+    return user;
+  }
+
+  @override
+  Future<UserModel?> futureToRun() async {
+    return isUser! ? await getUserData() : null;
   }
 }
