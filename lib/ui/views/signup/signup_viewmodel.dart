@@ -10,6 +10,12 @@ class SignUpViewModel extends BaseViewModel {
   final _navigationService = locator<NavigationService>();
   final _validationService = locator<ValidationService>();
   final _authService = locator<AuthService>();
+  bool? isClicked = false;
+
+  updateIsClicked({value}) {
+    isClicked = value;
+    notifyListeners();
+  }
 
   void changeObscure() {
     isObscure = !isObscure;
@@ -29,6 +35,7 @@ class SignUpViewModel extends BaseViewModel {
   }
 
   Future<bool> verifyPhoneNumber({String? phoneNumber}) async {
+    updateIsClicked(value: true);
     return await _authService.verifyPhoneNumber(phoneNumber: phoneNumber,);
   }
 }
