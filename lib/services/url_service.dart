@@ -8,10 +8,10 @@ class UrlService {
         .join('&');
   }
 
-  launchEmail () async{
+  launchEmail ({String? email}) async{
     final Uri emailLaunchUri = Uri(
       scheme: 'mailto',
-      path: 'contact@goasbar.com',
+      path: email,
       query: _encodeQueryParameters(<String, String>{
         'subject': 'Support',
       }),
@@ -20,22 +20,22 @@ class UrlService {
     launchUrl(emailLaunchUri);
   }
 
-  launchWebsite() async {
-    if (!await launchUrl(Uri.parse("https://www.goasbar.com/"))) {
-      throw 'Could not launch https://www.goasbar.com/';
+  launchLink({String? link}) async {
+    if (!await launchUrl(Uri.parse(link!))) {
+      throw 'Could not launch $link';
     }
   }
 
-  launchLink({String? link}) async {
+  launchExperienceLink({String? link}) async {
     if (!await launchUrl(Uri.parse("$baseUrl/experience/$link"))) {
       throw 'Could not launch https://www.goasbar.com/';
     }
   }
 
-  launchPhoneCall() async {
+  launchPhoneCall({String? phoneNumber}) async {
     final Uri launchUri = Uri(
       scheme: 'tel',
-      path: "+966 (483) -565 9898",
+      path: phoneNumber,
     );
     await launchUrl(launchUri);
   }
