@@ -149,7 +149,7 @@ class BeHostedView extends HookWidget {
                   model.beHostedProvider(context: context, body: body,).then((value) {
                     model.updateIsClicked(value: false);
                     if (value != null) {
-                      model.back();
+                      completer(SheetResponse(confirmed: true));
                     } else {
                       MotionToast.error(
                         title: const Text("Registering Provider Failed"),
