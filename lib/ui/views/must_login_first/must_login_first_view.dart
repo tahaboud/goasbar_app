@@ -34,7 +34,6 @@ class MustLoginFirstView extends HookWidget {
                   const Text('When you be ready for take your experience \nJoin with us and create your account', style: TextStyle(color: kMainGray)),
                   verticalSpaceLarge,
                   Container(
-                    width: MediaQuery.of(context).size.width - 60,
                     height: 50,
                     decoration: const BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -54,7 +53,6 @@ class MustLoginFirstView extends HookWidget {
                   const Text("You didn't have account yet ?", style: TextStyle(color: kMainGray)).center(),
                   verticalSpaceRegular,
                   Container(
-                    width: MediaQuery.of(context).size.width - 60,
                     height: 50,
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
