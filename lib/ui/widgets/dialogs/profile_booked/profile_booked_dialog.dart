@@ -74,7 +74,7 @@ class ProfileBookedDialog extends HookWidget {
                           children: [
                             const Text("City", style: TextStyle(color: kGrayText, fontWeight: FontWeight.bold),),
                             verticalSpaceTiny,
-                            Text(dialogRequest!.data.user!.city),
+                            Text("${dialogRequest!.data.user!.city![0]}${dialogRequest!.data.user!.city!.substring(1).replaceAll('_', ' ').toLowerCase()}"),
                           ],
                         ),
                         verticalSpaceMedium,
