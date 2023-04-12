@@ -26,9 +26,14 @@ class NewTimingView extends HookWidget {
       builder: (context, model, child) {
         if (!model.isBusy && once!) {
           model.startDate.text = request.data;
-          if (request.customData is TimingResponse) {
-            model.startTime.text = request.customData.startTime;
-            addPeople.text = request.customData.capacity.toString();
+          if (request.customData is TimingResponse || request.customData['timing'] is TimingResponse) {
+            if (request.customData is TimingResponse) {
+              model.startTime.text = request.customData.startTime;
+              addPeople.text = request.customData.capacity.toString();
+            } else {
+              model.startTime.text = request.customData['timing'].startTime;
+              addPeople.text = request.customData['timing'].capacity.toString();
+            }
           }
           once = false;
         }
@@ -49,12 +54,12 @@ class NewTimingView extends HookWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Icon(Icons.close, size: 30,).gestures(onTap: () => model.back()),
-                  Text(request.customData is TimingResponse ? 'UPDATE TIMING' : 'NEW TIMING', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  Text(request.customData is TimingResponse || request.customData['timing'] is TimingResponse ? 'UPDATE TIMING' : 'NEW TIMING', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   horizontalSpaceLarge,
                 ],
               ),
               verticalSpaceLarge,
-              Text(request.customData!.title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22),),
+              Text(request.customData is TimingResponse || request.customData['timing'] is TimingResponse ? request.customData['experience'].title : request.customData!.title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22),),
               const Divider(thickness: 1.2, height: 40),
               verticalSpaceRegular,
               const Text('Date start', style: TextStyle(fontWeight: FontWeight.bold),),
@@ -147,39 +152,36 @@ class NewTimingView extends HookWidget {
                 onTap: () {
                   if (model.startDate.text.isNotEmpty && model.startTime.text.isNotEmpty && addPeople.text.isNotEmpty) {
                     var body = {};
-                    if (request.customData is TimingResponse) {
+                    if (request.customData is TimingResponse || request.customData['timing'] is TimingResponse) {
+                      TimingResponse? timingResponse;
+                      if (request.customData['timing'] is TimingResponse) {
+                        timingResponse = request.customData['timing'];
+                      } else {
+                        timingResponse = request.customData;
+                      }
+
                       if (model.pickedTimeForRequest != null) {
                         body.addAll({"start_time": model.pickedTimeForRequest});
                       }
                       if (model.startDate.text != request.data) {
                         body.addAll({"date": model.startDate.text});
                       }
-                      if (addPeople.text != request.customData.capacity.toString()) {
+                      if (addPeople.text != timingResponse!.capacity.toString()) {
                         body.addAll({"date": model.startDate.text});
                       }
-                      if (model.startTime.text != request.customData.startTime
-                          || addPeople.text != request.customData.capacity.toString()
+                      if (model.startTime.text != timingResponse.startTime
+                          || addPeople.text != timingResponse.capacity.toString()
                           || model.startDate.text != request.data) {
 
-                        model.updateTiming(context: context, body: body, timingId: request.customData.id,).then((value) {
+                        model.updateTiming(context: context, body: body, timingId: timingResponse.id,).then((value) {
                           if (value == null) {
-                            MotionToast.error(
-                              title: const Text("Timing Update Failed"),
-                              description: const Text("Timing could not be updated"),
-                              animationCurve: Curves.easeIn,
-                              animationDuration: const Duration(milliseconds: 200),
-                            ).show(context);
+                            showMotionToast(context: context, title: 'Timing Update Failed', msg: "Timing could not be updated", type: MotionToastType.error);
                           } else {
                             completer(SheetResponse(confirmed: true));
                           }
                         });
                       } else {
-                        MotionToast.warning(
-                          title: const Text("Warning"),
-                          description: const Text("Update the timing first."),
-                          animationCurve: Curves.easeIn,
-                          animationDuration: const Duration(milliseconds: 200),
-                        ).show(context);
+                        showMotionToast(context: context, title: 'Warning', msg: "Update the timing first", type: MotionToastType.warning);
                       }
                     } else {
                       body.addAll({
