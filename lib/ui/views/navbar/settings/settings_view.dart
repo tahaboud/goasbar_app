@@ -99,7 +99,7 @@ class SettingsView extends HookWidget {
                     item1Parameter: "ON",
                     item2Image: 'lang',
                     item2Title: 'Language',
-                    item2Parameter: context.locale.toString() == "en_US" ? "English" : "Arabic",
+                    item2Parameter: context.locale.toString() == "en_UK" ? "English" : "Arabic",
                     onItem1Tap: () => model.navigateTo(view: const NotificationSettingsView()),
                     onItem2Tap: () => model.navigateTo(view: const LanguageView()),
                     isUser: false,
