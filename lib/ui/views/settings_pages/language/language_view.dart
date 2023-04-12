@@ -38,16 +38,16 @@ class LanguageView extends HookWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text("English (US)"),
+                    const Text("Arabic (SA)"),
                     Container(
                       width: 20,
                       height: 20,
                       decoration: BoxDecoration(
-                        color: model.lang == "us" ? Colors.white : Colors.grey.shade300,
-                        border: Border.all(width: model.lang == "us" ? 5 : 1, color: model.lang == "us" ? kMainColor1 : Colors.grey),
+                        color: model.lang == "ar" ? Colors.white : Colors.grey.shade300,
+                        border: Border.all(width: model.lang == "ar" ? 5 : 1, color: model.lang == "ar" ? kMainColor1 : Colors.grey),
                         borderRadius: BorderRadius.circular(30)
                       ),
-                    ).gestures(onTap: () => model.changeValue(value: "us")),
+                    ).gestures(onTap: () => model.changeValue(value: "ar", context: context)),
                   ],
                 ),
                 verticalSpaceSmall,
@@ -63,107 +63,7 @@ class LanguageView extends HookWidget {
                           border: Border.all(width: model.lang == "uk" ? 5 : 1, color: model.lang == "uk" ? kMainColor1 : Colors.grey),
                           borderRadius: BorderRadius.circular(30)
                       ),
-                    ).gestures(onTap: () => model.changeValue(value: "uk")),
-                  ],
-                ),
-                verticalSpaceSmall,
-                const Divider(thickness: 1),
-                verticalSpaceSmall,
-                const Text("Others", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),).alignment(Alignment.centerLeft),
-                verticalSpaceRegular,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text("Mandarin"),
-                    Container(
-                      width: 20,
-                      height: 20,
-                      decoration: BoxDecoration(
-                          color: Colors.grey.shade300,
-                          border: Border.all(width: 1, color: Colors.grey),
-                          borderRadius: BorderRadius.circular(30)
-                      ),
-                    ).gestures(onTap: () => model.changeValue(value: "us")),
-                  ],
-                ),
-                verticalSpaceSmall,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text("Hindi"),
-                    Container(
-                      width: 20,
-                      height: 20,
-                      decoration: BoxDecoration(
-                          color: Colors.grey.shade300,
-                          border: Border.all(width: 1, color: Colors.grey),
-                          borderRadius: BorderRadius.circular(30)
-                      ),
-                    ).gestures(onTap: () => model.changeValue(value: "us")),
-                  ],
-                ),
-                verticalSpaceSmall,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text("Spanish"),
-                    Container(
-                      width: 20,
-                      height: 20,
-                      decoration: BoxDecoration(
-                          color: Colors.grey.shade300,
-                          border: Border.all(width: 1, color: Colors.grey),
-                          borderRadius: BorderRadius.circular(30)
-                      ),
-                    ).gestures(onTap: () => model.changeValue(value: "us")),
-                  ],
-                ),
-                verticalSpaceSmall,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text("Arabic"),
-                    Container(
-                      width: 20,
-                      height: 20,
-                      decoration: BoxDecoration(
-                          color: Colors.grey.shade300,
-                          border: Border.all(width: 1, color: Colors.grey),
-                          borderRadius: BorderRadius.circular(30)
-                      ),
-                    ).gestures(onTap: () => model.changeValue(value: "us")),
-                  ],
-                ),
-                verticalSpaceSmall,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text("French"),
-                    Container(
-                      width: 20,
-                      height: 20,
-                      decoration: BoxDecoration(
-                          color: Colors.grey.shade300,
-                          border: Border.all(width: 1, color: Colors.grey),
-                          borderRadius: BorderRadius.circular(30)
-                      ),
-                    ).gestures(onTap: () => model.changeValue(value: "us")),
-                  ],
-                ),
-                verticalSpaceSmall,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text("Russian"),
-                    Container(
-                      width: 20,
-                      height: 20,
-                      decoration: BoxDecoration(
-                          color: Colors.grey.shade300,
-                          border: Border.all(width: 1, color: Colors.grey),
-                          borderRadius: BorderRadius.circular(30)
-                      ),
-                    ).gestures(onTap: () => model.changeValue(value: "us")),
+                    ).gestures(onTap: () => model.changeValue(value: "uk", context: context)),
                   ],
                 ),
               ],
