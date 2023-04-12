@@ -50,7 +50,7 @@ class ExperienceApiService {
       },
     ).then((response) {
       if (response.statusCode == 200) {
-        return ExperienceModel.fromJson(jsonDecode(response.body));
+        return ExperienceModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
       } else if (response.statusCode == 401) {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
@@ -68,7 +68,7 @@ class ExperienceApiService {
       },
     ).then((response) {
       if (response.statusCode == 200) {
-        return ExperienceModel.fromJson(jsonDecode(response.body));
+        return ExperienceModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
       } else {
         return null;
       }
