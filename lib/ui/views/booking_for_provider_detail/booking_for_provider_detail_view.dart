@@ -165,14 +165,14 @@ class BookingForProviderDetailView extends HookWidget {
               ),
             ),
             verticalSpaceRegular,
-            Text('Get your experience this weekend \nwith amazing trip in ${providerPublicExperience!.city}', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 22),)
+            Text('Get your experience this weekend \nwith amazing trip in ${providerPublicExperience!.city![0]}${providerPublicExperience!.city!.substring(1).replaceAll('_', ' ').toLowerCase()}', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 22),)
                 .padding(horizontal: 20),
             verticalSpaceRegular,
             Row(
               children: [
                 Image.asset("assets/icons/location.png"),
                 horizontalSpaceTiny,
-                Text("${providerPublicExperience!.city} , Duration : ${providerPublicExperience!.duration} ${double.parse(providerPublicExperience!.duration!) <= 1 ? "Hour" : "Hours"}", style: const TextStyle(color: kMainGray, fontSize: 11)),
+                Text("${providerPublicExperience!.city![0]}${providerPublicExperience!.city!.substring(1).replaceAll('_', ' ').toLowerCase()} , Duration : ${providerPublicExperience!.duration} ${double.parse(providerPublicExperience!.duration!) <= 1 ? "Hour" : "Hours"}", style: const TextStyle(color: kMainGray, fontSize: 11)),
               ],
             ).padding(horizontal: 20),
             Expanded(
