@@ -10,6 +10,26 @@ class TripsViewModel extends FutureViewModel<List<ExperienceResults?>> {
   final _experienceApiService = locator<ExperienceApiService>();
   ExperienceModel? experienceModels;
   int pageNumber = 1;
+  int index = 1;
+
+  void selectCategory({ind}) {
+    index = ind;
+    String? query;
+    if (index == 1) {
+      query = '';
+    } else if (index == 2) {
+      query = "?status=COMPLETED";
+    } else if (index == 3) {
+      query = "?gender=MEN";
+    } else {
+      query = "";
+    }
+
+    pageNumber = 1;
+    notifyListeners();
+
+    getPublicExperiences(query: query, page: pageNumber);
+  }
 
   Future getPublicExperiencesFromNextPage({int? index}) async {
     if (index! % 10 == 0) {
@@ -21,7 +41,7 @@ class TripsViewModel extends FutureViewModel<List<ExperienceResults?>> {
     }
   }
 
-  Future<List<ExperienceResults?>> getPublicExperiences({String? query,}) async {
+  Future<List<ExperienceResults?>> getPublicExperiences({String? query, page}) async {
     experienceModels = await _experienceApiService.getPublicExperiences(query: query, page: pageNumber);
     notifyListeners();
     return experienceModels!.results!;
