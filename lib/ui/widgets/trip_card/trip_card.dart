@@ -92,7 +92,11 @@ class TripItem extends StatelessWidget {
                     Row(
                       children: [
                         horizontalSpaceSmall,
-                        Text(experience!.title!, style: const TextStyle(fontWeight: FontWeight.bold)),
+                        SizedBox(
+                          height: 20,
+                          width: screenWidthPercentage(context, percentage: 0.31),
+                          child: Text(experience!.title!, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.bold)),
+                        ),
                         const Spacer(),
                         Row(
                           children: [
@@ -109,7 +113,7 @@ class TripItem extends StatelessWidget {
                         horizontalSpaceSmall,
                         Image.asset("assets/icons/location.png"),
                         horizontalSpaceTiny,
-                        Text("${experience!.city!}, ${experience!.duration!} ${double.parse(experience!.duration!) >= 2 ? 'Hours' : 'Hour'}", style: const TextStyle(color: kMainGray, fontSize: 11))
+                        Text("${experience!.city![0]}${experience!.city!.substring(1).replaceAll('_', ' ').toLowerCase()}, ${experience!.duration!} ${double.parse(experience!.duration!) >= 2 ? 'Hours' : 'Hour'}", style: const TextStyle(color: kMainGray, fontSize: 11))
                       ],
                     ),
                     verticalSpaceSmall,
