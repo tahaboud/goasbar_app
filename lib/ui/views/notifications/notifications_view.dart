@@ -15,21 +15,23 @@ class NotificationsView extends StatelessWidget {
     return ViewModelBuilder<NotificationsViewModel>.reactive(
       builder: (context, model, child) {
         return model.isBusy ? const Loader() : Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset("assets/icons/read_check.png"),
-                horizontalSpaceSmall,
-                const Text("Mark all as read", style: TextStyle(color: Color(0xff3983F1), fontWeight: FontWeight.w600),),
-              ],
-            ),
-            const Divider(height: 40, thickness: 1),
-            const NotificationItem(),
-            const NotificationItem(),
-            const NotificationItem(),
-            const NotificationItem(),
-            const NotificationItem(),
+          children: const [
+            verticalSpaceMedium,
+            Text('This page is not available right now'),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     Image.asset("assets/icons/read_check.png"),
+            //     horizontalSpaceSmall,
+            //     const Text("Mark all as read", style: TextStyle(color: Color(0xff3983F1), fontWeight: FontWeight.w600),),
+            //   ],
+            // ),
+            // const Divider(height: 40, thickness: 1),
+            // const NotificationItem(),
+            // const NotificationItem(),
+            // const NotificationItem(),
+            // const NotificationItem(),
+            // const NotificationItem(),
           ],
         );
       },
