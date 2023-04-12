@@ -16,6 +16,7 @@ class SearchViewModel extends BaseViewModel {
   bool? isTokenExist;
   ExperienceModel? experienceModels;
   TextEditingController searchDate = TextEditingController();
+  String? from = '', to = '';
   String? genderConstraint = genderConstraints[0];
   String? category = 'Experience Category';
   String? city = 'Search City';
@@ -67,6 +68,8 @@ class SearchViewModel extends BaseViewModel {
 
   void clearSearchDate() {
     searchDate.clear();
+    from = '';
+    to = '';
     notifyListeners();
   }
 
@@ -76,7 +79,7 @@ class SearchViewModel extends BaseViewModel {
       config: CalendarDatePicker2WithActionButtonsConfig(
         disableYearPicker: true,
         firstDate: DateTime.now(),
-        calendarType: CalendarDatePicker2Type.single,
+        calendarType: CalendarDatePicker2Type.multi,
         selectedDayHighlightColor: kMainColor1,
       ),
       initialValue: [
@@ -87,9 +90,12 @@ class SearchViewModel extends BaseViewModel {
     );
 
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
-    final String formatted = formatter.format(picked![0]!);
+    final String formatted1 = formatter.format(picked![0]!);
+    final String formatted2 = formatter.format(picked[1]!);
 
-    searchDate.text = formatted;
+    from = formatted1;
+    to = formatted2;
+    searchDate.text = "from $from to $to";
     notifyListeners();
   }
 
