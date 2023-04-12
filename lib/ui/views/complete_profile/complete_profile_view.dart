@@ -162,10 +162,10 @@ class CompleteProfileView extends HookWidget {
                               ),
                               onChanged: (value) => model.updateCity(value: value),
                               items: cities.map((c) => DropdownMenuItem(
-                                value: c,
+                                value: "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}",
                                 onTap: () {},
                                 child: SizedBox(
-                                  child: Text(c, style: const TextStyle(fontFamily: 'Cairo'),),
+                                  child: Text("${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}", style: const TextStyle(fontFamily: 'Cairo'),),
                                 ),
                               )).toList(),
                             ),
@@ -275,7 +275,7 @@ class CompleteProfileView extends HookWidget {
                       "gender": model.gender.text[0],
                       "phone_number": "",
                       "verification_code": "",
-                      "city": model.city,
+                      "city": model.city!.replaceAll(' ', '_').toUpperCase(),
                     };
 
                     if (model.file != null) {
