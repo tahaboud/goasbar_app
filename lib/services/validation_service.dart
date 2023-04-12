@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:string_validator/string_validator.dart';
 
 class ValidationService {
   String? passwordValidation(String? value) {
@@ -35,6 +36,14 @@ class ValidationService {
       } else {
         return "Wrong phone number";
       }
+    }
+  }
+
+  String? validateIsNumeric (String? value) {
+    if (isNumeric(value!)) {
+      return null;
+    } else {
+      return "Age must be in numbers only";
     }
   }
 
