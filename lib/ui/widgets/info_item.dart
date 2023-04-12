@@ -5,6 +5,7 @@ import 'package:goasbar/shared/textfield_formatters/iban_formatter.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/shared/textfield_formatters/card_expiration_formatter.dart';
 import 'package:goasbar/shared/textfield_formatters/card_number_formatter.dart';
+import 'package:string_validator/string_validator.dart';
 
 class InfoItem extends StatelessWidget {
   const InfoItem({
@@ -60,6 +61,16 @@ class InfoItem extends StatelessWidget {
                 IbanFormatter(),
               ] : [],
               controller: controller,
+              validator: label == "Minimum Age" ? (value) {
+                if (isNumeric(value!)) {
+                  return null;
+                } else {
+                  return "Age must be in numbers only";
+                }
+              } : (value) {
+                return null;
+              },
+              autovalidateMode: label == "Minimum Age" ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
               maxLength: label == "Identity number" ? 10 : label == "Minimum Age" ? 2 : null,
               keyboardType: label == "Identity number" || label == "IBAN" || label == "Duration (hours)" || label == "Card Number" || label == "Expiry Date" || label == "CVV" || label == "Minimum Age" ? TextInputType.number : TextInputType.text,
               decoration: InputDecoration(
