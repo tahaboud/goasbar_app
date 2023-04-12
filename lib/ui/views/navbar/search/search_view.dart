@@ -80,10 +80,10 @@ class SearchView extends HookWidget {
                                 ),
                                 onChanged: (value) => model.updateCity(value: value),
                                 items: model.citiesWithNone().map((c) => DropdownMenuItem(
-                                  value: c,
+                                  value: c == 'Search City' ? c : "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}",
                                   onTap: () {},
                                   child: SizedBox(
-                                    child: Text(c, style: const TextStyle(fontFamily: 'Cairo'),),
+                                    child: Text(c == 'Search City' ? c : "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}", style: const TextStyle(fontFamily: 'Cairo'),),
                                   ),
                                 )).toList(),
                               ),
@@ -94,27 +94,35 @@ class SearchView extends HookWidget {
                     ),
                   ),
                   verticalSpaceRegular,
-                  TextField(
-                    readOnly: true,
-                    controller: model.searchDate,
-                    decoration: InputDecoration(
-                      hintText: 'Search Date',
-                      hintStyle: const TextStyle(fontSize: 14),
-                      prefixIcon: Image.asset('assets/icons/birth_date.png').gestures(
-                        onTap: () => model.showStartDatePicker(context),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width: screenWidthPercentage(context, percentage: 0.4),
+                        child: TextField(
+                          readOnly: true,
+                          controller: model.searchDate,
+                          decoration: InputDecoration(
+                            hintText: 'Search Date',
+                            hintStyle: const TextStyle(fontSize: 14),
+                            prefixIcon: Image.asset('assets/icons/birth_date.png').gestures(
+                              onTap: () => model.showStartDatePicker(context),
+                            ),
+                            suffixIcon: const Icon(Icons.clear).gestures(
+                              onTap: () => model.clearSearchDate(),
+                            ),
+                            fillColor: kTextFiledGrayColor,
+                            filled: true,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            enabledBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(color: kTextFiledGrayColor),
+                            ),
+                          ),
+                        ),
                       ),
-                      suffixIcon: const Icon(Icons.clear).gestures(
-                        onTap: () => model.clearSearchDate(),
-                      ),
-                      fillColor: kTextFiledGrayColor,
-                      filled: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      enabledBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: kTextFiledGrayColor),
-                      ),
-                    ),
+                    ],
                   ),
                   verticalSpaceRegular,
                   Container(
@@ -263,9 +271,10 @@ class SearchView extends HookWidget {
                         if (model.genderConstraint == "Men Only") query = '$query&gender=MEN';
                         if (model.genderConstraint == "Women Only") query = '$query&gender=WOMEN';
                         
-                        if (model.searchDate.text.isNotEmpty) query = '$query&date=${model.searchDate.text}';
+                        if (model.from != '') query = '$query&date=${model.from}';
+                        if (model.to != '') query = '$query&date=${model.to}';
 
-                        if (model.city != 'Search City') query = '$query&city=${model.city}';
+                        if (model.city != 'Search City') query = '$query&city=${model.city!.replaceAll(' ', '_').toUpperCase()}';
 
                         if (title.text.isNotEmpty) query = '$query&title=${title.text}';
 
@@ -363,7 +372,7 @@ class SearchView extends HookWidget {
                                     SizedBox(
                                       width: 160,
                                       child: Text(
-                                        "${model.experienceModels!.results![index].city!}, ${model.experienceModels!.results![index].duration!} ${double.parse(model.experienceModels!.results![index].duration!) >= 2 ? 'Hours' : 'Hour'}",
+                                        "${model.experienceModels!.results![index].city![0]}${model.experienceModels!.results![index].city!.substring(1).replaceAll('_', ' ').toLowerCase()}, ${model.experienceModels!.results![index].duration!} ${double.parse(model.experienceModels!.results![index].duration!) >= 2 ? 'Hours' : 'Hour'}",
                                         style: const TextStyle(color: kMainGray, fontSize: 11),
                                         overflow: TextOverflow.ellipsis,
                                       ),
