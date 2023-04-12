@@ -104,6 +104,10 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
     return _validationService.validatePhoneNumber(value);
   }
 
+  String? validateIsNumeric ({String? value}) {
+    return _validationService.validateIsNumeric(value);
+  }
+
   void showSelectionDialog({gender, int? index}) async {
     var response = await _dialogService.showCustomDialog(
       variant: DialogType.selection,
