@@ -34,21 +34,24 @@ class StreamMessagesView extends HookWidget {
 
             List<Widget>? messagesBubble = [];
             List<DocumentSnapshot>? messages = snapshot.data!.docs;
-            int? minutes = ((DateTime.now().millisecondsSinceEpoch / 60000).floor() - (messages.last.get('createdAt').seconds / 60)).floor();
-            int? hours = ((DateTime.now().millisecondsSinceEpoch / 3600000).floor() - (messages.last.get('createdAt').seconds / 3600)).floor();
-            int? days = ((DateTime.now().millisecondsSinceEpoch / 86400000).floor() - (messages.last.get('createdAt').seconds / 86400)).floor();
+            String? time;
+            if (messages.isNotEmpty) {
+              int? minutes = ((DateTime.now().millisecondsSinceEpoch / 60000).floor() - (messages.last.get('createdAt').seconds / 60)).floor();
+              int? hours = ((DateTime.now().millisecondsSinceEpoch / 3600000).floor() - (messages.last.get('createdAt').seconds / 3600)).floor();
+              int? days = ((DateTime.now().millisecondsSinceEpoch / 86400000).floor() - (messages.last.get('createdAt').seconds / 86400)).floor();
 
-            String? time = minutes < 1
-                ? "now"
-                : minutes < 60
-                ? "$minutes min"
-                : hours < 2
-                ? "1 hour"
-                : hours < 24
-                ? "$hours hours"
-                : days < 2
-                ? "1 day"
-                : "$days days";
+              time = minutes < 1
+                  ? "now"
+                  : minutes < 60
+                  ? "$minutes min"
+                  : hours < 2
+                  ? "1 hour"
+                  : hours < 24
+                  ? "$hours hours"
+                  : days < 2
+                  ? "1 day"
+                  : "$days days";
+            }
 
             for (var message in messages) {
               if (message.get("receiverID") == providerId.toString()) {
