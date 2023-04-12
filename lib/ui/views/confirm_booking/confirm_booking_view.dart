@@ -72,7 +72,7 @@ class ConfirmBookingView extends HookWidget {
                             SizedBox(
                               width: 160,
                               child: Text(
-                                "${experience!.city!} , ${experience!.duration!} ${double.parse(experience!.duration!) >= 2 ? 'Hours' : 'Hour'}",
+                                "${experience!.city![0]}${experience!.city!.substring(1).replaceAll('_', ' ').toLowerCase()} , ${experience!.duration!} ${double.parse(experience!.duration!) >= 2 ? 'Hours' : 'Hour'}",
                                 style: const TextStyle(color: kMainGray, fontSize: 11),
                               ),
                             ),
@@ -298,9 +298,11 @@ class ConfirmBookingView extends HookWidget {
                         ),
                       ),
                       verticalSpaceRegular,
-                      TextField(
+                      TextFormField(
                         keyboardType: TextInputType.number,
                         controller: model.age[i],
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (value) => model.validateIsNumeric(value: value),
                         decoration: InputDecoration(
                           hintText: 'Guest Age',
                           hintStyle: const TextStyle(fontSize: 14),
