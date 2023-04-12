@@ -61,7 +61,6 @@ class SignUpView extends HookWidget {
                 maxLength: 9,
                 controller: phone,
                 validator: (value) => model.validatePhoneNumber(value: value),
-                keyboardType: TextInputType.number,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 decoration: InputDecoration(
                   hintText: 'xx x - xx x - xx x',
