@@ -64,7 +64,6 @@ class RequestPasswordView extends HookWidget {
                 TextFormField(
                   controller: phoneNumber,
                   validator: (value) => model.validatePhoneNumber(value: value),
-                  keyboardType: TextInputType.number,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: InputDecoration(
                     hintText: 'xx x - xx x - xx x',
