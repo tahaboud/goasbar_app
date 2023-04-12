@@ -103,7 +103,7 @@ class PostExperienceView extends HookWidget {
                                 Positioned(
                                     bottom: 15,
                                     left: 10,
-                                    child: Text("City  |  ${model.data![index].city!}", style: const TextStyle(color: Colors.white,),)
+                                    child: Text("City  |  ${model.data![index].city![0]}${model.data![index].city!.substring(1).replaceAll('_', ' ').toLowerCase()}", style: const TextStyle(color: Colors.white,),)
                                 ),
                                 Positioned(
                                   bottom: 10,
@@ -126,7 +126,7 @@ class PostExperienceView extends HookWidget {
                               ],
                             ),
                             !model.isCollapsed[index]! ? const SizedBox() : verticalSpaceSmall,
-                            !model.isCollapsed[index]! ? const SizedBox() : Text("Get your experience this weekend with amazing trip in ${model.data![index].city}", style: const TextStyle(fontSize: 20)),
+                            !model.isCollapsed[index]! ? const SizedBox() : Text("Get your experience this weekend with amazing trip in ${model.data![index].city![0]}${model.data![index].city!.substring(1).replaceAll('_', ' ').toLowerCase()}", style: const TextStyle(fontSize: 20)),
                             !model.isCollapsed[index]! ? const SizedBox() : verticalSpaceSmall,
                             !model.isCollapsed[index]! ? const SizedBox() : Text(model.data![index].description!, style: const TextStyle(fontSize: 13, color: kGrayText)),
                             !model.isCollapsed[index]! ? const SizedBox() : verticalSpaceRegular,
