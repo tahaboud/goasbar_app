@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:stacked/stacked.dart';
@@ -15,7 +16,13 @@ class LanguageViewModel extends BaseViewModel {
     _navigationService.back();
   }
 
-  changeValue({String? value}) {
+  changeValue({String? value, BuildContext? context}) {
+    if (context!.locale == const Locale('ar', 'SA')) {
+      context.setLocale(const Locale('en', 'UK'));
+    } else {
+      context.setLocale(const Locale('ar', 'SA'));
+    }
+
     lang = value;
     notifyListeners();
   }
