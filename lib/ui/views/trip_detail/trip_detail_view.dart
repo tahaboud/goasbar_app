@@ -11,6 +11,7 @@ import 'package:goasbar/ui/views/confirm_booking/confirm_booking_view.dart';
 import 'package:goasbar/ui/views/login/login_view.dart';
 import 'package:goasbar/ui/views/provider_profile/provider_profile_view.dart';
 import 'package:goasbar/ui/views/trip_detail/trip_detail_viewmodel.dart';
+import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:goasbar/ui/widgets/note_item.dart';
 import 'package:goasbar/ui/widgets/slider_image_item.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -30,7 +31,7 @@ class TripDetailView extends HookWidget {
     return ViewModelBuilder<TripDetailViewModel>.reactive(
       builder: (context, model, child) => Scaffold(
         extendBodyBehindAppBar: true,
-        body: Column(
+        body: model.isBusy ? const Loader().center() : Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children:  [
@@ -43,7 +44,7 @@ class TripDetailView extends HookWidget {
                     child: PageView(
                       scrollDirection: Axis.horizontal,
                       controller: pageController,
-                      onPageChanged: (index) => model.changeIndex(index: index),
+                      onPageChanged: (index) => model.changeIndex(index: index + 1),
                       children: experience!.imageSet!.isEmpty ? experience!.profileImage != null ? experience!.profileImage!.contains('/asbar-icon.ico') ? const [
                         SliderImageItem(path: 'assets/images/trip_detail.png', isAsset: true,),
                       ] : [
@@ -94,7 +95,7 @@ class TripDetailView extends HookWidget {
                                     .width(100)
                                     .gestures(onTap: () => model.share(link: experience!.slug)),
                                 horizontalSpaceSmall,
-                                user == null ? const SizedBox() : model.isBusy ? const SizedBox() : Container(
+                                user == null ? const SizedBox() : Container(
                                     decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(10),
@@ -147,7 +148,7 @@ class TripDetailView extends HookWidget {
                                     const DotItem(condition: true),
                                     horizontalSpaceSmall,
                                   ] : [
-                                    for (var i = 0; i < experience!.imageSet!.length; i++)
+                                    for (var i = 1; i < experience!.imageSet!.length; i++)
                                       Row(
                                         children: [
                                           DotItem(condition: model.pageIndex == i + 1),
@@ -168,15 +169,19 @@ class TripDetailView extends HookWidget {
               ),
             ),
             verticalSpaceRegular,
-            Text('Get your experience this weekend \nwith amazing trip in ${experience!.city}', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 22),)
+            Text('Get your experience this weekend \nwith amazing trip in ${experience!.city![0]}${experience!.city!.substring(1).replaceAll('_', ' ').toLowerCase()}', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 22),)
                 .padding(horizontal: 20),
             verticalSpaceRegular,
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(experience!.reviews! > 1 ? '${experience!.reviews} reviews' : '${experience!.reviews} review'),
                 Image.asset("assets/icons/location.png"),
                 horizontalSpaceTiny,
-                Text("${experience!.city} , Duration : ${experience!.duration} ${double.parse(experience!.duration!) <= 1 ? "Hour" : "Hours"}", style: const TextStyle(color: kMainGray, fontSize: 11)),
+                SizedBox(
+                  width: screenWidthPercentage(context, percentage: 0.7),
+                  child: Text("${experience!.city![0]}${experience!.city!.substring(1).replaceAll('_', ' ').toLowerCase()} , Duration : ${experience!.duration} ${double.parse(experience!.duration!) <= 1 ? "Hour" : "Hours"} ${model.timingListModel == null ? "" : model.timingListModel!.count! > 0 ? "| Start at ${model.timingListModel!.results![0].startTime!.substring(0, 5)}" : ''}", overflow: TextOverflow.clip, style: const TextStyle(color: kMainGray, fontSize: 11)),
+                ),
               ],
             ).padding(horizontal: 20),
             Expanded(
@@ -239,7 +244,7 @@ class TripDetailView extends HookWidget {
                     ],
                   ).padding(horizontal: 20),
                   model.kGooglePlex == null ? const SizedBox() : verticalSpaceRegular,
-                  model.isBusy ? const SizedBox() : model.kGooglePlex == null ? const SizedBox() : Container(
+                  model.kGooglePlex == null ? const SizedBox() : Container(
                     height: 300,
                     width: screenWidthPercentage(context, percentage: 0.9),
                     decoration: BoxDecoration(
@@ -265,7 +270,7 @@ class TripDetailView extends HookWidget {
                       horizontalSpaceSmall,
                       const Text('Notes & Requirement',),
                     ],
-                  ).padding(horizontal: 20),
+                  ).padding(horizontal: 20,),
                   if (experience!.requirements != null)
                     for (var requirement in experience!.requirements!.split('\n'))
                       if (requirement.isNotEmpty)
@@ -292,7 +297,7 @@ class TripDetailView extends HookWidget {
                       ],
                     ),
                     verticalSpaceTiny,
-                    Text(model.formatMonthYear(experience!.creationDate!.substring(0, 10)), style: const TextStyle(fontSize: 13, color: kGrayText),)
+                    Text(model.timingListModel == null ? "" : model.timingListModel!.count! > 0 ? model.formatMonthYear(model.timingListModel!.results![0].date) : "", style: const TextStyle(fontSize: 13, color: kGrayText),)
                   ],
                 ),
                 Container(
