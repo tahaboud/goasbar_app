@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:goasbar/data_models/user_model.dart';
+import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/ui/views/navbar/trips/trips_viewmodel.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/widgets/creation_aware_item.dart';
@@ -30,7 +31,25 @@ class TripsView extends HookWidget {
                   verticalSpaceMedium,
                   Text(text!, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),).alignment(Alignment.centerLeft),
                   verticalSpaceMedium,
-                  model.isBusy ? const Loader().center() : model.data == null ? const Text('No trips right now').center() : model.data!.isEmpty ? const Text('No trips right now').center() : Expanded(child: ListView.builder(
+                  SizedBox(
+                    height: 50,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      physics: const BouncingScrollPhysics(),
+                      children: [
+                        categoryItem(model: model, index: 1, image: 'hosted', text: "All"),
+                        horizontalSpaceSmall,
+                        categoryItem(model: model, index: 2, text: "Completed"),
+                        horizontalSpaceSmall,
+                        categoryItem(model: model, index: 3, text: "Not Completed"),
+                      ],
+                    ),
+                  ),
+                  verticalSpaceMedium,
+                  model.isBusy ? const Loader().center()
+                      : !model.dataReady ? const Text('No trips right now').center() : model.experienceModels!.count == 0
+                      ? const Text('No trips right now').center() : model.data!.isEmpty
+                      ? const Text('No trips right now').center() : Expanded(child: ListView.builder(
                     physics: const BouncingScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: model.experienceModels!.count,
@@ -49,5 +68,24 @@ class TripsView extends HookWidget {
       ),
       viewModelBuilder: () => TripsViewModel(),
     );
+  }
+
+  Widget categoryItem({TripsViewModel? model, int? index, String? image, String? text}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12,horizontal: 10),
+      child: Row(
+        children: [
+          image != null ? Image.asset("assets/icons/settings/$image.png", color: index == 0 ? Colors.white : Colors.black,)
+              : Container(),
+          image != null ? horizontalSpaceTiny : Container(),
+          Text(text!, style: TextStyle(color: model!.index == index ? Colors.white : kMainGray,)),
+        ],
+      ),
+    ).backgroundGradient(model.index == index ? kMainGradient : kDisabledGradient, animate: true)
+        .clipRRect(all: 10)
+        .animate(const Duration(milliseconds: 200), Curves.easeIn)
+        .gestures(onTap: () {
+      model.selectCategory(ind: index);
+    });
   }
 }
