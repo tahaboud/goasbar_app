@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:goasbar/ui/widgets/previous_button.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -385,33 +385,34 @@ class AddExperienceView extends HookWidget {
                     )),
                   ),
                   verticalSpaceLarge,
-                  Container(
-                    width: MediaQuery.of(context).size.width - 60,
-                    height: 50,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      gradient: kMainGradient,
-                    ),
-                    child: const Center(
-                      child: Text('NEXT', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
-                    ),
-                  ).gestures(
-                    onTap: () {
-                      if (link.text.isNotEmpty) {
-                        if (!link.text.contains("www.youtube.com/")) {
-                          MotionToast.warning(
-                            title: const Text("Warning"),
-                            description: const Text("Youtube link is not correct"),
-                            animationCurve: Curves.easeIn,
-                            animationDuration: const Duration(milliseconds: 200),
-                          ).show(context);
-                        } else {
-                          pageController.jumpToPage(2);
-                        }
-                      } else {
-                        pageController.jumpToPage(2);
-                      }
-                    },
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      PreviousButton(onTap: () => pageController.jumpToPage(0)),
+                      Container(
+                        width: screenWidthPercentage(context, percentage: 0.4),
+                        height: 50,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          gradient: kMainGradient,
+                        ),
+                        child: const Center(
+                          child: Text('NEXT', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+                        ),
+                      ).gestures(
+                        onTap: () {
+                          if (link.text.isNotEmpty) {
+                            if (!link.text.contains("www.youtube.com/")) {
+                              showMotionToast(context: context, title: 'Warning', msg: "Youtube link is not correct", type: MotionToastType.warning);
+                            } else {
+                              pageController.jumpToPage(2);
+                            }
+                          } else {
+                            pageController.jumpToPage(2);
+                          }
+                        },
+                      ),
+                    ],
                   ),
                   verticalSpaceRegular,
                 ],
@@ -519,38 +520,34 @@ class AddExperienceView extends HookWidget {
                     ],
                   ),
                   verticalSpaceLarge,
-                  Container(
-                    width: MediaQuery.of(context).size.width - 60,
-                    height: 50,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      gradient: kMainGradient,
-                    ),
-                    child: const Center(
-                      child: Text('NEXT', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
-                    ),
-                  ).gestures(
-                    onTap: () {
-                      if (description.text.isNotEmpty && activities.text.isNotEmpty) {
-                        if (description.text.length >= 140) {
-                          pageController.jumpToPage(3);
-                        } else {
-                          MotionToast.warning(
-                            title: const Text("Warning"),
-                            description: const Text("Description must be more than 140 characters"),
-                            animationCurve: Curves.easeIn,
-                            animationDuration: const Duration(milliseconds: 200),
-                          ).show(context);
-                        }
-                      } else {
-                        MotionToast.warning(
-                          title: const Text("Warning"),
-                          description: const Text("Description and activities are required"),
-                          animationCurve: Curves.easeIn,
-                          animationDuration: const Duration(milliseconds: 200),
-                        ).show(context);
-                      }
-                    },
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      PreviousButton(onTap: () => pageController.jumpToPage(1)),
+                      Container(
+                        width: screenWidthPercentage(context, percentage: 0.4),
+                        height: 50,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          gradient: kMainGradient,
+                        ),
+                        child: const Center(
+                          child: Text('NEXT', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+                        ),
+                      ).gestures(
+                        onTap: () {
+                          if (description.text.isNotEmpty && activities.text.isNotEmpty) {
+                            if (description.text.length >= 140) {
+                              pageController.jumpToPage(3);
+                            } else {
+                              showMotionToast(context: context, title: 'Warning', msg: "Description must be more than 140 characters", type: MotionToastType.warning);
+                            }
+                          } else {
+                            showMotionToast(context: context, title: 'Warning', msg: "Description and activities are required", type: MotionToastType.warning);
+                          }
+                        },
+                      ),
+                    ],
                   ),
                   verticalSpaceRegular,
                 ],
@@ -739,40 +736,46 @@ class AddExperienceView extends HookWidget {
                     ],
                   ),
                   verticalSpaceLarge,
-                  Container(
-                    width: MediaQuery.of(context).size.width - 60,
-                    height: 50,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      gradient: kMainGradient,
-                    ),
-                    child: const Center(
-                      child: Text('NEXT', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
-                    ),
-                  ).gestures(
-                    onTap: () {
-                      if (model.providedGoodsController1.text.isNotEmpty) model.updateProvidedGoodsText(text: "${model.providedGoodsController1.text}\n${model.providedGoodsText}");
-                      if (model.providedGoodsController2.text.isNotEmpty) model.updateProvidedGoodsText(text: "${model.providedGoodsController2.text}\n${model.providedGoodsText}");
-                      if (model.providedGoodsController3.text.isNotEmpty) model.updateProvidedGoodsText(text: "${model.providedGoodsController3.text}\n${model.providedGoodsText}");
-                      if (model.providedGoodsController4.text.isNotEmpty) model.updateProvidedGoodsText(text: "${model.providedGoodsController4.text}\n${model.providedGoodsText}");
-                      for (var i = 0; i < model.addedProvidedGoodsControllers.length; i++) {
-                        if (model.addedProvidedGoodsControllers[i].text.isNotEmpty) {
-                          model.updateProvidedGoodsText(text: "${model.addedProvidedGoodsControllers[i].text}\n${model.providedGoodsText}");
-                        }
-                      }
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      PreviousButton(onTap: () => pageController.jumpToPage(2)),
+                      Container(
+                        width: screenWidthPercentage(context, percentage: 0.4),
+                        height: 50,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          gradient: kMainGradient,
+                        ),
+                        child: const Center(
+                          child: Text('NEXT', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+                        ),
+                      ).gestures(
+                        onTap: () {
+                          if (model.providedGoodsController1.text.isNotEmpty) model.updateProvidedGoodsText(text: "${model.providedGoodsController1.text}\n${model.providedGoodsText}");
+                          if (model.providedGoodsController2.text.isNotEmpty) model.updateProvidedGoodsText(text: "${model.providedGoodsController2.text}\n${model.providedGoodsText}");
+                          if (model.providedGoodsController3.text.isNotEmpty) model.updateProvidedGoodsText(text: "${model.providedGoodsController3.text}\n${model.providedGoodsText}");
+                          if (model.providedGoodsController4.text.isNotEmpty) model.updateProvidedGoodsText(text: "${model.providedGoodsController4.text}\n${model.providedGoodsText}");
+                          for (var i = 0; i < model.addedProvidedGoodsControllers.length; i++) {
+                            if (model.addedProvidedGoodsControllers[i].text.isNotEmpty) {
+                              model.updateProvidedGoodsText(text: "${model.addedProvidedGoodsControllers[i].text}\n${model.providedGoodsText}");
+                            }
+                          }
 
-                      if (model.requirementsController1.text.isNotEmpty) model.updateRequirementsText(text: "${model.requirementsController1.text}\n${model.requirementsText}");
-                      if (model.requirementsController2.text.isNotEmpty) model.updateRequirementsText(text: "${model.requirementsController2.text}\n${model.requirementsText}");
-                      if (model.requirementsController3.text.isNotEmpty) model.updateRequirementsText(text: "${model.requirementsController3.text}\n${model.requirementsText}");
-                      if (model.requirementsController4.text.isNotEmpty) model.updateRequirementsText(text: "${model.requirementsController4.text}\n${model.requirementsText}");
-                      for (var i = 0; i < model.addedRequirementsControllers.length; i++) {
-                        if (model.addedRequirementsControllers[i].text.isNotEmpty) {
-                          model.updateRequirementsText(text: "${model.addedRequirementsControllers[i].text}\n${model.requirementsText}");
-                        }
-                      }
+                          if (model.requirementsController1.text.isNotEmpty) model.updateRequirementsText(text: "${model.requirementsController1.text}\n${model.requirementsText}");
+                          if (model.requirementsController2.text.isNotEmpty) model.updateRequirementsText(text: "${model.requirementsController2.text}\n${model.requirementsText}");
+                          if (model.requirementsController3.text.isNotEmpty) model.updateRequirementsText(text: "${model.requirementsController3.text}\n${model.requirementsText}");
+                          if (model.requirementsController4.text.isNotEmpty) model.updateRequirementsText(text: "${model.requirementsController4.text}\n${model.requirementsText}");
+                          for (var i = 0; i < model.addedRequirementsControllers.length; i++) {
+                            if (model.addedRequirementsControllers[i].text.isNotEmpty) {
+                              model.updateRequirementsText(text: "${model.addedRequirementsControllers[i].text}\n${model.requirementsText}");
+                            }
+                          }
 
-                      pageController.jumpToPage(4);
-                    },
+                          pageController.jumpToPage(4);
+                        },
+                      ),
+                    ],
                   ),
                   verticalSpaceRegular,
                 ],
@@ -844,10 +847,10 @@ class AddExperienceView extends HookWidget {
                               ),
                               onChanged: (value) => model.updateCity(value: value),
                               items: cities.map((c) => DropdownMenuItem(
-                                value: c,
+                                value: "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}",
                                 onTap: () {},
                                 child: SizedBox(
-                                  child: Text(c, style: const TextStyle(fontFamily: 'Cairo'),),
+                                  child: Text("${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}", style: const TextStyle(fontFamily: 'Cairo'),),
                                 ),
                               )).toList(),
                             ),
@@ -944,20 +947,26 @@ class AddExperienceView extends HookWidget {
                     ],
                   ),
                   verticalSpaceLarge,
-                  Container(
-                    width: MediaQuery.of(context).size.width - 60,
-                    height: 50,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      gradient: kMainGradient,
-                    ),
-                    child: const Center(
-                      child: Text('NEXT', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
-                    ),
-                  ).gestures(
-                    onTap: () {
-                      pageController.jumpToPage(5);
-                    },
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      PreviousButton(onTap: () => pageController.jumpToPage(3)),
+                      Container(
+                        width: screenWidthPercentage(context, percentage: 0.4),
+                        height: 50,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          gradient: kMainGradient,
+                        ),
+                        child: const Center(
+                          child: Text('NEXT', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+                        ),
+                      ).gestures(
+                        onTap: () {
+                          pageController.jumpToPage(5);
+                        },
+                      ),
+                    ],
                   ),
                   verticalSpaceRegular,
                 ],
@@ -1125,180 +1134,186 @@ class AddExperienceView extends HookWidget {
                   ),
 
                   verticalSpaceLarge,
-                  Container(
-                    width: MediaQuery.of(context).size.width - 60,
-                    height: 50,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      gradient: kMainGradient,
-                    ),
-                    child: model.isClicked! ? const Loader().center() : const Center(
-                      child: Text('PUBLISH', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
-                    ),
-                  ).gestures(
-                    onTap: () async {
-                      if ((price.text.isNotEmpty && addPeople.text.isNotEmpty && model.startDate.text.isNotEmpty && model.startTime.text.isNotEmpty)
-                          || (price.text.isNotEmpty && request.data != null)) {
-                        if (double.parse(price.text) > 1) {
-                          Map<String, dynamic>? body = {};
-                          Map<String, dynamic>? timingBody = {};
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      PreviousButton(onTap: () => pageController.jumpToPage(4)),
+                      Container(
+                        width: MediaQuery.of(context).size.width - 60,
+                        height: 50,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          gradient: kMainGradient,
+                        ),
+                        child: model.isClicked! ? const Loader().center() : const Center(
+                          child: Text('PUBLISH', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+                        ),
+                      ).gestures(
+                        onTap: () async {
+                          if ((price.text.isNotEmpty && addPeople.text.isNotEmpty && model.startDate.text.isNotEmpty && model.startTime.text.isNotEmpty)
+                              || (price.text.isNotEmpty && request.data != null)) {
+                            if (double.parse(price.text) > 1) {
+                              Map<String, dynamic>? body = {};
+                              Map<String, dynamic>? timingBody = {};
 
-                          if (request.data != null) {
-                            if (title.text != request.data.title) body.addAll({'title': title.text});
-                            if (age.text != request.data.minAge.toString()) body.addAll({'min_age': age.text});
-                            if (description.text != request.data.description) body.addAll({'description': description.text});
-                            if (activities.text != request.data.events) body.addAll({'events': activities.text});
-                            if (model.city != request.data.city) body.addAll({'city': model.city});
-                            if (price.text != request.data.price) body.addAll({'price': price.text});
+                              if (request.data != null) {
+                                if (title.text != request.data.title) body.addAll({'title': title.text});
+                                if (age.text != request.data.minAge.toString()) body.addAll({'min_age': age.text});
+                                if (description.text != request.data.description) body.addAll({'description': description.text});
+                                if (activities.text != request.data.events) body.addAll({'events': activities.text});
+                                if (model.city != request.data.city) body.addAll({'city': model.city!.replaceAll(' ', '_').toUpperCase()});
+                                if (price.text != request.data.price) body.addAll({'price': price.text});
 
-                            if (model.isProfileImageFromLocal!) {
-                              if (!model.mainImage!.path.contains("/media/")) {
-                                var pickedFile = await MultipartFile.fromFile(
-                                  model.mainImage!.path,
-                                  filename: model.mainImage!.path.substring(model.mainImage!.absolute.path.lastIndexOf('/') + 1),
-                                );
-                                body.addAll({'profile_image': pickedFile});
-                              }
-                            }
-
-                            if (model.images! > 0 && model.isHasAdditionalImagesFromLocal!) {
-                              for (var i = 0; i < model.images!; i++) {
-                                if (model.additionalImages![i]!.id == null) {
-                                  var pickedFile = await MultipartFile.fromFile(
-                                    model.additionalImages![i]!.image!,
-                                    filename: model.additionalImages![i]!.image!.substring(model.additionalImages![i]!.image!.lastIndexOf('/') + 1),
-                                  );
-                                  body.addAll({'image_set[$i]image': pickedFile});
+                                if (model.isProfileImageFromLocal!) {
+                                  if (!model.mainImage!.path.contains("/media/")) {
+                                    var pickedFile = await MultipartFile.fromFile(
+                                      model.mainImage!.path,
+                                      filename: model.mainImage!.path.substring(model.mainImage!.absolute.path.lastIndexOf('/') + 1),
+                                    );
+                                    body.addAll({'profile_image': pickedFile});
+                                  }
                                 }
-                              }
-                            }
 
-                            if (model.genderConstraint == "No constrains") body.addAll({'gender': 'None',});
-                            if (model.genderConstraint == "Families") body.addAll({'gender': 'FAMILIES',});
-                            if (model.genderConstraint == "Men Only") body.addAll({'gender': 'MEN',});
-                            if (model.genderConstraint == "Women Only") body.addAll({'gender': 'WOMEN',});
+                                if (model.images! > 0 && model.isHasAdditionalImagesFromLocal!) {
+                                  for (var i = 0; i < model.images!; i++) {
+                                    if (model.additionalImages![i]!.id == null) {
+                                      var pickedFile = await MultipartFile.fromFile(
+                                        model.additionalImages![i]!.image!,
+                                        filename: model.additionalImages![i]!.image!.substring(model.additionalImages![i]!.image!.lastIndexOf('/') + 1),
+                                      );
+                                      body.addAll({'image_set[$i]image': pickedFile});
+                                    }
+                                  }
+                                }
 
-                            if (duration.text.isNotEmpty) body.addAll({'duration': duration.text,});
-                            if (notes.text.isNotEmpty) body.addAll({'location_notes': notes.text,});
-                            if (model.selectedExperienceCategory != []) body.addAll({'categories': model.selectedExperienceCategory,});
-                            if (link.text.isNotEmpty) body.addAll({'youtube_video': link.text});
-                            if (model.latLon != null ) {
-                              if (model.latLon!.latitude != request.data!.latitude
-                                  && model.latLon!.longitude != request.data!.longitude) {
-                                body.addAll({'longitude': model.latLon!.longitude,});
-                                body.addAll({'latitude': model.latLon!.latitude,});
-                              }
-                            }
-                            body.addAll({'provided_goods': model.providedGoodsText});
-                            body.addAll({'requirements': model.requirementsText});
+                                if (model.genderConstraint == "No constrains") body.addAll({'gender': 'None',});
+                                if (model.genderConstraint == "Families") body.addAll({'gender': 'FAMILIES',});
+                                if (model.genderConstraint == "Men Only") body.addAll({'gender': 'MEN',});
+                                if (model.genderConstraint == "Women Only") body.addAll({'gender': 'WOMEN',});
 
-                            // if (model.startDate.text.isNotEmpty) timingBody.addAll({'date': model.startDate.text});
-                            // if (model.startDate.text.isNotEmpty) timingBody.addAll({'start_time': model.pickedTimeForRequest});
-                            // if (addPeople.text.isNotEmpty) timingBody.addAll({'capacity': addPeople.text});
+                                if (duration.text.isNotEmpty) body.addAll({'duration': duration.text,});
+                                if (notes.text.isNotEmpty) body.addAll({'location_notes': notes.text,});
+                                if (model.selectedExperienceCategory != []) body.addAll({'categories': model.selectedExperienceCategory,});
+                                if (link.text.isNotEmpty) body.addAll({'youtube_video': link.text});
+                                if (model.latLon != null ) {
+                                  if (model.latLon!.latitude != request.data!.latitude
+                                      && model.latLon!.longitude != request.data!.longitude) {
+                                    body.addAll({'longitude': model.latLon!.longitude,});
+                                    body.addAll({'latitude': model.latLon!.latitude,});
+                                  }
+                                }
+                                body.addAll({'provided_goods': model.providedGoodsText});
+                                body.addAll({'requirements': model.requirementsText});
 
-                            if (body.isEmpty) {
-                              model.showPublishSuccessBottomSheet().then((value) {
-                                completer(SheetResponse(confirmed: true));
-                              });
-                            } else {
-                              model.updateExperience(
-                                hasImages: model.isProfileImageFromLocal! || model.isHasAdditionalImagesFromLocal!,
-                                context: context, body: body, experienceId: request.data.id,
-                              ).then((value) {
-                                model.updateIsClicked(value: false);
-                                if (value != null) {
+                                // if (model.startDate.text.isNotEmpty) timingBody.addAll({'date': model.startDate.text});
+                                // if (model.startDate.text.isNotEmpty) timingBody.addAll({'start_time': model.pickedTimeForRequest});
+                                // if (addPeople.text.isNotEmpty) timingBody.addAll({'capacity': addPeople.text});
+
+                                if (body.isEmpty) {
                                   model.showPublishSuccessBottomSheet().then((value) {
                                     completer(SheetResponse(confirmed: true));
                                   });
                                 } else {
-                                  showMotionToast(context: context, title: 'Update Experience Failed', msg: 'An error occurred while updating the experience, please try again.', type: MotionToastType.error);
+                                  model.updateExperience(
+                                    hasImages: model.isProfileImageFromLocal! || model.isHasAdditionalImagesFromLocal!,
+                                    context: context, body: body, experienceId: request.data.id,
+                                  ).then((value) {
+                                    model.updateIsClicked(value: false);
+                                    if (value != null) {
+                                      model.showPublishSuccessBottomSheet().then((value) {
+                                        completer(SheetResponse(confirmed: true));
+                                      });
+                                    } else {
+                                      showMotionToast(context: context, title: 'Update Experience Failed', msg: 'An error occurred while updating the experience, please try again.', type: MotionToastType.error);
+                                    }
+                                  });
                                 }
-                              });
+                              } else {
+                                body.addAll({'title': title.text});
+                                body.addAll({'min_age': age.text});
+                                body.addAll({'description': description.text});
+                                body.addAll({'events': activities.text});
+                                body.addAll({'city': model.city!.replaceAll(' ', '_').toUpperCase()});
+                                body.addAll({'price': price.text});
+
+                                if (model.mainImage != null) {
+                                  if (!model.mainImage!.path.contains("/media/")) {
+                                    var pickedFile = await MultipartFile.fromFile(
+                                      model.mainImage!.path,
+                                      filename: model.mainImage!.path.substring(model.mainImage!.absolute.path.lastIndexOf('/') + 1),
+                                    );
+                                    body.addAll({'profile_image': pickedFile});
+                                  }
+                                }
+
+                                if (model.images! > 0) {
+                                  for (var i = 0; i < model.images!; i++) {
+                                    if (model.additionalImages![i]!.id == null) {
+                                      var pickedFile = await MultipartFile.fromFile(
+                                        model.additionalImages![i]!.image!,
+                                        filename: model.additionalImages![i]!.image!.substring(model.additionalImages![i]!.image!.lastIndexOf('/') + 1),
+                                      );
+                                      body.addAll({'image_set[$i]image': pickedFile});
+                                    }
+                                  }
+                                }
+
+                                if (model.genderConstraint == "No constrains") body.addAll({'gender': 'None',});
+                                if (model.genderConstraint == "Families") body.addAll({'gender': 'FAMILIES',});
+                                if (model.genderConstraint == "Men Only") body.addAll({'gender': 'MEN',});
+                                if (model.genderConstraint == "Women Only") body.addAll({'gender': 'WOMEN',});
+
+                                if (duration.text.isNotEmpty) body.addAll({'duration': duration.text,});
+                                if (model.latLon != null) {
+                                  body.addAll({'longitude': model.latLon!.longitude,});
+                                  body.addAll({'latitude': model.latLon!.latitude,});
+                                }
+                                if (duration.text.isNotEmpty) body.addAll({'duration': duration.text,});
+                                if (notes.text.isNotEmpty) body.addAll({'location_notes': notes.text,});
+                                if (model.selectedExperienceCategory != []) body.addAll({'categories': model.selectedExperienceCategory,});
+                                if (link.text.isNotEmpty) body.addAll({'youtube_video': link.text});
+                                body.addAll({'provided_goods': model.providedGoodsText});
+                                body.addAll({'requirements': model.requirementsText});
+
+                                if (model.startDate.text.isNotEmpty) timingBody.addAll({'date': model.startDate.text});
+                                if (model.startDate.text.isNotEmpty) timingBody.addAll({'start_time': model.pickedTimeForRequest});
+                                if (addPeople.text.isNotEmpty) timingBody.addAll({'capacity': addPeople.text});
+
+                                model.createExperience(context: context, body: body, timingBody: timingBody).then((value) {
+                                  model.updateIsClicked(value: false);
+                                  if (value != null) {
+                                    model.showPublishSuccessBottomSheet().then((value) {
+                                      completer(SheetResponse(confirmed: true));
+                                    });
+                                  } else {
+                                    MotionToast.error(
+                                      title: const Text("Create Experience Failed"),
+                                      description: const Text("An error occurred while creating the experience, please try again."),
+                                      animationCurve: Curves.easeIn,
+                                      animationDuration: const Duration(milliseconds: 200),
+                                    ).show(context);
+                                  }
+                                });
+                              }
+                            } else {
+                              MotionToast.warning(
+                                title: const Text("Warning"),
+                                description: const Text("Price must be more than 1.0 SR"),
+                                animationCurve: Curves.easeIn,
+                                animationDuration: const Duration(milliseconds: 200),
+                              ).show(context);
                             }
                           } else {
-                            body.addAll({'title': title.text});
-                            body.addAll({'min_age': age.text});
-                            body.addAll({'description': description.text});
-                            body.addAll({'events': activities.text});
-                            body.addAll({'city': model.city});
-                            body.addAll({'price': price.text});
-
-                            if (model.mainImage != null) {
-                              if (!model.mainImage!.path.contains("/media/")) {
-                                var pickedFile = await MultipartFile.fromFile(
-                                  model.mainImage!.path,
-                                  filename: model.mainImage!.path.substring(model.mainImage!.absolute.path.lastIndexOf('/') + 1),
-                                );
-                                body.addAll({'profile_image': pickedFile});
-                              }
-                            }
-
-                            if (model.images! > 0) {
-                              for (var i = 0; i < model.images!; i++) {
-                                if (model.additionalImages![i]!.id == null) {
-                                  var pickedFile = await MultipartFile.fromFile(
-                                    model.additionalImages![i]!.image!,
-                                    filename: model.additionalImages![i]!.image!.substring(model.additionalImages![i]!.image!.lastIndexOf('/') + 1),
-                                  );
-                                  body.addAll({'image_set[$i]image': pickedFile});
-                                }
-                              }
-                            }
-
-                            if (model.genderConstraint == "No constrains") body.addAll({'gender': 'None',});
-                            if (model.genderConstraint == "Families") body.addAll({'gender': 'FAMILIES',});
-                            if (model.genderConstraint == "Men Only") body.addAll({'gender': 'MEN',});
-                            if (model.genderConstraint == "Women Only") body.addAll({'gender': 'WOMEN',});
-
-                            if (duration.text.isNotEmpty) body.addAll({'duration': duration.text,});
-                            if (model.latLon != null) {
-                              body.addAll({'longitude': model.latLon!.longitude,});
-                              body.addAll({'latitude': model.latLon!.latitude,});
-                            }
-                            if (duration.text.isNotEmpty) body.addAll({'duration': duration.text,});
-                            if (notes.text.isNotEmpty) body.addAll({'location_notes': notes.text,});
-                            if (model.selectedExperienceCategory != []) body.addAll({'categories': model.selectedExperienceCategory,});
-                            if (link.text.isNotEmpty) body.addAll({'youtube_video': link.text});
-                            body.addAll({'provided_goods': model.providedGoodsText});
-                            body.addAll({'requirements': model.requirementsText});
-
-                            if (model.startDate.text.isNotEmpty) timingBody.addAll({'date': model.startDate.text});
-                            if (model.startDate.text.isNotEmpty) timingBody.addAll({'start_time': model.pickedTimeForRequest});
-                            if (addPeople.text.isNotEmpty) timingBody.addAll({'capacity': addPeople.text});
-
-                            model.createExperience(context: context, body: body, timingBody: timingBody).then((value) {
-                              model.updateIsClicked(value: false);
-                              if (value != null) {
-                                model.showPublishSuccessBottomSheet().then((value) {
-                                  completer(SheetResponse(confirmed: true));
-                                });
-                              } else {
-                                MotionToast.error(
-                                  title: const Text("Create Experience Failed"),
-                                  description: const Text("An error occurred while creating the experience, please try again."),
-                                  animationCurve: Curves.easeIn,
-                                  animationDuration: const Duration(milliseconds: 200),
-                                ).show(context);
-                              }
-                            });
+                            MotionToast.warning(
+                              title: const Text("Warning"),
+                              description: const Text("All fields are required"),
+                              animationCurve: Curves.easeIn,
+                              animationDuration: const Duration(milliseconds: 200),
+                            ).show(context);
                           }
-                        } else {
-                          MotionToast.warning(
-                            title: const Text("Warning"),
-                            description: const Text("Price must be more than 1.0 SR"),
-                            animationCurve: Curves.easeIn,
-                            animationDuration: const Duration(milliseconds: 200),
-                          ).show(context);
-                        }
-                      } else {
-                        MotionToast.warning(
-                          title: const Text("Warning"),
-                          description: const Text("All fields are required"),
-                          animationCurve: Curves.easeIn,
-                          animationDuration: const Duration(milliseconds: 200),
-                        ).show(context);
-                      }
-                    },
+                        },
+                      ),
+                    ],
                   ),
                   verticalSpaceRegular,
                 ],
