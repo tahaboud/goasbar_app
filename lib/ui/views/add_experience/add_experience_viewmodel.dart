@@ -43,7 +43,7 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   int pageIndex = 1;
   int? addedProviding = 0;
   int? addedRequirements = 0;
-  String? city = "RIYADH";
+  String? city = "Riyadh";
   List<dynamic>? selectedExperienceCategory = [];
   String? providedGoodsText = '';
   String? requirementsText = '';
@@ -179,7 +179,7 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   }
 
   String? getCity() {
-    city = experience != null ? experience!.city : null;
+    city = experience != null ? "${experience!.city![0]}${experience!.city!.substring(1).replaceAll('_', ' ').toLowerCase()}" : null;
     return city;
   }
 
@@ -348,21 +348,6 @@ class AddExperienceInfoViewModel extends BaseViewModel {
     }
 
     notifyListeners();
-  }
-
-  showNewTimingBottomSheet({String? date, int? experienceId}) async {
-    var response = await _bottomSheetService.showCustomSheet(
-      variant: BottomSheetType.newTiming,
-      isScrollControlled: true,
-      barrierDismissible: true,
-      data: date,
-      // ignore: deprecated_member_use
-      customData: experienceId,
-    );
-
-    if (response!.confirmed) {
-      notifyListeners();
-    }
   }
 
   Future showPublishSuccessBottomSheet() async {
