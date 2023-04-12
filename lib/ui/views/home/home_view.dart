@@ -47,23 +47,26 @@ class HomeView extends StatelessWidget {
             items: [
               BottomNavigationBarItem(
                 label: 'Experience',
-                icon: Image.asset("assets/icons/navbar/experience.png"),
+                icon: SizedBox(
+                  height: 35,
+                  child: Image.asset("assets/icons/navbar/experience.png"),
+                ),
               ),
               BottomNavigationBarItem(
                 label: 'Search',
-                icon: Image.asset("assets/icons/navbar/search.png"),
+                icon: SizedBox(height: 35, child: Image.asset("assets/icons/navbar/search.png")),
               ),
               BottomNavigationBarItem(
                 label: 'Trips',
-                icon: Image.asset("assets/icons/navbar/trips.png"),
+                icon: SizedBox(height: 35, child: Image.asset("assets/icons/navbar/trips.png")),
               ),
               BottomNavigationBarItem(
                 label: 'Saved',
-                icon: Image.asset("assets/icons/navbar/saved.png"),
+                icon: SizedBox(height: 35, child: Image.asset("assets/icons/navbar/saved.png")),
               ),
               BottomNavigationBarItem(
                 label: 'Settings',
-                icon: Image.asset("assets/icons/navbar/settings.png"),
+                icon: SizedBox(height: 35, child: Image.asset("assets/icons/navbar/settings.png")),
               ),
             ],
           ),
