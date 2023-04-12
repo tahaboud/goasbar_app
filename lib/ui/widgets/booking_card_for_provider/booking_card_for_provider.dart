@@ -93,7 +93,7 @@ class BookingItemForProviderView extends StatelessWidget {
                         horizontalSpaceSmall,
                         Image.asset("assets/icons/location.png"),
                         horizontalSpaceTiny,
-                        Text("${providerPublicExperience!.city!} , ${providerPublicExperience!.duration!} ${double.parse(providerPublicExperience!.duration!) >= 2 ? 'Hours' : 'Hour'}", style: const TextStyle(color: kMainGray, fontSize: 11))
+                        Text(" ${providerPublicExperience!.city![0]}${providerPublicExperience!.city!.substring(1).replaceAll('_', ' ').toLowerCase()} , ${providerPublicExperience!.duration!} ${double.parse(providerPublicExperience!.duration!) >= 2 ? 'Hours' : 'Hour'}", style: const TextStyle(color: kMainGray, fontSize: 11))
                       ],
                     ),
                     verticalSpaceSmall,
