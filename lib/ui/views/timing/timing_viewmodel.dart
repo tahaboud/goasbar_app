@@ -84,7 +84,7 @@ class TimingViewModel extends FutureViewModel<dynamic> {
       barrierDismissible: true,
       data: date,
       // ignore: deprecated_member_use
-      customData: timing ?? experience!,
+      customData: timing != null ? {"timing": timing, "experience": experience!} : experience!,
     );
 
     if (response!.confirmed) {
