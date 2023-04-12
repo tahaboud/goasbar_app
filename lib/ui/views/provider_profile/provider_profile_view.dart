@@ -180,22 +180,24 @@ class ProviderProfileView extends HookWidget {
                 //     style: TextStyle(color: Colors.black54),
                 //   ),
                 // ),
-                const Divider(color: kMainColor1, height: 40, thickness: 1.2),
-                Row(
-                  children: [
-                    Container(
-                      height: 30,
-                      width: 30,
-                      decoration: BoxDecoration(
-                        color: kGrayText.withOpacity(0.5),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Icon(Icons.outlined_flag, color: Colors.black54, size: 20),
-                    ),
-                    horizontalSpaceSmall,
-                    const Text('Report this Host profile'),
-                  ],
-                ),
+
+                //TODO add the report item
+                // const Divider(color: kMainColor1, height: 40, thickness: 1.2),
+                // Row(
+                //   children: [
+                //     Container(
+                //       height: 30,
+                //       width: 30,
+                //       decoration: BoxDecoration(
+                //         color: kGrayText.withOpacity(0.5),
+                //         borderRadius: BorderRadius.circular(8),
+                //       ),
+                //       child: const Icon(Icons.outlined_flag, color: Colors.black54, size: 20),
+                //     ),
+                //     horizontalSpaceSmall,
+                //     const Text('Report this Host profile'),
+                //   ],
+                // ),
               ],
             ),
           ),
