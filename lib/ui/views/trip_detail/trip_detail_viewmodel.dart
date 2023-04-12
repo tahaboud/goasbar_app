@@ -1,12 +1,15 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/animation.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/experience_response.dart';
 import 'package:goasbar/data_models/public_provider_model.dart';
+import 'package:goasbar/data_models/timing_list_model.dart';
 import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/services/auth_service.dart';
 import 'package:goasbar/services/provider_api_service.dart';
+import 'package:goasbar/services/timing_api_service.dart';
 import 'package:goasbar/services/token_service.dart';
 import 'package:goasbar/services/url_service.dart';
 import 'package:goasbar/shared/app_configs.dart';
@@ -26,7 +29,9 @@ class TripDetailViewModel extends FutureViewModel<PublicProviderModel?> {
   final _tokenService = locator<TokenService>();
   final _authService = locator<AuthService>();
   final _providerApiService = locator<ProviderApiService>();
+  final _timingApiService = locator<TimingApiService>();
   PublicProviderModel? provider;
+  TimingListModel? timingListModel;
   List<int>? favoriteList = [];
   CameraPosition? kGooglePlex;
   Completer<GoogleMapController> controller = Completer();
@@ -113,8 +118,14 @@ class TripDetailViewModel extends FutureViewModel<PublicProviderModel?> {
     }
   }
 
+  getTimingsList({context}) async {
+    String? token = await _tokenService.getTokenValue();
+    timingListModel = await _timingApiService.getTimingsList(context: context, token: token, experienceId: experience!.id, page: 1);
+  }
+
   Future<PublicProviderModel?> getProvider () async {
     if (user != null) getIsFav();
+    getTimingsList();
     provider = await _providerApiService.getPublicProviderInfo(providerId: experience!.providerId);
     setMapAndMarker();
     notifyListeners();
