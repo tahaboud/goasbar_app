@@ -44,7 +44,7 @@ public class MainActivity extends FlutterActivity implements ITransactionListene
     private String checkoutid = "";
     private MethodChannel.Result Result;
     private String type = "";
-    private String number,holder,cvv,year,month,brand;
+    private String number,holder,cvv,year,month,brand, checkoutId, expiryMonth, expiryYear;
     private  String mode = "";
     private String STCPAY = "";
     OppPaymentProvider paymentProvider = new OppPaymentProvider(MainActivity.this, Connect.ProviderMode.TEST);
@@ -140,11 +140,50 @@ public class MainActivity extends FlutterActivity implements ITransactionListene
 
                                 openCustomUI(checkoutid);
                             }
+                        } else if (call.method.equals("savecard")) {
+
+                            checkoutId = call.argument("checkoutid");
+                            brand = call.argument("brand");
+                            number = call.argument("number");
+                            holder = call.argument("holder");
+                            expiryMonth = call.argument("expiryMonth");
+                            expiryYear = call.argument("expiryYear");
+                            cvv = call.argument("cvv");
+
+
+                            try {
+                                PaymentParams paymentParams = new CardPaymentParams(
+                                        checkoutId,
+                                        brand,
+                                        number,
+                                        holder,
+                                        expiryMonth,
+                                        expiryYear,
+                                        cvv
+                                );
+
+                                // Set shopper result URL
+                                paymentParams.setShopperResultUrl("com.goasbar.goAsbar://result");
+
+
+                                Transaction transaction = null;
+
+                                try {
+                                    transaction = new Transaction(paymentParams);
+                                    paymentProvider.registerTransaction(transaction, MainActivity.this);
+                                } catch (PaymentException ee) {
+                                    ee.printStackTrace();
+                                }
+                            } catch (PaymentException e) {
+                                e.printStackTrace();
+                            }
                         } else {
 
-                            error("1","Method name is not found","");
+                            error("1","This method name is not found","");
                         }
+
                     }});
+
 
 
         // new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CHANNEL).setMethodCallHandler(hand);
@@ -293,6 +332,7 @@ public class MainActivity extends FlutterActivity implements ITransactionListene
         }
 
         if (transaction.getTransactionType() == TransactionType.SYNC) {
+
             success("SYNC");
         } else {
             /* wait for the callback in the s */
@@ -370,15 +410,4 @@ public class MainActivity extends FlutterActivity implements ITransactionListene
         }
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-
-        super.onNewIntent(intent);
-
-        if (intent.getScheme().equals("com.goasbar.goAsbar")) {
-
-            success("success");
-
-        }
-    }
 }
