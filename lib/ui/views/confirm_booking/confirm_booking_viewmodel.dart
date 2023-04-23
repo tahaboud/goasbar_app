@@ -93,13 +93,6 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
     notifyListeners();
   }
 
-  void showAvailablePlacesDialog({timingResponse}) {
-    _dialogService.showCustomDialog(
-      variant: DialogType.availablePlaces,
-      data: timingResponse,
-    );
-  }
-
   String? validatePhoneNumber ({String? value}) {
     return _validationService.validatePhoneNumber(value);
   }
