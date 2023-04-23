@@ -1,13 +1,20 @@
 import 'package:flutter/animation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:goasbar/app/app.locator.dart';
+import 'package:goasbar/services/auth_service.dart';
 import 'package:goasbar/services/token_service.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
-class PaymentMethodViewModel extends BaseViewModel {
+class PaymentMethodViewModel extends FutureViewModel<List?> {
+  BuildContext? context;
+  PaymentMethodViewModel({this.context});
+
   bool isDone = false;
   final _navigationService = locator<NavigationService>();
   final _tokenService = locator<TokenService>();
+  final _authService = locator<AuthService>();
+  List? userCards;
 
   void navigateTo({view}) {
     _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
@@ -19,5 +26,21 @@ class PaymentMethodViewModel extends BaseViewModel {
 
   checkToken () async {
     return await _tokenService.isTokenExist();
+  }
+
+  Future<List?> getUserCards () async {
+    String? token = await _tokenService.getTokenValue();
+    return _authService.getUserCards(context: context, token: token).then((value) {
+      if (value != null) {
+        userCards = value;
+        notifyListeners();
+      }
+      return userCards;
+    });
+  }
+
+  @override
+  Future<List?> futureToRun() {
+    return getUserCards();
   }
 }
