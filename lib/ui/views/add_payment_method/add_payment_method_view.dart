@@ -4,6 +4,7 @@ import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/ui/views/add_payment_method/add_payment_method_viewmodel.dart';
 import 'package:goasbar/ui/widgets/info_item.dart';
+import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:goasbar/ui/widgets/add_payment_method_card.dart';
@@ -46,24 +47,23 @@ class AddPaymentMethodView extends HookWidget {
                       child: Column(
                         children: [
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              AddPaymentMethodCard(image: 'visa_method', isSelected: model.isSelected == 1, onTap: () => model.changeSelection(index: 1)),
-                              AddPaymentMethodCard(image: 'mastercard_method', isSelected: model.isSelected == 2, onTap: () => model.changeSelection(index: 2)),
-                              AddPaymentMethodCard(image: 'paypal_method', isSelected: model.isSelected == 3, onTap: () => model.changeSelection(index: 3)),
+                              AddPaymentMethodCard(image: 'visa_method', isSelected: model.selectedCardType == 1, onTap: () => model.changeSelection(index: 1)),
+                              AddPaymentMethodCard(image: 'mada_method', isSelected: model.selectedCardType == 2, onTap: () => model.changeSelection(index: 2)),
                             ],
                           ),
                           verticalSpaceLarge,
                           InfoItem(
                             controller: cardHolder,
                             label: 'Card Holder',
-                            hintText: 'Oussama GoAsbar',
+                            hintText: 'Osama Mogaitoof',
                           ),
                           verticalSpaceRegular,
                           InfoItem(
                             controller: cardNumber,
                             label: 'Card Number',
-                            hintText: '8585 9595 7575 6565',
+                            hintText: 'xxxx xxxx xxxx xxxx',
                           ),
                           verticalSpaceRegular,
                           Row(
@@ -74,7 +74,7 @@ class AddPaymentMethodView extends HookWidget {
                                 child: InfoItem(
                                   controller: expiryDate,
                                   label: 'Expiry Date',
-                                  hintText: '08/24',
+                                  hintText: 'MM/YY',
                                 ),
                               ),
                               SizedBox(
@@ -82,7 +82,7 @@ class AddPaymentMethodView extends HookWidget {
                                 child: InfoItem(
                                   controller: cvv,
                                   label: 'CVV',
-                                  hintText: '000',
+                                  hintText: 'XXX',
                                 ),
                               ),
                             ],
@@ -103,10 +103,17 @@ class AddPaymentMethodView extends HookWidget {
                     ).gestures(
                       onTap: () async {
                         if (cardNumber.text.isNotEmpty && cardHolder.text.isNotEmpty && expiryDate.text.isNotEmpty && cvv.text.isNotEmpty) {
-                          model.back();
-                          model.back();
+                          model.saveCard(
+                            context: context,
+                            cardType: model.selectedCardType == 1 ? "VISA" : "MADA",
+                            expiryMonth: expiryDate.text.substring(0, 2),
+                            expiryYear: expiryDate.text.substring(3),
+                            cVV: cvv.text,
+                            cardNumber: cardNumber.text,
+                            cardHolder: cardHolder.text,
+                          );
                         } else {
-
+                          showMotionToast(context: context, title: 'Warning', msg: 'All fields are mandatory', type: MotionToastType.warning);
                         }
                       },
                     ),
