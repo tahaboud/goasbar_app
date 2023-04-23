@@ -192,10 +192,14 @@ class TripDetailView extends HookWidget {
                   const Divider(height: 1, color: kMainDisabledGray, thickness: 1).padding(horizontal: 20),
                   verticalSpaceRegular,
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Hosted Experience by', style: TextStyle(fontSize: 18)),
-                      horizontalSpaceSmall,
+                      Row(
+                        children: [
+                          const Text('Hosted Experience by :', style: TextStyle(fontSize: 16)),
+                          Text(' ${model.provider!.response!.nickname}', style: const TextStyle(fontSize: 16, color: kMainColor1)),
+                        ],
+                      ),
                       !model.dataReady ? Image.asset("assets/images/by_user.png").borderRadius(all: 50).height(50).width(50)
                           : Image.network("$baseUrl${model.provider!.response!.image}", height: 35,).clipRRect(all: 30).gestures(
                           onTap: () => model.navigateTo(view: ProviderProfileView(provider: model.provider!.response!, user: user)),
@@ -259,8 +263,8 @@ class TripDetailView extends HookWidget {
                       },
                       markers: model.customMarkers.toSet(),
                       myLocationEnabled: true,
-                      myLocationButtonEnabled: false,
-                      zoomControlsEnabled: false,
+                      myLocationButtonEnabled: true,
+                      zoomControlsEnabled: true,
                     ),
                   ),
                   model.kGooglePlex == null ? const SizedBox() : verticalSpaceRegular,
