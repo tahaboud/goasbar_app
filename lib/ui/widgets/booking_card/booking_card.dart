@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:goasbar/data_models/bookings_list_response.dart';
-import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/widgets/booking_card/booking_card_viewmodel.dart';
@@ -11,14 +10,12 @@ class BookingItem extends StatelessWidget {
   const BookingItem({
     Key? key,
     this.bookingsList,
-    this.user,
     this.onDelete,
     this.onUpdate,
   }) : super(key: key);
   final BookingsListResults? bookingsList;
-  final UserModel? user;
   final Function? onDelete;
-  final Function()? onUpdate;
+  final Function? onUpdate;
 
   @override
   Widget build(BuildContext context) {
@@ -102,13 +99,7 @@ class BookingItem extends StatelessWidget {
                             Text(bookingsList!.review != null ? bookingsList!.review!.rate.toString() : 'Review', style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500),).center(),
                           ],
                         ),
-                      ).gestures(onTap: () {
-                        model.showReviewBottomSheet(review: bookingsList!.review, bookingId: bookingsList!.id).then((value) {
-                          if (value) {
-                            onUpdate!();
-                          }
-                        });
-                      }) : const SizedBox(),
+                      ).gestures(onTap: () => onUpdate!()) : const SizedBox(),
                       (model.formatYear(bookingsList!.experienceTiming!.date!) < model.formatYearFromToday())
 
                           || (model.formatMonth(bookingsList!.experienceTiming!.date!) < model.formatMonthFromToday()
@@ -137,7 +128,7 @@ class BookingItem extends StatelessWidget {
           ],
         );
       },
-      viewModelBuilder: () => BookingItemViewModel(user: user),
+      viewModelBuilder: () => BookingItemViewModel(),
     );
   }
 }
