@@ -10,6 +10,7 @@ import 'package:goasbar/ui/views/trip_detail/trip_detail_view.dart';
 import 'package:goasbar/ui/widgets/creation_aware_item.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:motion_toast/motion_toast.dart';
+import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -94,35 +95,27 @@ class SearchView extends HookWidget {
                     ),
                   ),
                   verticalSpaceRegular,
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: screenWidthPercentage(context, percentage: 0.4),
-                        child: TextField(
-                          readOnly: true,
-                          controller: model.searchDate,
-                          decoration: InputDecoration(
-                            hintText: 'Search Date',
-                            hintStyle: const TextStyle(fontSize: 14),
-                            prefixIcon: Image.asset('assets/icons/birth_date.png').gestures(
-                              onTap: () => model.showStartDatePicker(context),
-                            ),
-                            suffixIcon: const Icon(Icons.clear).gestures(
-                              onTap: () => model.clearSearchDate(),
-                            ),
-                            fillColor: kTextFiledGrayColor,
-                            filled: true,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            enabledBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: kTextFiledGrayColor),
-                            ),
-                          ),
-                        ),
+                  TextField(
+                    readOnly: true,
+                    controller: model.searchDate,
+                    decoration: InputDecoration(
+                      hintText: 'Search Date',
+                      hintStyle: const TextStyle(fontSize: 14),
+                      prefixIcon: Image.asset('assets/icons/birth_date.png').gestures(
+                        onTap: () => model.showDateRangePicker(context),
                       ),
-                    ],
+                      suffixIcon: const Icon(Icons.clear).gestures(
+                        onTap: () => model.clearSearchDate(),
+                      ),
+                      fillColor: kTextFiledGrayColor,
+                      filled: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: kTextFiledGrayColor),
+                      ),
+                    ),
                   ),
                   verticalSpaceRegular,
                   Container(
@@ -271,8 +264,8 @@ class SearchView extends HookWidget {
                         if (model.genderConstraint == "Men Only") query = '$query&gender=MEN';
                         if (model.genderConstraint == "Women Only") query = '$query&gender=WOMEN';
                         
-                        if (model.from != '') query = '$query&date=${model.from}';
-                        if (model.to != '') query = '$query&date=${model.to}';
+                        if (model.from != '') query = '$query&date_min=${model.from}';
+                        if (model.to != '') query = '$query&date_max=${model.to}';
 
                         if (model.city != 'Search City') query = '$query&city=${model.city!.replaceAll(' ', '_').toUpperCase()}';
 
@@ -288,12 +281,7 @@ class SearchView extends HookWidget {
                             if (value != null) {
 
                             } else {
-                              MotionToast.warning(
-                                title: const Text("No experience found"),
-                                description: const Text("No experience found with your specifications"),
-                                animationCurve: Curves.easeIn,
-                                animationDuration: const Duration(milliseconds: 200),
-                              ).show(context);
+                              showMotionToast(context: context, title: 'No experience found', msg: "No experience found with your specifications", type: MotionToastType.warning);
                             }
                           });
                         }
