@@ -908,7 +908,7 @@ class AddExperienceView extends HookWidget {
                           markers: model.customMarkers.toSet(),
                           myLocationEnabled: true,
                           myLocationButtonEnabled: false,
-                          zoomControlsEnabled: false,
+                          zoomControlsEnabled: true,
                         ),
                       ),
                       verticalSpaceRegular,
@@ -1139,7 +1139,7 @@ class AddExperienceView extends HookWidget {
                     children: [
                       PreviousButton(onTap: () => pageController.jumpToPage(4)),
                       Container(
-                        width: MediaQuery.of(context).size.width - 60,
+                        width: screenWidthPercentage(context, percentage: 0.4),
                         height: 50,
                         decoration: const BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(10)),
