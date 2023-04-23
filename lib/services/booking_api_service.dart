@@ -78,9 +78,9 @@ class BookingApiService {
     });
   }
 
-  Future<BookingsListModel?> getUserBookings({context, String? token, int? page}) async {
+  Future<BookingsListModel?> getUserBookings({context, String? token, int? page, String? query = ''}) async {
     return http.get(
-      Uri.parse("$baseUrl/api/booking/?page=$page"),
+      Uri.parse("$baseUrl/api/booking/?page=$page&query=$query"),
       headers: {
         "Accept-Language": "en-US",
         "Authorization": "Token $token",
