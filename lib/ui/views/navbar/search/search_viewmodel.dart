@@ -73,13 +73,12 @@ class SearchViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void showStartDatePicker(context) async {
+  void showDateRangePicker(context) async {
     List<DateTime?>? picked = await showCalendarDatePicker2Dialog(
       context: context,
       config: CalendarDatePicker2WithActionButtonsConfig(
         disableYearPicker: true,
-        firstDate: DateTime.now(),
-        calendarType: CalendarDatePicker2Type.multi,
+        calendarType: CalendarDatePicker2Type.range,
         selectedDayHighlightColor: kMainColor1,
       ),
       initialValue: [
