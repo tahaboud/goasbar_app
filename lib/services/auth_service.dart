@@ -232,6 +232,66 @@ class AuthService {
     });
   }
 
+  Future<List?> getUserCards({String? token, context,}) async {
+    return http.get(
+      Uri.parse("$baseUrl/api/auth/cards/"),
+      headers: {
+        "Accept-Language": "en-US",
+        "Authorization": "Token $token",
+      },
+    ).then((response) {
+      if (response.statusCode == 200) {
+        return [];
+      } else if (response.statusCode == 401) {
+        unAuthClearAndRestart(context: context,);
+        return null;
+      } else {
+        return null;
+      }
+    });
+  }
+
+  Future<String?> getRegistrationId({String? token, context, body}) async {
+    return http.post(
+      Uri.parse("$baseUrl/api/auth/cards/"),
+      headers: {
+        "Accept-Language": "en-US",
+        "Authorization": "Token $token",
+      },
+      body: body,
+    ).then((response) {
+      if (response.statusCode == 201) {
+        return jsonDecode(response.body)['id'];
+      } else if (response.statusCode == 401) {
+        unAuthClearAndRestart(context: context,);
+        return null;
+      } else {
+        return null;
+      }
+    });
+  }
+
+  Future<String?> saveNewCard({String? token, context, body}) async {
+    return http.put(
+      Uri.parse("$baseUrl/api/auth/cards/"),
+      headers: {
+        "Accept-Language": "en-US",
+        "Authorization": "Token $token",
+      },
+      body: body,
+    ).then((response) {
+      print(response.body);
+      if (response.statusCode == 201) {
+        return null;
+      } else if (response.statusCode == 401) {
+        unAuthClearAndRestart(context: context,);
+        return null;
+      } else {
+        return null;
+      }
+    });
+  }
+
   Future<bool?> logout({String? token, context}) async {
     return http.post(
       Uri.parse("$baseUrl/api/auth/logout/"),
