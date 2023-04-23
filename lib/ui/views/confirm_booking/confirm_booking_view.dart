@@ -139,7 +139,7 @@ class ConfirmBookingView extends HookWidget {
                 // ),
                 model.isBusy ? const SizedBox() : model.data!.count == 0 ? const SizedBox() : verticalSpaceMedium,
                 model.isBusy ? const Loader().center() : model.data!.count == 0 ? const SizedBox() : SizedBox(
-                  height: 82,
+                  height: 105,
                   child: ListView.builder(
                     itemCount: model.data!.count,
                     physics: const BouncingScrollPhysics(),
@@ -169,13 +169,9 @@ class ConfirmBookingView extends HookWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                           child: Column(
                             children: [
-                              Row(
-                                children: [
-                                  Text(model.formatDate(model.data!.results![index].date!), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: index == model.selectedIndex ? Colors.white : Colors.black)),
-                                  horizontalSpaceSmall,
-                                  Text(model.data!.results![index].date!.substring(8, 10), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: index == model.selectedIndex ? Colors.white : Colors.black),)
-                                ],
-                              ),
+                              Text(model.formatDate(model.data!.results![index].date!), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: index == model.selectedIndex ? Colors.white : Colors.black)),
+                              verticalSpaceSmall,
+                              Text("${model.data!.results![index].date!.substring(8, 10)}/${model.data!.results![index].date!.substring(5, 7)}", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: index == model.selectedIndex ? Colors.white : Colors.black),),
                               verticalSpaceSmall,
                               Text(model.data!.results![index].startTime!.substring(0, 5), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: index == model.selectedIndex ? Colors.white : kMainColor1)),
                             ],
@@ -192,15 +188,11 @@ class ConfirmBookingView extends HookWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                           child: Column(
                             children: [
-                              Row(
-                                children: [
-                                  Text(model.formatDate(model.data!.results![index].date!), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black.withOpacity(0.4))),
-                                  horizontalSpaceSmall,
-                                  Text(model.data!.results![index].date!.substring(8, 10), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black.withOpacity(0.4)),)
-                                ],
-                              ),
+                              Text(model.formatDate(model.data!.results![index].date!), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: index == model.selectedIndex ? Colors.white : Colors.black)),
                               verticalSpaceSmall,
-                              Text(model.data!.results![index].startTime!.substring(0, 5), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: kMainColor1.withOpacity(0.4))),
+                              Text("${model.data!.results![index].date!.substring(8, 10)}/${model.data!.results![index].date!.substring(5, 7)}", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: index == model.selectedIndex ? Colors.white : Colors.black),),
+                              verticalSpaceSmall,
+                              Text(model.data!.results![index].startTime!.substring(0, 5), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: index == model.selectedIndex ? Colors.white : kMainColor1)),
                             ],
                           ),
                         ).decorated(border: Border.all(color: Colors.black12.withOpacity(0.1), width: 2), borderRadius: BorderRadius.circular(10),)
@@ -214,23 +206,15 @@ class ConfirmBookingView extends HookWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
-                      children: const [
-                        horizontalSpaceSmall,
-                        Text('Available Places', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
-                      ],
-                    ),
-                    Row(
                       children: [
-                        const Text('View', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: kMainColor1),).gestures(onTap: () {
-                          if (model.selectedIndex == null) {
-                            showMotionToast(context: context, type: MotionToastType.warning, title: 'Warning', msg: "Select a timing to show available places!.");
-                          } else {
-                            model.showAvailablePlacesDialog(
-                              timingResponse: model.data!.results![model.selectedIndex!],
-                            );
-                          }
-                        }),
                         horizontalSpaceSmall,
+                        SizedBox(
+                          width: screenWidthPercentage(context, percentage: 1) - 50,
+                          child: Text(model.selectedIndex == null
+                              ? 'Available Places : Pick a timing first'
+                              : 'Available Places : ${model.data!.results![model.selectedIndex!].availability} / ${model.data!.results![model.selectedIndex!].capacity}',
+                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
+                        ),
                       ],
                     ),
                   ],
@@ -345,10 +329,12 @@ class ConfirmBookingView extends HookWidget {
                         controller: model.phones[i],
                         validator: (value) => model.validatePhoneNumber(value: value),
                         keyboardType: TextInputType.number,
+                        maxLength: 9,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         decoration: InputDecoration(
                           hintText: 'xx x - xx x - xx x',
                           hintStyle: const TextStyle(fontSize: 14),
+                          counterText: '',
                           // prefixText: 'Saudi Arabia ( +966 ) | ',
                           prefixIcon: const Text('Saudi Arabia ( +966 )  |', style: TextStyle(color: kMainGray, fontSize: 14),).padding(vertical: 20, horizontal: 10),
                           fillColor: kTextFiledGrayColor,
@@ -457,7 +443,7 @@ class ConfirmBookingView extends HookWidget {
                         model.createBooking(context: context, body: body, timingId: model.timingListModel!.results![model.selectedIndex!].id).then((value) {
                           model.updateIsClicked(value: false);
                           if (value != null) {
-                            model.navigateTo(view: CheckoutView(experience: experience, user: user,));
+                            model.navigateTo(view: CheckoutView(experience: experience, user: user, usersCount: model.numberOfGuests! + 1));
                           } else {
                             showMotionToast(context: context, msg: "An error occurred while creating the booking, please try again.", title: 'Create Booking Failed', type: MotionToastType.error);
                           }
