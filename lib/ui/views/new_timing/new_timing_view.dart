@@ -4,7 +4,6 @@ import 'package:goasbar/data_models/timing_response.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/new_timing/new_timing_viewmodel.dart';
-import 'package:motion_toast/motion_toast.dart';
 import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -26,14 +25,13 @@ class NewTimingView extends HookWidget {
       builder: (context, model, child) {
         if (!model.isBusy && once!) {
           model.startDate.text = request.data;
-          if (request.customData is TimingResponse || request.customData['timing'] is TimingResponse) {
-            if (request.customData is TimingResponse) {
-              model.startTime.text = request.customData.startTime;
-              addPeople.text = request.customData.capacity.toString();
-            } else {
-              model.startTime.text = request.customData['timing'].startTime;
-              addPeople.text = request.customData['timing'].capacity.toString();
-            }
+          if (request.customData is TimingResponse) {
+            model.startTime.text = request.customData.startTime;
+            addPeople.text = request.customData.capacity.toString();
+          }
+          if (request.customData is Map)  {
+            model.startTime.text = request.customData['timing'].startTime;
+            addPeople.text = request.customData['timing'].capacity.toString();
           }
           once = false;
         }
@@ -54,12 +52,12 @@ class NewTimingView extends HookWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Icon(Icons.close, size: 30,).gestures(onTap: () => model.back()),
-                  Text(request.customData is TimingResponse || request.customData['timing'] is TimingResponse ? 'UPDATE TIMING' : 'NEW TIMING', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  Text(request.customData is TimingResponse || request.customData is Map ? 'UPDATE TIMING' : 'NEW TIMING', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   horizontalSpaceLarge,
                 ],
               ),
               verticalSpaceLarge,
-              Text(request.customData is TimingResponse || request.customData['timing'] is TimingResponse ? request.customData['experience'].title : request.customData!.title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22),),
+              Text(request.customData is TimingResponse || request.customData is Map ? request.customData['experience'].title : request.customData!.title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22),),
               const Divider(thickness: 1.2, height: 40),
               verticalSpaceRegular,
               const Text('Date start', style: TextStyle(fontWeight: FontWeight.bold),),
@@ -152,9 +150,9 @@ class NewTimingView extends HookWidget {
                 onTap: () {
                   if (model.startDate.text.isNotEmpty && model.startTime.text.isNotEmpty && addPeople.text.isNotEmpty) {
                     var body = {};
-                    if (request.customData is TimingResponse || request.customData['timing'] is TimingResponse) {
+                    if (request.customData is TimingResponse || request.customData is Map) {
                       TimingResponse? timingResponse;
-                      if (request.customData['timing'] is TimingResponse) {
+                      if (request.customData is Map) {
                         timingResponse = request.customData['timing'];
                       } else {
                         timingResponse = request.customData;
