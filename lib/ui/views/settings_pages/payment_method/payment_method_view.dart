@@ -3,6 +3,7 @@ import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/ui/views/add_payment_method/add_payment_method_view.dart';
 import 'package:goasbar/ui/views/settings_pages/payment_method/payment_method_viewmodel.dart';
+import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:goasbar/ui/widgets/payment_method_card.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -37,12 +38,13 @@ class PaymentMethodView extends StatelessWidget {
                   verticalSpaceLarge,
                   Expanded(
                     child: Column(
-                      children: const [
-                        PaymentMethodCard(text: 'xxxx - xxxx - xxxx - 6037', method: 'visa_method'),
-                        verticalSpaceMedium,
-                        PaymentMethodCard(text: 'xxxx - xxxx - xxxx - 6037', method: 'mastercard_method'),
-                        verticalSpaceMedium,
-                        PaymentMethodCard(text: 'Oussama@gmail.com', method: 'paypal_method'),
+                      children: model.dataReady ? model.data!.isEmpty ? [
+                        const Text("You have no cards registered yet").center(),
+                      ] : [
+                        for (var card in model.userCards!)
+                          const PaymentMethodCard(text: 'xxxx - xxxx - xxxx - xxxx', method: 'visa_method'),
+                      ] : [
+                        const Loader().center()
                       ],
                     ),
                   ),
@@ -68,7 +70,7 @@ class PaymentMethodView extends StatelessWidget {
           ],
         ).padding(vertical: 20, horizontal: 20),
       ),
-      viewModelBuilder: () => PaymentMethodViewModel(),
+      viewModelBuilder: () => PaymentMethodViewModel(context: context),
     );
   }
 }
