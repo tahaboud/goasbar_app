@@ -12,9 +12,10 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class CheckoutView extends HookWidget {
-  const CheckoutView({Key? key, this.experience, this.user}) : super(key: key);
+  const CheckoutView({Key? key, this.experience, this.user, this.usersCount}) : super(key: key);
   final ExperienceResults? experience;
   final UserModel? user;
+  final int? usersCount;
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +127,7 @@ class CheckoutView extends HookWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text('Ticket price', style: TextStyle(fontSize: 16)),
-                          Text('${experience!.price} SR', style: const TextStyle(fontSize: 16)),
+                          Text('${double.parse(experience!.price!) * usersCount!} SR', style: const TextStyle(fontSize: 16)),
                         ],
                       ),
                       verticalSpaceRegular,
@@ -143,7 +144,7 @@ class CheckoutView extends HookWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text('Total amount', style: TextStyle(fontSize: 16)),
-                          Text('${experience!.price!} SR', style: const TextStyle(fontSize: 16)),
+                          Text('${double.parse(experience!.price!) * usersCount!} SR', style: const TextStyle(fontSize: 16)),
                         ],
                       ),
                     ],
