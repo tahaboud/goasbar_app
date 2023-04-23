@@ -237,7 +237,7 @@ class BookingForProviderDetailView extends HookWidget {
                       markers: model.customMarkers.toSet(),
                       myLocationEnabled: true,
                       myLocationButtonEnabled: false,
-                      zoomControlsEnabled: false,
+                      zoomControlsEnabled: true,
                     ),
                   ),
                   model.kGooglePlex == null ? const SizedBox() : verticalSpaceRegular,
