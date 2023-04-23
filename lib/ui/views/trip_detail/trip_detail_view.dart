@@ -197,7 +197,9 @@ class TripDetailView extends HookWidget {
                       Row(
                         children: [
                           const Text('Hosted Experience by :', style: TextStyle(fontSize: 16)),
-                          Text(' ${model.provider!.response!.nickname}', style: const TextStyle(fontSize: 16, color: kMainColor1)),
+                          Text(' ${model.provider!.response!.nickname}', style: const TextStyle(fontSize: 16, color: kMainColor1)).gestures(
+                            onTap: () => model.navigateTo(view: ProviderProfileView(provider: model.provider!.response!, user: user),)
+                          ),
                         ],
                       ),
                       !model.dataReady ? Image.asset("assets/images/by_user.png").borderRadius(all: 50).height(50).width(50)
