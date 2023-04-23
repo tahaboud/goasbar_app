@@ -49,7 +49,7 @@ class BookingsHistoryView extends HookWidget {
                         return CreationAwareListItem(
                           itemCreated: () => model.getUserBookingsFromNextPage(index: index + 1),
                           child: BookingItem(
-                            bookingsList: model.data![index], user: user,
+                            bookingsList: model.data![index],
                             onUpdate: () => model.futureToRun(),
                             onDelete: () {
                                 model.deleteBooking(context: context, bookingId: model.data![index]!.id).then((value) {
