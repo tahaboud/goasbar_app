@@ -175,6 +175,15 @@ class AddExperienceInfoViewModel extends BaseViewModel {
 
       notifyListeners();
       setBusy(false);
+    } else {
+      setBusy(true);
+      city = getCity();
+      kGooglePlex = const CameraPosition(
+        target: LatLng(24.720495, 46.675468),
+        zoom: 13.4746,
+      );
+      setBusy(false);
+      notifyListeners();
     }
   }
 
