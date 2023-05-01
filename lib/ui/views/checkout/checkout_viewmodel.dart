@@ -89,7 +89,6 @@ class CheckoutViewModel extends BaseViewModel {
       bool? bookingState = await _bookingApiService.getPaymentStatus(context: context, token: token, bookingId: bookingId);
       if (bookingState!) {
         Navigator.pop(context);
-        //TODO go to bookings page
         _navigationService.clearTillFirstAndShowView(BookingsHistoryView(user: user!, ));
       } else {
         Navigator.pop(context);
