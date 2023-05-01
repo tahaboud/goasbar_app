@@ -56,9 +56,9 @@ class TripsViewModel extends FutureViewModel<List<BookingsListResults?>?> {
     if (index == 1) {
       query = '';
     } else if (index == 2) {
-      query = "?status=COMPLETED";
+      query = "status=CONFIRMED";
     } else if (index == 3) {
-      query = "?gender=PENDING";
+      query = "status=PENDING";
     }
 
     pageNumber = 1;
@@ -82,7 +82,7 @@ class TripsViewModel extends FutureViewModel<List<BookingsListResults?>?> {
     String? token = await _tokenService.getTokenValue();
     bookingsListModel = await _bookingApiService.getUserBookings(token: token, context: context, page: page, query: query);
     notifyListeners();
-    return bookingsListModel!.results!;
+    return bookingsListModel!.results ?? [];
   }
 
   @override
