@@ -26,7 +26,7 @@ class ChatsView extends HookWidget {
             TextField(
               controller: search,
               decoration: InputDecoration(
-                hintText: 'Search company trips . . .',
+                hintText: 'Search',
                 hintStyle: const TextStyle(fontSize: 14),
                 prefixIcon: Image.asset("assets/icons/navbar/search.png"),
                 fillColor: kTextFiledGrayColor,
