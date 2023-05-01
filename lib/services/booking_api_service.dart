@@ -80,14 +80,14 @@ class BookingApiService {
 
   Future<BookingsListModel?> getUserBookings({context, String? token, int? page, String? query = ''}) async {
     return http.get(
-      Uri.parse("$baseUrl/api/booking/?page=$page&query=$query"),
+      Uri.parse("$baseUrl/api/booking/?page=$page&$query"),
       headers: {
         "Accept-Language": "en-US",
         "Authorization": "Token $token",
       },
     ).then((response) {
       if (response.statusCode == 200) {
-        return BookingsListModel.fromJson(jsonDecode(response.body));
+        return BookingsListModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
       } else if (response.statusCode == 401) {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
