@@ -46,7 +46,7 @@ class ChatWithAgencyView extends HookWidget {
                 TextField(
                   controller: message,
                   decoration: InputDecoration(
-                    hintText: 'Type Something...',
+                    hintText: 'Send a message',
                     hintStyle: const TextStyle(fontSize: 14),
                     suffixIcon: Image.asset("assets/icons/import.png").gestures(onTap: () => model.sendMessage(providerId: providerId!.toString(), message: message, userId: userId!.toString())),
                     // icon: Image.asset("assets/icons/file.png").gestures(onTap: () => model.file()),
