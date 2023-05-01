@@ -63,7 +63,7 @@ class ProfileBookedDialog extends HookWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text("Issue number", style: TextStyle(color: kGrayText, fontWeight: FontWeight.bold),),
+                            const Text("Issue Number", style: TextStyle(color: kGrayText, fontWeight: FontWeight.bold),),
                             verticalSpaceTiny,
                             Text("${dialogRequest!.data.experienceTiming.date} ${dialogRequest!.data.experienceTiming.startTime.toString().substring(0, 5)}"),
                           ],
@@ -128,7 +128,7 @@ class ProfileBookedDialog extends HookWidget {
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(color: kMainGray, width: 1.2)
                   ),
-                  child: const Text('View More Additional Booking', style: TextStyle(color: kGrayText),).center(),
+                  child: const Text('View More Booking', style: TextStyle(color: kGrayText),).center(),
                 ).gestures(onTap: () {
                   model.back();
                   model.back();
