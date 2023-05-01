@@ -19,12 +19,12 @@ class SearchViewModel extends BaseViewModel {
   String? from = '', to = '';
   String? genderConstraint = genderConstraints[0];
   String? category = 'Experience Category';
-  String? city = 'Search City';
+  String? city = 'Search by Region';
   int pageNumber = 1;
 
   List<String> citiesWithNone () {
     List<String> list = [];
-    list.add('Search City');
+    list.add('Search by Region');
     list.addAll(cities);
 
     return list;
