@@ -140,44 +140,7 @@ public class MainActivity extends FlutterActivity implements ITransactionListene
 
                                 openCustomUI(checkoutid);
                             }
-                        } else if (call.method.equals("savecard")) {
-
-                            checkoutId = call.argument("checkoutid");
-                            brand = call.argument("brand");
-                            number = call.argument("number");
-                            holder = call.argument("holder");
-                            expiryMonth = call.argument("expiryMonth");
-                            expiryYear = call.argument("expiryYear");
-                            cvv = call.argument("cvv");
-
-
-                            try {
-                                PaymentParams paymentParams = new CardPaymentParams(
-                                        checkoutId,
-                                        brand,
-                                        number,
-                                        holder,
-                                        expiryMonth,
-                                        expiryYear,
-                                        cvv
-                                );
-
-                                // Set shopper result URL
-                                paymentParams.setShopperResultUrl("com.goasbar.goAsbar://result");
-
-
-                                Transaction transaction = null;
-
-                                try {
-                                    transaction = new Transaction(paymentParams);
-                                    paymentProvider.registerTransaction(transaction, MainActivity.this);
-                                } catch (PaymentException ee) {
-                                    ee.printStackTrace();
-                                }
-                            } catch (PaymentException e) {
-                                e.printStackTrace();
-                            }
-                        } else {
+                        }  else {
 
                             error("1","This method name is not found","");
                         }
@@ -333,6 +296,7 @@ public class MainActivity extends FlutterActivity implements ITransactionListene
 
         if (transaction.getTransactionType() == TransactionType.SYNC) {
 
+            Log.i("msg",String.valueOf(transaction));
             success("SYNC");
         } else {
             /* wait for the callback in the s */
