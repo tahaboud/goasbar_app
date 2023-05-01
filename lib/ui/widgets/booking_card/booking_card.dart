@@ -30,7 +30,7 @@ class BookingItem extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15),
               ),
               width: screenWidthPercentage(context, percentage: 1) - 60,
-              height: screenHeightPercentage(context, percentage: 0.15),
+              height: screenHeightPercentage(context, percentage: 0.17),
               child: Column(
                 children: [
                   verticalSpaceSmall,
