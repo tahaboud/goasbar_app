@@ -207,8 +207,6 @@ class BookingForProviderDetailView extends HookWidget {
                     children: [
                       Image.asset("assets/icons/communication.png",),
                       horizontalSpaceSmall,
-                      const Text('Have great communication',),
-                      const Spacer(),
                       const Text('Start Chat', style: TextStyle(color: kMainColor1,),).gestures(onTap: () => model.navigateTo(view: user == null ? const LoginView() : ChatWithAgencyView(providerId: providerPublicExperience!.providerId, userId: user!.id, providerName: "Provider",))),
                     ],
                   ).padding(horizontal: 20),
@@ -245,7 +243,7 @@ class BookingForProviderDetailView extends HookWidget {
                     children: [
                       Image.asset("assets/icons/notes.png",),
                       horizontalSpaceSmall,
-                      const Text('Notes & Requirement',),
+                      const Text('Notes & Requirements',),
                     ],
                   ).padding(horizontal: 20),
                   if (providerPublicExperience!.requirements != null)
