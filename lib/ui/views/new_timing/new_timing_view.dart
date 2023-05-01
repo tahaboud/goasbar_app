@@ -60,7 +60,7 @@ class NewTimingView extends HookWidget {
               Text(request.customData is TimingResponse || request.customData is Map ? request.customData['experience'].title : request.customData!.title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22),),
               const Divider(thickness: 1.2, height: 40),
               verticalSpaceRegular,
-              const Text('Date start', style: TextStyle(fontWeight: FontWeight.bold),),
+              const Text('Experience Date', style: TextStyle(fontWeight: FontWeight.bold),),
               verticalSpaceSmall,
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -112,7 +112,7 @@ class NewTimingView extends HookWidget {
                 ],
               ),
               verticalSpaceRegular,
-              const Text('Capacity ( people ) Trip', style: TextStyle(fontWeight: FontWeight.bold),),
+              const Text('Capacity ( people )', style: TextStyle(fontWeight: FontWeight.bold),),
               verticalSpaceSmall,
               SizedBox(
                 height: 58,
