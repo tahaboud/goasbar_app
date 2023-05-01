@@ -133,7 +133,7 @@ class DocInfo extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset("assets/icons/camera.png"),
-                const Text("upload identity image", style: TextStyle(color: kGrayText,)),
+                const Text("Upload identity image", style: TextStyle(color: kGrayText,)),
               ],
             ).center(),
           ),
