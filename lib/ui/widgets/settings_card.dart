@@ -48,7 +48,7 @@ class SettingsCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          isUser! ? SettingsCardItem(image: "wallet", title: "Add payment method", parameter: "Add more", onTapParameter: additionalParameterOnTap,) : Container(),
+          isUser! ? SettingsCardItem(image: "wallet", title: "Add a payment method", parameter: "Add more", onTapParameter: additionalParameterOnTap,) : Container(),
           isUser! ? verticalSpaceRegular : Container(),
           !isUser! ? Container() : item1Image == "hosted" ? const SettingsCardItem(image: "hosted", title: "Bookings History", parameter: "",).gestures(onTap: additionalParameterOnTap) : Container(),
           !isUser! ? Container() : item1Image == "hosted" ? verticalSpaceRegular : Container(),
