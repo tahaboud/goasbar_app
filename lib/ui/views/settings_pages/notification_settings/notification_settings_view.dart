@@ -33,12 +33,12 @@ class NotificationSettingsView extends HookWidget {
                   ],
                 ),
                 verticalSpaceMedium,
-                const Text("Common", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),).alignment(Alignment.centerLeft),
+                const Text("General", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),).alignment(Alignment.centerLeft),
                 verticalSpaceSmall,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text("General Notification"),
+                    const Text("Notification"),
                     CupertinoSwitch(
                       value: model.genInfo,
                       onChanged: (val) {
@@ -80,12 +80,12 @@ class NotificationSettingsView extends HookWidget {
                 verticalSpaceSmall,
                 const Divider(thickness: 1),
                 verticalSpaceSmall,
-                const Text("System & services update", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),).alignment(Alignment.centerLeft),
+                const Text("System Updates", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),).alignment(Alignment.centerLeft),
                 verticalSpaceSmall,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text("App updates"),
+                    const Text("App Updates"),
                     CupertinoSwitch(
                       value: model.appUpdates,
                       onChanged: (val) {
@@ -127,7 +127,7 @@ class NotificationSettingsView extends HookWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text("Discount Avaiable"),
+                    const Text("Discount Available"),
                     CupertinoSwitch(
                       value: model.discount,
                       onChanged: (val) {
@@ -160,7 +160,7 @@ class NotificationSettingsView extends HookWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text("New Service Available"),
+                    const Text("New Service"),
                     CupertinoSwitch(
                       value: model.newService,
                       onChanged: (val) {
@@ -174,7 +174,7 @@ class NotificationSettingsView extends HookWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text("New Tips Available"),
+                    const Text("New Tips"),
                     CupertinoSwitch(
                       value: model.newTips,
                       onChanged: (val) {
