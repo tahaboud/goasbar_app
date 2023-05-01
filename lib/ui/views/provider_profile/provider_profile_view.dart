@@ -195,7 +195,7 @@ class ProviderProfileView extends HookWidget {
                 //       child: const Icon(Icons.outlined_flag, color: Colors.black54, size: 20),
                 //     ),
                 //     horizontalSpaceSmall,
-                //     const Text('Report this Host profile'),
+                //     const Text('Report this host profile'),
                 //   ],
                 // ),
               ],
