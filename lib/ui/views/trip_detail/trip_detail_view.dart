@@ -196,7 +196,7 @@ class TripDetailView extends HookWidget {
                     children: [
                       Row(
                         children: [
-                          const Text('Hosted Experience by :', style: TextStyle(fontSize: 16)),
+                          const Text('Hosted by :', style: TextStyle(fontSize: 16)),
                           Text(' ${model.provider!.response!.nickname}', style: const TextStyle(fontSize: 16, color: kMainColor1)).gestures(
                             onTap: () => model.navigateTo(view: ProviderProfileView(provider: model.provider!.response!, user: user),)
                           ),
@@ -236,8 +236,6 @@ class TripDetailView extends HookWidget {
                     children: [
                       Image.asset("assets/icons/communication.png",),
                       horizontalSpaceSmall,
-                      const Text('Have great communication',),
-                      const Spacer(),
                       const Text('Start Chat', style: TextStyle(color: kMainColor1,),).gestures(onTap: () => model.navigateTo(view: user == null ? const LoginView() : ChatWithAgencyView(providerId: experience!.providerId, userId: user!.id, providerName: "Provider",))),
                     ],
                   ).padding(horizontal: 20),
@@ -274,7 +272,7 @@ class TripDetailView extends HookWidget {
                     children: [
                       Image.asset("assets/icons/notes.png",),
                       horizontalSpaceSmall,
-                      const Text('Notes & Requirement',),
+                      const Text('Notes & Requirements',),
                     ],
                   ).padding(horizontal: 20,),
                   if (experience!.requirements != null)
