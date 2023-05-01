@@ -36,10 +36,9 @@ class SettingsView extends HookWidget {
             children: [
               verticalSpaceLarge,
               Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Image.asset("assets/icons/navbar/settings.png",),
-                  horizontalSpaceMedium,
-                  const Text("Customize your preferences", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),)
                 ],
               ),
               verticalSpaceLarge,
@@ -90,7 +89,7 @@ class SettingsView extends HookWidget {
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(width: 1, color: isUser! ? kMainColor1 : Colors.black),
                     ),
-                    child: Text(isUser! ? "Edit Your Profile" : "Get Your Information", style: TextStyle(color: isUser! ? kMainColor1 : Colors.black),).center(),
+                    child: Text(isUser! ? "Edit your Profile" : "Get Your Information", style: TextStyle(color: isUser! ? kMainColor1 : Colors.black),).center(),
                   ).gestures(onTap: isUser! ? () => model.navigateToWithResponse(view: EditProfileView()) : () => model.navigateTo(view: const LoginView()),),
                   verticalSpaceRegular,
                   SettingsCard(
@@ -107,7 +106,7 @@ class SettingsView extends HookWidget {
                   verticalSpaceRegular,
                   SettingsCard(
                     item1Image: 'hosted',
-                    item1Title: isUser! ? model.user!.isProvider! ? 'Post new tripe experience' : 'Be Hosted' : 'Be Hosted',
+                    item1Title: isUser! ? model.user!.isProvider! ? 'Post a new experience' : 'Be Hosted' : 'Be Hosted',
                     item1Parameter: isUser! ? model.user!.isProvider! ? 'Update Info' : "Apply now" : "Apply now",
                     onTapParameter: isUser! ? model.user!.isProvider! ? () => model.showGeneralInfoBottomSheet() : () => model.showGeneralInfoBottomSheet() : () {model.navigateTo(view: const LoginView());},
                     item2Image: 'security',
