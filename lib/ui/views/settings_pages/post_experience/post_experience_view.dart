@@ -70,7 +70,7 @@ class PostExperienceView extends HookWidget {
                                   children: [
                                     Text(model.data![index].title!),
                                     horizontalSpaceSmall,
-                                    Text(model.data![index].status!, style: const TextStyle(color: kMainColor1)),
+                                    Text('${model.data![index].status!.substring(0, 1)}${model.data![index].status!.substring(1).toLowerCase()}', style: const TextStyle(color: kMainColor1)),
                                   ],
                                 ),
                                 Container(
@@ -118,7 +118,7 @@ class PostExperienceView extends HookWidget {
                                       children: [
                                         Image.asset("assets/icons/birth_date.png", color: Colors.black, height: 20),
                                         horizontalSpaceSmall,
-                                        const Text("View timing", style: TextStyle(fontSize: 14)),
+                                        const Text("Schedule", style: TextStyle(fontSize: 14)),
                                       ],
                                     ),
                                   ).gestures(onTap: () => model.navigateTo(view: TimingView(experience: model.data![index]))),
