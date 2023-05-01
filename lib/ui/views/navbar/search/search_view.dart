@@ -81,10 +81,10 @@ class SearchView extends HookWidget {
                                 ),
                                 onChanged: (value) => model.updateCity(value: value),
                                 items: model.citiesWithNone().map((c) => DropdownMenuItem(
-                                  value: c == 'Search City' ? c : "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}",
+                                  value: c == 'Search by Region' ? c : "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}",
                                   onTap: () {},
                                   child: SizedBox(
-                                    child: Text(c == 'Search City' ? c : "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}", style: const TextStyle(fontFamily: 'Cairo'),),
+                                    child: Text(c == 'Search by Region' ? c : "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}", style: const TextStyle(fontFamily: 'Cairo'),),
                                   ),
                                 )).toList(),
                               ),
@@ -233,10 +233,10 @@ class SearchView extends HookWidget {
                                     ),
                                     onChanged: (value) => model.updateCategory(value: value),
                                     items: model.categoriesWithNone().map((c) => DropdownMenuItem(
-                                      value: c,
+                                      value: c == 'Experience Category' ? c : "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}",
                                       onTap: () {},
                                       child: SizedBox(
-                                        child: Text(c, style: const TextStyle(fontFamily: 'Cairo'),),
+                                        child: Text(c == 'Experience Category' ? c : "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}", style: const TextStyle(fontFamily: 'Cairo'),),
                                       ),
                                     )).toList(),
                                   ),
@@ -267,7 +267,7 @@ class SearchView extends HookWidget {
                         if (model.from != '') query = '$query&date_min=${model.from}';
                         if (model.to != '') query = '$query&date_max=${model.to}';
 
-                        if (model.city != 'Search City') query = '$query&city=${model.city!.replaceAll(' ', '_').toUpperCase()}';
+                        if (model.city != 'Search by Region') query = '$query&city=${model.city!.replaceAll(' ', '_').toUpperCase()}';
 
                         if (title.text.isNotEmpty) query = '$query&title=${title.text}';
 
