@@ -47,7 +47,7 @@ class RequestPasswordView extends HookWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: const [
-                    Text('Forget \nPassword ?', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
+                    Text('Forget your\nPassword ?', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
                   ],
                 ),
                 verticalSpaceMedium,
@@ -55,7 +55,7 @@ class RequestPasswordView extends HookWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: const [
                     Text(
-                      "Don't worry! it happens, please entre the address\nassociated with your account",
+                      "Don't worry, it happens! Please enter the address\nassociated with your account",
                       style: TextStyle(fontSize: 14, color: kMainGray),
                     ),
                   ],
