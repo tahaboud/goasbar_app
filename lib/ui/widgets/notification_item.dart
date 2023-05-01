@@ -19,7 +19,7 @@ class NotificationItem extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: const [
-            Text('We have update for you',),
+            Text('We have an update for you',),
             verticalSpaceSmall,
             Text('New experinces from Elsalam egency', style: TextStyle(color: kMainDisabledGray, fontSize: 12),)
           ],
