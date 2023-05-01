@@ -55,7 +55,7 @@ class ExperienceViewModel extends FutureViewModel<List<ExperienceResults?>?> {
   Future<List<ExperienceResults?>?> getPublicExperiences({String? query, int? page}) async {
     experienceModels = await _experienceApiService.getPublicExperiences(query: query, page: page);
     notifyListeners();
-    return experienceModels!.results!;
+    return experienceModels!.results ?? [];
   }
 
   @override
