@@ -54,7 +54,7 @@ class ForgetPasswordView extends HookWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: const [
                     Text(
-                      "Don't worry ! it happens , please entre the address \nassociated with your account",
+                      "Don't worry, it happens! Please enter the address\nassociated with your account",
                       style: TextStyle(fontSize: 14, color: kMainGray),
                     ),
                   ],
