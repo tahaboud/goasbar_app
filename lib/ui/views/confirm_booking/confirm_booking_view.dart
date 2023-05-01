@@ -98,7 +98,7 @@ class ConfirmBookingView extends HookWidget {
                     Row(
                       children: const [
                         horizontalSpaceSmall,
-                        Text('Available Timings', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
+                        Text('Availability', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
                       ],
                     ),
                     Row(
@@ -211,8 +211,8 @@ class ConfirmBookingView extends HookWidget {
                         SizedBox(
                           width: screenWidthPercentage(context, percentage: 1) - 50,
                           child: Text(model.selectedIndex == null
-                              ? 'Available Places : Pick a timing first'
-                              : 'Available Places : ${model.data!.results![model.selectedIndex!].availability} / ${model.data!.results![model.selectedIndex!].capacity}',
+                              ? 'Available Seats : Pick a timing first'
+                              : 'Available Seats : ${model.data!.results![model.selectedIndex!].availability} / ${model.data!.results![model.selectedIndex!].capacity}',
                             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
                         ),
                       ],
@@ -357,7 +357,7 @@ class ConfirmBookingView extends HookWidget {
                     Row(
                       children: const [
                         horizontalSpaceSmall,
-                        Text('You have Trip coupon ?', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
+                        Text('Trip Coupon', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
                       ],
                     ),
                     Row(
