@@ -67,7 +67,7 @@ class SupportView extends HookWidget {
                       gradient: kMainGradient,
                     ),
                     child: const Center(
-                      child: Text('Go To Website', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+                      child: Text('Go to Website', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
                     ),
                   ).gestures(
                     onTap: () async {
