@@ -261,7 +261,7 @@ class AuthService {
       body: body,
     ).then((response) {
       if (response.statusCode == 201) {
-        return jsonDecode(response.body)['id'];
+        return getRegistrationStatus(id: jsonDecode(response.body)['id'], context: context, token: token, cardType: body["card_type"]);
       } else if (response.statusCode == 401) {
         unAuthClearAndRestart(context: context,);
         return null;
@@ -270,6 +270,27 @@ class AuthService {
       }
     });
   }
+
+  Future<String?> getRegistrationStatus({id, String? token, context, cardType}) async {
+    return http.get(
+      Uri.parse("https://eu-test.oppwa.com/v1/checkouts/$id/payment"),
+    ).then((response) {
+      print("----------------------------");
+      print(response.body);
+      print("----------------------------");
+
+      if (jsonDecode(response.body)['result']['description'] != "transaction pending") {
+        return saveNewCard(token: token, context: context, body: {
+          "checkout_id": jsonDecode(response.body)['id'],
+          "card_type": cardType,
+        });
+      } else {
+        return null;
+      }
+    });
+  }
+
+
 
   Future<String?> saveNewCard({String? token, context, body}) async {
     return http.put(
@@ -282,7 +303,7 @@ class AuthService {
     ).then((response) {
       print(response.body);
       if (response.statusCode == 201) {
-        return null;
+        return "null";
       } else if (response.statusCode == 401) {
         unAuthClearAndRestart(context: context,);
         return null;
