@@ -66,7 +66,7 @@ class CheckoutView extends HookWidget {
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(width: model.selectedPaymentMethod == 2 ? 2 : 1.5, color: model.selectedPaymentMethod == 2 ? Colors.blue : Colors.grey)
                       ),
-                      child: Image.asset("assets/icons/checkout/master_card.png",).gestures(
+                      child: Image.asset("assets/icons/checkout/mada.png",).gestures(
                         onTap: () => model.selectPaymentMethod(value: 2),
                       ),
                     ),
@@ -97,7 +97,7 @@ class CheckoutView extends HookWidget {
                       width: screenWidthPercentage(context, percentage: 0.4),
                       child: InfoItem(
                         controller: expiryDate,
-                        label: 'Expiry Date',
+                        label: 'Expiration Date',
                         hintText: '08/24',
                       ),
                     ),
@@ -126,7 +126,7 @@ class CheckoutView extends HookWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text('Ticket price', style: TextStyle(fontSize: 16)),
+                          const Text('Ticket Price', style: TextStyle(fontSize: 16)),
                           Text('${double.parse(experience!.price!) * usersCount!} SR', style: const TextStyle(fontSize: 16)),
                         ],
                       ),
@@ -134,7 +134,7 @@ class CheckoutView extends HookWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: const [
-                          Text('Fare tax', style: TextStyle(fontSize: 16)),
+                          Text('Fare Tax', style: TextStyle(fontSize: 16)),
                           Text('00.00 SR', style: TextStyle(fontSize: 16)),
                         ],
                       ),
@@ -143,7 +143,7 @@ class CheckoutView extends HookWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text('Total amount', style: TextStyle(fontSize: 16)),
+                          const Text('Total Amount', style: TextStyle(fontSize: 16)),
                           Text('${double.parse(experience!.price!) * usersCount!} SR', style: const TextStyle(fontSize: 16)),
                         ],
                       ),
@@ -151,7 +151,7 @@ class CheckoutView extends HookWidget {
                   ),
                 ),
                 verticalSpaceLarge,
-                const Text('Payment terms and conditions', style: TextStyle(color: Color(0xff223263)),),
+                const Text('Payment Terms and Conditions', style: TextStyle(color: Color(0xff223263)),),
                 verticalSpaceRegular,
                 Container(
                   width: MediaQuery.of(context).size.width - 30,
@@ -160,7 +160,7 @@ class CheckoutView extends HookWidget {
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                     gradient: kMainGradient,
                   ),
-                  child: model.isClicked! ? const Loader().center() :const Text('Continue with payment', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
+                  child: model.isClicked! ? const Loader().center() :const Text('Continue with Payment', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
                 ).gestures(
                   onTap:  () {
                     if (cardNumber.text.isNotEmpty && cvv.text.isNotEmpty && expiryDate.text.isNotEmpty) {
