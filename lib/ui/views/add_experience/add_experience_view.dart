@@ -125,14 +125,14 @@ class AddExperienceView extends HookWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Image.asset("assets/icons/camera.png"),
-                        const Text("upload identity image", style: TextStyle(color: kGrayText,)),
+                        const Text("Upload identity image", style: TextStyle(color: kGrayText,)),
                       ],
                     ).center(),
                   ).gestures(onTap: () => model.pickMainImage(),),
                   verticalSpaceRegular,
                   InfoItem(
                     controller: title,
-                    label: 'Experience Title',
+                    label: 'Experience title',
                     hintText: 'Experience Title , e.g',
                   ),
                   verticalSpaceRegular,
@@ -187,7 +187,7 @@ class AddExperienceView extends HookWidget {
                   verticalSpaceRegular,
                   InfoItem(
                     controller: age,
-                    label: 'Minimum Age',
+                    label: 'Minimum age',
                     hintText: '00',
                   ),
                   verticalSpaceRegular,
@@ -208,7 +208,7 @@ class AddExperienceView extends HookWidget {
                       physics: const BouncingScrollPhysics(),
                       children: categories.map((category) => model.isBusy ? const Loader().center() : Container(
                         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-                        child: Text(category, style: TextStyle(
+                        child: Text("${category[0]}${category.substring(1).replaceAll('_', ' ').toLowerCase()}", style: TextStyle(
                           color: model.selectedExperienceCategory != null && model.selectedExperienceCategory!.contains(category)
                               ? Colors.white : Colors.black,
                         ),).center(),
@@ -606,7 +606,7 @@ class AddExperienceView extends HookWidget {
                           TextField(
                             controller: model.providedGoodsController1,
                             decoration: const InputDecoration(
-                              hintText: "Providing's add-ons",
+                              hintText: "Item 1",
                               hintStyle: TextStyle(fontSize: 14),
                             ),
                           ),
@@ -614,7 +614,7 @@ class AddExperienceView extends HookWidget {
                           TextField(
                             controller: model.providedGoodsController2,
                             decoration: const InputDecoration(
-                              hintText: "Providing's add-ons",
+                              hintText: "Item 2",
                               hintStyle: TextStyle(fontSize: 14),
                             ),
                           ),
@@ -622,7 +622,7 @@ class AddExperienceView extends HookWidget {
                           TextField(
                             controller: model.providedGoodsController3,
                             decoration: const InputDecoration(
-                              hintText: "Providing's add-ons",
+                              hintText: "Item 3",
                               hintStyle: TextStyle(fontSize: 14),
                             ),
                           ),
@@ -630,16 +630,16 @@ class AddExperienceView extends HookWidget {
                           TextField(
                             controller: model.providedGoodsController4,
                             decoration: const InputDecoration(
-                              hintText: "Providing's add-ons",
+                              hintText: "Item 4",
                               hintStyle: TextStyle(fontSize: 14),
                             ),
                           ),
                           for (var i = 0; i < model.addedProviding!; i++)
                             TextField(
                               controller: model.addedProvidedGoodsControllers[i],
-                              decoration: const InputDecoration(
-                                hintText: "Providing's add-ons",
-                                hintStyle: TextStyle(fontSize: 14),
+                              decoration: InputDecoration(
+                                hintText: "Item ${i + 5}",
+                                hintStyle: const TextStyle(fontSize: 14),
                               ),
                             ).padding(top: 10),
                         ],
@@ -670,14 +670,14 @@ class AddExperienceView extends HookWidget {
                       verticalSpaceSmall,
                       const Text("Requirements", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                       verticalSpaceSmall,
-                      const Text("some notes and requirement for safe trip", style: TextStyle(fontSize: 14, color: kGrayText)),
+                      const Text("Some notes and requirements for safe experience", style: TextStyle(fontSize: 14, color: kGrayText)),
                       Column(
                         children: [
                           verticalSpaceSmall,
                           TextField(
                             controller: model.requirementsController1,
                             decoration: const InputDecoration(
-                              hintText: "Providing's add-ons",
+                              hintText: "Note 1",
                               hintStyle: TextStyle(fontSize: 14),
                             ),
                           ),
@@ -685,7 +685,7 @@ class AddExperienceView extends HookWidget {
                           TextField(
                             controller: model.requirementsController2,
                             decoration: const InputDecoration(
-                              hintText: "Providing's add-ons",
+                              hintText: "Note 2",
                               hintStyle: TextStyle(fontSize: 14),
                             ),
                           ),
@@ -693,7 +693,7 @@ class AddExperienceView extends HookWidget {
                           TextField(
                             controller: model.requirementsController3,
                             decoration: const InputDecoration(
-                              hintText: "Providing's add-ons",
+                              hintText: "Note 3",
                               hintStyle: TextStyle(fontSize: 14),
                             ),
                           ),
@@ -701,7 +701,7 @@ class AddExperienceView extends HookWidget {
                           TextField(
                             controller: model.requirementsController4,
                             decoration: const InputDecoration(
-                              hintText: "Providing's add-ons",
+                              hintText: "Note 4",
                               hintStyle: TextStyle(fontSize: 14),
                             ),
                           ),
@@ -709,9 +709,9 @@ class AddExperienceView extends HookWidget {
                           for (var i = 0; i < model.addedRequirements!; i++)
                             TextField(
                               controller: model.addedRequirementsControllers[i],
-                              decoration: const InputDecoration(
-                                hintText: "Providing's add-ons",
-                                hintStyle: TextStyle(fontSize: 14),
+                              decoration: InputDecoration(
+                                hintText: "Note ${i + 5}",
+                                hintStyle: const TextStyle(fontSize: 14),
                               ),
                             ).padding(top: 10),
                         ],
@@ -872,7 +872,7 @@ class AddExperienceView extends HookWidget {
                           children: [
                             SizedBox(
                               width: screenWidthPercentage(context, percentage: 0.5),
-                              child: Text(model.address != null ? "${model.address!.thoroughfare!} - ${model.address!.locality!}" : "Street Name"),
+                              child: Text(model.address != null ? "${model.address!.thoroughfare!} - ${model.address!.locality!}" : "Street name"),
                             ),
                             Row(
                               children: [
@@ -1193,7 +1193,13 @@ class AddExperienceView extends HookWidget {
 
                                 if (duration.text.isNotEmpty) body.addAll({'duration': duration.text,});
                                 if (notes.text.isNotEmpty) body.addAll({'location_notes': notes.text,});
-                                if (model.selectedExperienceCategory != []) body.addAll({'categories': model.selectedExperienceCategory,});
+
+                                List categories = [];
+                                for (var category in model.selectedExperienceCategory!) {
+                                  category!.replaceAll(' ', '_').toUpperCase();
+                                  categories.add(category);
+                                }
+                                if (model.selectedExperienceCategory != []) body.addAll({'categories': categories,});
                                 if (link.text.isNotEmpty) body.addAll({'youtube_video': link.text});
                                 if (model.latLon != null ) {
                                   if (model.latLon!.latitude != request.data!.latitude
@@ -1270,7 +1276,13 @@ class AddExperienceView extends HookWidget {
                                 }
                                 if (duration.text.isNotEmpty) body.addAll({'duration': duration.text,});
                                 if (notes.text.isNotEmpty) body.addAll({'location_notes': notes.text,});
-                                if (model.selectedExperienceCategory != []) body.addAll({'categories': model.selectedExperienceCategory,});
+
+                                List categories = [];
+                                for (var category in model.selectedExperienceCategory!) {
+                                  category!.replaceAll(' ', '_').toUpperCase();
+                                  categories.add(category);
+                                }
+                                if (model.selectedExperienceCategory != []) body.addAll({'categories': categories,});
                                 if (link.text.isNotEmpty) body.addAll({'youtube_video': link.text});
                                 body.addAll({'provided_goods': model.providedGoodsText});
                                 body.addAll({'requirements': model.requirementsText});
