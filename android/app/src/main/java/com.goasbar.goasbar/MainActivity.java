@@ -47,7 +47,7 @@ public class MainActivity extends FlutterActivity implements ITransactionListene
     private String number,holder,cvv,year,month,brand, checkoutId, expiryMonth, expiryYear;
     private  String mode = "";
     private String STCPAY = "";
-    OppPaymentProvider paymentProvider = new OppPaymentProvider(MainActivity.this, Connect.ProviderMode.TEST);
+    OppPaymentProvider paymentProvider = new OppPaymentProvider(MainActivity.this, Connect.ProviderMode.LIVE);
 
     private Handler handler = new Handler(Looper.getMainLooper());
 
