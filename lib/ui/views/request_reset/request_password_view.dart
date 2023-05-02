@@ -48,7 +48,7 @@ class RequestPasswordView extends HookWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text('Forget your\nPassword ?'.tr(), style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
+                    Text('Forget your Password ?'.tr(), style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
                   ],
                 ),
                 verticalSpaceMedium,
