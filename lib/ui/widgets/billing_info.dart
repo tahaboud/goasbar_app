@@ -6,6 +6,7 @@ import 'package:motion_toast/motion_toast.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class BillingInfo extends StatelessWidget {
   const BillingInfo({
@@ -122,8 +123,8 @@ class BillingInfo extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(10)),
               gradient: kMainGradient,
             ),
-            child: isClicked! ? const Loader().center() : const Center(
-              child: Text('SUBMIT', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+            child: isClicked! ? const Loader().center() : Center(
+              child: Text('SUBMIT'.tr(), style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
             ),
           ).gestures(
             onTap: () {
