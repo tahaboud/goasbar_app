@@ -62,7 +62,7 @@ class CheckoutViewModel extends BaseViewModel {
       final String result = await platform.invokeMethod('gethyperpayresponse', {
         "type": "CustomUI",
         "checkoutid": checkoutId,
-        "mode": "TEST",
+        "mode": "LIVE",
         "brand": brand == "VISA" ? "DB" : "mada",
         "card_number": cardNumber!.replaceAll(r" ", ""),
         "holder_name": cardHolder,
