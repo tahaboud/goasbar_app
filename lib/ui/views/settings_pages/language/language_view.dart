@@ -30,11 +30,11 @@ class LanguageView extends HookWidget {
                           model.back();
                         }
                     ),
-                    Text('Language'.tr(), style: TextStyle(fontSize: 21),),
+                    Text('Language'.tr(), style: const TextStyle(fontSize: 21),),
                   ],
                 ),
                 verticalSpaceMedium,
-                Text("Suggested".tr(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),).alignment(Alignment.centerLeft),
+                Text("Suggested".tr(), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),).alignment(Alignment.centerLeft),
                 verticalSpaceRegular,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -73,6 +73,7 @@ class LanguageView extends HookWidget {
         ),
       ),
       viewModelBuilder: () => LanguageViewModel(),
+      onModelReady: (model) => model.getStartLocale(context: context),
     );
   }
 }
