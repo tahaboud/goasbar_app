@@ -11,6 +11,7 @@ import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ReviewView extends HookWidget {
   ReviewView({Key? key, required this.request, required this.completer})
@@ -150,8 +151,8 @@ class ReviewView extends HookWidget {
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   gradient: kMainGradient,
                 ),
-                child: model.isClicked! ? const Loader().center() : const Center(
-                  child: Text('Submit', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+                child: model.isClicked! ? const Loader().center() : Center(
+                  child: Text('SUBMIT'.tr(), style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
                 ),
               ).gestures(
                 onTap: () {
