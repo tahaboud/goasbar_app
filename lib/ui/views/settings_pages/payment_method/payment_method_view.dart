@@ -7,6 +7,7 @@ import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:goasbar/ui/widgets/payment_method_card.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class PaymentMethodView extends StatelessWidget {
   const PaymentMethodView({Key? key}) : super(key: key);
@@ -32,14 +33,14 @@ class PaymentMethodView extends StatelessWidget {
                             model.back();
                           }
                       ),
-                      const Text('Payment methods', style: TextStyle(fontSize: 21),),
+                      Text('Payment methods'.tr(), style: TextStyle(fontSize: 21),),
                     ],
                   ),
                   verticalSpaceLarge,
                   Expanded(
                     child: Column(
                       children: model.dataReady ? model.data!.isEmpty ? [
-                        const Text("You have no cards registered yet").center(),
+                        Text("You have no cards registered yet".tr()).center(),
                       ] : [
                         for (var card in model.userCards!)
                           const PaymentMethodCard(text: 'xxxx - xxxx - xxxx - xxxx', method: 'visa_method'),
@@ -55,8 +56,8 @@ class PaymentMethodView extends StatelessWidget {
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                       gradient: kMainGradient,
                     ),
-                    child: const Center(
-                      child: Text('ADD MORE', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+                    child: Center(
+                      child: Text('ADD MORE'.tr(), style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
                     ),
                   ).gestures(
                     onTap: () async {
