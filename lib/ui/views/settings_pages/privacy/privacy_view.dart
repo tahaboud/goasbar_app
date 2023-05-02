@@ -5,6 +5,7 @@ import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class PrivacyView extends HookWidget {
   const PrivacyView({Key? key}) : super(key: key);
@@ -28,7 +29,7 @@ class PrivacyView extends HookWidget {
                           model.back();
                         }
                     ),
-                    const Text('Privacy Policy', style: TextStyle(fontSize: 21),),
+                    Text('Privacy Policy'.tr(), style: TextStyle(fontSize: 21),),
                   ],
                 ),
                 verticalSpaceMedium,
