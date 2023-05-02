@@ -19,6 +19,7 @@ class ExperienceResults {
   String? rate;
   int? reviews;
   String? duration;
+  String? providerNickname;
   int? providerId;
   String? gender;
   dynamic youtubeVideo;
@@ -42,6 +43,7 @@ class ExperienceResults {
         this.providedGoods,
         this.events,
         this.requirements,
+        this.providerNickname,
         this.rate,
         this.reviews,
         this.duration,
@@ -72,6 +74,7 @@ class ExperienceResults {
     reviews = json['reviews'];
     duration = json['duration'];
     providerId = json['provider_id'];
+    providerNickname = json['provider_nickname'];
     gender = json['gender'];
     youtubeVideo = json['youtube_video'];
     creationDate = json['creation_date'];
@@ -107,6 +110,7 @@ class ExperienceResults {
     data['reviews'] = reviews;
     data['duration'] = duration;
     data['provider_id'] = providerId;
+    data['provider_name'] = providerNickname;
     data['gender'] = gender;
     data['youtube_video'] = youtubeVideo;
     data['creation_date'] = creationDate;
