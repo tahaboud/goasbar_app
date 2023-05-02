@@ -40,7 +40,7 @@ class AddPaymentMethodView extends HookWidget {
                               model.back();
                             }
                         ),
-                        const Text('Add more payment methods', style: TextStyle(fontSize: 21),),
+                        Text('Add more payment methods'.tr(), style: TextStyle(fontSize: 21),),
                       ],
                     ),
                     verticalSpaceLarge,
@@ -57,7 +57,7 @@ class AddPaymentMethodView extends HookWidget {
                           verticalSpaceLarge,
                           InfoItem(
                             controller: cardHolder,
-                            label: 'Card Holder',
+                            label: 'Card Holder'.tr(),
                             hintText: 'Osama Mogaitoof',
                           ),
                           verticalSpaceRegular,
@@ -98,8 +98,8 @@ class AddPaymentMethodView extends HookWidget {
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         gradient: kMainGradient,
                       ),
-                      child: const Center(
-                        child: Text('Link To My Account', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+                      child: Center(
+                        child: Text('Link To My Account'.tr(), style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
                       ),
                     ).gestures(
                       onTap: () async {
