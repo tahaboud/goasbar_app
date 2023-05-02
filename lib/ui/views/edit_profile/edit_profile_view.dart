@@ -97,7 +97,7 @@ class EditProfileView extends HookWidget {
                                   children: [
                                     Text("${model.user!.firstName!} ${model.user!.lastName!}", style: const TextStyle(fontWeight: FontWeight.w600),),
                                     verticalSpaceSmall,
-                                    const Text("Change Profile Picture", style: TextStyle(color: kGrayText),),
+                                    Text("Change Profile Picture".tr(), style: TextStyle(color: kGrayText),),
                                   ],
                                 ),
                               ],
@@ -128,7 +128,7 @@ class EditProfileView extends HookWidget {
                       verticalSpaceMedium,
                       InfoItem(
                         controller: userName,
-                        label: 'User name',
+                        label: 'User name'.tr(),
                         hintText: 'Abdeldjalil_Anes',
                       ),
                       verticalSpaceMedium,
@@ -262,7 +262,7 @@ class EditProfileView extends HookWidget {
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                           gradient: kMainGradient,
                         ),
-                        child: model.isClicked! ? const Loader().center() : const Text('SUBMIT', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
+                        child: model.isClicked! ? const Loader().center() : Text('SUBMIT'.tr(), style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
                       ).gestures(
                         onTap: firstName.text != model.user!.firstName!
                             || lastName.text != model.user!.lastName!
