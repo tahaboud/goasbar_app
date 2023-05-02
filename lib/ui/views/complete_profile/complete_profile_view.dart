@@ -80,7 +80,7 @@ class CompleteProfileView extends HookWidget {
                     hintText: 'Anas',
                     hintStyle: const TextStyle(fontSize: 14),
                     // prefixText: 'Saudi Arabia ( +966 ) | ',
-                    prefixIcon: const Text(' Last name ', style: TextStyle(color: kMainColor2, fontSize: 14),).padding(vertical: 20, horizontal: 10),
+                    prefixIcon: Text(' Last name '.tr(), style: const TextStyle(color: kMainColor2, fontSize: 14),).padding(vertical: 20, horizontal: 10),
                     fillColor: kTextFiledGrayColor,
                     filled: true,
                     border: OutlineInputBorder(
