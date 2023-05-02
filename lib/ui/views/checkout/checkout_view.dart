@@ -98,7 +98,7 @@ class CheckoutView extends HookWidget {
                       child: InfoItem(
                         controller: expiryDate,
                         label: 'Expiration Date',
-                        hintText: '08/24',
+                        hintText: 'MM/YY',
                       ),
                     ),
                     SizedBox(
@@ -106,7 +106,7 @@ class CheckoutView extends HookWidget {
                       child: InfoItem(
                         controller: cvv,
                         label: 'CVV',
-                        hintText: '000',
+                        hintText: 'XXX',
                       ),
                     ),
                   ],
