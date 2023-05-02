@@ -42,11 +42,11 @@ class InfoItem extends StatelessWidget {
             height: 40,
             child: TextFormField(
               onChanged: (value) {
-                if (label == "Expiry Date") {
+                if (label == "Expiration Date") {
 
                 }
               },
-              inputFormatters: label == "Expiry Date" ? [
+              inputFormatters: label == "Expiration Date" ? [
                 LengthLimitingTextInputFormatter(5),
                 CardExpirationFormatter(),
               ] : label == "CVV" ? [
@@ -61,7 +61,7 @@ class InfoItem extends StatelessWidget {
                 IbanFormatter(),
               ] : [],
               controller: controller,
-              validator: label == "Minimum Age" ? (value) {
+              validator: label == "Minimum age" ? (value) {
                 if (isNumeric(value!)) {
                   return null;
                 } else {
@@ -70,15 +70,15 @@ class InfoItem extends StatelessWidget {
               } : (value) {
                 return null;
               },
-              autovalidateMode: label == "Minimum Age" ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
-              maxLength: label == "Identity number" ? 10 : label == "Minimum Age" ? 2 : null,
-              keyboardType: label == "Identity number" || label == "IBAN" || label == "Duration (hours)" || label == "Card Number" || label == "Expiry Date" || label == "CVV" || label == "Minimum Age" ? TextInputType.number : TextInputType.text,
+              autovalidateMode: label == "Minimum age" ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+              maxLength: label == "Identity number" ? 10 : label == "Minimum age" ? 2 : null,
+              keyboardType: label == "Identity number" || label == "IBAN" || label == "Duration (hours)" || label == "Card Number" || label == "Expiration Date" || label == "CVV" || label == "Minimum age" ? TextInputType.number : TextInputType.text,
               decoration: InputDecoration(
                 hintText: hintText!,
                 hintStyle: const TextStyle(fontSize: 14),
                 fillColor: kTextFiledMainColor,
                 filled: true,
-                counterText: label == "Identity number" || label == 'Minimum Age' ? "" : null,
+                counterText: label == "Identity number" || label == 'Minimum age' ? "" : null,
                 focusedBorder: const OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.transparent),
                 ),
