@@ -53,12 +53,12 @@ class LoginView extends HookWidget {
               verticalSpaceMedium,
               Image.asset("assets/icons/logo.png").center(),
               verticalSpaceMedium,
-              Text("email".tr(), style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 15),),
+              Text("Email".tr(), style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 15),),
               verticalSpaceSmall,
               TextField(
                 controller: userName,
                 decoration: InputDecoration(
-                  hintText: "email".tr(),
+                  hintText: "Email".tr(),
                   hintStyle: const TextStyle(fontSize: 14),
                   prefixIcon: const Icon(Icons.alternate_email_outlined, size: 16, ),
                   fillColor: kTextFiledGrayColor,
