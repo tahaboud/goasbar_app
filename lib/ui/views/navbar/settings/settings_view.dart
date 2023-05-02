@@ -121,10 +121,10 @@ class SettingsView extends HookWidget {
                   SettingsCard(
                     additionalParameterOnTap: () => model.navigateTo(view: const PaymentMethodView()),
                     item1Image: 'support',
-                    item1Title: 'Help & Support',
+                    item1Title: 'Help & Support'.tr(),
                     item1Parameter: "",
                     item2Image: 'privacy',
-                    item2Title: 'Privacy policy',
+                    item2Title: 'Privacy policy'.tr(),
                     item2Parameter: "",
                     onItem1Tap: () => model.navigateTo(view: const SupportView()),
                     onItem2Tap: () => model.navigateTo(view: const PrivacyView()),
