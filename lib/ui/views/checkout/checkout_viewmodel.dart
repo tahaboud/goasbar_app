@@ -11,6 +11,7 @@ import 'package:goasbar/ui/views/bookings_history/bookings_history_view.dart';
 import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:http/http.dart' as http;
 
 class CheckoutViewModel extends BaseViewModel {
   static const platform = MethodChannel('Hyperpay.demo.fultter/channel');
@@ -58,8 +59,33 @@ class CheckoutViewModel extends BaseViewModel {
   Future<String?> pay({context, UserModel? user, int? bookingId, String? token, String? checkoutId, String? cardNumber, String? cardHolder,
       String? expiryMonth, String? expiryYear, String? cVV, String? brand}) async {
     String transactionStatus;
-    try {
-      final String result = await platform.invokeMethod('gethyperpayresponse', {
+
+    // Access token can be taken from the backend UI under Administration > Account data > Merchant / Channel Info
+    // Live: https://eu-prod.oppwa.com/
+    //TODO payment with test data
+    // http.post(Uri.parse("https://eu-test.oppwa.com/v1/payments"),
+    //     headers: {
+    //       "Authorization": "Bearer OGE4Mjk0MTc0YjdlY2IyODAxNGI5Njk5MjIwMDE1Y2N8c3k2S0pzVDg=",
+    //     },
+    //     body: {
+    //       "entityId": "8a8294174b7ecb28014b9699220015ca",
+    //       "amount": "2.00",
+    //       "currency": "EUR",
+    //       "paymentBrand": "VISA",
+    //       "card.number":"4200000000000000",
+    //       "card.holder":"Jane Jones",
+    //       "paymentType": brand == "VISA" ? "DB" : "mada",
+    //       "card.expiryMonth": expiryMonth,
+    //       "card.expiryYear": expiryYear,
+    //       "card.cvv": cVV,
+    //     }
+    // ).then((value) {
+    //   print(value.body);
+    //
+    // });
+
+    http.post(Uri.parse("https://eu-test.oppwa.com/v1/payments"),
+      body: {
         "type": "CustomUI",
         "checkoutid": checkoutId,
         "mode": "LIVE",
@@ -74,6 +100,11 @@ class CheckoutViewModel extends BaseViewModel {
         "STCPAY": "disabled",
         "istoken": "false",
         "token": ""
+      }
+    );
+    try {
+      final String result = await platform.invokeMethod('gethyperpayresponse', {
+
       });
       transactionStatus = '$result';
     } on PlatformException catch (e) {
