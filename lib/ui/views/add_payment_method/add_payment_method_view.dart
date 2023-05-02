@@ -73,7 +73,7 @@ class AddPaymentMethodView extends HookWidget {
                                 width: screenWidthPercentage(context, percentage: 0.4),
                                 child: InfoItem(
                                   controller: expiryDate,
-                                  label: 'Expiry Date',
+                                  label: 'Expiration Date',
                                   hintText: 'MM/YY',
                                 ),
                               ),
