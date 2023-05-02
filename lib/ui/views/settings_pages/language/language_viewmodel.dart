@@ -26,4 +26,11 @@ class LanguageViewModel extends BaseViewModel {
     lang = value;
     notifyListeners();
   }
+
+  getStartLocale({BuildContext? context}) {
+    setBusy(true);
+    lang = context!.locale == const Locale('ar', 'SA') ? "ar" : "uk";
+    notifyListeners();
+    setBusy(false);
+  }
 }
