@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:goasbar/data_models/experience_response.dart';
 import 'package:goasbar/data_models/user_model.dart';
@@ -70,6 +72,7 @@ class CheckoutView extends HookWidget {
                         onTap: () => model.selectPaymentMethod(value: 2),
                       ),
                     ),
+                    if (Platform.isIOS)
                     Container(
                       height: 60,
                       width: 60,
