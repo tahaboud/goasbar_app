@@ -34,7 +34,7 @@ class LanguageView extends HookWidget {
                   ],
                 ),
                 verticalSpaceMedium,
-                const Text("Suggested", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),).alignment(Alignment.centerLeft),
+                Text("Suggested".tr(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),).alignment(Alignment.centerLeft),
                 verticalSpaceRegular,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
