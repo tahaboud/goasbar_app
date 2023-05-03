@@ -5,6 +5,7 @@ import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class AvailablePlacesDialog extends HookWidget {
   final DialogRequest? dialogRequest;
@@ -44,7 +45,7 @@ class AvailablePlacesDialog extends HookWidget {
               Row(
                 children: [
                   Text(dialogRequest!.data.capacity.toString(), style: const TextStyle(color: kMainColor1),),
-                  const Text(" Seats",),
+                  Text(" ${"Seats".tr()}",),
                   horizontalSpaceMedium,
                 ],
               ),
@@ -55,15 +56,15 @@ class AvailablePlacesDialog extends HookWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
-                children: const [
+                children: [
                   horizontalSpaceMedium,
-                  Text('Available Seats : '),
+                  Text('Available Seats : '.tr()),
                 ],
               ),
               Row(
                 children: [
                   Text(dialogRequest!.data.availability.toString(), style: const TextStyle(color: kMainColor1),),
-                  const Text(" Seats",),
+                  Text(" ${"Seats".tr()}",),
                   horizontalSpaceMedium,
                 ],
               )
