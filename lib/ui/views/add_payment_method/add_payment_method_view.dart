@@ -8,6 +8,7 @@ import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:goasbar/ui/widgets/add_payment_method_card.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class AddPaymentMethodView extends HookWidget {
   const AddPaymentMethodView({Key? key}) : super(key: key);
@@ -62,7 +63,7 @@ class AddPaymentMethodView extends HookWidget {
                           verticalSpaceRegular,
                           InfoItem(
                             controller: cardNumber,
-                            label: 'Card Number',
+                            label: 'Card Number'.tr(),
                             hintText: 'xxxx xxxx xxxx xxxx',
                           ),
                           verticalSpaceRegular,
@@ -73,7 +74,7 @@ class AddPaymentMethodView extends HookWidget {
                                 width: screenWidthPercentage(context, percentage: 0.4),
                                 child: InfoItem(
                                   controller: expiryDate,
-                                  label: 'Expiration Date',
+                                  label: 'Expiration Date'.tr(),
                                   hintText: 'MM/YY',
                                 ),
                               ),
