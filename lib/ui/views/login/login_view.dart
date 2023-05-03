@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
@@ -46,18 +47,18 @@ class LoginView extends HookWidget {
                 ],
               ),
               verticalSpaceLarge,
-              const Text("Sign in", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 25),),
+              Text("sign_in".tr(), style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 25),),
               verticalSpaceMedium,
-              const Text("login with your account to start manage \nyour store or get inform about your product", style: TextStyle(color: Colors.black, fontSize: 15),),
+              Text("login_text".tr(), style: const TextStyle(color: Colors.black, fontSize: 15),),
               verticalSpaceMedium,
               Image.asset("assets/icons/logo.png").center(),
               verticalSpaceMedium,
-              const Text("Email or user name", style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 15),),
+              Text("email".tr(), style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 15),),
               verticalSpaceSmall,
               TextField(
                 controller: userName,
                 decoration: InputDecoration(
-                  hintText: 'Email',
+                  hintText: "email".tr(),
                   hintStyle: const TextStyle(fontSize: 14),
                   prefixIcon: const Icon(Icons.alternate_email_outlined, size: 16, ),
                   fillColor: kTextFiledGrayColor,
@@ -71,7 +72,7 @@ class LoginView extends HookWidget {
                 ),
               ),
               verticalSpaceMedium,
-              const Text("Password", style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 15),),
+              Text("password".tr(), style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 15),),
               verticalSpaceSmall,
               TextFormField(
                 controller: password,
@@ -79,7 +80,7 @@ class LoginView extends HookWidget {
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: (value) => model.validatePassword(value: value),
                 decoration: InputDecoration(
-                  hintText: 'Password',
+                  hintText: 'password'.tr(),
                   hintStyle: const TextStyle(fontSize: 14),
                   prefixIcon: const Icon(Icons.shield_outlined, size: 16, ),
                   suffixIcon: const Icon(Icons.remove_red_eye_outlined, size: 17)
@@ -99,7 +100,7 @@ class LoginView extends HookWidget {
                 ),
               ),
               verticalSpaceRegular,
-              const Text('Forgot Password?', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),)
+              Text('Forgot Password?'.tr(), style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 15),)
                   .alignment(Alignment.centerRight).gestures(onTap: () {
                     model.navigateTo(view: const ForgetPasswordView());
               }),
@@ -117,7 +118,7 @@ class LoginView extends HookWidget {
                     const Spacer(),
                     const Spacer(),
                     const Spacer(),
-                    model.isClicked! ? const Loader().center() : const Text('Continue', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),),
+                    model.isClicked! ? const Loader().center() : Text('Continue'.tr(), style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),),
                     const Spacer(),
                     const Spacer(),
                     Image.asset("assets/icons/person_login.png",).padding(horizontal: 15),
@@ -144,7 +145,7 @@ class LoginView extends HookWidget {
                 } : () {},
               ),
               verticalSpaceRegular,
-              const Text("You didn't have account yet ?", style: TextStyle(color: Color(0xff647382), fontWeight: FontWeight.w500, fontSize: 15),)
+               Text("You didn't have account yet ?".tr(), style: TextStyle(color: Color(0xff647382), fontWeight: FontWeight.w500, fontSize: 15),)
                   .center(),
               verticalSpaceRegular,
 
@@ -164,7 +165,7 @@ class LoginView extends HookWidget {
                       const Spacer(),
                       const Spacer(),
                       const Spacer(),
-                      const Text('Signup', style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500),),
+                      Text('Sign Up'.tr(), style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500),),
                       const Spacer(),
                       const Spacer(),
                       Image.asset("assets/icons/person_signup.png",).padding(horizontal: 15),

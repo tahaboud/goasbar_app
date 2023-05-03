@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
@@ -39,8 +40,8 @@ class MustLoginFirstView extends HookWidget {
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                       gradient: kMainGradient,
                     ),
-                    child: const Center(
-                      child: Text('Sign In', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+                    child: Center(
+                      child: Text('sign_in'.tr(), style: const TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
                     ),
                   ).gestures(
                     onTap: () {
