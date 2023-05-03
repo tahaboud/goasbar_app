@@ -4,6 +4,7 @@ import 'package:goasbar/ui/widgets/info_item.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class GeneralInfo extends StatelessWidget {
   const GeneralInfo({
@@ -85,7 +86,7 @@ class GeneralInfo extends StatelessWidget {
           verticalSpaceRegular,
           InfoItem(
             controller: bio,
-            label: 'Bio',
+            label: 'Bio'.tr(),
             hintText: 'Tell us more about yourself',
           ),
           verticalSpaceRegular,
@@ -101,9 +102,9 @@ class GeneralInfo extends StatelessWidget {
               children: [
                 verticalSpaceSmall,
                 Row(
-                  children: const [
+                  children: [
                     horizontalSpaceSmall,
-                    Text("Email"),
+                    Text("Email".tr()),
                   ],
                 ),
                 SizedBox(
@@ -147,9 +148,9 @@ class GeneralInfo extends StatelessWidget {
               children: [
                 verticalSpaceSmall,
                 Row(
-                  children: const [
+                  children: [
                     horizontalSpaceSmall,
-                    Text("Phone Number"),
+                    Text("Phone Number".tr()),
                   ],
                 ),
                 SizedBox(
@@ -183,8 +184,8 @@ class GeneralInfo extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(10)),
               gradient: kMainGradient,
             ),
-            child: const Center(
-              child: Text('NEXT', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+            child: Center(
+              child: Text('NEXT'.tr(), style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
             ),
           ).gestures(
             onTap: () {
