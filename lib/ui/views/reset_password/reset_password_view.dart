@@ -6,6 +6,7 @@ import 'package:goasbar/ui/views/reset_password/reset_password_viewmodel.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ResetPasswordView extends HookWidget {
   const ResetPasswordView({Key? key}) : super(key: key);
@@ -78,7 +79,7 @@ class ResetPasswordView extends HookWidget {
                   obscureText: model.isObscure,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: InputDecoration(
-                    hintText: 'Re-Password',
+                    hintText: 'Re-Password'.tr(),
                     hintStyle: const TextStyle(fontSize: 14),
                     prefixIcon: const Icon(Icons.shield_outlined, size: 16, ),
                     suffixIcon: const Icon(Icons.remove_red_eye_outlined, size: 17)
