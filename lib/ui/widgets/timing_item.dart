@@ -4,6 +4,7 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class TimingItem extends StatelessWidget {
   const TimingItem({
@@ -59,7 +60,7 @@ class TimingItem extends StatelessWidget {
                 children: [
                   Image.asset("assets/icons/map_link.png", color: kMainColor1),
                   horizontalSpaceSmall,
-                  const Text("Google maps", style: TextStyle(color: kGrayText),)
+                  Text("Google maps".tr(), style: TextStyle(color: kGrayText),)
                 ],
               ),
             ).gestures(onTap: launchMaps),
@@ -74,7 +75,7 @@ class TimingItem extends StatelessWidget {
                 children: [
                   Image.asset("assets/icons/booking_places.png", color: kMainColor1),
                   horizontalSpaceSmall,
-                  Text("$bookings Booking", style: const TextStyle(color: kGrayText),)
+                  Text("$bookings Booking".tr(), style: const TextStyle(color: kGrayText),)
                 ],
               ),
             ).gestures(onTap: showBooking),
