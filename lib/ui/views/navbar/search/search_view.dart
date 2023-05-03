@@ -9,7 +9,7 @@ import 'package:goasbar/ui/views/navbar/search/search_viewmodel.dart';
 import 'package:goasbar/ui/views/trip_detail/trip_detail_view.dart';
 import 'package:goasbar/ui/widgets/creation_aware_item.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
-import 'package:motion_toast/motion_toast.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -36,12 +36,12 @@ class SearchView extends HookWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   verticalSpaceMedium,
-                  const Text('Where are you going ?', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),),
+                  Text('Where are you going ?'.tr(), style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),),
                   verticalSpaceMedium,
                   TextField(
                     controller: title,
                     decoration: InputDecoration(
-                      hintText: 'Title',
+                      hintText: 'Title'.tr(),
                       hintStyle: const TextStyle(fontSize: 14),
                       prefixIcon: Image.asset("assets/icons/navbar/search.png"),
                       fillColor: kTextFiledGrayColor,
@@ -81,10 +81,10 @@ class SearchView extends HookWidget {
                                 ),
                                 onChanged: (value) => model.updateCity(value: value),
                                 items: model.citiesWithNone().map((c) => DropdownMenuItem(
-                                  value: c == 'Search by Region' ? c : "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}",
+                                  value: c == 'Search by Region'.tr() ? c : "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}",
                                   onTap: () {},
                                   child: SizedBox(
-                                    child: Text(c == 'Search by Region' ? c : "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}", style: const TextStyle(fontFamily: 'Cairo'),),
+                                    child: Text(c == 'Search by Region'.tr() ? c : "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}", style: const TextStyle(fontFamily: 'Cairo'),),
                                   ),
                                 )).toList(),
                               ),
@@ -99,7 +99,7 @@ class SearchView extends HookWidget {
                     readOnly: true,
                     controller: model.searchDate,
                     decoration: InputDecoration(
-                      hintText: 'Search Date',
+                      hintText: 'Search Date'.tr(),
                       hintStyle: const TextStyle(fontSize: 14),
                       prefixIcon: Image.asset('assets/icons/birth_date.png').gestures(
                         onTap: () => model.showDateRangePicker(context),
@@ -167,7 +167,7 @@ class SearchView extends HookWidget {
                           keyboardType: TextInputType.number,
                           controller: minPrice,
                           decoration: InputDecoration(
-                            hintText: 'Min Price (SR)',
+                            hintText: 'Min Price (SR)'.tr(),
                             hintStyle: const TextStyle(fontSize: 14),
                             prefixIcon: Image.asset("assets/icons/receipt.png"),
                             fillColor: kTextFiledGrayColor,
@@ -187,7 +187,7 @@ class SearchView extends HookWidget {
                           keyboardType: TextInputType.number,
                           controller: maxPrice,
                           decoration: InputDecoration(
-                            hintText: 'Max Price (SR)',
+                            hintText: 'Max Price (SR)'.tr(),
                             hintStyle: const TextStyle(fontSize: 14),
                             fillColor: kTextFiledGrayColor,
                             filled: true,
@@ -233,10 +233,10 @@ class SearchView extends HookWidget {
                                     ),
                                     onChanged: (value) => model.updateCategory(value: value),
                                     items: model.categoriesWithNone().map((c) => DropdownMenuItem(
-                                      value: c == 'Experience Category' ? c : "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}",
+                                      value: c == 'Experience Category'.tr() ? c : "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}",
                                       onTap: () {},
                                       child: SizedBox(
-                                        child: Text(c == 'Experience Category' ? c : "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}", style: const TextStyle(fontFamily: 'Cairo'),),
+                                        child: Text(c == 'Experience Category'.tr() ? c : "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}", style: const TextStyle(fontFamily: 'Cairo'),),
                                       ),
                                     )).toList(),
                                   ),
@@ -259,22 +259,22 @@ class SearchView extends HookWidget {
                       ).gestures(onTap: () {
                         String query = '';
                         
-                        if (model.genderConstraint == "No constrains") query = '$query&gender=None';
-                        if (model.genderConstraint == "Families") query = '$query&gender=FAMILIES';
-                        if (model.genderConstraint == "Men Only") query = '$query&gender=MEN';
-                        if (model.genderConstraint == "Women Only") query = '$query&gender=WOMEN';
+                        if (model.genderConstraint == "No constrains".tr()) query = '$query&gender=None';
+                        if (model.genderConstraint == "Families only".tr()) query = '$query&gender=FAMILIES';
+                        if (model.genderConstraint == "Men Only".tr()) query = '$query&gender=MEN';
+                        if (model.genderConstraint == "Women Only".tr()) query = '$query&gender=WOMEN';
                         
                         if (model.from != '') query = '$query&date_min=${model.from}';
                         if (model.to != '') query = '$query&date_max=${model.to}';
 
-                        if (model.city != 'Search by Region') query = '$query&city=${model.city!.replaceAll(' ', '_').toUpperCase()}';
+                        if (model.city != 'Search by Region'.tr()) query = '$query&city=${model.city!.replaceAll(' ', '_').toUpperCase()}';
 
                         if (title.text.isNotEmpty) query = '$query&title=${title.text}';
 
                         if (minPrice.text.isNotEmpty) query = '$query&price_min=${minPrice.text}';
                         if (maxPrice.text.isNotEmpty) query = '$query&price_max=${maxPrice.text}';
 
-                        if (model.category != 'Experience Category') query = '$query&category=${model.category}';
+                        if (model.category != 'Experience Category'.tr()) query = '$query&category=${model.category}';
 
                         if (query != '') {
                           model.getPublicExperiences(query: query.replaceFirst(r'&', '?')).then((value) {
@@ -360,7 +360,7 @@ class SearchView extends HookWidget {
                                     SizedBox(
                                       width: 160,
                                       child: Text(
-                                        "${model.experienceModels!.results![index].city![0]}${model.experienceModels!.results![index].city!.substring(1).replaceAll('_', ' ').toLowerCase()}, ${model.experienceModels!.results![index].duration!} ${double.parse(model.experienceModels!.results![index].duration!) >= 2 ? 'Hours' : 'Hour'}",
+                                        "${model.experienceModels!.results![index].city![0]}${model.experienceModels!.results![index].city!.substring(1).replaceAll('_', ' ').toLowerCase()}, ${model.experienceModels!.results![index].duration!} ${double.parse(model.experienceModels!.results![index].duration!) >= 2 ? 'Hours'.tr() : 'Hour'.tr()}",
                                         style: const TextStyle(color: kMainGray, fontSize: 11),
                                         overflow: TextOverflow.ellipsis,
                                       ),
@@ -374,7 +374,7 @@ class SearchView extends HookWidget {
                                     Row(
                                       children: [
                                         Text('${model.experienceModels!.results![index].price!} SR', style: const TextStyle(color: kMainColor1, fontSize: 9)),
-                                        const Text(' / Person', style: TextStyle(color: kMainGray, fontSize: 9)),
+                                        Text(' / Person'.tr(), style: TextStyle(color: kMainGray, fontSize: 9)),
                                       ],
                                     ),
                                     Container(
@@ -384,7 +384,7 @@ class SearchView extends HookWidget {
                                         borderRadius: BorderRadius.all(Radius.circular(8)),
                                         gradient: kMainGradient,
                                       ),
-                                      child: const Text('Book Now', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500),).center(),
+                                      child: Text('Book Now'.tr(), style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500),).center(),
                                     ).gestures(onTap: () {
                                       model.navigateTo(view: user == null ? const LoginView() : ConfirmBookingView(experience: model.experienceModels!.results![index], user: user,));
                                     }),
