@@ -11,6 +11,7 @@ import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ProviderProfileView extends HookWidget {
   const ProviderProfileView({Key? key, this.provider, this.user}) : super(key: key);
@@ -47,13 +48,13 @@ class ProviderProfileView extends HookWidget {
                   ),
                 ),
                 verticalSpaceRegular,
-                Text("Hi, I'm ${provider!.nickname}", style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                Text("${"Hi, I'm".tr()} ${provider!.nickname}", style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
                 verticalSpaceMedium,
                 Row(
                   children: [
                     Image.asset("assets/icons/verified.png"),
                     horizontalSpaceSmall,
-                    const Text("Account verified", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: kGrayText),),
+                    Text("Verified Account".tr(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: kGrayText),),
                   ],
                 ),
                 verticalSpaceTiny,
@@ -109,11 +110,11 @@ class ProviderProfileView extends HookWidget {
                   ],
                 ).gestures(onTap: () => model.launchLink(link: provider!.twitterAccount)) : const SizedBox(),
                 const Divider(color: kMainColor1, height: 40, thickness: 1.2),
-                const Text("Bio", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                Text("Bio".tr(), style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
                 verticalSpaceSmall,
                 Text(provider!.about!, style: const TextStyle(color: kGrayText, fontWeight: FontWeight.bold),),
                 verticalSpaceMedium,
-                const Text("Hosted Trips", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                Text("Hosted Trips".tr(), style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
                 verticalSpaceSmall,
                 SizedBox(
                   height: 255,
@@ -195,7 +196,7 @@ class ProviderProfileView extends HookWidget {
                 //       child: const Icon(Icons.outlined_flag, color: Colors.black54, size: 20),
                 //     ),
                 //     horizontalSpaceSmall,
-                //     const Text('Report this host profile'),
+                //     const Text('Report this host profile'.tr()),
                 //   ],
                 // ),
               ],
