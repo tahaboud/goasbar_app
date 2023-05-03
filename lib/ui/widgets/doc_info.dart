@@ -5,6 +5,7 @@ import 'package:motion_toast/motion_toast.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class DocInfo extends StatelessWidget {
   const DocInfo({
@@ -133,7 +134,7 @@ class DocInfo extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset("assets/icons/camera.png"),
-                const Text("Upload identity image", style: TextStyle(color: kGrayText,)),
+                Text("Upload identity image".tr(), style: TextStyle(color: kGrayText,)),
               ],
             ).center(),
           ),
@@ -160,8 +161,8 @@ class DocInfo extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(10)),
               gradient: kMainGradient,
             ),
-            child: const Center(
-              child: Text('NEXT', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+            child: Center(
+              child: Text('NEXT'.tr(), style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
             ),
           ).gestures(
             onTap: () {
