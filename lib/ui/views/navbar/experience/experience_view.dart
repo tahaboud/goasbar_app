@@ -12,6 +12,7 @@ import 'package:goasbar/ui/widgets/user_welcome_widget/user_welcome_widget.dart'
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ExperienceView extends HookWidget {
   const ExperienceView({Key? key, this.isUser, this.user}) : super(key: key);
@@ -53,13 +54,13 @@ class ExperienceView extends HookWidget {
                     scrollDirection: Axis.horizontal,
                     physics: const BouncingScrollPhysics(),
                     children: [
-                      categoryItem(model: model, index: 1, image: 'all.png', text: "All"),
+                      categoryItem(model: model, index: 1, image: 'all.png', text: "All".tr()),
                       horizontalSpaceSmall,
-                      categoryItem(model: model, index: 2, image: 'family.png', text: "Families only"),
+                      categoryItem(model: model, index: 2, image: 'family.png', text: "Families only".tr()),
                       horizontalSpaceSmall,
-                      categoryItem(model: model, index: 3, image: 'men.png', text: "Men only"),
+                      categoryItem(model: model, index: 3, image: 'men.png', text: "Men only".tr()),
                       horizontalSpaceSmall,
-                      categoryItem(model: model, index: 4, image: 'women.png', text: "Women only"),
+                      categoryItem(model: model, index: 4, image: 'women.png', text: "Women only".tr()),
                     ],
                   ),
                 ),
