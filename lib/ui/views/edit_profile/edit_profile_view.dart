@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
@@ -32,7 +33,7 @@ class EditProfileView extends HookWidget {
           userName.text = model.user!.userName!;
           email.text = model.user!.email!;
           phone.text = model.user!.phoneNumber!;
-          model.gender.text = model.user!.gender! == "M" ? "Male" : "Female";
+          model.gender.text = model.user!.gender! == "M" ? "Male".tr() : "Female".tr();
 
           once = false;
         }
@@ -52,7 +53,7 @@ class EditProfileView extends HookWidget {
                             model.back();
                           }
                       ),
-                      const Text('Edit Profile', style: TextStyle(fontSize: 21),),
+                      Text('Edit Profile'.tr(), style: TextStyle(fontSize: 21),),
                     ],
                   ),
                   verticalSpaceMedium,
@@ -115,13 +116,13 @@ class EditProfileView extends HookWidget {
                       verticalSpaceMedium,
                       InfoItem(
                         controller: firstName,
-                        label: 'First name',
+                        label: 'First name'.tr(),
                         hintText: 'Abdeldjalil',
                       ),
                       verticalSpaceMedium,
                       InfoItem(
                         controller: lastName,
-                        label: 'Last name',
+                        label: 'Last name'.tr(),
                         hintText: 'Anes',
                       ),
                       verticalSpaceMedium,
@@ -141,9 +142,9 @@ class EditProfileView extends HookWidget {
                           children: [
                             verticalSpaceSmall,
                             Row(
-                              children: const [
+                              children: [
                                 horizontalSpaceSmall,
-                                Text("Email"),
+                                Text("Email".tr()),
                               ],
                             ),
                             SizedBox(
@@ -181,9 +182,9 @@ class EditProfileView extends HookWidget {
                           children: [
                             verticalSpaceSmall,
                             Row(
-                              children: const [
+                              children: [
                                 horizontalSpaceSmall,
-                                Text("Phone Number"),
+                                Text("Phone Number".tr()),
                               ],
                             ),
                             SizedBox(
@@ -221,9 +222,9 @@ class EditProfileView extends HookWidget {
                           children: [
                             verticalSpaceSmall,
                             Row(
-                              children: const [
+                              children: [
                                 horizontalSpaceSmall,
-                                Text("Gender"),
+                                Text("Gender".tr()),
                               ],
                             ),
                             SizedBox(
@@ -232,7 +233,7 @@ class EditProfileView extends HookWidget {
                                 readOnly: true,
                                 controller: model.gender,
                                 decoration: InputDecoration(
-                                  hintText: 'Male',
+                                  hintText: 'Male'.tr(),
                                   hintStyle: const TextStyle(fontSize: 14),
                                   suffixIcon: const Icon(Icons.arrow_drop_down)
                                       .gestures(onTap: () => model.showSelectionDialog(gen: model.gender.text)),
