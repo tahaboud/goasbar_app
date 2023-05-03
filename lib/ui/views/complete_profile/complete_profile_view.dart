@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/shared/app_configs.dart';
@@ -34,9 +35,9 @@ class CompleteProfileView extends HookWidget {
                   onTap: () {model.back();},
                 ).alignment(Alignment.centerLeft),
                 verticalSpaceLarge,
-                const Text('Profile', style: TextStyle(fontSize: 32),).center(),
+                Text('Profile'.tr(), style: const TextStyle(fontSize: 32),).center(),
                 verticalSpaceSmall,
-                const Text("Quick steps to publish your profile", style: TextStyle(color: kMainGray,),).center(),
+                Text("Quick steps to publish your profile".tr(), style: const TextStyle(color: kMainGray,),).center(),
                 verticalSpaceMedium,
                 Container(
                   height: 130,
@@ -61,7 +62,7 @@ class CompleteProfileView extends HookWidget {
                     hintText: 'Abdeldjalil',
                     hintStyle: const TextStyle(fontSize: 14),
                     // prefixText: 'Saudi Arabia ( +966 ) | ',
-                    prefixIcon: const Text(' First name ', style: TextStyle(color: kMainColor2, fontSize: 14),).padding(vertical: 20, horizontal: 10),
+                    prefixIcon: Text(' First name '.tr(), style: const TextStyle(color: kMainColor2, fontSize: 14),).padding(vertical: 20, horizontal: 10),
                     fillColor: kTextFiledGrayColor,
                     filled: true,
                     border: OutlineInputBorder(
@@ -97,7 +98,7 @@ class CompleteProfileView extends HookWidget {
                     readOnly: true,
                     controller: model.gender,
                     decoration: InputDecoration(
-                      hintText: 'Male',
+                      hintText: 'Male'.tr(),
                       hintStyle: const TextStyle(fontSize: 14),
                       suffixIcon: Image.asset('assets/icons/drop_down.png')
                           .gestures(onTap: () {
@@ -126,7 +127,7 @@ class CompleteProfileView extends HookWidget {
                         .gestures(onTap: () {
                         model.showBirthDayPicker(context);
                     }),
-                    prefixIcon: const Text(' Birthday ', style: TextStyle(color: kMainColor2, fontSize: 14),).padding(vertical: 20, horizontal: 10),
+                    prefixIcon: Text(' Birthday '.tr(), style: TextStyle(color: kMainColor2, fontSize: 14),).padding(vertical: 20, horizontal: 10),
                     fillColor: kTextFiledGrayColor,
                     filled: true,
                     border: OutlineInputBorder(
@@ -228,9 +229,9 @@ class CompleteProfileView extends HookWidget {
                   obscureText: model.isObscure,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: InputDecoration(
-                    hintText: 'Re-Password',
+                    hintText: 'Re-Password'.tr(),
                     hintStyle: const TextStyle(fontSize: 14),
-                    prefixIcon: const Text(' Re-Password ', style: TextStyle(color: kMainColor2, fontSize: 14),).padding(vertical: 20, horizontal: 10),
+                    prefixIcon: Text(' Re-Password '.tr(), style: TextStyle(color: kMainColor2, fontSize: 14),).padding(vertical: 20, horizontal: 10),
                     suffixIcon: const Icon(Icons.remove_red_eye_outlined, size: 17)
                         .gestures(
                         onTap: () {
@@ -258,7 +259,7 @@ class CompleteProfileView extends HookWidget {
                         && rePassword.text.isNotEmpty && model.birthDate.text.isNotEmpty
                         && model.gender.text.isNotEmpty ? kMainGradient : kMainDisabledGradient,
                   ),
-                  child: const Text('Continue', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
+                  child: Text('Continue'.tr(), style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
                 ).gestures(
                   onTap: firstName.text.isNotEmpty && email.text.isNotEmpty && firstName.text.isNotEmpty
                       && lastName.text.isNotEmpty && password.text.isNotEmpty
