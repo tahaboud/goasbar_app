@@ -8,6 +8,7 @@ import 'package:goasbar/ui/views/booking_for_provider_detail/booking_for_provide
 import 'package:goasbar/ui/widgets/booking_card_for_provider/booking_card_for_provider_viewmodel.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class BookingItemForProviderView extends StatelessWidget {
   const BookingItemForProviderView({
@@ -81,7 +82,7 @@ class BookingItemForProviderView extends StatelessWidget {
                         Row(
                           children: [
                             Text('${providerPublicExperience!.price!} SR', style: const TextStyle(color: kMainColor1, fontSize: 9)),
-                            const Text(' / Person', style: TextStyle(color: kMainGray, fontSize: 9)),
+                            Text(' / Person'.tr(), style: TextStyle(color: kMainGray, fontSize: 9)),
                           ],
                         ),
                         horizontalSpaceSmall,
@@ -93,7 +94,7 @@ class BookingItemForProviderView extends StatelessWidget {
                         horizontalSpaceSmall,
                         Image.asset("assets/icons/location.png"),
                         horizontalSpaceTiny,
-                        Text(" ${providerPublicExperience!.city![0]}${providerPublicExperience!.city!.substring(1).replaceAll('_', ' ').toLowerCase()} , ${providerPublicExperience!.duration!} ${double.parse(providerPublicExperience!.duration!) >= 2 ? 'Hours' : 'Hour'}", style: const TextStyle(color: kMainGray, fontSize: 11))
+                        Text(" ${providerPublicExperience!.city![0]}${providerPublicExperience!.city!.substring(1).replaceAll('_', ' ').toLowerCase()} , ${providerPublicExperience!.duration!} ${double.parse(providerPublicExperience!.duration!) >= 2 ? 'Hours'.tr() : 'Hour'.tr()}", style: const TextStyle(color: kMainGray, fontSize: 11))
                       ],
                     ),
                     verticalSpaceSmall,
