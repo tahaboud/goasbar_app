@@ -10,6 +10,7 @@ import 'package:goasbar/ui/widgets/chat_item/chat_item.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:stacked/stacked.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ChatsView extends HookWidget {
   const ChatsView({Key? key, this.user,}) : super(key: key,);
@@ -26,7 +27,7 @@ class ChatsView extends HookWidget {
             TextField(
               controller: search,
               decoration: InputDecoration(
-                hintText: 'Search',
+                hintText: 'Search'.tr(),
                 hintStyle: const TextStyle(fontSize: 14),
                 prefixIcon: Image.asset("assets/icons/navbar/search.png"),
                 fillColor: kTextFiledGrayColor,
@@ -41,7 +42,7 @@ class ChatsView extends HookWidget {
               ),
             ).padding(horizontal: 20),
             verticalSpaceMedium,
-            const Text('Chats', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),).alignment(Alignment.centerLeft),
+            Text('Chats'.tr(), style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),).alignment(Alignment.centerLeft),
             verticalSpaceMedium,
             model.isBusy ? const Loader().center() : StreamBuilder(
               stream: model.stream,
