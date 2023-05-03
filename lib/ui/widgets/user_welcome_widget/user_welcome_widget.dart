@@ -5,6 +5,7 @@ import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/widgets/user_welcome_widget/user_welcome_widget_viewmodel.dart';
 import 'package:stacked/stacked.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class UserWelcomeWidget extends StatelessWidget {
   const UserWelcomeWidget({
@@ -35,11 +36,11 @@ class UserWelcomeWidget extends StatelessWidget {
                 child: Image.network("$baseUrl${user!.image}", height: 30, width: 30, fit: BoxFit.cover),
               ),
               horizontalSpaceTiny,
-              user == null ? const Text('Hi , ') : Text('Hi , ${user!.firstName} !'),
+              user == null ? Text('Hi ,'.tr()) : Text('${'Hi ,'.tr()} ${user!.firstName} !'),
             ] : [
               Image.asset("assets/icons/person_login.png", color: kMainColor1),
               horizontalSpaceTiny,
-              const Text('welcome ,Guest'),
+              Text('welcome ,Guest'.tr()),
             ],
           ),
         );
