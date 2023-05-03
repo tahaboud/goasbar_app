@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/login/login_view.dart';
@@ -78,9 +79,9 @@ class SplashView extends StatelessWidget {
                       .opacity(!model.isDone ? 0.0 : 1.0, animate: true)
                       .animate(const Duration(milliseconds: 1000), Curves.easeIn),
 
-                  const Text(
-                    "We believe that traveling around the \nworld shouldn’t be hard.",
-                    style: TextStyle(color: kMainGray, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),
+                  Text(
+                    "splash_text".tr(),
+                    style: const TextStyle(color: kMainGray, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),
                   ).translate(offset: const Offset(30, 570)),
 
 
@@ -95,8 +96,8 @@ class SplashView extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(10)),
                 gradient: kMainGradient,
               ),
-              child: const Center(
-                child: Text('Get Started', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+              child: Center(
+                child: Text('get_started'.tr(), style: const TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
               ),
             ).gestures(
               onTap: () async {
