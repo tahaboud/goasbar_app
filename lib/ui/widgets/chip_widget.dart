@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:goasbar/ui/views/chats_notifications/chats_notifications_viewmodel.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ChipWidget extends StatelessWidget {
   const ChipWidget({
@@ -16,7 +17,7 @@ class ChipWidget extends StatelessWidget {
     return SizedBox(
       height: 30,
       width: 100,
-      child: Text(index! == 1 ? "Messages" : "Notifications").center(),
+      child: Text(index! == 1 ? "Messages".tr() : "Notifications".tr()).center(),
     ).decorated(
       borderRadius: BorderRadius.circular(20),
       color: model!.indexTab == index ? const Color(0xffF9F9F9) : const Color(0xffE8E9ED),
