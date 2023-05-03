@@ -9,6 +9,7 @@ import 'package:motion_toast/motion_toast.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class SignUpView extends HookWidget {
   const SignUpView({Key? key, this.body, this.hasImage}) : super(key: key);
@@ -92,7 +93,7 @@ class SignUpView extends HookWidget {
                     const Spacer(),
                     const Spacer(),
                     const Spacer(),
-                    model.isClicked! ? const Loader().center() : const Text('Send Verification Code', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),),
+                    model.isClicked! ? const Loader().center() : Text('Send Verification Code'.tr(), style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),),
                     const Spacer(),
                     const Spacer(),
                     Image.asset("assets/icons/person_login.png",).padding(horizontal: 15),
