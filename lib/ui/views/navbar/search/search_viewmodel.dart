@@ -18,13 +18,13 @@ class SearchViewModel extends BaseViewModel {
   TextEditingController searchDate = TextEditingController();
   String? from = '', to = '';
   String? genderConstraint = genderConstraints[0];
-  String? category = 'Experience Category';
-  String? city = 'Search by Region';
+  String? category = 'Experience Category'.tr();
+  String? city = 'Search by Region'.tr();
   int pageNumber = 1;
 
   List<String> citiesWithNone () {
     List<String> list = [];
-    list.add('Search by Region');
+    list.add('Search by Region'.tr());
     list.addAll(cities);
 
     return list;
@@ -32,7 +32,7 @@ class SearchViewModel extends BaseViewModel {
 
   List<String> categoriesWithNone () {
     List<String> list = [];
-    list.add('Experience Category');
+    list.add('Experience Category'.tr());
     list.addAll(categories);
 
     return list;
