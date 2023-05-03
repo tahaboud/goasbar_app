@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:goasbar/ui/widgets/previous_button.dart';
 import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:goasbar/shared/app_configs.dart';
@@ -77,7 +78,7 @@ class AddExperienceView extends HookWidget {
                     children: [
                       const Icon(Icons.close, size: 30,).gestures(onTap: () =>model.back(),),
                       horizontalSpaceTiny,
-                      const Text('EXPERIENCE INFORMATION', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                      Text('EXPERIENCE INFORMATION'.tr(), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                       Row(
                         children: [
                           Container(
@@ -102,7 +103,7 @@ class AddExperienceView extends HookWidget {
                     ],
                   ),
                   verticalSpaceMedium,
-                  const Text('Main image', style: TextStyle(fontWeight: FontWeight.bold),),
+                  Text('Main image'.tr(), style: const TextStyle(fontWeight: FontWeight.bold),),
                   verticalSpaceSmall,
                   model.mainImage != null ? Container(
                     height: 100,
@@ -125,15 +126,15 @@ class AddExperienceView extends HookWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Image.asset("assets/icons/camera.png"),
-                        const Text("Upload identity image", style: TextStyle(color: kGrayText,)),
+                        Text("Upload identity image".tr(), style: TextStyle(color: kGrayText,)),
                       ],
                     ).center(),
                   ).gestures(onTap: () => model.pickMainImage(),),
                   verticalSpaceRegular,
                   InfoItem(
                     controller: title,
-                    label: 'Experience title',
-                    hintText: 'Experience Title , e.g',
+                    label: 'Experience title'.tr(),
+                    hintText: '${"Experience title".tr()} , e.g',
                   ),
                   verticalSpaceRegular,
                   Container(
@@ -146,9 +147,9 @@ class AddExperienceView extends HookWidget {
                       children: [
                         verticalSpaceSmall,
                         Row(
-                          children: const [
+                          children: [
                             horizontalSpaceSmall,
-                            Text("Gender constrains"),
+                            Text("Gender constrains".tr()),
                           ],
                         ),
                         Container(
@@ -187,18 +188,18 @@ class AddExperienceView extends HookWidget {
                   verticalSpaceRegular,
                   InfoItem(
                     controller: age,
-                    label: 'Minimum age',
+                    label: 'Minimum age'.tr(),
                     hintText: '00',
                   ),
                   verticalSpaceRegular,
                   InfoItem(
                     controller: duration,
-                    label: 'Duration (hours)',
+                    label: 'Duration (hours)'.tr(),
                     hintText: '0.5 H',
                   ),
                   verticalSpaceRegular,
                   verticalSpaceSmall,
-                  const Text('What is your experience category?', style: TextStyle(fontWeight: FontWeight.bold),),
+                  Text('What is your experience category?'.tr(), style: TextStyle(fontWeight: FontWeight.bold),),
                   verticalSpaceRegular,
                   SizedBox(
                     height: 45,
@@ -228,8 +229,8 @@ class AddExperienceView extends HookWidget {
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                       gradient: kMainGradient,
                     ),
-                    child: const Center(
-                      child: Text('NEXT', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+                    child: Center(
+                      child: Text('NEXT'.tr(), style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
                     ),
                   ).gestures(
                     onTap: () {
@@ -286,7 +287,7 @@ class AddExperienceView extends HookWidget {
                     children: [
                       const Icon(Icons.close, size: 30,).gestures(onTap: () =>model.back(),),
                       horizontalSpaceTiny,
-                      const Text('SHOWCASE EXPERIENCE', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                      Text('SHOWCASE EXPERIENCE'.tr(), style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                       Row(
                         children: [
                           Container(
@@ -311,7 +312,7 @@ class AddExperienceView extends HookWidget {
                     ],
                   ),
                   verticalSpaceMedium,
-                  const Text('Add more images', style: TextStyle(fontWeight: FontWeight.bold),),
+                  Text('Add more images'.tr(), style: TextStyle(fontWeight: FontWeight.bold),),
                   verticalSpaceSmall,
                   Container(
                     height: 100,
@@ -323,7 +324,7 @@ class AddExperienceView extends HookWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Image.asset("assets/icons/camera.png"),
-                        const Text("Add images", style: TextStyle(color: kGrayText,)),
+                        Text("Add images".tr(), style: TextStyle(color: kGrayText,)),
                       ],
                     ).center(),
                   ).gestures(onTap: () {
@@ -339,11 +340,11 @@ class AddExperienceView extends HookWidget {
                     }
                   }),
                   verticalSpaceRegular,
-                  const Text('Link for a video of the experience', style: TextStyle(fontWeight: FontWeight.bold),),
+                  Text('Link for a video of the experience'.tr(), style: TextStyle(fontWeight: FontWeight.bold),),
                   verticalSpaceSmall,
                   InfoItem(
                     controller: link,
-                    label: 'Drop link',
+                    label: 'Drop link'.tr(),
                     hintText: 'http:www.youtube.com/bngvdx …. ( exp)',
                   ),
                   verticalSpaceRegular,
@@ -396,8 +397,8 @@ class AddExperienceView extends HookWidget {
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                           gradient: kMainGradient,
                         ),
-                        child: const Center(
-                          child: Text('NEXT', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+                        child: Center(
+                          child: Text('NEXT'.tr(), style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
                         ),
                       ).gestures(
                         onTap: () {
@@ -433,7 +434,7 @@ class AddExperienceView extends HookWidget {
                     children: [
                       const Icon(Icons.close, size: 30,).gestures(onTap: () =>model.back(),),
                       horizontalSpaceTiny,
-                      const Text('EXPERIENCE BRIEF', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                      Text('EXPERIENCE BRIEF'.tr(), style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                       Row(
                         children: [
                           Container(
@@ -462,7 +463,7 @@ class AddExperienceView extends HookWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       verticalSpaceSmall,
-                      const Text("Description", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                      Text("Description".tr(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                       verticalSpaceSmall,
                       SizedBox(
                         height: 150,
@@ -493,7 +494,7 @@ class AddExperienceView extends HookWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       verticalSpaceSmall,
-                      const Text("Experience activities and places", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                      Text("Experience activities and places".tr(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                       verticalSpaceSmall,
                       SizedBox(
                         height: 150,
@@ -501,7 +502,7 @@ class AddExperienceView extends HookWidget {
                           maxLines: 10,
                           controller: activities,
                           decoration: InputDecoration(
-                            hintText: "Experience activities and places...",
+                            hintText: "Experience activities and places".tr(),
                             hintStyle: const TextStyle(fontSize: 14),
                             fillColor: kTextFiledMainColor,
                             filled: true,
@@ -531,8 +532,8 @@ class AddExperienceView extends HookWidget {
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                           gradient: kMainGradient,
                         ),
-                        child: const Center(
-                          child: Text('NEXT', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+                        child: Center(
+                          child: Text('NEXT'.tr(), style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
                         ),
                       ).gestures(
                         onTap: () {
@@ -568,7 +569,7 @@ class AddExperienceView extends HookWidget {
                     children: [
                       const Icon(Icons.close, size: 30,).gestures(onTap: () =>model.back(),),
                       horizontalSpaceTiny,
-                      const Text('PROVIDING & REQUIREMENTS', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                      Text('PROVIDING & REQUIREMENTS'.tr(), style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                       Row(
                         children: [
                           Container(
@@ -597,9 +598,9 @@ class AddExperienceView extends HookWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       verticalSpaceSmall,
-                      const Text("What will be provided?", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                      Text("What will be provided?".tr(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                       verticalSpaceSmall,
-                      const Text("E.g. lunch meal, coffee, some tools...", style: TextStyle(fontSize: 14, color: kGrayText)),
+                      Text("E.g. lunch meal, coffee, some tools...".tr(), style: TextStyle(fontSize: 14, color: kGrayText)),
                       Column(
                         children: [
                           verticalSpaceSmall,
@@ -658,7 +659,7 @@ class AddExperienceView extends HookWidget {
                             child: const Icon(Icons.add, color: kMainColor1, size: 15,).center(),
                           ),
                           horizontalSpaceSmall,
-                          const Text("Add more", style: TextStyle(color: kMainColor1),),
+                          Text("Add more".tr(), style: TextStyle(color: kMainColor1),),
                         ],
                       ).gestures(onTap: () => model.addProvidings(text: '')),
                     ],
@@ -668,9 +669,9 @@ class AddExperienceView extends HookWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       verticalSpaceSmall,
-                      const Text("Requirements", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                      Text("Requirements".tr(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                       verticalSpaceSmall,
-                      const Text("Some notes and requirements for safe experience", style: TextStyle(fontSize: 14, color: kGrayText)),
+                      Text("Some notes and requirements for safe experience".tr(), style: TextStyle(fontSize: 14, color: kGrayText)),
                       Column(
                         children: [
                           verticalSpaceSmall,
@@ -730,7 +731,7 @@ class AddExperienceView extends HookWidget {
                             child: const Icon(Icons.add, color: kMainColor1, size: 15,).center(),
                           ),
                           horizontalSpaceSmall,
-                          const Text("Add more", style: TextStyle(color: kMainColor1),),
+                          Text("Add more".tr(), style: TextStyle(color: kMainColor1),),
                         ],
                       ).gestures(onTap: () => model.addRequirements(text: '')),
                     ],
@@ -747,8 +748,8 @@ class AddExperienceView extends HookWidget {
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                           gradient: kMainGradient,
                         ),
-                        child: const Center(
-                          child: Text('NEXT', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+                        child: Center(
+                          child: Text('NEXT'.tr(), style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
                         ),
                       ).gestures(
                         onTap: () {
@@ -796,7 +797,7 @@ class AddExperienceView extends HookWidget {
                     children: [
                       const Icon(Icons.close, size: 30,).gestures(onTap: () =>model.back(),),
                       horizontalSpaceTiny,
-                      const Text('EXPERIENCE LOCATION', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                      Text('EXPERIENCE LOCATION'.tr(), style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                       Row(
                         children: [
                           Container(
@@ -825,7 +826,7 @@ class AddExperienceView extends HookWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       verticalSpaceSmall,
-                      const Text("City", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                      Text("City".tr(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                       verticalSpaceSmall,
                       Container(
                         height: 50,
@@ -858,7 +859,7 @@ class AddExperienceView extends HookWidget {
                         ),
                       ),
                       verticalSpaceRegular,
-                      const Text("Starting point", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                      Text("Starting point".tr(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                       verticalSpaceSmall,
                       Container(
                         height: 50,
@@ -878,7 +879,7 @@ class AddExperienceView extends HookWidget {
                               children: [
                                 Image.asset("assets/icons/map_link.png", color: kMainColor1),
                                 horizontalSpaceTiny,
-                                const Text("Google maps", style: TextStyle(color: kGrayText),),
+                                Text("Google maps".tr(), style: TextStyle(color: kGrayText),),
                               ],
                             ).gestures(onTap: () {
                               if (model.latLon != null) {
@@ -916,7 +917,7 @@ class AddExperienceView extends HookWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           verticalSpaceSmall,
-                          const Text("Description Or Notes", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                          Text("Description Or Notes".tr(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                           verticalSpaceSmall,
                           SizedBox(
                             height: 100,
@@ -958,8 +959,8 @@ class AddExperienceView extends HookWidget {
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                           gradient: kMainGradient,
                         ),
-                        child: const Center(
-                          child: Text('NEXT', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+                        child: Center(
+                          child: Text('NEXT'.tr(), style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
                         ),
                       ).gestures(
                         onTap: () {
@@ -987,7 +988,7 @@ class AddExperienceView extends HookWidget {
                     children: [
                       const Icon(Icons.close, size: 30,).gestures(onTap: () =>model.back(),),
                       horizontalSpaceTiny,
-                      const Text('EXPERIENCE TIMING', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                      Text('EXPERIENCE TIMING'.tr(), style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                       Row(
                         children: [
                           Container(
@@ -1016,7 +1017,7 @@ class AddExperienceView extends HookWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       verticalSpaceSmall,
-                      const Text('When you will make the experience?', style: TextStyle(fontWeight: FontWeight.bold),),
+                      Text('When you will make the experience?'.tr(), style: TextStyle(fontWeight: FontWeight.bold),),
                       verticalSpaceSmall,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1068,7 +1069,7 @@ class AddExperienceView extends HookWidget {
                         ],
                       ),
                       verticalSpaceRegular,
-                      const Text('Capacity ( people ) Trip', style: TextStyle(fontWeight: FontWeight.bold),),
+                      Text('Capacity ( people )'.tr(), style: TextStyle(fontWeight: FontWeight.bold),),
                       verticalSpaceSmall,
                       SizedBox(
                         height: 50,
@@ -1110,7 +1111,7 @@ class AddExperienceView extends HookWidget {
                   // ).gestures(onTap: () => model.showNewTimingBottomSheet(date: , experienceId: ,)),
 
                   verticalSpaceRegular,
-                  const Text('Pricing', style: TextStyle(fontWeight: FontWeight.bold),),
+                  Text('Pricing'.tr(), style: TextStyle(fontWeight: FontWeight.bold),),
                   verticalSpaceSmall,
                   SizedBox(
                     height: 50,
@@ -1145,8 +1146,8 @@ class AddExperienceView extends HookWidget {
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                           gradient: kMainGradient,
                         ),
-                        child: model.isClicked! ? const Loader().center() : const Center(
-                          child: Text('PUBLISH', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+                        child: model.isClicked! ? const Loader().center() : Center(
+                          child: Text('PUBLISH'.tr(), style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
                         ),
                       ).gestures(
                         onTap: () async {
@@ -1186,10 +1187,10 @@ class AddExperienceView extends HookWidget {
                                   }
                                 }
 
-                                if (model.genderConstraint == "No constrains") body.addAll({'gender': 'None',});
-                                if (model.genderConstraint == "Families") body.addAll({'gender': 'FAMILIES',});
-                                if (model.genderConstraint == "Men Only") body.addAll({'gender': 'MEN',});
-                                if (model.genderConstraint == "Women Only") body.addAll({'gender': 'WOMEN',});
+                                if (model.genderConstraint == "No constrains".tr()) body.addAll({'gender': 'None',});
+                                if (model.genderConstraint == "Families only".tr()) body.addAll({'gender': 'FAMILIES',});
+                                if (model.genderConstraint == "Men Only".tr()) body.addAll({'gender': 'MEN',});
+                                if (model.genderConstraint == "Women Only".tr()) body.addAll({'gender': 'WOMEN',});
 
                                 if (duration.text.isNotEmpty) body.addAll({'duration': duration.text,});
                                 if (notes.text.isNotEmpty) body.addAll({'location_notes': notes.text,});
@@ -1264,10 +1265,10 @@ class AddExperienceView extends HookWidget {
                                   }
                                 }
 
-                                if (model.genderConstraint == "No constrains") body.addAll({'gender': 'None',});
-                                if (model.genderConstraint == "Families") body.addAll({'gender': 'FAMILIES',});
-                                if (model.genderConstraint == "Men Only") body.addAll({'gender': 'MEN',});
-                                if (model.genderConstraint == "Women Only") body.addAll({'gender': 'WOMEN',});
+                                if (model.genderConstraint == "No constrains".tr()) body.addAll({'gender': 'None',});
+                                if (model.genderConstraint == "Families only".tr()) body.addAll({'gender': 'FAMILIES',});
+                                if (model.genderConstraint == "Men Only".tr()) body.addAll({'gender': 'MEN',});
+                                if (model.genderConstraint == "Women Only".tr()) body.addAll({'gender': 'WOMEN',});
 
                                 if (duration.text.isNotEmpty) body.addAll({'duration': duration.text,});
                                 if (model.latLon != null) {
