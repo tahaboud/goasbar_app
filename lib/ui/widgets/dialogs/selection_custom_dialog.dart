@@ -4,6 +4,7 @@ import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class SelectionCustomDialog extends HookWidget {
   final DialogRequest? dialogRequest;
@@ -24,21 +25,21 @@ class SelectionCustomDialog extends HookWidget {
         children: [
           Container(
             height: 40,
-            color : dialogRequest!.data == "Male" ? kMainDisabledGray : Colors.white,
-            child: const Text("Male")
+            color : dialogRequest!.data == "Male".tr() ? kMainDisabledGray : Colors.white,
+            child: Text("Male".tr())
                 .center(),
           ).gestures(onTap: () {
-            onDialogTap!(DialogResponse(data: "Male",));
+            onDialogTap!(DialogResponse(data: "Male".tr(),));
           }),
           const Divider(height: 1, thickness: 2),
           // verticalSpaceRegular,
           Container(
             height: 40,
-            color : dialogRequest!.data == "Female" ? kMainDisabledGray : Colors.white,
-            child: const Text("Female")
+            color : dialogRequest!.data == "Female".tr() ? kMainDisabledGray : Colors.white,
+            child: Text("Female".tr())
                 .center(),
           ).gestures(onTap: () {
-            onDialogTap!(DialogResponse(data: "Female",));
+            onDialogTap!(DialogResponse(data: "Female".tr(),));
           }),
         ],
       ),
