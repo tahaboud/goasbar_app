@@ -11,6 +11,7 @@ import 'package:stacked/stacked.dart';
 import 'package:animations/animations.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({Key? key, this.isUser, this.index = 0}) : super(key: key);
@@ -46,26 +47,26 @@ class HomeView extends StatelessWidget {
             onTap: model.setIndex,
             items: [
               BottomNavigationBarItem(
-                label: 'Experience',
+                label: 'Experience'.tr(),
                 icon: SizedBox(
                   height: 35,
                   child: Image.asset("assets/icons/navbar/experience.png"),
                 ),
               ),
               BottomNavigationBarItem(
-                label: 'Search',
+                label: 'Search'.tr(),
                 icon: SizedBox(height: 35, child: Image.asset("assets/icons/navbar/search.png")),
               ),
               BottomNavigationBarItem(
-                label: 'Trips',
+                label: 'Trips'.tr(),
                 icon: SizedBox(height: 35, child: Image.asset("assets/icons/navbar/trips.png")),
               ),
               BottomNavigationBarItem(
-                label: 'Saved',
+                label: 'Saved'.tr(),
                 icon: SizedBox(height: 35, child: Image.asset("assets/icons/navbar/saved.png")),
               ),
               BottomNavigationBarItem(
-                label: 'Settings',
+                label: 'Settings'.tr(),
                 icon: SizedBox(height: 35, child: Image.asset("assets/icons/navbar/settings.png")),
               ),
             ],
