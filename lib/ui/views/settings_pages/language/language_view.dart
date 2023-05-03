@@ -6,6 +6,7 @@ import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class LanguageView extends HookWidget {
   const LanguageView({Key? key}) : super(key: key);
@@ -29,7 +30,7 @@ class LanguageView extends HookWidget {
                           model.back();
                         }
                     ),
-                    const Text('Language', style: TextStyle(fontSize: 21),),
+                    Text('Language'.tr(), style: TextStyle(fontSize: 21),),
                   ],
                 ),
                 verticalSpaceMedium,
@@ -38,7 +39,7 @@ class LanguageView extends HookWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text("Arabic (SA)"),
+                    Text("Arabic (SA)".tr()),
                     Container(
                       width: 20,
                       height: 20,
