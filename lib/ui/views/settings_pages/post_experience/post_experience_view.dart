@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
@@ -32,9 +33,9 @@ class PostExperienceView extends HookWidget {
                         model.back();
                       }
                   ),
-                  const Text('My Experience', style: TextStyle(fontSize: 21),),
+                  Text('My Experience'.tr(), style: TextStyle(fontSize: 21),),
                   const Spacer(),
-                  const Text("Add New Experience", style: TextStyle(color: kMainColor1),).gestures(onTap: () => model.showAddExperienceInfoBottomSheet())
+                  Text("Add New Experience".tr(), style: TextStyle(color: kMainColor1),).gestures(onTap: () => model.showAddExperienceInfoBottomSheet())
                 ],
               ),
               verticalSpaceMedium,
@@ -118,7 +119,7 @@ class PostExperienceView extends HookWidget {
                                       children: [
                                         Image.asset("assets/icons/birth_date.png", color: Colors.black, height: 20),
                                         horizontalSpaceSmall,
-                                        const Text("Schedule", style: TextStyle(fontSize: 14)),
+                                        Text("Schedule".tr(), style: TextStyle(fontSize: 14)),
                                       ],
                                     ),
                                   ).gestures(onTap: () => model.navigateTo(view: TimingView(experience: model.data![index]))),
@@ -126,7 +127,7 @@ class PostExperienceView extends HookWidget {
                               ],
                             ),
                             !model.isCollapsed[index]! ? const SizedBox() : verticalSpaceSmall,
-                            !model.isCollapsed[index]! ? const SizedBox() : Text("Get your experience this weekend with amazing trip in ${model.data![index].city![0]}${model.data![index].city!.substring(1).replaceAll('_', ' ').toLowerCase()}", style: const TextStyle(fontSize: 20)),
+                            !model.isCollapsed[index]! ? const SizedBox() : Text("${"Get your experience this weekend \nwith amazing trip in".tr()} ${model.data![index].city![0]}${model.data![index].city!.substring(1).replaceAll('_', ' ').toLowerCase()}", style: const TextStyle(fontSize: 20)),
                             !model.isCollapsed[index]! ? const SizedBox() : verticalSpaceSmall,
                             !model.isCollapsed[index]! ? const SizedBox() : Text(model.data![index].description!, style: const TextStyle(fontSize: 13, color: kGrayText)),
                             !model.isCollapsed[index]! ? const SizedBox() : verticalSpaceRegular,
@@ -145,7 +146,7 @@ class PostExperienceView extends HookWidget {
                                     children: [
                                       Image.asset("assets/icons/delete.png", color: Colors.redAccent, height: 25),
                                       horizontalSpaceSmall,
-                                      const Text('Delete', style: TextStyle(color: Colors.redAccent, fontSize: 16, fontWeight: FontWeight.w500),).center(),
+                                      Text('Delete'.tr(), style: TextStyle(color: Colors.redAccent, fontSize: 16, fontWeight: FontWeight.w500),).center(),
                                     ],
                                   ),
                                 ).gestures(onTap: () {
@@ -164,7 +165,7 @@ class PostExperienceView extends HookWidget {
                                     borderRadius: BorderRadius.all(Radius.circular(8)),
                                     gradient: kMainGradient,
                                   ),
-                                  child: const Text('Update', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
+                                  child: Text('Update'.tr(), style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
                                 ).gestures(onTap: () {
                                   model.showAddExperienceInfoBottomSheet(experience: model.experienceModels!.results![index],);
                                 }),
