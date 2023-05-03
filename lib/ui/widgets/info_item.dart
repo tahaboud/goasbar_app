@@ -6,6 +6,7 @@ import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/shared/textfield_formatters/card_expiration_formatter.dart';
 import 'package:goasbar/shared/textfield_formatters/card_number_formatter.dart';
 import 'package:string_validator/string_validator.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class InfoItem extends StatelessWidget {
   const InfoItem({
@@ -42,16 +43,16 @@ class InfoItem extends StatelessWidget {
             height: 40,
             child: TextFormField(
               onChanged: (value) {
-                if (label == "Expiration Date") {
+                if (label == "Expiration Date".tr()) {
 
                 }
               },
-              inputFormatters: label == "Expiration Date" ? [
+              inputFormatters: label == "Expiration Date".tr() ? [
                 LengthLimitingTextInputFormatter(5),
                 CardExpirationFormatter(),
               ] : label == "CVV" ? [
                 LengthLimitingTextInputFormatter(3),
-              ] : label == "Card Number" ? [
+              ] : label == "Card Number".tr() ? [
                 FilteringTextInputFormatter.digitsOnly,
                 LengthLimitingTextInputFormatter(16),
                 CardNumberInputFormatter(),
@@ -61,7 +62,7 @@ class InfoItem extends StatelessWidget {
                 IbanFormatter(),
               ] : [],
               controller: controller,
-              validator: label == "Minimum age" ? (value) {
+              validator: label == "Minimum age".tr() ? (value) {
                 if (isNumeric(value!)) {
                   return null;
                 } else {
@@ -70,15 +71,15 @@ class InfoItem extends StatelessWidget {
               } : (value) {
                 return null;
               },
-              autovalidateMode: label == "Minimum age" ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
-              maxLength: label == "Identity number" ? 10 : label == "Minimum age" ? 2 : null,
-              keyboardType: label == "Identity number" || label == "IBAN" || label == "Duration (hours)" || label == "Card Number" || label == "Expiration Date" || label == "CVV" || label == "Minimum age" ? TextInputType.number : TextInputType.text,
+              autovalidateMode: label == "Minimum age".tr() ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+              maxLength: label == "Identity number" ? 10 : label == "Minimum age".tr() ? 2 : null,
+              keyboardType: label == "Identity number" || label == "IBAN" || label == "Duration (hours)".tr() || label == "Card Number".tr() || label == "Expiration Date".tr() || label == "CVV" || label == "Minimum age".tr() ? TextInputType.number : TextInputType.text,
               decoration: InputDecoration(
                 hintText: hintText!,
                 hintStyle: const TextStyle(fontSize: 14),
                 fillColor: kTextFiledMainColor,
                 filled: true,
-                counterText: label == "Identity number" || label == 'Minimum age' ? "" : null,
+                counterText: label == "Identity number" || label == 'Minimum age'.tr() ? "" : null,
                 focusedBorder: const OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.transparent),
                 ),
