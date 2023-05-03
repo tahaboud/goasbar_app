@@ -11,6 +11,7 @@ import 'package:goasbar/ui/views/trip_detail/trip_detail_view.dart';
 import 'package:goasbar/ui/widgets/trip_card/trip_card_viewmodel.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class TripItem extends StatelessWidget {
   const TripItem({
@@ -101,7 +102,7 @@ class TripItem extends StatelessWidget {
                         Row(
                           children: [
                             Text('${experience!.price!} SR', style: const TextStyle(color: kMainColor1, fontSize: 9)),
-                            const Text(' / Person', style: TextStyle(color: kMainGray, fontSize: 9)),
+                            Text(' / Person'.tr(), style: TextStyle(color: kMainGray, fontSize: 9)),
                           ],
                         ),
                         horizontalSpaceSmall,
@@ -113,7 +114,7 @@ class TripItem extends StatelessWidget {
                         horizontalSpaceSmall,
                         Image.asset("assets/icons/location.png"),
                         horizontalSpaceTiny,
-                        Text("${experience!.city![0]}${experience!.city!.substring(1).replaceAll('_', ' ').toLowerCase()}, ${experience!.duration!} ${double.parse(experience!.duration!) >= 2 ? 'Hours' : 'Hour'}", style: const TextStyle(color: kMainGray, fontSize: 11))
+                        Text("${experience!.city![0]}${experience!.city!.substring(1).replaceAll('_', ' ').toLowerCase()}, ${experience!.duration!} ${double.parse(experience!.duration!) >= 2 ? 'Hours'.tr() : 'Hour'.tr()}", style: const TextStyle(color: kMainGray, fontSize: 11))
                       ],
                     ),
                     verticalSpaceSmall,
@@ -129,7 +130,7 @@ class TripItem extends StatelessWidget {
                             borderRadius: BorderRadius.all(Radius.circular(3)),
                             gradient: kMainGradient,
                           ),
-                          child: const Text('Book Now', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500),).center(),
+                          child: Text('Book Now'.tr(), style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500),).center(),
                         ).gestures(onTap: () {
                           model.navigateTo(view: user == null ? const LoginView() : ConfirmBookingView(experience: experience, user: user,));
                         }),
