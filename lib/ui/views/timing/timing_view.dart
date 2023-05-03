@@ -12,6 +12,7 @@ import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class TimingView extends HookWidget {
   const TimingView({Key? key, this.experience}) : super(key: key);
@@ -35,7 +36,7 @@ class TimingView extends HookWidget {
                           model.back();
                         }
                     ),
-                    const Text('My Experience', style: TextStyle(fontSize: 21),),
+                    Text('My Experience'.tr(), style: TextStyle(fontSize: 21),),
                   ],
                 ),
                 verticalSpaceMedium,
@@ -50,8 +51,8 @@ class TimingView extends HookWidget {
                         color: kMainColor1.withOpacity(0.3),
                       ),
                       child: Row(
-                        children: const [
-                          Text("Offer new timing", style: TextStyle(color: kMainColor1)),
+                        children: [
+                          Text("Offer new timing".tr(), style: TextStyle(color: kMainColor1)),
                           Icon(Icons.add, color: kMainColor1, size: 25,)
                         ],
                       ),
@@ -81,7 +82,7 @@ class TimingView extends HookWidget {
                   },
                 ),
                 verticalSpaceSmall,
-                const Text('Timings', style: TextStyle(fontSize: 21, fontWeight: FontWeight.w600),).alignment(Alignment.centerLeft),
+                Text('Timings'.tr(), style: TextStyle(fontSize: 21, fontWeight: FontWeight.w600),).alignment(Alignment.centerLeft),
                 verticalSpaceSmall,
 
                 model.isBusy ? const Loader().center() : model.timingListModel!.count! == 0
