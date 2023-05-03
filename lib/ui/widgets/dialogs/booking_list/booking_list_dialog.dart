@@ -8,6 +8,7 @@ import 'package:goasbar/ui/widgets/profile_booked/profile_booked_view.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class BookingListDialog extends HookWidget {
   final DialogRequest? dialogRequest;
@@ -33,8 +34,8 @@ class BookingListDialog extends HookWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const Text(
-                  "Booking List",
+                Text(
+                  "Booking List".tr(),
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
                 ),
                 verticalSpaceMedium,
