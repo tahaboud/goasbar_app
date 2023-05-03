@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -82,7 +83,7 @@ class BookingForProviderDetailView extends HookWidget {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      const Text("Share"),
+                                      Text("Share".tr()),
                                       horizontalSpaceTiny,
                                       const Icon(Icons.share_outlined,).center(),
                                     ],
@@ -165,14 +166,14 @@ class BookingForProviderDetailView extends HookWidget {
               ),
             ),
             verticalSpaceRegular,
-            Text('Get your experience this weekend \nwith amazing trip in ${providerPublicExperience!.city![0]}${providerPublicExperience!.city!.substring(1).replaceAll('_', ' ').toLowerCase()}', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 22),)
+            Text('${'Get your experience this weekend \nwith amazing trip in'.tr()} ${providerPublicExperience!.city![0]}${providerPublicExperience!.city!.substring(1).replaceAll('_', ' ').toLowerCase()}', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 22),)
                 .padding(horizontal: 20),
             verticalSpaceRegular,
             Row(
               children: [
                 Image.asset("assets/icons/location.png"),
                 horizontalSpaceTiny,
-                Text("${providerPublicExperience!.city![0]}${providerPublicExperience!.city!.substring(1).replaceAll('_', ' ').toLowerCase()} , Duration : ${providerPublicExperience!.duration} ${double.parse(providerPublicExperience!.duration!) <= 1 ? "Hour" : "Hours"}", style: const TextStyle(color: kMainGray, fontSize: 11)),
+                Text("${providerPublicExperience!.city![0]}${providerPublicExperience!.city!.substring(1).replaceAll('_', ' ').toLowerCase()} , ${'Duration'.tr()} : ${providerPublicExperience!.duration} ${double.parse(providerPublicExperience!.duration!) <= 1 ? "Hour".tr() : "Hours".tr()}", style: const TextStyle(color: kMainGray, fontSize: 11)),
               ],
             ).padding(horizontal: 20),
             Expanded(
@@ -186,7 +187,7 @@ class BookingForProviderDetailView extends HookWidget {
                     children: [
                       Image.asset("assets/icons/description_quote.png",),
                       horizontalSpaceSmall,
-                      const Text('Description', ),
+                      Text('Description'.tr(), ),
                     ],
                   ).padding(horizontal: 20),
                   verticalSpaceRegular,
@@ -197,7 +198,7 @@ class BookingForProviderDetailView extends HookWidget {
                     children: [
                       Image.asset("assets/icons/gender.png",),
                       horizontalSpaceSmall,
-                      const Text('Gender', ),
+                      Text('Gender Type'.tr(), ),
                       horizontalSpaceMedium,
                       Text(providerPublicExperience!.gender! == "None" ? 'Valid for All' : providerPublicExperience!.gender!, style: const TextStyle(color: kMainDisabledGray),)
                     ],
@@ -207,7 +208,7 @@ class BookingForProviderDetailView extends HookWidget {
                     children: [
                       Image.asset("assets/icons/communication.png",),
                       horizontalSpaceSmall,
-                      const Text('Start Chat', style: TextStyle(color: kMainColor1,),).gestures(onTap: () => model.navigateTo(view: user == null ? const LoginView() : ChatWithAgencyView(providerId: providerPublicExperience!.providerId, userId: user!.id, providerName: "Provider",))),
+                      Text('Start Chat'.tr(), style: TextStyle(color: kMainColor1,),).gestures(onTap: () => model.navigateTo(view: user == null ? const LoginView() : ChatWithAgencyView(providerId: providerPublicExperience!.providerId, userId: user!.id, providerName: "Provider",))),
                     ],
                   ).padding(horizontal: 20),
                   verticalSpaceRegular,
@@ -215,7 +216,7 @@ class BookingForProviderDetailView extends HookWidget {
                     children: [
                       Image.asset("assets/icons/starting_point.png",),
                       horizontalSpaceSmall,
-                      const Text('Starting Point',),
+                      Text('Starting Point'.tr(),),
                     ],
                   ).padding(horizontal: 20),
                   model.kGooglePlex == null ? const SizedBox() : verticalSpaceRegular,
@@ -243,7 +244,7 @@ class BookingForProviderDetailView extends HookWidget {
                     children: [
                       Image.asset("assets/icons/notes.png",),
                       horizontalSpaceSmall,
-                      const Text('Notes & Requirements',),
+                      Text('Notes & Requirements'.tr(),),
                     ],
                   ).padding(horizontal: 20),
                   if (providerPublicExperience!.requirements != null)
@@ -268,7 +269,7 @@ class BookingForProviderDetailView extends HookWidget {
                     Row(
                       children: [
                         Text('${providerPublicExperience!.price!} SR', style: const TextStyle(color: kMainColor1, fontSize: 18)),
-                        const Text(' / Person', style: TextStyle(color: kMainGray, fontSize: 18)),
+                        Text(' / Person'.tr(), style: TextStyle(color: kMainGray, fontSize: 18)),
                       ],
                     ),
                     verticalSpaceTiny,
