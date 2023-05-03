@@ -14,6 +14,7 @@ import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ConfirmBookingView extends HookWidget {
   const ConfirmBookingView({Key? key, this.experience, this.user}) : super(key: key);
@@ -42,7 +43,7 @@ class ConfirmBookingView extends HookWidget {
                           model.back();
                         }
                     ),
-                    const Text('Confirm Your Booking', style: TextStyle(fontSize: 21),),
+                    Text('Confirm Your Booking'.tr(), style: TextStyle(fontSize: 21),),
                   ],
                 ),
                 verticalSpaceMedium,
@@ -72,7 +73,7 @@ class ConfirmBookingView extends HookWidget {
                             SizedBox(
                               width: 160,
                               child: Text(
-                                "${experience!.city![0]}${experience!.city!.substring(1).replaceAll('_', ' ').toLowerCase()} , ${experience!.duration!} ${double.parse(experience!.duration!) >= 2 ? 'Hours' : 'Hour'}",
+                                "${experience!.city![0]}${experience!.city!.substring(1).replaceAll('_', ' ').toLowerCase()} , ${experience!.duration!} ${double.parse(experience!.duration!) >= 2 ? 'Hours'.tr() : 'Hour'.tr()}",
                                 style: const TextStyle(color: kMainGray, fontSize: 11),
                               ),
                             ),
@@ -96,9 +97,9 @@ class ConfirmBookingView extends HookWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
-                      children: const [
+                      children: [
                         horizontalSpaceSmall,
-                        Text('Availability', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
+                        Text('Availability'.tr(), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
                       ],
                     ),
                     Row(
@@ -211,8 +212,8 @@ class ConfirmBookingView extends HookWidget {
                         SizedBox(
                           width: screenWidthPercentage(context, percentage: 1) - 50,
                           child: Text(model.selectedIndex == null
-                              ? 'Available Seats : Pick a timing first'
-                              : 'Available Seats : ${model.data!.results![model.selectedIndex!].availability} / ${model.data!.results![model.selectedIndex!].capacity}',
+                              ? '${"Available Seats".tr()} : Pick a timing first'
+                              : '${"Available Seats".tr()} : ${model.data!.results![model.selectedIndex!].availability} / ${model.data!.results![model.selectedIndex!].capacity}',
                             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
                         ),
                       ],
@@ -224,9 +225,9 @@ class ConfirmBookingView extends HookWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
-                      children: const [
+                      children: [
                         horizontalSpaceSmall,
-                        Text('Number of Guests', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
+                        Text('Number of Guests'.tr(), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
                       ],
                     ),
                     Row(
@@ -355,9 +356,9 @@ class ConfirmBookingView extends HookWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
-                      children: const [
+                      children: [
                         horizontalSpaceSmall,
-                        Text('Trip Coupon', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
+                        Text('Trip Coupon'.tr(), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
                       ],
                     ),
                     Row(
@@ -394,7 +395,7 @@ class ConfirmBookingView extends HookWidget {
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                     gradient: kMainGradient,
                   ),
-                  child: model.isClicked! ? const Loader().center() :const Text('Continue with payment', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
+                  child: model.isClicked! ? const Loader().center() : Text('Continue with Payment Send Request'.tr(), style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
                 ).gestures(
                   onTap:  () {
                     bool? isOkay = true;
