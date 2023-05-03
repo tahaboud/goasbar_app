@@ -43,7 +43,7 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   int pageIndex = 1;
   int? addedProviding = 0;
   int? addedRequirements = 0;
-  String? city = "Riyadh";
+  String? city = "Riyadh".tr();
   List<dynamic>? selectedExperienceCategory = [];
   String? providedGoodsText = '';
   String? requirementsText = '';
@@ -198,9 +198,9 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   }
 
   String? getGenderConstraint () {
-    genderConstraint = experience != null ? experience!.gender == "None" ? "No constrains"
-      : experience!.gender == "FAMILIES" ? "Families" : experience!.gender == "MEN" ? "Men Only"
-      : "Women Only" : genderConstraints[0];
+    genderConstraint = experience != null ? experience!.gender == "None" ? "No constrains".tr()
+      : experience!.gender == "FAMILIES" ? "Families only".tr() : experience!.gender == "MEN" ? "Men Only".tr()
+      : "Women Only".tr() : genderConstraints[0];
     return genderConstraint;
   }
 
