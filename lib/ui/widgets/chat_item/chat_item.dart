@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
@@ -44,7 +45,7 @@ class ChatItem extends StatelessWidget {
               children: [
                 Text(receiverName!,),
                 verticalSpaceSmall,
-                const Text('Check your last messages', style: TextStyle(color: kMainDisabledGray, fontSize: 12),)
+                Text('Check your last messages'.tr(), style: TextStyle(color: kMainDisabledGray, fontSize: 12),)
               ],
             ),
             //TODO add non read messages
