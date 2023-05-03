@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
@@ -54,9 +55,9 @@ class SignUpOtpView extends HookWidget {
                   ],
                 ),
                 verticalSpaceMedium,
-                const Text("Enter code", style: TextStyle(fontSize: 32),),
+                Text("Enter code".tr(), style: TextStyle(fontSize: 32),),
                 verticalSpaceSmall,
-                Text('We sent it to +966 $phone', style: const TextStyle(color: kMainGray),),
+                Text('${"We sent it to +966".tr()} $phone', style: const TextStyle(color: kMainGray),),
                 const Spacer(),
                 Pinput(
                   controller: codeController,
