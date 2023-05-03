@@ -7,6 +7,7 @@ import 'package:motion_toast/motion_toast.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ForgetPasswordView extends HookWidget {
   const ForgetPasswordView({Key? key, this.phone}) : super(key: key);
@@ -45,16 +46,16 @@ class ForgetPasswordView extends HookWidget {
                 verticalSpaceMedium,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: const [
-                    Text('Forget \nPassword ?', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
+                  children: [
+                    Text('Forget your\nPassword ?'.tr(), style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
                   ],
                 ),
                 verticalSpaceMedium,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: const [
+                  children: [
                     Text(
-                      "Don't worry, it happens! Please enter the address\nassociated with your account",
+                      "Dont worry".tr(),
                       style: TextStyle(fontSize: 14, color: kMainGray),
                     ),
                   ],
@@ -93,7 +94,7 @@ class ForgetPasswordView extends HookWidget {
                         const Spacer(),
                         const Spacer(),
                         const Spacer(),
-                        const Text('Send Verification Code', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),),
+                        Text('Send Verification Code'.tr(), style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),),
                         const Spacer(),
                         const Spacer(),
                         Image.asset("assets/icons/forget_password.png",).padding(horizontal: 15),
