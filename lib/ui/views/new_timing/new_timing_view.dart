@@ -8,6 +8,7 @@ import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class NewTimingView extends HookWidget {
   NewTimingView({Key? key, required this.request, required this.completer})
@@ -52,7 +53,7 @@ class NewTimingView extends HookWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Icon(Icons.close, size: 30,).gestures(onTap: () => model.back()),
-                  Text(request.customData is TimingResponse || request.customData is Map ? 'UPDATE TIMING' : 'NEW TIMING', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  Text(request.customData is TimingResponse || request.customData is Map ? 'UPDATE TIMING'.tr() : 'NEW TIMING'.tr(), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   horizontalSpaceLarge,
                 ],
               ),
@@ -112,7 +113,7 @@ class NewTimingView extends HookWidget {
                 ],
               ),
               verticalSpaceRegular,
-              const Text('Capacity ( people )', style: TextStyle(fontWeight: FontWeight.bold),),
+              Text('Capacity ( people )'.tr(), style: TextStyle(fontWeight: FontWeight.bold),),
               verticalSpaceSmall,
               SizedBox(
                 height: 58,
@@ -143,8 +144,8 @@ class NewTimingView extends HookWidget {
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   gradient: kMainGradient,
                 ),
-                child: const Center(
-                  child: Text('NEXT', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+                child: Center(
+                  child: Text('NEXT'.tr(), style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
                 ),
               ).gestures(
                 onTap: () {
