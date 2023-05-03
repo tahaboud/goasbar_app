@@ -18,7 +18,7 @@ class CompleteProfileViewModel extends BaseViewModel {
   final _navigationService = locator<NavigationService>();
   final _dialogService = locator<DialogService>();
   final _validationService = locator<ValidationService>();
-  String? city = "Riyadh";
+  String? city = "Riyadh".tr();
   File? file;
   bool? hasImage = false;
   final _mediaService = locator<MediaService>();
