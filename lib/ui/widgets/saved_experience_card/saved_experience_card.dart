@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/data_models/experience_response.dart';
@@ -79,7 +80,7 @@ class SavedExperience extends StatelessWidget {
               child: Row(
                 children: [
                   horizontalSpaceSmall,
-                  Text('${experience!.price!} SR / Person', style: const TextStyle(color: Colors.white, fontSize: 10)),
+                  Text('${experience!.price!} SR${" / Person".tr()}', style: const TextStyle(color: Colors.white, fontSize: 10)),
                 ],
               ),
             )
