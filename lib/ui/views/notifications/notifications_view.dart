@@ -23,7 +23,7 @@ class NotificationsView extends StatelessWidget {
             //   children: [
             //     Image.asset("assets/icons/read_check.png"),
             //     horizontalSpaceSmall,
-            //     const Text("Mark all as read", style: TextStyle(color: Color(0xff3983F1), fontWeight: FontWeight.w600),),
+            //     const Text("Mark all as read".tr(), style: TextStyle(color: Color(0xff3983F1), fontWeight: FontWeight.w600),),
             //   ],
             // ),
             // const Divider(height: 40, thickness: 1),
