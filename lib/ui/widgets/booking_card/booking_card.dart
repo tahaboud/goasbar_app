@@ -5,6 +5,7 @@ import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/widgets/booking_card/booking_card_viewmodel.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class BookingItem extends StatelessWidget {
   const BookingItem({
@@ -42,7 +43,7 @@ class BookingItem extends StatelessWidget {
                       Row(
                         children: [
                           Text('${bookingsList!.price!} SR', style: const TextStyle(color: kMainColor1, )),
-                          const Text(' / Person', style: TextStyle(color: kMainGray,)),
+                          Text(' / Person'.tr(), style: TextStyle(color: kMainGray,)),
                         ],
                       ),
                       horizontalSpaceSmall,
@@ -54,7 +55,7 @@ class BookingItem extends StatelessWidget {
                       horizontalSpaceSmall,
                       Image.asset("assets/icons/location.png"),
                       horizontalSpaceTiny,
-                      Text("${bookingsList!.experienceTiming!.place!}, ${double.parse(bookingsList!.experienceTiming!.duration!) >= 2 ? 'Hours' : 'Hour'}", style: const TextStyle(color: kMainGray, fontSize: 11)),
+                      Text("${bookingsList!.experienceTiming!.place!}, ${double.parse(bookingsList!.experienceTiming!.duration!) >= 2 ? 'Hours'.tr() : 'Hour'.tr()}", style: const TextStyle(color: kMainGray, fontSize: 11)),
                       const Spacer(),
                       Container(
                         width: 70,
@@ -116,7 +117,7 @@ class BookingItem extends StatelessWidget {
                           borderRadius: BorderRadius.all(Radius.circular(3)),
                           color: Colors.redAccent,
                         ),
-                        child: const Text('Delete', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500),).center(),
+                        child: Text('Delete'.tr(), style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500),).center(),
                       ).gestures(onTap: () => onDelete!()),
                       horizontalSpaceSmall,
                     ],
