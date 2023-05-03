@@ -10,6 +10,7 @@ import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class TripsView extends HookWidget {
   const TripsView({Key? key, this.text, this.user}) : super(key: key);
@@ -38,11 +39,11 @@ class TripsView extends HookWidget {
                       scrollDirection: Axis.horizontal,
                       physics: const BouncingScrollPhysics(),
                       children: [
-                        categoryItem(model: model, index: 1, image: 'hosted', text: "All"),
+                        categoryItem(model: model, index: 1, image: 'hosted', text: "All".tr()),
                         horizontalSpaceSmall,
-                        categoryItem(model: model, index: 2, text: "Completed"),
+                        categoryItem(model: model, index: 2, text: "Completed".tr()),
                         horizontalSpaceSmall,
-                        categoryItem(model: model, index: 3, text: "Not Completed"),
+                        categoryItem(model: model, index: 3, text: "Not Completed".tr()),
                       ],
                     ),
                   ),
