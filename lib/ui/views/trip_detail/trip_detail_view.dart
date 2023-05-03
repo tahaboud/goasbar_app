@@ -18,6 +18,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:goasbar/ui/widgets/dot_item.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class TripDetailView extends HookWidget {
   const TripDetailView({Key? key, this.experience, this.user}) : super(key: key);
@@ -86,7 +87,7 @@ class TripDetailView extends HookWidget {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      const Text("Share"),
+                                      Text("Share".tr()),
                                       horizontalSpaceTiny,
                                       const Icon(Icons.share_outlined,).center(),
                                     ],
@@ -169,18 +170,18 @@ class TripDetailView extends HookWidget {
               ),
             ),
             verticalSpaceRegular,
-            Text('Get your experience this weekend \nwith amazing trip in ${experience!.city![0]}${experience!.city!.substring(1).replaceAll('_', ' ').toLowerCase()}', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 22),)
+            Text('${"Get your experience this weekend \nwith amazing trip in".tr()} ${experience!.city![0]}${experience!.city!.substring(1).replaceAll('_', ' ').toLowerCase()}', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 22),)
                 .padding(horizontal: 20),
             verticalSpaceRegular,
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(experience!.reviews! > 1 ? '${experience!.reviews} reviews' : '${experience!.reviews} review'),
+                Text(experience!.reviews! > 1 ? '${experience!.reviews} ${"reviews".tr()}' : '${experience!.reviews} ${'review'.tr()}'),
                 Image.asset("assets/icons/location.png"),
                 horizontalSpaceTiny,
                 SizedBox(
                   width: screenWidthPercentage(context, percentage: 0.7),
-                  child: Text("${experience!.city![0]}${experience!.city!.substring(1).replaceAll('_', ' ').toLowerCase()} , Duration : ${experience!.duration} ${double.parse(experience!.duration!) <= 1 ? "Hour" : "Hours"} ${model.timingListModel == null ? "" : model.timingListModel!.count! > 0 ? "| Start at ${model.timingListModel!.results![0].startTime!.substring(0, 5)}" : ''}", overflow: TextOverflow.clip, style: const TextStyle(color: kMainGray, fontSize: 11)),
+                  child: Text("${experience!.city![0]}${experience!.city!.substring(1).replaceAll('_', ' ').toLowerCase()} , ${'Duration'.tr()} : ${experience!.duration} ${double.parse(experience!.duration!) <= 1 ? "Hour".tr() : "Hours".tr()} ${model.timingListModel == null ? "" : model.timingListModel!.count! > 0 ? "| Start at ${model.timingListModel!.results![0].startTime!.substring(0, 5)}" : ''}", overflow: TextOverflow.clip, style: const TextStyle(color: kMainGray, fontSize: 11)),
                 ),
               ],
             ).padding(horizontal: 20),
@@ -196,7 +197,7 @@ class TripDetailView extends HookWidget {
                     children: [
                       Row(
                         children: [
-                          const Text('Hosted by :', style: TextStyle(fontSize: 16)),
+                          Text('${"Hosted by".tr()} :', style: TextStyle(fontSize: 16)),
                           Text(' ${model.provider!.response!.nickname}', style: const TextStyle(fontSize: 16, color: kMainColor1)).gestures(
                             onTap: () => model.navigateTo(view: ProviderProfileView(provider: model.provider!.response!, user: user),)
                           ),
@@ -215,7 +216,7 @@ class TripDetailView extends HookWidget {
                     children: [
                       Image.asset("assets/icons/description_quote.png",),
                       horizontalSpaceSmall,
-                      const Text('Description', ),
+                      Text('Description'.tr(), ),
                     ],
                   ).padding(horizontal: 20),
                   verticalSpaceRegular,
@@ -226,7 +227,7 @@ class TripDetailView extends HookWidget {
                     children: [
                       Image.asset("assets/icons/gender.png",),
                       horizontalSpaceSmall,
-                      const Text('Gender', ),
+                      Text('Gender Type'.tr(), ),
                       horizontalSpaceMedium,
                       Text(experience!.gender! == "None" ? 'Valid for All' : experience!.gender!, style: const TextStyle(color: kMainDisabledGray),)
                     ],
@@ -236,7 +237,7 @@ class TripDetailView extends HookWidget {
                     children: [
                       Image.asset("assets/icons/communication.png",),
                       horizontalSpaceSmall,
-                      const Text('Start Chat', style: TextStyle(color: kMainColor1,),).gestures(onTap: () => model.navigateTo(view: user == null ? const LoginView() : ChatWithAgencyView(providerId: experience!.providerId, userId: user!.id, providerName: "Provider",))),
+                      Text('Start Chat'.tr(), style: TextStyle(color: kMainColor1,),).gestures(onTap: () => model.navigateTo(view: user == null ? const LoginView() : ChatWithAgencyView(providerId: experience!.providerId, userId: user!.id, providerName: "Provider",))),
                     ],
                   ).padding(horizontal: 20),
                   verticalSpaceRegular,
@@ -244,7 +245,7 @@ class TripDetailView extends HookWidget {
                     children: [
                       Image.asset("assets/icons/starting_point.png",),
                       horizontalSpaceSmall,
-                      const Text('Starting Point',),
+                      Text('Starting Point'.tr(),),
                     ],
                   ).padding(horizontal: 20),
                   model.kGooglePlex == null ? const SizedBox() : verticalSpaceRegular,
@@ -272,7 +273,7 @@ class TripDetailView extends HookWidget {
                     children: [
                       Image.asset("assets/icons/notes.png",),
                       horizontalSpaceSmall,
-                      const Text('Notes & Requirements',),
+                      Text('Notes & Requirements'.tr(),),
                     ],
                   ).padding(horizontal: 20,),
                   if (experience!.requirements != null)
@@ -297,7 +298,7 @@ class TripDetailView extends HookWidget {
                     Row(
                       children: [
                         Text('${experience!.price!} SR', style: const TextStyle(color: kMainColor1, fontSize: 18)),
-                        const Text(' / Person', style: TextStyle(color: kMainGray, fontSize: 18)),
+                        Text(' / Person'.tr(), style: TextStyle(color: kMainGray, fontSize: 18)),
                       ],
                     ),
                     verticalSpaceTiny,
@@ -311,7 +312,7 @@ class TripDetailView extends HookWidget {
                     borderRadius: BorderRadius.all(Radius.circular(8)),
                     gradient: kMainGradient,
                   ),
-                  child: const Text('Book Now', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),)
+                  child: Text('Book Now'.tr(), style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),)
                       .center()
                       .gestures(onTap: () {
                         model.navigateTo(view: user == null ? const LoginView() : ConfirmBookingView(experience: experience, user: user,));
