@@ -6,6 +6,7 @@ import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class SupportView extends HookWidget {
   const SupportView({Key? key}) : super(key: key);
@@ -31,20 +32,20 @@ class SupportView extends HookWidget {
                             model.back();
                           }
                       ),
-                      const Text('Support Center', style: TextStyle(fontSize: 21),),
+                      Text('Support Center'.tr(), style: TextStyle(fontSize: 21),),
                     ],
                   ),
                   verticalSpaceMedium,
                   Expanded(
                     child: Column(
                       children: [
-                        const Text("If you have any questions or concerns, please \ncontact us", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                        Text("contact us".tr(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
                         verticalSpaceMedium,
                         Row(
                           children: const [
                             Icon(Icons.phone_outlined, size: 35,),
                             horizontalSpaceSmall,
-                            Text("+966 (483) -565 9898", style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),)
+                            Text("+966 535 584 402", style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),)
                           ],
                         ).gestures(onTap: () => model.launchPhoneCall()),
                         verticalSpaceMedium,
@@ -52,7 +53,7 @@ class SupportView extends HookWidget {
                           children: const [
                             Icon(Icons.email_outlined, size: 35,),
                             horizontalSpaceSmall,
-                            Text("contact@goasbar.com", style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),)
+                            Text("info@goasbar.com", style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),)
                           ],
                         ).gestures(onTap: () => model.launchEmail()),
                       ],
@@ -66,8 +67,8 @@ class SupportView extends HookWidget {
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                       gradient: kMainGradient,
                     ),
-                    child: const Center(
-                      child: Text('Go to Website', style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+                    child: Center(
+                      child: Text('Go to Website'.tr(), style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
                     ),
                   ).gestures(
                     onTap: () async {
