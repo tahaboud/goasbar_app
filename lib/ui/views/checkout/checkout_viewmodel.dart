@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:goasbar/app/app.locator.dart';
+import 'package:goasbar/data_models/cards_model.dart';
 import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/enum/dialog_type.dart';
+import 'package:goasbar/services/auth_service.dart';
 import 'package:goasbar/services/booking_api_service.dart';
 import 'package:goasbar/services/token_service.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
@@ -13,16 +15,22 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:hyperpay_plugin/flutter_hyperpay.dart';
 
-class CheckoutViewModel extends BaseViewModel {
+class CheckoutViewModel extends FutureViewModel<CardsModel?> {
+  BuildContext? context;
+  CheckoutViewModel({this.context});
+
   final _navigationService = locator<NavigationService>();
   int? selectedPaymentMethod = 1;
   String? checkoutId;
   final _tokenService = locator<TokenService>();
+  final _authService = locator<AuthService>();
+  CardsModel? userCards;
   final _dialogService = locator<DialogService>();
   final _bookingApiService = locator<BookingApiService>();
   bool? waitUntilFinish = false;
   bool? isClicked = false;
   FlutterHyperPay? flutterHyperPay;
+  Response? selectedRegisteredCard = Response(registrationId: "");
 
   void navigateTo({view}) {
     _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
@@ -30,6 +38,15 @@ class CheckoutViewModel extends BaseViewModel {
 
   void back() {
     _navigationService.back();
+  }
+
+  updateIsRegisteredCardSelected({registeredCard}) {
+    if (selectedRegisteredCard!.registrationId == "") {
+      selectedRegisteredCard = registeredCard;
+    } else {
+      selectedRegisteredCard = Response(registrationId: "");
+    }
+    notifyListeners();
   }
 
   selectPaymentMethod({int? value}) {
@@ -119,6 +136,22 @@ class CheckoutViewModel extends BaseViewModel {
     } else {
       showMotionToast(context: context, title: 'Error Payment', msg: "Payment Failed, Please Retry Payment", type: MotionToastType.error);
     }
+  }
+
+  Future<CardsModel?> getUserCards () async {
+    String? token = await _tokenService.getTokenValue();
+    return _authService.getUserCards(context: context, token: token).then((value) {
+      if (value != null) {
+        userCards = value;
+        notifyListeners();
+      }
+      return userCards;
+    });
+  }
+
+  @override
+  Future<CardsModel?> futureToRun() {
+    return getUserCards();
   }
 }
 
