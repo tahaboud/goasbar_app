@@ -60,12 +60,17 @@ flutter {
 }
 
 dependencies {
-    implementation fileTree(dir: "libs", include: ["*.aar"])
-    implementation "androidx.appcompat:appcompat:1.5.1"
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
-    implementation "androidx.browser:browser:1.4.0"
     implementation "androidx.fragment:fragment:1.5.3"
-    implementation "com.google.android.material:material:1.7.0"
     implementation "com.google.android.gms:play-services-base:18.1.0"
+
+    implementation(name: "oppwa.mobile-release", ext: 'aar')
+    debugImplementation(name: "ipworks3ds_sdk", ext: 'aar')
+    releaseImplementation(name: "ipworks3ds_sdk_deploy", ext: 'aar')
+    implementation "com.google.android.material:material:1.6.1"
+    implementation "androidx.appcompat:appcompat:1.5.1"
+    implementation 'com.google.android.gms:play-services-wallet:19.1.0'
+    implementation "androidx.browser:browser:1.4.0"
+
     implementation platform('com.google.firebase:firebase-bom:31.2.3')
 }
