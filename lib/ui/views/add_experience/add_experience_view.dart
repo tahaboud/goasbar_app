@@ -17,6 +17,8 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 
 class AddExperienceView extends HookWidget {
   AddExperienceView({Key? key, required this.request, required this.completer})
@@ -199,7 +201,7 @@ class AddExperienceView extends HookWidget {
                   ),
                   verticalSpaceRegular,
                   verticalSpaceSmall,
-                  Text('What is your experience category?'.tr(), style: TextStyle(fontWeight: FontWeight.bold),),
+                  Text('What is your experience category?'.tr(), style: const TextStyle(fontWeight: FontWeight.bold),),
                   verticalSpaceRegular,
                   SizedBox(
                     height: 45,
@@ -218,7 +220,9 @@ class AddExperienceView extends HookWidget {
                               ? kMainGradient : kDisabledGradient, animate: true)
                           .clipRRect(all: 8,)
                           .card(margin: const EdgeInsets.only(right: 12),)
-                          .animate(const Duration(milliseconds: 300), Curves.easeIn).gestures(onTap: () => model.updateSelectedExperienceCategory(category: category,)),).toList(),
+                          .animate(const Duration(milliseconds: 300), Curves.easeIn)
+                          .gestures(onTap: () => model.updateSelectedExperienceCategory(category: category,)),
+                      ).toList(),
                     ),
                   ),
                   verticalSpaceLarge,
@@ -892,13 +896,14 @@ class AddExperienceView extends HookWidget {
                       model.kGooglePlex == null ? const SizedBox() : verticalSpaceRegular,
                       model.isBusy ? const SizedBox() : model.kGooglePlex == null ? const SizedBox() : Container(
                         height: 300,
-                        width: screenWidthPercentage(context, percentage: 0.9),
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10)
                         ),
                         child: GoogleMap(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           mapType: MapType.normal,
+                          gestureRecognizers: Set()..add(Factory<EagerGestureRecognizer>(() => EagerGestureRecognizer())),
                           initialCameraPosition: model.kGooglePlex!,
                           onMapCreated: (GoogleMapController controller) {
                             model.controller.complete(controller);
@@ -909,7 +914,7 @@ class AddExperienceView extends HookWidget {
                           markers: model.customMarkers.toSet(),
                           myLocationEnabled: true,
                           myLocationButtonEnabled: false,
-                          zoomControlsEnabled: true,
+                          zoomControlsEnabled: false,
                         ),
                       ),
                       verticalSpaceRegular,
