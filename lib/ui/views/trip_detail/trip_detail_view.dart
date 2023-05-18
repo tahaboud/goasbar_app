@@ -19,6 +19,8 @@ import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:goasbar/ui/widgets/dot_item.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 
 class TripDetailView extends HookWidget {
   const TripDetailView({Key? key, this.experience, this.user}) : super(key: key);
@@ -251,10 +253,10 @@ class TripDetailView extends HookWidget {
                   model.kGooglePlex == null ? const SizedBox() : verticalSpaceRegular,
                   model.kGooglePlex == null ? const SizedBox() : Container(
                     height: 300,
-                    width: screenWidthPercentage(context, percentage: 0.9),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10)
                     ),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: GoogleMap(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       mapType: MapType.normal,
@@ -264,8 +266,9 @@ class TripDetailView extends HookWidget {
                       },
                       markers: model.customMarkers.toSet(),
                       myLocationEnabled: true,
+                      gestureRecognizers: Set()..add(Factory<EagerGestureRecognizer>(() => EagerGestureRecognizer())),
                       myLocationButtonEnabled: true,
-                      zoomControlsEnabled: true,
+                      zoomControlsEnabled: false,
                     ),
                   ),
                   model.kGooglePlex == null ? const SizedBox() : verticalSpaceRegular,
