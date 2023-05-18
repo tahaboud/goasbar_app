@@ -12,9 +12,9 @@ class ExperienceModel {
     count = json['count'];
     next = json['next'];
     previous = json['previous'];
-    if (json['results'] != null) {
+    if (json['response'] != null) {
       results = <ExperienceResults>[];
-      json['results'].forEach((v) {
+      json['response'].forEach((v) {
         results!.add(ExperienceResults.fromJson(v));
       });
     }
