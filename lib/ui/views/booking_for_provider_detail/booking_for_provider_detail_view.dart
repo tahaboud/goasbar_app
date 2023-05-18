@@ -15,6 +15,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:goasbar/ui/widgets/dot_item.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 
 class BookingForProviderDetailView extends HookWidget {
   const BookingForProviderDetailView({Key? key, this.providerPublicExperience, this.user}) : super(key: key);
@@ -222,7 +224,7 @@ class BookingForProviderDetailView extends HookWidget {
                   model.kGooglePlex == null ? const SizedBox() : verticalSpaceRegular,
                   model.isBusy ? const SizedBox() : model.kGooglePlex == null ? const SizedBox() : Container(
                     height: 300,
-                    width: screenWidthPercentage(context, percentage: 0.9),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10)
                     ),
@@ -233,10 +235,11 @@ class BookingForProviderDetailView extends HookWidget {
                       onMapCreated: (GoogleMapController controller) {
                         model.controller.complete(controller);
                       },
+                      gestureRecognizers: Set()..add(Factory<EagerGestureRecognizer>(() => EagerGestureRecognizer())),
                       markers: model.customMarkers.toSet(),
                       myLocationEnabled: true,
                       myLocationButtonEnabled: false,
-                      zoomControlsEnabled: true,
+                      zoomControlsEnabled: false,
                     ),
                   ),
                   model.kGooglePlex == null ? const SizedBox() : verticalSpaceRegular,
