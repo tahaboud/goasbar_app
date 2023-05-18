@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:goasbar/data_models/booking_model.dart';
 import 'package:goasbar/data_models/experience_response.dart';
 import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/shared/colors.dart';
@@ -14,14 +15,16 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class CheckoutView extends HookWidget {
-  const CheckoutView({Key? key, this.experience, this.user, this.usersCount}) : super(key: key);
+  const CheckoutView({Key? key, this.booking, this.experience, this.user, this.usersCount}) : super(key: key);
   final ExperienceResults? experience;
   final UserModel? user;
+  final BookingModel? booking;
   final int? usersCount;
 
   @override
   Widget build(BuildContext context) {
     var cardNumber = useTextEditingController();
+    var cardHolder = useTextEditingController();
     var expiryDate = useTextEditingController();
     var cvv = useTextEditingController();
 
@@ -54,10 +57,10 @@ class CheckoutView extends HookWidget {
                       height: 60,
                       width: 60,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(width: model.selectedPaymentMethod == 1 ? 2 : 1.5, color: model.selectedPaymentMethod == 1 ? Colors.blue : Colors.grey,)
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(width: model.selectedPaymentMethod == 1 ? 2 : 1.5, color: model.selectedPaymentMethod == 1 ? Colors.blue : Colors.grey)
                       ),
-                      child: Image.asset("assets/icons/checkout/visa.png",).gestures(
+                      child: Image.asset("assets/icons/checkout/mada.png",).gestures(
                         onTap: () => model.selectPaymentMethod(value: 1),
                       ),
                     ),
@@ -66,9 +69,9 @@ class CheckoutView extends HookWidget {
                       width: 60,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        border: Border.all(width: model.selectedPaymentMethod == 2 ? 2 : 1.5, color: model.selectedPaymentMethod == 2 ? Colors.blue : Colors.grey)
+                        border: Border.all(width: model.selectedPaymentMethod == 2 ? 2 : 1.5, color: model.selectedPaymentMethod == 2 ? Colors.blue : Colors.grey,)
                       ),
-                      child: Image.asset("assets/icons/checkout/mada.png",).gestures(
+                      child: Image.asset("assets/icons/checkout/visa.png",).gestures(
                         onTap: () => model.selectPaymentMethod(value: 2),
                       ),
                     ),
@@ -78,13 +81,19 @@ class CheckoutView extends HookWidget {
                       width: 60,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        border: Border.all(width: model.selectedPaymentMethod == 3 ? 2 : 1.5, color: model.selectedPaymentMethod == 4 ? Colors.blue : Colors.grey)
+                        border: Border.all(width: model.selectedPaymentMethod == 3 ? 2 : 1.5, color: model.selectedPaymentMethod == 3 ? Colors.blue : Colors.grey)
                       ),
                       child: Image.asset("assets/icons/checkout/apple_pay.png",).gestures(
                         onTap: () => model.selectPaymentMethod(value: 4),
                       ),
                     ),
                   ],
+                ),
+                verticalSpaceMedium,
+                InfoItem(
+                  controller: cardHolder,
+                  label: 'Card Holder'.tr(),
+                  hintText: 'Osama Mogaitoof',
                 ),
                 verticalSpaceMedium,
                 InfoItem(
@@ -170,14 +179,14 @@ class CheckoutView extends HookWidget {
                       model.prepareCheckout(
                         context: context,
                         user: user,
-                        bookingId: experience!.id,
+                        bookingId: booking!.response!.id,
                         cardHolder: "cardNumber.text",
                         cardNumber: cardNumber.text,
                         cVV: cvv.text,
                         expiryMonth: expiryDate.text.substring(0, 2),
                         expiryYear: expiryDate.text.substring(3),
                         body: {
-                          "payment_method": model.selectedPaymentMethod == 1 ? 'VISA' : model.selectedPaymentMethod == 2 ? 'MADA' : 'APPLEPAY',
+                          "payment_method": model.selectedPaymentMethod == 1 ? 'MADA' : model.selectedPaymentMethod == 2 ? 'VISA' : 'APPLEPAY',
                         },);
                     } else {
                       showMotionToast(context: context, title: 'Warning', msg: "All filed must be filled.", type: MotionToastType.warning);
