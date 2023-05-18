@@ -28,15 +28,27 @@ class AddPaymentMethodViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<String?> saveCard({String? cardType, cardNumber, cardHolder, cVV, expiryMonth, expiryYear, context}) async {
+  Future<String?> saveCard({String? cardType, cardNumber, String? cardHolder, cVV, expiryMonth, expiryYear, context}) async {
     String? token = await _tokenService.getTokenValue();
     await _authService.getRegistrationId(body: {"card_type": cardType,}, context: context, token: token).then((value) async {
-      if (value != null) {
-        print('Done');
-      } else {
-        showMotionToast(context: context, title: 'Error', msg: "Failed to save card", type: MotionToastType.error);
+      try {
+        final String result = await platform.invokeMethod('savecard', {
+          "checkoutid": value,
+          "number": cardNumber,
+          "brand": cardType,
+          "holder": cardHolder!.replaceAll(" ", ""),
+          "expiryMonth": expiryMonth,
+          "expiryYear": "20$expiryYear",
+          "cvv": cVV,
+        });
+        print(result);
+
+
+
+        _authService.getRegistrationStatus(id: value, context: context, token: token, cardType: cardType);
+      } on PlatformException catch (e) {
+
       }
     });
-
   }
 }
