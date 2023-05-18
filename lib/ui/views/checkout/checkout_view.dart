@@ -46,7 +46,7 @@ class CheckoutView extends HookWidget {
                           model.back();
                         }
                     ),
-                    Text('Checkout'.tr(), style: TextStyle(fontSize: 21),),
+                    Text('Checkout'.tr(), style: const TextStyle(fontSize: 21),),
                   ],
                 ),
                 verticalSpaceMedium,
@@ -138,7 +138,7 @@ class CheckoutView extends HookWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Ticket Price'.tr(), style: TextStyle(fontSize: 16)),
+                          Text('Ticket Price'.tr(), style: const TextStyle(fontSize: 16)),
                           Text('${double.parse(experience!.price!) * usersCount!} SR', style: const TextStyle(fontSize: 16)),
                         ],
                       ),
@@ -146,8 +146,8 @@ class CheckoutView extends HookWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Fare Tax'.tr(), style: TextStyle(fontSize: 16)),
-                          Text('00.00 SR', style: TextStyle(fontSize: 16)),
+                          Text('Fare Tax'.tr(), style: const TextStyle(fontSize: 16)),
+                          const Text('00.00 SR', style: TextStyle(fontSize: 16)),
                         ],
                       ),
                       verticalSpaceLarge,
@@ -155,7 +155,7 @@ class CheckoutView extends HookWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Total Amount'.tr(), style: TextStyle(fontSize: 16)),
+                          Text('Total Amount'.tr(), style: const TextStyle(fontSize: 16)),
                           Text('${double.parse(experience!.price!) * usersCount!} SR', style: const TextStyle(fontSize: 16)),
                         ],
                       ),
@@ -163,7 +163,7 @@ class CheckoutView extends HookWidget {
                   ),
                 ),
                 verticalSpaceLarge,
-                Text('Payment Terms and Conditions'.tr(), style: TextStyle(color: Color(0xff223263)),),
+                Text('Payment Terms and Conditions'.tr(), style: const TextStyle(color: Color(0xff223263)),),
                 verticalSpaceRegular,
                 Container(
                   width: MediaQuery.of(context).size.width - 30,
@@ -172,7 +172,7 @@ class CheckoutView extends HookWidget {
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                     gradient: kMainGradient,
                   ),
-                  child: model.isClicked! ? const Loader().center() : Text('Continue with Payment'.tr(), style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
+                  child: model.isClicked! ? const Loader().center() : Text('Continue with Payment'.tr(), style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
                 ).gestures(
                   onTap:  () {
                     if (cardNumber.text.isNotEmpty && cvv.text.isNotEmpty && expiryDate.text.isNotEmpty) {
