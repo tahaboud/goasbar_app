@@ -140,7 +140,45 @@ public class MainActivity extends FlutterActivity implements ITransactionListene
 
                                 openCustomUI(checkoutid);
                             }
-                        }  else {
+                        } else if (call.method.equals("savecard")) {
+
+                            checkoutId = call.argument("checkoutid");
+                            brand = call.argument("brand");
+                            number = call.argument("number");
+                            holder = call.argument("holder");
+                            expiryMonth = call.argument("expiryMonth");
+                            expiryYear = call.argument("expiryYear");
+                            cvv = call.argument("cvv");
+
+
+                            try {
+                                PaymentParams paymentParams = new CardPaymentParams(
+                                        checkoutId,
+                                        brand,
+                                        number,
+                                        holder,
+                                        expiryMonth,
+                                        expiryYear,
+                                        cvv
+                                );
+
+                                Toast.makeText(getBaseContext(),"Start",Toast.LENGTH_LONG).show();
+                                // Set shopper result URL
+                                paymentParams.setShopperResultUrl("goasbar://result");
+
+
+                                Transaction transaction = null;
+
+                                try {
+                                    transaction = new Transaction(paymentParams);
+                                    paymentProvider.registerTransaction(transaction, MainActivity.this);
+                                } catch (PaymentException ee) {
+                                    ee.printStackTrace();
+                                }
+                            } catch (PaymentException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
 
                             error("1","This method name is not found","");
                         }
@@ -155,65 +193,12 @@ public class MainActivity extends FlutterActivity implements ITransactionListene
 
     private void openCustomUI(String checkoutid) {
 
-        Toast.makeText(getBaseContext(),"Waiting..",Toast.LENGTH_LONG).show();
-
         if (mode.equals("LIVE")) {
             paymentProvider = new OppPaymentProvider(MainActivity.this, Connect.ProviderMode.LIVE);
         }
 
 
-        if (STCPAY.equals("enabled")) {
-
-            try {
-                PaymentParams paymentParams = new PaymentParams(checkoutid,"STC_PAY");
-                paymentParams.setShopperResultUrl("com.goasbar.goAsbar://result");
-                Transaction transaction = new Transaction(paymentParams);
-
-                paymentProvider.setThreeDSWorkflowListener(new ThreeDSWorkflowListener() {
-                    @Override
-                    public Activity onThreeDSChallengeRequired() {
-                        return MainActivity.this;
-                    }
-                });
-                paymentProvider.submitTransaction(transaction, MainActivity.this);
-            } catch (PaymentException e) {
-                e.printStackTrace();
-            }
-
-
-        } else if (istoken.equals("true")) {
-
-            if (!CardPaymentParams.isCvvValid(cvv)) {
-
-                Toast.makeText(getBaseContext(),"CVV is Invalid",Toast.LENGTH_LONG).show();
-            } else {
-
-                try {
-                    TokenPaymentParams paymentParams = new TokenPaymentParams(checkoutid, token, " ",cvv);
-
-                    paymentParams.setShopperResultUrl("com.goasbar.goAsbar://result");
-
-                    Transaction transaction = new Transaction(paymentParams);
-
-                    paymentProvider.setThreeDSWorkflowListener(new ThreeDSWorkflowListener() {
-                        @Override
-                        public Activity onThreeDSChallengeRequired() {
-                            return MainActivity.this;
-                        }
-                    });
-
-
-                    paymentProvider.submitTransaction(transaction, MainActivity.this);
-
-                } catch (PaymentException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-
-
-        } else {
+            Toast.makeText(getBaseContext(),"Waiting Live..",Toast.LENGTH_LONG).show();
 
             boolean result = check(number);
 
@@ -261,7 +246,9 @@ public class MainActivity extends FlutterActivity implements ITransactionListene
                             cvv
                     );
 
-                    paymentParams.setShopperResultUrl("com.goasbar.goAsbar://result");
+                    Toast.makeText(getBaseContext(),"Start",Toast.LENGTH_LONG).show();
+
+                    paymentParams.setShopperResultUrl("goasbar://result");
 
                     Transaction transaction = new Transaction(paymentParams);
 
@@ -278,7 +265,6 @@ public class MainActivity extends FlutterActivity implements ITransactionListene
                     e.printStackTrace();
                 }
             }
-        }
     }
 
 
