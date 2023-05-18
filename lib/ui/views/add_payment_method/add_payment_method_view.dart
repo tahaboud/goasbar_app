@@ -50,8 +50,8 @@ class AddPaymentMethodView extends HookWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              AddPaymentMethodCard(image: 'visa_method', isSelected: model.selectedCardType == 1, onTap: () => model.changeSelection(index: 1)),
-                              AddPaymentMethodCard(image: 'mada_method', isSelected: model.selectedCardType == 2, onTap: () => model.changeSelection(index: 2)),
+                              AddPaymentMethodCard(image: 'mada_method', isSelected: model.selectedCardType == 1, onTap: () => model.changeSelection(index: 2)),
+                              AddPaymentMethodCard(image: 'visa_method', isSelected: model.selectedCardType == 2, onTap: () => model.changeSelection(index: 1)),
                             ],
                           ),
                           verticalSpaceLarge,
@@ -99,14 +99,14 @@ class AddPaymentMethodView extends HookWidget {
                         gradient: kMainGradient,
                       ),
                       child: Center(
-                        child: Text('Link To My Account'.tr(), style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+                        child: Text('Link To My Account'.tr(), style: const TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
                       ),
                     ).gestures(
                       onTap: () async {
                         if (cardNumber.text.isNotEmpty && cardHolder.text.isNotEmpty && expiryDate.text.isNotEmpty && cvv.text.isNotEmpty) {
                           model.saveCard(
                             context: context,
-                            cardType: model.selectedCardType == 1 ? "VISA" : "MADA",
+                            cardType: model.selectedCardType == 1 ? "MADA" : "VISA",
                             expiryMonth: expiryDate.text.substring(0, 2),
                             expiryYear: expiryDate.text.substring(3),
                             cVV: cvv.text,
