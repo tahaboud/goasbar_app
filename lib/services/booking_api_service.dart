@@ -51,7 +51,7 @@ class BookingApiService {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
-        showMotionToast(context: context, title: 'Error Payment', msg: jsonDecode(response.body)['error'], type: MotionToastType.error);
+        // showMotionToast(context: context, title: 'Error Payment', msg: jsonDecode(response.body)['error'], type: MotionToastType.error);
         return null;
       }
     });
