@@ -33,17 +33,17 @@ class PaymentMethodView extends StatelessWidget {
                             model.back();
                           }
                       ),
-                      Text('Payment methods'.tr(), style: TextStyle(fontSize: 21),),
+                      Text('Payment methods'.tr(), style: const TextStyle(fontSize: 21),),
                     ],
                   ),
                   verticalSpaceLarge,
                   Expanded(
                     child: Column(
-                      children: model.dataReady ? model.data!.isEmpty ? [
+                      children: model.dataReady ? model.data!.response!.isEmpty ? [
                         Text("You have no cards registered yet".tr()).center(),
                       ] : [
-                        for (var card in model.userCards!)
-                          const PaymentMethodCard(text: 'xxxx - xxxx - xxxx - xxxx', method: 'visa_method'),
+                        for (var card in model.data!.response!)
+                          PaymentMethodCard(text: 'xxxx - xxxx - xxxx - ${card.lastDigits}', method: card.brand == "VS" ? 'visa_method' : 'mada_method'),
                       ] : [
                         const Loader().center()
                       ],
@@ -57,7 +57,7 @@ class PaymentMethodView extends StatelessWidget {
                       gradient: kMainGradient,
                     ),
                     child: Center(
-                      child: Text('ADD MORE'.tr(), style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+                      child: Text('ADD MORE'.tr(), style: const TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
                     ),
                   ).gestures(
                     onTap: () async {
