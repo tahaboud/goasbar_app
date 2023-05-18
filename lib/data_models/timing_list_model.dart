@@ -12,9 +12,9 @@ class TimingListModel {
     count = json['count'];
     next = json['next'];
     previous = json['previous'];
-    if (json['results'] != null) {
+    if (json['response'] != null) {
       results = <TimingResponse>[];
-      json['results'].forEach((v) {
+      json['response'].forEach((v) {
         results!.add(TimingResponse.fromJson(v));
       });
     }
