@@ -9,6 +9,7 @@ import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/checkout/checkout_viewmodel.dart';
 import 'package:goasbar/ui/widgets/info_item.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
+import 'package:goasbar/ui/widgets/payment_method_card.dart';
 import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -50,6 +51,35 @@ class CheckoutView extends HookWidget {
                   ],
                 ),
                 verticalSpaceMedium,
+                !model.dataReady ? const SizedBox() : model.data!.response!.isEmpty ? const SizedBox() : Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text('Registered Cards'.tr()),
+                  ],
+                ),
+                !model.dataReady ? const SizedBox() : model.data!.response!.isEmpty ? const SizedBox() : verticalSpaceSmall,
+                Column(
+                  children: model.dataReady ? model.data!.response!.isEmpty ? [
+                    const SizedBox()
+                  ] : [
+                    for (var card in model.data!.response!)
+                      PaymentMethodCard(text: 'xxxx - xxxx - xxxx - ${card.lastDigits}', method: card.brand == "VS" ? 'visa_method' : 'mada_method').gestures(
+                        onTap: () {
+                          model.updateIsRegisteredCardSelected(registeredCard: card);
+                        }
+                      ).backgroundColor(model.selectedRegisteredCard!.registrationId == card.registrationId ? kMainColor1 : Colors.transparent, animate: true).clipRRect(all: 10).animate(const Duration(milliseconds: 300), Curves.decelerate),
+                  ] : [
+                    const Loader().center()
+                  ],
+                ),
+                !model.dataReady ? const SizedBox() : model.data!.response!.isEmpty ? const SizedBox() : const Divider(height: 50, thickness: 1.2),
+                !model.dataReady ? const SizedBox() : model.data!.response!.isEmpty ? const SizedBox() : Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text('New Payment Card'.tr()),
+                  ],
+                ),
+                !model.dataReady ? const SizedBox() : model.data!.response!.isEmpty ? const SizedBox() : verticalSpaceSmall,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -175,21 +205,25 @@ class CheckoutView extends HookWidget {
                   child: model.isClicked! ? const Loader().center() : Text('Continue with Payment'.tr(), style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
                 ).gestures(
                   onTap:  () {
-                    if (cardNumber.text.isNotEmpty && cvv.text.isNotEmpty && expiryDate.text.isNotEmpty) {
-                      model.prepareCheckout(
-                        context: context,
-                        user: user,
-                        bookingId: booking!.response!.id,
-                        cardHolder: "cardNumber.text",
-                        cardNumber: cardNumber.text,
-                        cVV: cvv.text,
-                        expiryMonth: expiryDate.text.substring(0, 2),
-                        expiryYear: expiryDate.text.substring(3),
-                        body: {
-                          "payment_method": model.selectedPaymentMethod == 1 ? 'MADA' : model.selectedPaymentMethod == 2 ? 'VISA' : 'APPLEPAY',
-                        },);
+                    if (model.selectedRegisteredCard!.registrationId != "") {
+                      //TODO pay with registered cards
                     } else {
-                      showMotionToast(context: context, title: 'Warning', msg: "All filed must be filled.", type: MotionToastType.warning);
+                      if (cardNumber.text.isNotEmpty && cvv.text.isNotEmpty && expiryDate.text.isNotEmpty) {
+                        model.prepareCheckout(
+                          context: context,
+                          user: user,
+                          bookingId: booking!.response!.id,
+                          cardHolder: cardHolder.text,
+                          cardNumber: cardNumber.text,
+                          cVV: cvv.text,
+                          expiryMonth: expiryDate.text.substring(0, 2),
+                          expiryYear: expiryDate.text.substring(3),
+                          body: {
+                            "payment_method": model.selectedPaymentMethod == 1 ? 'MADA' : model.selectedPaymentMethod == 2 ? 'VISA' : 'APPLEPAY',
+                          },);
+                      } else {
+                        showMotionToast(context: context, title: 'Warning', msg: "All filed must be filled.", type: MotionToastType.warning);
+                      }
                     }
                   },
                 ),
@@ -198,7 +232,7 @@ class CheckoutView extends HookWidget {
           ),
         ),
       ),
-      viewModelBuilder: () => CheckoutViewModel(),
+      viewModelBuilder: () => CheckoutViewModel(context: context),
     );
   }
 }
