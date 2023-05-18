@@ -15,6 +15,7 @@ import 'package:goasbar/ui/views/splash/splash_view.dart';
 import 'package:http/http.dart' as http;
 import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:goasbar/data_models/cards_model.dart';
 
 class AuthService {
   final _navigationService = locator<NavigationService>();
@@ -232,7 +233,7 @@ class AuthService {
     });
   }
 
-  Future<List?> getUserCards({String? token, context,}) async {
+  Future<CardsModel?> getUserCards({String? token, context,}) async {
     return http.get(
       Uri.parse("$baseUrl/api/auth/cards/"),
       headers: {
@@ -240,8 +241,9 @@ class AuthService {
         "Authorization": "Token $token",
       },
     ).then((response) {
+      print(response.body);
       if (response.statusCode == 200) {
-        return [];
+        return CardsModel.fromJson(jsonDecode(response.body));
       } else if (response.statusCode == 401) {
         unAuthClearAndRestart(context: context,);
         return null;
@@ -261,7 +263,7 @@ class AuthService {
       body: body,
     ).then((response) {
       if (response.statusCode == 201) {
-        return getRegistrationStatus(id: jsonDecode(response.body)['id'], context: context, token: token, cardType: body["card_type"]);
+        return jsonDecode(response.body)['id'];
       } else if (response.statusCode == 401) {
         unAuthClearAndRestart(context: context,);
         return null;
@@ -272,21 +274,21 @@ class AuthService {
   }
 
   Future<String?> getRegistrationStatus({id, String? token, context, cardType}) async {
-    return http.get(
-      Uri.parse("https://eu-test.oppwa.com/v1/checkouts/$id/payment"),
+    return http.put(
+      Uri.parse("$baseUrl/api/auth/cards/"),
+      headers: {
+        "Accept-Language": "en-US",
+        "Authorization": "Token $token",
+      },
+      body: {
+        "checkout_id": id,
+        "card_type": cardType,
+      },
     ).then((response) {
       print("----------------------------");
       print(response.body);
       print("----------------------------");
 
-      if (jsonDecode(response.body)['result']['description'] != "transaction pending") {
-        return saveNewCard(token: token, context: context, body: {
-          "checkout_id": jsonDecode(response.body)['id'],
-          "card_type": cardType,
-        });
-      } else {
-        return null;
-      }
     });
   }
 
