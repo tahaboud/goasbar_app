@@ -42,14 +42,13 @@
               />
 
             <intent-filter>
-                <data android:scheme="com.goasbar.goAsbar"/>
-
-                <action android:name="android.intent.action.VIEW"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <data android:scheme="goasbar" />
             </intent-filter>
-
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
