@@ -42,9 +42,6 @@ class AddPaymentMethodViewModel extends BaseViewModel {
           "cvv": cVV,
         });
         print(result);
-
-
-
         _authService.getRegistrationStatus(id: value, context: context, token: token, cardType: cardType);
       } on PlatformException catch (e) {
 
