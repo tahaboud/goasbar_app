@@ -239,6 +239,7 @@ class TripDetailView extends HookWidget {
                     children: [
                       Image.asset("assets/icons/communication.png",),
                       horizontalSpaceSmall,
+                      //TODO test here if experience.providerId == user.providerId to not chat with yourself
                       Text('Start Chat'.tr(), style: const TextStyle(color: kMainColor1,),).gestures(onTap: () => model.navigateTo(view: user == null ? const LoginView() : ChatWithAgencyView(providerId: experience!.providerId, userId: user!.id, providerName: "Provider",))),
                     ],
                   ).padding(horizontal: 20),
