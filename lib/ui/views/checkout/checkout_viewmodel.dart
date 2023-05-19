@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/cards_model.dart';
 import 'package:goasbar/data_models/user_model.dart';
@@ -19,6 +20,7 @@ class CheckoutViewModel extends FutureViewModel<CardsModel?> {
   BuildContext? context;
   CheckoutViewModel({this.context});
 
+  static const platform = MethodChannel('Hyperpay.demo.fultter/channel');
   final _navigationService = locator<NavigationService>();
   int? selectedPaymentMethod = 1;
   String? checkoutId;
@@ -59,7 +61,32 @@ class CheckoutViewModel extends FutureViewModel<CardsModel?> {
     notifyListeners();
   }
 
-  Future prepareCheckout({context, UserModel? user, int? bookingId, Map? body, String? cardNumber, String? cardHolder,
+  Future prepareCheckoutTokenization({context, int? bookingId, Map? body, registrationId, brand}) async {
+
+    updateIsClicked(value: true);
+    String? token = await _tokenService.getTokenValue();
+    await _bookingApiService.prepareCheckout(context: context, token: token, bookingId: bookingId, body: body,).then((value) async{
+      updateIsClicked(value: false);
+      if (value != null) {
+        print(value);
+
+        try {
+          final String result = await platform.invokeMethod('paywithsavedcard', {
+            "checkoutid": value,
+            "brand": brand,
+            "tokenid": registrationId,
+          });
+          print(result);
+          _authService.getRegistrationStatus(id: value, context: context, token: token,
+            cardType: brand == "VS" ? "VISA" : "MADA",);
+        } on PlatformException catch (e) {
+
+        }
+      }
+    });
+  }
+
+  Future prepareCheckoutPayment({context, UserModel? user, int? bookingId, Map? body, String? cardNumber, String? cardHolder,
     String? expiryMonth, String? expiryYear, String? cVV,}) async {
 
     updateIsClicked(value: true);
