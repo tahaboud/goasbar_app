@@ -199,7 +199,7 @@ class TripDetailView extends HookWidget {
                     children: [
                       Row(
                         children: [
-                          Text('${"Hosted by".tr()} :', style: TextStyle(fontSize: 16)),
+                          Text('${"Hosted by".tr()} :', style: const TextStyle(fontSize: 16)),
                           Text(' ${model.provider!.response!.nickname}', style: const TextStyle(fontSize: 16, color: kMainColor1)).gestures(
                             onTap: () => model.navigateTo(view: ProviderProfileView(provider: model.provider!.response!, user: user),)
                           ),
@@ -239,7 +239,7 @@ class TripDetailView extends HookWidget {
                     children: [
                       Image.asset("assets/icons/communication.png",),
                       horizontalSpaceSmall,
-                      Text('Start Chat'.tr(), style: TextStyle(color: kMainColor1,),).gestures(onTap: () => model.navigateTo(view: user == null ? const LoginView() : ChatWithAgencyView(providerId: experience!.providerId, userId: user!.id, providerName: "Provider",))),
+                      Text('Start Chat'.tr(), style: const TextStyle(color: kMainColor1,),).gestures(onTap: () => model.navigateTo(view: user == null ? const LoginView() : ChatWithAgencyView(providerId: experience!.providerId, userId: user!.id, providerName: "Provider",))),
                     ],
                   ).padding(horizontal: 20),
                   verticalSpaceRegular,
@@ -301,7 +301,7 @@ class TripDetailView extends HookWidget {
                     Row(
                       children: [
                         Text('${experience!.price!} SR', style: const TextStyle(color: kMainColor1, fontSize: 18)),
-                        Text(' / Person'.tr(), style: TextStyle(color: kMainGray, fontSize: 18)),
+                        Text(' / Person'.tr(), style: const TextStyle(color: kMainGray, fontSize: 18)),
                       ],
                     ),
                     verticalSpaceTiny,
@@ -315,7 +315,7 @@ class TripDetailView extends HookWidget {
                     borderRadius: BorderRadius.all(Radius.circular(8)),
                     gradient: kMainGradient,
                   ),
-                  child: Text('Book Now'.tr(), style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),)
+                  child: Text('Book Now'.tr(), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),)
                       .center()
                       .gestures(onTap: () {
                         model.navigateTo(view: user == null ? const LoginView() : ConfirmBookingView(experience: experience, user: user,));
