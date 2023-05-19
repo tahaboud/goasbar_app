@@ -524,7 +524,7 @@ packages:
       name: hyperpay_plugin
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.1"
   image_picker:
     dependency: "direct main"
     description:
