@@ -207,9 +207,17 @@ class CheckoutView extends HookWidget {
                   onTap:  () {
                     if (model.selectedRegisteredCard!.registrationId != "") {
                       //TODO pay with registered cards
+                      model.prepareCheckoutTokenization(
+                        context: context,
+                        brand: model.selectedRegisteredCard!.brand,
+                        registrationId: model.selectedRegisteredCard!.registrationId,
+                        bookingId: booking!.response!.id,
+                        body: {
+                          "payment_method": model.selectedPaymentMethod == 1 ? 'MADA' : model.selectedPaymentMethod == 2 ? 'VISA' : 'APPLEPAY',
+                        },);
                     } else {
                       if (cardNumber.text.isNotEmpty && cvv.text.isNotEmpty && expiryDate.text.isNotEmpty) {
-                        model.prepareCheckout(
+                        model.prepareCheckoutPayment(
                           context: context,
                           user: user,
                           bookingId: booking!.response!.id,
