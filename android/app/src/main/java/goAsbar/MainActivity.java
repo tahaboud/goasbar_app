@@ -44,7 +44,7 @@ public class MainActivity extends FlutterActivity implements ITransactionListene
     private String checkoutid = "";
     private MethodChannel.Result Result;
     private String type = "";
-    private String number,holder,cvv,year,month,brand, checkoutId, expiryMonth, expiryYear;
+    private String number,tokenId,holder,cvv,year,month,brand, checkoutId, expiryMonth, expiryYear;
     private  String mode = "";
     private String STCPAY = "";
     OppPaymentProvider paymentProvider = new OppPaymentProvider(MainActivity.this, Connect.ProviderMode.LIVE);
@@ -161,6 +161,30 @@ public class MainActivity extends FlutterActivity implements ITransactionListene
                                         expiryYear,
                                         cvv
                                 );
+
+                                Toast.makeText(getBaseContext(),"Start",Toast.LENGTH_LONG).show();
+                                // Set shopper result URL
+                                paymentParams.setShopperResultUrl("goasbar://result");
+
+
+                                Transaction transaction = null;
+
+                                try {
+                                    transaction = new Transaction(paymentParams);
+                                    paymentProvider.registerTransaction(transaction, MainActivity.this);
+                                } catch (PaymentException ee) {
+                                    ee.printStackTrace();
+                                }
+                            } catch (PaymentException e) {
+                                e.printStackTrace();
+                            }
+                        } else if (call.method.equals("paywithsavedcard")) {
+                            checkoutId = call.argument("checkoutid");
+                            brand = call.argument("brand");
+                            tokenId = call.argument("tokenid");
+
+                            try {
+                                TokenPaymentParams paymentParams = new TokenPaymentParams(checkoutid, tokenId, brand);
 
                                 Toast.makeText(getBaseContext(),"Start",Toast.LENGTH_LONG).show();
                                 // Set shopper result URL
