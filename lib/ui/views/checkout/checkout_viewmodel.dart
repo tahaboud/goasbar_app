@@ -110,19 +110,58 @@ class CheckoutViewModel extends FutureViewModel<CardsModel?> {
       lang: InAppPaymentSetting.getLang(),
     );
 
-    payRequestNowCustomUi(
-      user: user,
-      context: context,
-      bookingId: bookingId,
-      token: token,
-      cardNumber: cardNumber!,
-      brandName: brand!,
-      checkoutId: checkoutId!,
-      cvv: int.parse(cVV!),
-      holderName: cardHolder,
-      month: int.parse(expiryMonth!),
-      year: int.parse(expiryYear!),
+    if (Platform.isIOS) {
+      payRequestNowReadyUI(checkoutId: checkoutId!, context: context, token: token, user: user, bookingId: bookingId);
+    } else {
+      payRequestNowCustomUi(
+        user: user,
+        context: context,
+        bookingId: bookingId,
+        token: token,
+        cardNumber: cardNumber!,
+        brandName: brand!,
+        checkoutId: checkoutId!,
+        cvv: int.parse(cVV!),
+        holderName: cardHolder,
+        month: int.parse(expiryMonth!),
+        year: int.parse(expiryYear!),
+      );
+    }
+  }
+
+  payRequestNowReadyUI({required String checkoutId, context, UserModel? user, int? bookingId, String? token,}) async {
+    PaymentResultData paymentResultData;
+    paymentResultData = await flutterHyperPay!.readyUICards(
+      readyUI: ReadyUI(
+          brandsName: ["MADA", "VISA" ,"MASTER", "APPLEPAY"],
+          checkoutId: checkoutId,
+          merchantIdApplePayIOS: InAppPaymentSetting.merchantId, // applepay
+          countryCodeApplePayIOS: InAppPaymentSetting.countryCode, // applePay
+          companyNameApplePayIOS: "Go Asbar", // applePay
+          themColorHexIOS: "#000000" ,// FOR IOS ONLY
+          setStorePaymentDetailsMode: true // store payment details for future use
+      ),
     );
+
+    if (paymentResultData.paymentResult == PaymentResult.success ||
+        paymentResultData.paymentResult == PaymentResult.sync) {
+
+      print('-------------------------------------');
+      print('DONE');
+
+      _dialogService.showCustomDialog(variant: DialogType.waitingUntilPaymentFinished, barrierDismissible: false, );
+
+      bool? bookingState = await _bookingApiService.getPaymentStatus(context: context, token: token, bookingId: bookingId);
+      if (bookingState!) {
+        Navigator.pop(context);
+        _navigationService.clearTillFirstAndShowView(BookingsHistoryView(user: user!, ));
+      } else {
+        Navigator.pop(context);
+        // showMotionToast(context: context, title: 'Error Payment', msg: "Payment Failed, Please Retry Payment", type: MotionToastType.error);
+      }
+    } else {
+      showMotionToast(context: context, title: 'Error Payment', msg: "Payment Failed, Please Retry Payment", type: MotionToastType.error);
+    }
   }
 
   payRequestNowCustomUi(
@@ -131,6 +170,7 @@ class CheckoutViewModel extends FutureViewModel<CardsModel?> {
         required String checkoutId , required String cardNumber}) async {
     PaymentResultData paymentResultData;
 
+    //TODO update infos
     paymentResultData = await flutterHyperPay!.customUICards(
       customUI: CustomUI(
         brandName: "VISA",
@@ -184,6 +224,8 @@ class CheckoutViewModel extends FutureViewModel<CardsModel?> {
 
 class InAppPaymentSetting {
   static const String shopperResultUrl= "goasbar";
+  static const String merchantId= "MerchantId";
+  static const String countryCode="SA";
   static getLang() {
     if (Platform.isIOS) {
       return  "en"; // ar
