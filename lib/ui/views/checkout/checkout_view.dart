@@ -114,7 +114,7 @@ class CheckoutView extends HookWidget {
                         border: Border.all(width: model.selectedPaymentMethod == 3 ? 2 : 1.5, color: model.selectedPaymentMethod == 3 ? Colors.blue : Colors.grey)
                       ),
                       child: Image.asset("assets/icons/checkout/apple_pay.png",).gestures(
-                        onTap: () => model.selectPaymentMethod(value: 4),
+                        onTap: () => model.selectPaymentMethod(value: 3),
                       ),
                     ),
                   ],
@@ -209,7 +209,7 @@ class CheckoutView extends HookWidget {
                       //TODO pay with registered cards
                       model.prepareCheckoutTokenization(
                         context: context,
-                        brand: model.selectedRegisteredCard!.brand,
+                        brand: model.selectedRegisteredCard!.brand == "VS" ? "VISA" : "MADA",
                         registrationId: model.selectedRegisteredCard!.registrationId,
                         bookingId: booking!.response!.id,
                         body: {
