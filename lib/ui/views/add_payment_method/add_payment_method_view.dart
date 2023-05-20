@@ -50,8 +50,8 @@ class AddPaymentMethodView extends HookWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              AddPaymentMethodCard(image: 'mada_method', isSelected: model.selectedCardType == 1, onTap: () => model.changeSelection(index: 2)),
-                              AddPaymentMethodCard(image: 'visa_method', isSelected: model.selectedCardType == 2, onTap: () => model.changeSelection(index: 1)),
+                              AddPaymentMethodCard(image: 'mada_method', isSelected: model.selectedCardType == 1, onTap: () => model.changeSelection(index: 1)),
+                              AddPaymentMethodCard(image: 'visa_method', isSelected: model.selectedCardType == 2, onTap: () => model.changeSelection(index: 2)),
                             ],
                           ),
                           verticalSpaceLarge,
