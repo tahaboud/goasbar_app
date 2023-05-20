@@ -139,7 +139,7 @@ class CheckoutViewModel extends FutureViewModel<CardsModel?> {
           countryCodeApplePayIOS: InAppPaymentSetting.countryCode, // applePay
           companyNameApplePayIOS: "Go Asbar", // applePay
           themColorHexIOS: "#000000" ,// FOR IOS ONLY
-          setStorePaymentDetailsMode: true // store payment details for future use
+          setStorePaymentDetailsMode: false, // store payment details for future use
       ),
     );
 
