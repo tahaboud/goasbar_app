@@ -1236,7 +1236,7 @@ class AddExperienceView extends HookWidget {
                                         completer(SheetResponse(confirmed: true));
                                       });
                                     } else {
-                                      showMotionToast(context: context, title: 'Update Experience Failed', msg: 'An error occurred while updating the experience, please try again.', type: MotionToastType.error);
+
                                     }
                                   });
                                 }
@@ -1304,12 +1304,7 @@ class AddExperienceView extends HookWidget {
                                       completer(SheetResponse(confirmed: true));
                                     });
                                   } else {
-                                    MotionToast.error(
-                                      title: const Text("Create Experience Failed"),
-                                      description: const Text("An error occurred while creating the experience, please try again."),
-                                      animationCurve: Curves.easeIn,
-                                      animationDuration: const Duration(milliseconds: 200),
-                                    ).show(context);
+
                                   }
                                 });
                               }
