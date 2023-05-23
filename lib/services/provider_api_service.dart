@@ -29,7 +29,7 @@ class ProviderApiService {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
-        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Create Provider Failed', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return null;
       }
     });
@@ -45,14 +45,16 @@ class ProviderApiService {
     ).then((response) {
       if (response.statusCode == 200) {
         return ProviderModel.fromJson(jsonDecode(response.body));
+      } else if (response.statusCode == 401) {
+        _authService.unAuthClearAndRestart(context: context,);
+        return null;
       } else {
-        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return null;
       }
     });
   }
 
-  Future<PublicProviderModel?> getPublicProviderInfo({int? providerId, context}) async {
+  Future<PublicProviderModel?> getPublicProviderInfo({int? providerId}) async {
     return http.get(
       Uri.parse("$baseUrl/api/provider/$providerId/"),
       headers: {
@@ -62,13 +64,12 @@ class ProviderApiService {
       if (response.statusCode == 200) {
         return PublicProviderModel.fromJson(jsonDecode(response.body));
       } else {
-        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return null;
       }
     });
   }
 
-  Future<ProviderPublicExperienceModel?> getProviderPublicExperiences({int? providerId, int? page, context}) async {
+  Future<ProviderPublicExperienceModel?> getProviderPublicExperiences({int? providerId, int? page}) async {
     return http.get(
       Uri.parse("$baseUrl/api/experience/provider/public/$providerId/?page=$page"),
       headers: {
@@ -78,7 +79,6 @@ class ProviderApiService {
       if (response.statusCode == 200) {
         return ProviderPublicExperienceModel.fromJson(jsonDecode(response.body));
       } else {
-        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return null;
       }
     });
@@ -99,7 +99,7 @@ class ProviderApiService {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
-        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Update Provider Failed', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return null;
       }
     });
