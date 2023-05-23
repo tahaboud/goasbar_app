@@ -46,10 +46,10 @@ dependencies:
 
   # chat firebase
   cloud_firestore: ^4.4.5
-  firebase_core: ^2.8.0
+  firebase_core: ^2.13.0
 
   # firebase auth
-  firebase_auth: ^4.3.0
+  firebase_auth: ^4.6.1
 
   # connectivity
   connectivity_plus: ^3.0.3
