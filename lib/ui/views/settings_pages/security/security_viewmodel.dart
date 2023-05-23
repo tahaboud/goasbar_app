@@ -28,7 +28,7 @@ class SecurityViewModel extends BaseViewModel {
     return _validationService.passwordValidation(value);
   }
 
-  Future<bool?> resetPassword({String? phoneNumber, String? code, String? password}) async {
-    return await _authService.resetPassword(phoneNumber: phoneNumber, code: code, password: password,);
+  Future<bool?> resetPassword({String? phoneNumber, String? code, String? password, context}) async {
+    return await _authService.resetPassword(phoneNumber: phoneNumber, code: code, password: password, context: context);
   }
 }
