@@ -167,7 +167,7 @@ class SecurityView extends HookWidget {
                   ).gestures(
                     onTap: password.text.isNotEmpty && newPassword.text.isNotEmpty && code.text.isNotEmpty ? () {
                       if (code.text.length == 5) {
-                        model.resetPassword(phoneNumber: phoneNumber, code: code.text, password: password.text).then((value) {
+                        model.resetPassword(context: context, phoneNumber: phoneNumber, code: code.text, password: password.text).then((value) {
                           if (value!) {
                             model.back();
                             model.back();
