@@ -234,12 +234,11 @@ class TripDetailView extends HookWidget {
                       Text(experience!.gender! == "None" ? 'Valid for All' : experience!.gender!, style: const TextStyle(color: kMainDisabledGray),)
                     ],
                   ).padding(horizontal: 20),
-                  verticalSpaceRegular,
-                  Row(
+                  experience!.providerId == user!.providerId ? const SizedBox() : verticalSpaceRegular,
+                  experience!.providerId == user!.providerId ? const SizedBox() : Row(
                     children: [
                       Image.asset("assets/icons/communication.png",),
                       horizontalSpaceSmall,
-                      //TODO test here if experience.providerId == user.providerId to not chat with yourself
                       Text('Start Chat'.tr(), style: const TextStyle(color: kMainColor1,),).gestures(onTap: () => model.navigateTo(view: user == null ? const LoginView() : ChatWithAgencyView(providerId: experience!.providerId, userId: user!.id, providerName: "Provider",))),
                     ],
                   ).padding(horizontal: 20),
