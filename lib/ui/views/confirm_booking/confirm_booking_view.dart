@@ -446,7 +446,7 @@ class ConfirmBookingView extends HookWidget {
                           if (value != null) {
                             model.navigateTo(view: CheckoutView(experience: experience, user: user, usersCount: model.numberOfGuests! + 1, booking: value));
                           } else {
-                            showMotionToast(context: context, msg: "An error occurred while creating the booking, please try again.", title: 'Create Booking Failed', type: MotionToastType.error);
+
                           }
                         });
                       }
