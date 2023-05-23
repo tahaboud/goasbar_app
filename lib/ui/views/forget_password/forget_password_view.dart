@@ -102,7 +102,7 @@ class ForgetPasswordView extends HookWidget {
                     )
                 ).gestures(
                   onTap: phoneNumber.text.isNotEmpty ? () {
-                    model.forgetPassword(phoneNumber: "+966${phoneNumber.text}").then((value) {
+                    model.forgetPassword(phoneNumber: "+966${phoneNumber.text}", context: context).then((value) {
                       if (value!) {
                         MotionToast.success(
                           title: const Text("Request Password Success"),
