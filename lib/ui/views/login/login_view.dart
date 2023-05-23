@@ -134,12 +134,7 @@ class LoginView extends HookWidget {
                     if (value) {
                       model.clearAndNavigateTo(view: const HomeView(isUser: true));
                     } else {
-                      MotionToast.warning(
-                        title: const Text("Login Failed"),
-                        description: const Text("An error has occurred, please try again"),
-                        animationCurve: Curves.easeIn,
-                        animationDuration: const Duration(milliseconds: 200),
-                      ).show(context);
+
                     }
                   });
                 } : () {},
