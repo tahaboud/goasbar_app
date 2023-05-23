@@ -49,14 +49,14 @@ class ExperienceViewModel extends FutureViewModel<List<ExperienceResults?>?> {
     if (index! % 10 == 0) {
       pageNumber++;
       print("index : $index");
-      ExperienceModel? experienceModelsList = await _experienceApiService.getPublicExperiences(page: pageNumber, context: context);
+      ExperienceModel? experienceModelsList = await _experienceApiService.getPublicExperiences(page: pageNumber);
       experienceModels!.results!.addAll(experienceModelsList!.results!);
       notifyListeners();
     }
   }
 
   Future<List<ExperienceResults?>?> getPublicExperiences({String? query, int? page}) async {
-    experienceModels = await _experienceApiService.getPublicExperiences(query: query, page: page, context: context);
+    experienceModels = await _experienceApiService.getPublicExperiences(query: query, page: page,);
     notifyListeners();
     return experienceModels!.results ?? [];
   }
