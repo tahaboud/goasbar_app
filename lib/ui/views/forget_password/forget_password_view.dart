@@ -112,12 +112,7 @@ class ForgetPasswordView extends HookWidget {
                         ).show(context);
                         model.navigateTo(view: const ResetPasswordView());
                       } else {
-                        MotionToast.error(
-                          title: const Text("Request Password Failed"),
-                          description: const Text("Request was cancelled, please try again"),
-                          animationCurve: Curves.easeIn,
-                          animationDuration: const Duration(milliseconds: 200),
-                        ).show(context);
+
                       }
                     });
                   } : () {},
