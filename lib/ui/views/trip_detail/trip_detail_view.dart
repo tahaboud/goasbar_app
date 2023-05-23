@@ -327,7 +327,7 @@ class TripDetailView extends HookWidget {
           ],
         ),
       ),
-      viewModelBuilder: () => TripDetailViewModel(user: user, experience: experience),
+      viewModelBuilder: () => TripDetailViewModel(context: context, user: user, experience: experience),
     );
   }
 }
