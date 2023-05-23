@@ -38,7 +38,7 @@ class ExperienceApiService {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
-        showMotionToast(context: context, title: 'Error', msg: response.data["errors"]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Create Experience Failed', msg: response.data["errors"]['detail'], type: MotionToastType.error);
         return null;
       }
     });
@@ -58,13 +58,12 @@ class ExperienceApiService {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
-        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return null;
       }
     });
   }
 
-  Future<ExperienceModel?> getPublicExperiences({String? query, int? page, context}) async {
+  Future<ExperienceModel?> getPublicExperiences({String? query, int? page}) async {
     return http.get(
       Uri.parse(query != null && query.isNotEmpty ? "$baseUrl/api/experience/$query&page=$page" : "$baseUrl/api/experience/?page=$page"),
       headers: {
@@ -74,13 +73,12 @@ class ExperienceApiService {
       if (response.statusCode == 200) {
         return ExperienceModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
       } else {
-        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return null;
       }
     });
   }
 
-  Future<TimingListModel?> getExperiencePublicTimings({int? experienceId, int? page, context}) async {
+  Future<TimingListModel?> getExperiencePublicTimings({int? experienceId, int? page}) async {
     return http.get(
       Uri.parse("$baseUrl/api/experience/timing/$experienceId/?page=$page"),
       headers: {
@@ -90,7 +88,6 @@ class ExperienceApiService {
       if (response.statusCode == 200) {
         return TimingListModel.fromJson(jsonDecode(response.body));
       } else {
-        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return null;
       }
     });
@@ -119,7 +116,7 @@ class ExperienceApiService {
           _authService.unAuthClearAndRestart(context: context,);
           return null;
         } else {
-          showMotionToast(context: context, title: 'Error', msg: response.data["errors"]['detail'], type: MotionToastType.error);
+          showMotionToast(context: context, title: 'Update Experience Failed', msg: response.data["errors"]['detail'], type: MotionToastType.error);
           return null;
         }
       });
@@ -162,7 +159,7 @@ class ExperienceApiService {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
-        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Delete Experience Failed', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return false;
       }
     });
@@ -182,7 +179,7 @@ class ExperienceApiService {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
-        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Update Experience Image Failed', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return false;
       }
     });
