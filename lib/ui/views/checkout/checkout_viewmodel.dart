@@ -61,7 +61,7 @@ class CheckoutViewModel extends FutureViewModel<CardsModel?> {
     notifyListeners();
   }
 
-  Future prepareCheckoutTokenization({context, int? bookingId, Map? body, registrationId, brand}) async {
+  Future prepareCheckoutTokenization({context, cvv, int? bookingId, Map? body, registrationId, brand}) async {
 
     updateIsClicked(value: true);
     String? token = await _tokenService.getTokenValue();
@@ -69,12 +69,16 @@ class CheckoutViewModel extends FutureViewModel<CardsModel?> {
       updateIsClicked(value: false);
       if (value != null) {
         print(value);
+        print(registrationId);
+        print(brand);
+        print(cvv);
 
         try {
           final String result = await platform.invokeMethod('paywithsavedcard', {
             "checkoutid": value,
-            "brand": brand,
+            "brand": "VS",
             "tokenid": registrationId,
+            "cvv": cvv,
           });
           print(result);
           _authService.getRegistrationStatus(id: value, context: context, token: token,
