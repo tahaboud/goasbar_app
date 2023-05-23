@@ -31,7 +31,7 @@ class BookingApiService {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
-        showMotionToast(context: context, title: 'Create Booking Failed', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Create Booking Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
         return null;
       }
     });
@@ -52,7 +52,7 @@ class BookingApiService {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
-        showMotionToast(context: context, title: 'Prepare Checkout Failed', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Prepare Checkout Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
         return null;
       }
     });
@@ -134,7 +134,7 @@ class BookingApiService {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
-        showMotionToast(context: context, title: 'Delete Booking Failed', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Delete Booking Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
         return false;
       }
     });
