@@ -146,7 +146,7 @@ class SettingsView extends HookWidget {
                         model.clearToken();
                         model.clearAndNavigateTo(view: const LoginView());
                       } else {
-                        showMotionToast(context: context, title: 'Logout Failed', msg: "An error has occurred, please try again", type: MotionToastType.error);
+
                       }
                     });
                   }),
