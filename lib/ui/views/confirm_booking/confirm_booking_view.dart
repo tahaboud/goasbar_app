@@ -458,7 +458,7 @@ class ConfirmBookingView extends HookWidget {
           ),
         ),
       ),
-      viewModelBuilder: () => ConfirmBookingViewModel(experienceId: experience!.id),
+      viewModelBuilder: () => ConfirmBookingViewModel(context: context, experienceId: experience!.id),
     );
   }
 }
