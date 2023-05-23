@@ -222,7 +222,7 @@ class CheckoutViewModel extends FutureViewModel<CardsModel?> {
 
 class InAppPaymentSetting {
   static const String shopperResultUrl= "goasbar";
-  static const String merchantId= "MerchantId";
+  static const String merchantId= "merchant.com.goasbar.liveApplePay";
   static const String countryCode="SA";
   static getLang() {
     if (Platform.isIOS) {

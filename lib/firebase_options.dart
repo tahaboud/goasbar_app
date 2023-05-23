@@ -66,6 +66,6 @@ class DefaultFirebaseOptions {
     databaseURL: 'https://asbar-49052-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'asbar-49052.appspot.com',
     iosClientId: '59603340838-kpf3hb640jt3dg1qlftg5s64ctqgqb0t.apps.googleusercontent.com',
-    iosBundleId: 'com.goasbar.goAsbar',
+    iosBundleId: 'com.goasbar.goAsbarApp',
   );
 }

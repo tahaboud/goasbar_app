@@ -76,7 +76,7 @@ flutter_application_id:
     id: "com.goasbar.goAsbar"
     name: "Go Asbar"
   ios:
-    id: "com.goasbar.goAsbar"
+    id: "com.goasbar.goAsbarApp"
     name: "Go Asbar"
 
 flutter:
