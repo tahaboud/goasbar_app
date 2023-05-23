@@ -284,7 +284,7 @@ class BookingForProviderDetailView extends HookWidget {
           ],
         ),
       ),
-      viewModelBuilder: () => BookingForProviderDetailViewModel(user: user, providerPublicExperience: providerPublicExperience),
+      viewModelBuilder: () => BookingForProviderDetailViewModel(context: context, user: user, providerPublicExperience: providerPublicExperience),
     );
   }
 }
