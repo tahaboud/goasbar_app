@@ -157,7 +157,6 @@ class CheckoutViewModel extends FutureViewModel<CardsModel?> {
         _navigationService.clearTillFirstAndShowView(BookingsHistoryView(user: user!, ));
       } else {
         Navigator.pop(context);
-        // showMotionToast(context: context, title: 'Error Payment', msg: "Payment Failed, Please Retry Payment", type: MotionToastType.error);
       }
     } else {
       showMotionToast(context: context, title: 'Error Payment', msg: "Payment Failed, Please Retry Payment", type: MotionToastType.error);
@@ -198,7 +197,6 @@ class CheckoutViewModel extends FutureViewModel<CardsModel?> {
         _navigationService.clearTillFirstAndShowView(BookingsHistoryView(user: user!, ));
       } else {
         Navigator.pop(context);
-        // showMotionToast(context: context, title: 'Error Payment', msg: "Payment Failed, Please Retry Payment", type: MotionToastType.error);
       }
     } else {
       showMotionToast(context: context, title: 'Error Payment', msg: "Payment Failed, Please Retry Payment", type: MotionToastType.error);
