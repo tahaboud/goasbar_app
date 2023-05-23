@@ -12,6 +12,7 @@ import 'package:motion_toast/resources/arrays.dart';
 class ChatApiService {
   final _authService = locator<AuthService>();
 
+  //TODO not working
   Future<String?> getUserFireStoreToken({context, String? token}) async {
     return http.get(
       Uri.parse("$baseUrl/api/chat/"),
