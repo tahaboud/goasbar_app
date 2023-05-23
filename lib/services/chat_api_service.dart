@@ -27,7 +27,7 @@ class ChatApiService {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
-        showMotionToast(context: context, title: 'Connection Failed', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Connection Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
         return null;
       }
     });
