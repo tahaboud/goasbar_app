@@ -72,87 +72,98 @@ class CheckoutView extends HookWidget {
                     const Loader().center()
                   ],
                 ),
-                !model.dataReady ? const SizedBox() : model.data!.response!.isEmpty ? const SizedBox() : const Divider(height: 50, thickness: 1.2),
-                !model.dataReady ? const SizedBox() : model.data!.response!.isEmpty ? const SizedBox() : Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text('New Payment Card'.tr()),
-                  ],
-                ),
-                !model.dataReady ? const SizedBox() : model.data!.response!.isEmpty ? const SizedBox() : verticalSpaceSmall,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      height: 60,
-                      width: 60,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(width: model.selectedPaymentMethod == 1 ? 2 : 1.5, color: model.selectedPaymentMethod == 1 ? Colors.blue : Colors.grey)
-                      ),
-                      child: Image.asset("assets/icons/checkout/mada.png",).gestures(
-                        onTap: () => model.selectPaymentMethod(value: 1),
-                      ),
+                if (model.selectedRegisteredCard!.registrationId != "")...[
+                  verticalSpaceMedium,
+                  SizedBox(
+                    child: InfoItem(
+                      controller: cvv,
+                      label: 'CVV',
+                      hintText: 'XXX',
                     ),
-                    Container(
-                      height: 60,
-                      width: 60,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(width: model.selectedPaymentMethod == 2 ? 2 : 1.5, color: model.selectedPaymentMethod == 2 ? Colors.blue : Colors.grey,)
+                  ),
+                ] else...[
+                  !model.dataReady ? const SizedBox() : model.data!.response!.isEmpty ? const SizedBox() : const Divider(height: 50, thickness: 1.2),
+                  !model.dataReady ? const SizedBox() : model.data!.response!.isEmpty ? const SizedBox() : Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text('New Payment Card'.tr()),
+                    ],
+                  ),
+                  !model.dataReady ? const SizedBox() : model.data!.response!.isEmpty ? const SizedBox() : verticalSpaceSmall,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        height: 60,
+                        width: 60,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(width: model.selectedPaymentMethod == 1 ? 2 : 1.5, color: model.selectedPaymentMethod == 1 ? Colors.blue : Colors.grey)
+                        ),
+                        child: Image.asset("assets/icons/checkout/mada.png",).gestures(
+                          onTap: () => model.selectPaymentMethod(value: 1),
+                        ),
                       ),
-                      child: Image.asset("assets/icons/checkout/visa.png",).gestures(
-                        onTap: () => model.selectPaymentMethod(value: 2),
+                      Container(
+                        height: 60,
+                        width: 60,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(width: model.selectedPaymentMethod == 2 ? 2 : 1.5, color: model.selectedPaymentMethod == 2 ? Colors.blue : Colors.grey,)
+                        ),
+                        child: Image.asset("assets/icons/checkout/visa.png",).gestures(
+                          onTap: () => model.selectPaymentMethod(value: 2),
+                        ),
                       ),
-                    ),
-                    if (Platform.isIOS)
-                    Container(
-                      height: 60,
-                      width: 60,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(width: model.selectedPaymentMethod == 3 ? 2 : 1.5, color: model.selectedPaymentMethod == 3 ? Colors.blue : Colors.grey)
+                      if (Platform.isIOS)
+                        Container(
+                          height: 60,
+                          width: 60,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(width: model.selectedPaymentMethod == 3 ? 2 : 1.5, color: model.selectedPaymentMethod == 3 ? Colors.blue : Colors.grey)
+                          ),
+                          child: Image.asset("assets/icons/checkout/apple_pay.png",).gestures(
+                            onTap: () => model.selectPaymentMethod(value: 3),
+                          ),
+                        ),
+                    ],
+                  ),
+                  verticalSpaceMedium,
+                  InfoItem(
+                    controller: cardHolder,
+                    label: 'Card Holder'.tr(),
+                    hintText: 'Osama Mogaitoof',
+                  ),
+                  verticalSpaceMedium,
+                  InfoItem(
+                    controller: cardNumber,
+                    label: 'Card Number'.tr(),
+                    hintText: '8585 9595 7575 6565',
+                  ),
+                  verticalSpaceMedium,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width: screenWidthPercentage(context, percentage: 0.4),
+                        child: InfoItem(
+                          controller: expiryDate,
+                          label: 'Expiration Date'.tr(),
+                          hintText: 'MM/YY',
+                        ),
                       ),
-                      child: Image.asset("assets/icons/checkout/apple_pay.png",).gestures(
-                        onTap: () => model.selectPaymentMethod(value: 3),
+                      SizedBox(
+                        width: screenWidthPercentage(context, percentage: 0.4),
+                        child: InfoItem(
+                          controller: cvv,
+                          label: 'CVV',
+                          hintText: 'XXX',
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                verticalSpaceMedium,
-                InfoItem(
-                  controller: cardHolder,
-                  label: 'Card Holder'.tr(),
-                  hintText: 'Osama Mogaitoof',
-                ),
-                verticalSpaceMedium,
-                InfoItem(
-                  controller: cardNumber,
-                  label: 'Card Number'.tr(),
-                  hintText: '8585 9595 7575 6565',
-                ),
-                verticalSpaceMedium,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      width: screenWidthPercentage(context, percentage: 0.4),
-                      child: InfoItem(
-                        controller: expiryDate,
-                        label: 'Expiration Date'.tr(),
-                        hintText: 'MM/YY',
-                      ),
-                    ),
-                    SizedBox(
-                      width: screenWidthPercentage(context, percentage: 0.4),
-                      child: InfoItem(
-                        controller: cvv,
-                        label: 'CVV',
-                        hintText: 'XXX',
-                      ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
+                ],
                 verticalSpaceMedium,
                 Container(
                   height: 180,
@@ -212,6 +223,7 @@ class CheckoutView extends HookWidget {
                         brand: model.selectedRegisteredCard!.brand == "VS" ? "VISA" : "MADA",
                         registrationId: model.selectedRegisteredCard!.registrationId,
                         bookingId: booking!.response!.id,
+                        cvv: cvv.text,
                         body: {
                           "payment_method": model.selectedPaymentMethod == 1 ? 'MADA' : model.selectedPaymentMethod == 2 ? 'VISA' : 'APPLEPAY',
                         },);
