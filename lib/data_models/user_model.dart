@@ -12,6 +12,7 @@ class UserModel {
   String? city;
   bool? emailConfirmed;
   bool? isProvider;
+  int? providerId;
 
   UserModel(
       {this.id,
@@ -25,6 +26,7 @@ class UserModel {
         this.birthDate,
         this.image,
         this.city,
+        this.providerId,
         this.emailConfirmed,
         this.isProvider});
 
@@ -42,6 +44,7 @@ class UserModel {
     city = json['city'];
     emailConfirmed = json['email_confirmed'];
     isProvider = json['is_provider'];
+    providerId = json['provider_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -59,6 +62,7 @@ class UserModel {
     data['city'] = city;
     data['email_confirmed'] = emailConfirmed;
     data['is_provider'] = isProvider;
+    data['provider_id'] = providerId;
     return data;
   }
 }
