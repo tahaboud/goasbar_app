@@ -32,7 +32,7 @@ class ChatItemViewModel extends FutureViewModel<String?> {
   }
 
   Future<String?> getProviderPicture() async {
-    PublicProviderModel? publicProviderModel = await _providerApiService.getPublicProviderInfo(providerId: id, context: context);
+    PublicProviderModel? publicProviderModel = await _providerApiService.getPublicProviderInfo(providerId: id, );
 
     return publicProviderModel!.response!.image;
   }
