@@ -4,8 +4,10 @@ import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/chat_token_provider_model.dart';
 import 'package:goasbar/services/auth_service.dart';
 import 'package:goasbar/shared/app_configs.dart';
+import 'package:goasbar/shared/ui_helpers.dart';
 // ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
+import 'package:motion_toast/resources/arrays.dart';
 
 class ChatApiService {
   final _authService = locator<AuthService>();
@@ -24,6 +26,7 @@ class ChatApiService {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
+        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return null;
       }
     });
@@ -42,11 +45,9 @@ class ChatApiService {
       } else if (response.statusCode == 401) {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
-      } else {
+      } else {showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return null;
       }
     });
   }
-
-
 }
