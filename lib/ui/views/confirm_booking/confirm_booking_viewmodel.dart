@@ -167,14 +167,14 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
     if (index! % 10 == 0) {
       pageNumber++;
       print("index : $index");
-      TimingListModel? timingList = await _experienceApiService.getExperiencePublicTimings(experienceId: experienceId, page: pageNumber, context: context);
+      TimingListModel? timingList = await _experienceApiService.getExperiencePublicTimings(experienceId: experienceId, page: pageNumber);
       timingListModel!.results!.addAll(timingList!.results!);
       notifyListeners();
     }
   }
 
   Future<TimingListModel?> getExperiencePublicTimings() async {
-    timingListModel = await _experienceApiService.getExperiencePublicTimings(experienceId: experienceId, page: pageNumber, context: context);
+    timingListModel = await _experienceApiService.getExperiencePublicTimings(experienceId: experienceId, page: pageNumber);
     notifyListeners();
 
     return timingListModel;
