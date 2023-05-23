@@ -10,6 +10,9 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:goasbar/shared/app_configs.dart';
 
 class SearchViewModel extends BaseViewModel {
+  SearchViewModel({this.context});
+  BuildContext? context;
+
   int index = 1;
   final _navigationService = locator<NavigationService>();
   final _experienceApiService = locator<ExperienceApiService>();
@@ -102,7 +105,7 @@ class SearchViewModel extends BaseViewModel {
     if (index! % 10 == 0) {
       pageNumber++;
       print("index : $index");
-      ExperienceModel? experienceModelsList = await _experienceApiService.getPublicExperiences(page: pageNumber);
+      ExperienceModel? experienceModelsList = await _experienceApiService.getPublicExperiences(page: pageNumber, context: context);
       experienceModels!.results!.addAll(experienceModelsList!.results!);
       notifyListeners();
     }
@@ -111,7 +114,7 @@ class SearchViewModel extends BaseViewModel {
   getPublicExperiences({String? query,}) async {
     setBusy(true);
     experienceModels = null;
-    experienceModels = await _experienceApiService.getPublicExperiences(query: query, page: pageNumber);
+    experienceModels = await _experienceApiService.getPublicExperiences(query: query, page: pageNumber, context: context);
     notifyListeners();
     setBusy(false);
     return experienceModels!;
