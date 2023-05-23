@@ -5,7 +5,9 @@ import 'package:goasbar/data_models/review_model.dart';
 import 'package:goasbar/data_models/review_models/reviews_list_model.dart';
 import 'package:goasbar/services/auth_service.dart';
 import 'package:goasbar/shared/app_configs.dart';
+import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:http/http.dart' as http;
+import 'package:motion_toast/resources/arrays.dart';
 
 class ReviewApiService {
   final _authService = locator<AuthService>();
@@ -26,6 +28,7 @@ class ReviewApiService {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
+        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return null;
       }
     });
@@ -48,21 +51,7 @@ class ReviewApiService {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
-        return null;
-      }
-    });
-  }
-
-  Future<ReviewsModelList?> getReviews({String? query, int? experienceId, int? page}) async {
-    return http.get(
-      Uri.parse("$baseUrl/api/review/$experienceId/?page=$page"),
-      headers: {
-        "Accept-Language": "en-US",
-      },
-    ).then((response) {
-      if (response.statusCode == 200) {
-        return ReviewsModelList.fromJson(jsonDecode(response.body));
-      } else {
+        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return null;
       }
     });
@@ -82,6 +71,7 @@ class ReviewApiService {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
+        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return false;
       }
     });
