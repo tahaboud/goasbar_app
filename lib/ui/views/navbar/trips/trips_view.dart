@@ -68,7 +68,7 @@ class TripsView extends HookWidget {
                                 if (value) {
                                   showMotionToast(context: context, title: 'Deleted Booking Successfully', msg: "Booking deleted, you will receive your refund", type: MotionToastType.success);
                                 } else {
-                                  showMotionToast(context: context, title: 'Deleted Booking Failed', msg: "This booking cannot be canceled", type: MotionToastType.error);
+
                                 }
                               }
                             },
