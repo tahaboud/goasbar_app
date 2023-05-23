@@ -13,7 +13,8 @@ import 'package:stacked_services/stacked_services.dart';
 
 class SavedExperiencesViewModel extends FutureViewModel<List<ExperienceResults?>> {
   final UserModel? user;
-  SavedExperiencesViewModel({this.user, });
+  BuildContext? context;
+  SavedExperiencesViewModel({this.user, this.context});
 
   final _navigationService = locator<NavigationService>();
   final _tokenService = locator<TokenService>();
@@ -56,7 +57,7 @@ class SavedExperiencesViewModel extends FutureViewModel<List<ExperienceResults?>
   Future<List<ExperienceResults?>> getFavoriteExperiences() async {
     favoriteList = await getUserData();
     if (favoriteList!.isNotEmpty) {
-      return await _experienceApiService.getPublicExperiences(page: 1).then((value) {
+      return await _experienceApiService.getPublicExperiences(page: 1, context: context).then((value) {
         if (value != null) {
           experienceResults = [];
           for (var experience in value.results!) {
