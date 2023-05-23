@@ -151,12 +151,7 @@ class BeHostedView extends HookWidget {
                     if (value != null) {
                       completer(SheetResponse(confirmed: true));
                     } else {
-                      MotionToast.error(
-                        title: const Text("Registering Provider Failed"),
-                        description: const Text("Registering was failed, please try again."),
-                        animationCurve: Curves.easeIn,
-                        animationDuration: const Duration(milliseconds: 200),
-                      ).show(context);
+
                     }
                   });
                 } else {
@@ -179,12 +174,7 @@ class BeHostedView extends HookWidget {
                     if (value != null) {
                       model.back();
                     } else {
-                      MotionToast.error(
-                        title: const Text("Registering Provider Failed"),
-                        description: const Text("Registering was failed, please try again."),
-                        animationCurve: Curves.easeIn,
-                        animationDuration: const Duration(milliseconds: 200),
-                      ).show(context);
+
                     }
                   });
                 }
