@@ -68,7 +68,7 @@ class SignUpOtpView extends HookWidget {
                       body!["phone_number"] = "+966$phone";
                       body!["verification_code"] = code;
 
-                      model.register(body: body!, hasImage: hasImage).then((value) {
+                      model.register(body: body!, hasImage: hasImage, context: context).then((value) {
                         if (value == StatusCode.throttled) {
                           MotionToast.error(
                             title: const Text("Register Failed"),
@@ -87,7 +87,7 @@ class SignUpOtpView extends HookWidget {
                 ),
                 const Spacer(),
                 Text('New code ${model.startStr}', style: TextStyle(color: model.start == 90 ? Colors.black : kMainGray),).gestures(onTap: () {
-                  model.resendCode(phoneNumber: "+966$phone");
+                  model.resendCode(phoneNumber: "+966$phone", context: context);
                 }),
                 verticalSpaceMedium,
               ],
