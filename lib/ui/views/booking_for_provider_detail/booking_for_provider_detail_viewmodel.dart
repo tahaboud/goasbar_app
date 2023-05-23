@@ -96,7 +96,7 @@ class BookingForProviderDetailViewModel extends FutureViewModel<PublicProviderMo
 
   Future<PublicProviderModel?> getProvider () async {
     if (user != null) getIsFav();
-    provider = await _providerApiService.getPublicProviderInfo(context: context, providerId: providerPublicExperience!.providerId);
+    provider = await _providerApiService.getPublicProviderInfo(providerId: providerPublicExperience!.providerId);
     if (providerPublicExperience!.latitude != null && providerPublicExperience!.longitude != null) {
       kGooglePlex = CameraPosition(
         target: LatLng(providerPublicExperience!.latitude, providerPublicExperience!.longitude),
