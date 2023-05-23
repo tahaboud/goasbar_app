@@ -48,7 +48,7 @@ class SavedExperiencesView extends HookWidget {
           )
         ),
       ),
-      viewModelBuilder: () => SavedExperiencesViewModel(user: user,),
+      viewModelBuilder: () => SavedExperiencesViewModel(user: user, context: context),
     );
   }
 }
