@@ -8,6 +8,9 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class ExperienceViewModel extends FutureViewModel<List<ExperienceResults?>?> {
+  BuildContext? context;
+  ExperienceViewModel({this.context});
+
   int index = 1;
   final _navigationService = locator<NavigationService>();
   final _experienceApiService = locator<ExperienceApiService>();
@@ -46,14 +49,14 @@ class ExperienceViewModel extends FutureViewModel<List<ExperienceResults?>?> {
     if (index! % 10 == 0) {
       pageNumber++;
       print("index : $index");
-      ExperienceModel? experienceModelsList = await _experienceApiService.getPublicExperiences(page: pageNumber);
+      ExperienceModel? experienceModelsList = await _experienceApiService.getPublicExperiences(page: pageNumber, context: context);
       experienceModels!.results!.addAll(experienceModelsList!.results!);
       notifyListeners();
     }
   }
 
   Future<List<ExperienceResults?>?> getPublicExperiences({String? query, int? page}) async {
-    experienceModels = await _experienceApiService.getPublicExperiences(query: query, page: page);
+    experienceModels = await _experienceApiService.getPublicExperiences(query: query, page: page, context: context);
     notifyListeners();
     return experienceModels!.results ?? [];
   }
