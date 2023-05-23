@@ -126,7 +126,7 @@ class TripDetailViewModel extends FutureViewModel<PublicProviderModel?> {
   Future<PublicProviderModel?> getProvider () async {
     if (user != null) getIsFav();
     getTimingsList();
-    provider = await _providerApiService.getPublicProviderInfo(providerId: experience!.providerId, context: context);
+    provider = await _providerApiService.getPublicProviderInfo(providerId: experience!.providerId, );
     setMapAndMarker();
     notifyListeners();
 
