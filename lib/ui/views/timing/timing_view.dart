@@ -107,7 +107,7 @@ class TimingView extends HookWidget {
                               if (value!) {
                                 showMotionToast(title: "Deleting Success", context: context, msg: "Deleting timing has done successfully.", type: MotionToastType.success);
                               } else {
-                                showMotionToast(title: "Deleting Failed", context: context, msg: "An error has occurred, please try again.", type: MotionToastType.error);
+
                               }
                             }),
                           ).gestures(onTap: () => model.showNewTimingBottomSheet(timing: model.timingListModel!.results![index],
