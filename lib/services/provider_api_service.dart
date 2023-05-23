@@ -5,9 +5,11 @@ import 'package:goasbar/data_models/provider_public_experience_model.dart';
 import 'package:goasbar/data_models/public_provider_model.dart';
 import 'package:goasbar/services/auth_service.dart';
 import 'package:goasbar/shared/app_configs.dart';
+import 'package:goasbar/shared/ui_helpers.dart';
 // ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
 import 'package:goasbar/data_models/provider_model.dart';
+import 'package:motion_toast/resources/arrays.dart';
 
 class ProviderApiService {
   final _authService = locator<AuthService>();
@@ -27,6 +29,7 @@ class ProviderApiService {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
+        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return null;
       }
     });
@@ -43,12 +46,13 @@ class ProviderApiService {
       if (response.statusCode == 200) {
         return ProviderModel.fromJson(jsonDecode(response.body));
       } else {
+        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return null;
       }
     });
   }
 
-  Future<PublicProviderModel?> getPublicProviderInfo({int? providerId}) async {
+  Future<PublicProviderModel?> getPublicProviderInfo({int? providerId, context}) async {
     return http.get(
       Uri.parse("$baseUrl/api/provider/$providerId/"),
       headers: {
@@ -58,12 +62,13 @@ class ProviderApiService {
       if (response.statusCode == 200) {
         return PublicProviderModel.fromJson(jsonDecode(response.body));
       } else {
+        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return null;
       }
     });
   }
 
-  Future<ProviderPublicExperienceModel?> getProviderPublicExperiences({int? providerId, int? page}) async {
+  Future<ProviderPublicExperienceModel?> getProviderPublicExperiences({int? providerId, int? page, context}) async {
     return http.get(
       Uri.parse("$baseUrl/api/experience/provider/public/$providerId/?page=$page"),
       headers: {
@@ -73,6 +78,7 @@ class ProviderApiService {
       if (response.statusCode == 200) {
         return ProviderPublicExperienceModel.fromJson(jsonDecode(response.body));
       } else {
+        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return null;
       }
     });
@@ -93,6 +99,7 @@ class ProviderApiService {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
+        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return null;
       }
     });
