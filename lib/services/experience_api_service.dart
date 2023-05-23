@@ -138,7 +138,7 @@ class ExperienceApiService {
           _authService.unAuthClearAndRestart(context: context,);
           return null;
         } else {
-          showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
+          showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
           return null;
         }
       });
@@ -159,7 +159,7 @@ class ExperienceApiService {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
-        showMotionToast(context: context, title: 'Delete Experience Failed', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Delete Experience Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
         return false;
       }
     });
@@ -179,7 +179,7 @@ class ExperienceApiService {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
-        showMotionToast(context: context, title: 'Update Experience Image Failed', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Update Experience Image Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
         return false;
       }
     });
