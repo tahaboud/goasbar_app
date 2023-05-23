@@ -106,12 +106,7 @@ class SignUpView extends HookWidget {
                     if (value) {
                       model.navigateTo(view: SignUpOtpView(phone: phone.text, body: body, hasImage: hasImage));
                     } else {
-                      MotionToast.error(
-                        title: const Text("Verification Code Not Sent"),
-                        description: const Text("An error has occurred, please try again."),
-                        animationCurve: Curves.easeIn,
-                        animationDuration: const Duration(milliseconds: 200),
-                      ).show(context);
+
                     }
                   });
                 } : () {},
