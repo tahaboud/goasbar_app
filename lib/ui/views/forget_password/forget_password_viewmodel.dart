@@ -18,8 +18,8 @@ class ForgetPasswordViewModel extends BaseViewModel {
     _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
   }
 
-  Future<bool?> forgetPassword({String? phoneNumber}) async {
-    return _authService.requestResetPassword(phoneNumber: phoneNumber,);
+  Future<bool?> forgetPassword({String? phoneNumber, context}) async {
+    return _authService.requestResetPassword(phoneNumber: phoneNumber, context: context);
   }
 
   String? validatePhoneNumber ({String? value}) {
