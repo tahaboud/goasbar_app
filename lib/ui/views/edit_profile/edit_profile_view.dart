@@ -293,12 +293,7 @@ class EditProfileView extends HookWidget {
                               if (value != null) {
                                 model.back();
                               } else {
-                                MotionToast.error(
-                                  title: const Text("Profile Update Failed"),
-                                  description: const Text("Profile Information Not Updated, An Error Has Occurred"),
-                                  animationCurve: Curves.easeIn,
-                                  animationDuration: const Duration(milliseconds: 200),
-                                ).show(context);
+
                               }
                             });
                           }
