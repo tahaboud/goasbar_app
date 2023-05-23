@@ -34,8 +34,8 @@ class SignUpViewModel extends BaseViewModel {
     return _validationService.validatePhoneNumber(value);
   }
 
-  Future<bool> verifyPhoneNumber({String? phoneNumber}) async {
+  Future<bool> verifyPhoneNumber({String? phoneNumber, context}) async {
     updateIsClicked(value: true);
-    return await _authService.verifyPhoneNumber(phoneNumber: phoneNumber,);
+    return await _authService.verifyPhoneNumber(phoneNumber: phoneNumber, context: context);
   }
 }
