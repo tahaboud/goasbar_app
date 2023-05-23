@@ -129,7 +129,7 @@ class LoginView extends HookWidget {
                   model.login(body: {
                     "email": userName.text,
                     "password": password.text,
-                  }).then((value) {
+                  }, context: context).then((value) {
                     model.updateIsClicked(value: false);
                     if (value) {
                       model.clearAndNavigateTo(view: const HomeView(isUser: true));
