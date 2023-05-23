@@ -59,7 +59,7 @@ class AuthService {
         } if (response.statusCode == 429) {
           return StatusCode.throttled;
         } else {
-          showMotionToast(context: context, title: 'Registration Failed', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
+          showMotionToast(context: context, title: 'Registration Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
           return null;
         }
       });
@@ -82,7 +82,7 @@ class AuthService {
       if (response.statusCode == 200) {
         return true;
       } else {
-        showMotionToast(context: context, title: 'Phone Verification Failed', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Phone Verification Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
         return false;
       }
     });
@@ -101,7 +101,7 @@ class AuthService {
         return AuthResponse.fromJson(jsonDecode(response.body));
       }
       else {
-        showMotionToast(context: context, title: 'login Failed', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'login Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
         return AuthResponse();
       }
     });
@@ -214,7 +214,7 @@ class AuthService {
       if (response.statusCode == 200) {
         return true;
       } else {
-        showMotionToast(context: context, title: 'Request Password Failed', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Request Password Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
         return false;
       }
     });
@@ -235,7 +235,7 @@ class AuthService {
       if (response.statusCode == 200) {
         return true;
       } else {
-        showMotionToast(context: context, title: 'Reset Failed', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Reset Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
         return false;
       }
     });
@@ -324,7 +324,7 @@ class AuthService {
         unAuthClearAndRestart(context: context,);
         return null;
       } else {
-        showMotionToast(context: context, title: 'Save Card Failed', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Save Card Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
         return null;
       }
     });
@@ -345,7 +345,7 @@ class AuthService {
         unAuthClearAndRestart(context: context,);
         return null;
       } else {
-        showMotionToast(context: context, title: 'Logout Failed', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Logout Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
         return false;
       }
     });
