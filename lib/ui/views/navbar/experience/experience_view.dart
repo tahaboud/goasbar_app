@@ -84,7 +84,7 @@ class ExperienceView extends HookWidget {
           )
         ),
       ),
-      viewModelBuilder: () => ExperienceViewModel(),
+      viewModelBuilder: () => ExperienceViewModel(context: context),
     );
   }
 
