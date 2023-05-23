@@ -172,12 +172,7 @@ class SecurityView extends HookWidget {
                             model.back();
                             model.back();
                           } else {
-                            MotionToast.error(
-                              title: const Text("Reset Password Failed"),
-                              description: const Text("An error has occurred, please try again."),
-                              animationCurve: Curves.easeIn,
-                              animationDuration: const Duration(milliseconds: 200),
-                            ).show(context);
+
                           }
                         });
                       } else {
