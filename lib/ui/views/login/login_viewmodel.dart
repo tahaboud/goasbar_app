@@ -43,9 +43,10 @@ class LoginViewModel extends BaseViewModel {
     _tokenService.setTokenValue(token);
   }
 
-  Future<bool> login({Map? body}) async {
+  Future<bool> login({Map? body, context}) async {
     updateIsClicked(value: true);
     authResponse = await _authService.login(
+      context: context,
       body: body,
     );
     if (authResponse!.token != null) {
