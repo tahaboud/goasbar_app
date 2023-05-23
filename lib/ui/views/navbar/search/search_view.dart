@@ -277,7 +277,7 @@ class SearchView extends HookWidget {
                         if (model.category != 'Experience Category'.tr()) query = '$query&category=${model.category}';
 
                         if (query != '') {
-                          model.getPublicExperiences(query: query.replaceFirst(r'&', '?')).then((value) {
+                          model.getPublicExperiences(query: query.replaceFirst(r'&', '?'),).then((value) {
                             if (value != null) {
 
                             } else {
@@ -405,7 +405,7 @@ class SearchView extends HookWidget {
           )
         ),
       ),
-      viewModelBuilder: () => SearchViewModel(),
+      viewModelBuilder: () => SearchViewModel(context: context),
     );
   }
 }
