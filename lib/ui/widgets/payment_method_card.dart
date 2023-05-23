@@ -22,7 +22,8 @@ class PaymentMethodCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Image.asset('assets/icons/$method.png'),
+          method == "mada_method" ? Image.asset('assets/icons/$method.png', height: 40,)
+              : Image.asset('assets/icons/$method.png'),
           horizontalSpaceRegular,
           Text(text!, style: const TextStyle(fontWeight: FontWeight.bold),)
         ],
