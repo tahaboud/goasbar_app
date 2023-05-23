@@ -154,7 +154,7 @@ class PostExperienceView extends HookWidget {
                                     if (value!) {
                                       showMotionToast(type: MotionToastType.success, context: context, title: "Deleting Success", msg: "Deleting experience has done successfully.");
                                     } else {
-                                      showMotionToast(type: MotionToastType.error, context: context, title: "Deleting Failed", msg: "An error has occurred, please try again.");
+
                                     }
                                   });
                                 }),
