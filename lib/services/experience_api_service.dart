@@ -9,8 +9,10 @@ import 'package:goasbar/data_models/experience_response.dart';
 import 'package:goasbar/data_models/timing_list_model.dart';
 import 'package:goasbar/services/auth_service.dart';
 import 'package:goasbar/shared/app_configs.dart';
+import 'package:goasbar/shared/ui_helpers.dart';
 // ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
+import 'package:motion_toast/resources/arrays.dart';
 
 class ExperienceApiService {
   final _authService = locator<AuthService>();
@@ -36,6 +38,7 @@ class ExperienceApiService {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
+        showMotionToast(context: context, title: 'Error', msg: response.data["errors"]['detail'], type: MotionToastType.error);
         return null;
       }
     });
@@ -55,12 +58,13 @@ class ExperienceApiService {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
+        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return null;
       }
     });
   }
 
-  Future<ExperienceModel?> getPublicExperiences({String? query, int? page}) async {
+  Future<ExperienceModel?> getPublicExperiences({String? query, int? page, context}) async {
     return http.get(
       Uri.parse(query != null && query.isNotEmpty ? "$baseUrl/api/experience/$query&page=$page" : "$baseUrl/api/experience/?page=$page"),
       headers: {
@@ -70,12 +74,13 @@ class ExperienceApiService {
       if (response.statusCode == 200) {
         return ExperienceModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
       } else {
+        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return null;
       }
     });
   }
 
-  Future<TimingListModel?> getExperiencePublicTimings({int? experienceId, int? page}) async {
+  Future<TimingListModel?> getExperiencePublicTimings({int? experienceId, int? page, context}) async {
     return http.get(
       Uri.parse("$baseUrl/api/experience/timing/$experienceId/?page=$page"),
       headers: {
@@ -85,6 +90,7 @@ class ExperienceApiService {
       if (response.statusCode == 200) {
         return TimingListModel.fromJson(jsonDecode(response.body));
       } else {
+        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return null;
       }
     });
@@ -113,6 +119,7 @@ class ExperienceApiService {
           _authService.unAuthClearAndRestart(context: context,);
           return null;
         } else {
+          showMotionToast(context: context, title: 'Error', msg: response.data["errors"]['detail'], type: MotionToastType.error);
           return null;
         }
       });
@@ -134,6 +141,7 @@ class ExperienceApiService {
           _authService.unAuthClearAndRestart(context: context,);
           return null;
         } else {
+          showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
           return null;
         }
       });
@@ -154,6 +162,7 @@ class ExperienceApiService {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
+        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return false;
       }
     });
@@ -173,6 +182,7 @@ class ExperienceApiService {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
+        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return false;
       }
     });
