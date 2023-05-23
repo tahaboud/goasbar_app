@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/animation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/provider_public_experience_response.dart';
 import 'package:goasbar/data_models/public_provider_model.dart';
@@ -16,8 +17,9 @@ import 'package:stacked_services/stacked_services.dart';
 
 class BookingForProviderDetailViewModel extends FutureViewModel<PublicProviderModel?> {
   UserModel? user;
+  BuildContext? context;
   ProviderPublicExperienceResults? providerPublicExperience;
-  BookingForProviderDetailViewModel({this.user, this.providerPublicExperience});
+  BookingForProviderDetailViewModel({this.user, this.providerPublicExperience, this.context});
 
   bool isFav = false;
   int pageIndex = 1;
@@ -94,7 +96,7 @@ class BookingForProviderDetailViewModel extends FutureViewModel<PublicProviderMo
 
   Future<PublicProviderModel?> getProvider () async {
     if (user != null) getIsFav();
-    provider = await _providerApiService.getPublicProviderInfo(providerId: providerPublicExperience!.providerId);
+    provider = await _providerApiService.getPublicProviderInfo(context: context, providerId: providerPublicExperience!.providerId);
     if (providerPublicExperience!.latitude != null && providerPublicExperience!.longitude != null) {
       kGooglePlex = CameraPosition(
         target: LatLng(providerPublicExperience!.latitude, providerPublicExperience!.longitude),
