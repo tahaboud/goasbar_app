@@ -107,12 +107,7 @@ class RequestPasswordView extends HookWidget {
                       if (value!) {
                         model.navigateTo(view: SecurityView(phoneNumber: "+966${phoneNumber.text}",));
                       } else {
-                        MotionToast.error(
-                          title: const Text("Request Password Failed"),
-                          description: const Text("Request was cancelled, please try again"),
-                          animationCurve: Curves.easeIn,
-                          animationDuration: const Duration(milliseconds: 200),
-                        ).show(context);
+
                       }
                     });
                   } : () {},
