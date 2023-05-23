@@ -60,12 +60,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyCi7b3McMQOD0XbOf7yXrdS2gFMSOs-vwo',
-    appId: '1:59603340838:ios:dcfaa447915898f171e0e7',
+    appId: '1:59603340838:ios:0471ce3abe26ff8371e0e7',
     messagingSenderId: '59603340838',
     projectId: 'asbar-49052',
     databaseURL: 'https://asbar-49052-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'asbar-49052.appspot.com',
-    iosClientId: '59603340838-kpf3hb640jt3dg1qlftg5s64ctqgqb0t.apps.googleusercontent.com',
+    iosClientId: '59603340838-agg2jp6sl42d6331om7omta1dffdfoo1.apps.googleusercontent.com',
     iosBundleId: 'com.goasbar.goAsbarApp',
   );
 }
