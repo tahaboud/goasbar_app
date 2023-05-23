@@ -7,7 +7,9 @@ import 'package:goasbar/data_models/timing_list_model.dart';
 import 'package:goasbar/data_models/timing_model.dart';
 import 'package:goasbar/services/auth_service.dart';
 import 'package:goasbar/shared/app_configs.dart';
+import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:http/http.dart' as http;
+import 'package:motion_toast/resources/arrays.dart';
 
 class TimingApiService {
   final _authService = locator<AuthService>();
@@ -28,6 +30,7 @@ class TimingApiService {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
+        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return null;
       }
     });
@@ -48,6 +51,7 @@ class TimingApiService {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
+        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return null;
       }
     });
@@ -67,6 +71,7 @@ class TimingApiService {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
+        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return null;
       }
     });
@@ -86,6 +91,7 @@ class TimingApiService {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
+        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return false;
       }
     });
