@@ -204,7 +204,7 @@ class ProviderProfileView extends HookWidget {
           ),
         ),
       ),
-      viewModelBuilder: () => ProviderProfileViewModel(providerId: provider!.id),
+      viewModelBuilder: () => ProviderProfileViewModel(context: context, providerId: provider!.id),
     );
   }
 }
