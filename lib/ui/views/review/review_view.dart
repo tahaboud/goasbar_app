@@ -169,7 +169,7 @@ class ReviewView extends HookWidget {
                         if (value is ReviewModel) {
                           completer(SheetResponse(confirmed: true));
                         } else {
-                          showMotionToast(context: context, title: 'Error', msg: 'An error occurred while updating the review, please try again', type: MotionToastType.error);
+
                         }
                       });
                     } else {
@@ -187,7 +187,7 @@ class ReviewView extends HookWidget {
                       if (value is ReviewModel) {
                         completer(SheetResponse(confirmed: true));
                       } else {
-                        showMotionToast(context: context, title: 'Error', msg: 'An error occurred while sending the rate, please try again', type: MotionToastType.error);
+
                       }
                     });
                   }
