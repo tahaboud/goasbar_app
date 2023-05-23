@@ -85,7 +85,7 @@ class AuthService {
     });
   }
 
-  Future<AuthResponse> login({Map? body}) async {
+  Future<AuthResponse> login({Map? body, context}) async {
     return http.post(
       Uri.parse("$baseUrl/api/auth/login/"),
       headers: {
@@ -98,6 +98,7 @@ class AuthService {
         return AuthResponse.fromJson(jsonDecode(response.body));
       }
       else {
+        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return AuthResponse();
       }
     });
@@ -118,6 +119,7 @@ class AuthService {
         unAuthClearAndRestart(context: context,);
         return null;
       } else {
+        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return null;
       }
     });
@@ -137,6 +139,7 @@ class AuthService {
         unAuthClearAndRestart(context: context,);
         return null;
       } else {
+        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return null;
       }
     });
@@ -163,6 +166,7 @@ class AuthService {
         unAuthClearAndRestart(context: context,);
         return null;
       } else {
+        showMotionToast(context: context, title: 'Error', msg: response.data["errors"]['detail'], type: MotionToastType.error);
         return null;
       }
     });
@@ -189,12 +193,13 @@ class AuthService {
         unAuthClearAndRestart(context: context,);
         return null;
       } else {
+        showMotionToast(context: context, title: 'Error', msg: response.data["errors"]['detail'], type: MotionToastType.error);
         return null;
       }
     });
   }
 
-  Future<bool?> requestResetPassword({String? phoneNumber}) async {
+  Future<bool?> requestResetPassword({String? phoneNumber, context}) async {
     return http.post(
       Uri.parse("$baseUrl/api/auth/request-password-reset/"),
       headers: {
@@ -208,12 +213,13 @@ class AuthService {
       if (response.statusCode == 200) {
         return true;
       } else {
+        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return false;
       }
     });
   }
 
-  Future<bool?> resetPassword({String? phoneNumber, String? code, String? password}) async {
+  Future<bool?> resetPassword({String? phoneNumber, String? code, String? password, context}) async {
     return http.post(
       Uri.parse("$baseUrl/api/auth/password-reset/"),
       headers: {
@@ -228,6 +234,7 @@ class AuthService {
       if (response.statusCode == 200) {
         return true;
       } else {
+        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return false;
       }
     });
@@ -248,6 +255,7 @@ class AuthService {
         unAuthClearAndRestart(context: context,);
         return null;
       } else {
+        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return null;
       }
     });
@@ -268,6 +276,7 @@ class AuthService {
         unAuthClearAndRestart(context: context,);
         return null;
       } else {
+        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return null;
       }
     });
@@ -288,7 +297,15 @@ class AuthService {
       print("----------------------------");
       print(response.body);
       print("----------------------------");
-
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body)['id'];
+      } else if (response.statusCode == 401) {
+        unAuthClearAndRestart(context: context,);
+        return null;
+      } else {
+        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
+        return null;
+      }
     });
   }
 
@@ -310,6 +327,7 @@ class AuthService {
         unAuthClearAndRestart(context: context,);
         return null;
       } else {
+        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return null;
       }
     });
@@ -330,6 +348,7 @@ class AuthService {
         unAuthClearAndRestart(context: context,);
         return null;
       } else {
+        showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"]['detail'], type: MotionToastType.error);
         return false;
       }
     });
