@@ -65,7 +65,7 @@ class ChatItem extends StatelessWidget {
           ],
         ).padding(bottom: 20).gestures(onTap: onTap);
       },
-      viewModelBuilder: () => ChatItemViewModel(id: receiverId, isUser: isUser),
+      viewModelBuilder: () => ChatItemViewModel(id: receiverId, isUser: isUser, context: context),
     );
   }
 }
