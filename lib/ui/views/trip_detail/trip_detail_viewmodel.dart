@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/animation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/experience_response.dart';
 import 'package:goasbar/data_models/public_provider_model.dart';
@@ -19,7 +20,8 @@ import 'package:share_plus/share_plus.dart';
 class TripDetailViewModel extends FutureViewModel<PublicProviderModel?> {
   UserModel? user;
   ExperienceResults? experience;
-  TripDetailViewModel({this.user, this.experience});
+  BuildContext? context;
+  TripDetailViewModel({this.context, this.user, this.experience});
 
   bool isFav = false;
   int pageIndex = 1;
@@ -124,7 +126,7 @@ class TripDetailViewModel extends FutureViewModel<PublicProviderModel?> {
   Future<PublicProviderModel?> getProvider () async {
     if (user != null) getIsFav();
     getTimingsList();
-    provider = await _providerApiService.getPublicProviderInfo(providerId: experience!.providerId);
+    provider = await _providerApiService.getPublicProviderInfo(providerId: experience!.providerId, context: context);
     setMapAndMarker();
     notifyListeners();
 
