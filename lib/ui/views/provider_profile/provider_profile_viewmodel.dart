@@ -9,7 +9,8 @@ import 'package:stacked_services/stacked_services.dart';
 
 class ProviderProfileViewModel extends FutureViewModel<List<ProviderPublicExperienceResults?>?> {
   int? providerId;
-  ProviderProfileViewModel({this.providerId});
+  BuildContext? context;
+  ProviderProfileViewModel({this.context, this.providerId});
 
   final _navigationService = locator<NavigationService>();
   final _providerApiService = locator<ProviderApiService>();
@@ -45,14 +46,14 @@ class ProviderProfileViewModel extends FutureViewModel<List<ProviderPublicExperi
     if (index! % 10 == 0) {
       pageNumber++;
       print("index : $index");
-      ProviderPublicExperienceModel? providerPublicExperienceList = await _providerApiService.getProviderPublicExperiences(providerId: providerId, page: pageNumber);
+      ProviderPublicExperienceModel? providerPublicExperienceList = await _providerApiService.getProviderPublicExperiences(context: context, providerId: providerId, page: pageNumber);
       providerPublicExperience!.results!.addAll(providerPublicExperienceList!.results!);
       notifyListeners();
     }
   }
 
   Future<List<ProviderPublicExperienceResults>?>? getProviderPublicExperiences() async {
-    providerPublicExperience = await _providerApiService.getProviderPublicExperiences(providerId: providerId, page: pageNumber);
+    providerPublicExperience = await _providerApiService.getProviderPublicExperiences(context: context, providerId: providerId, page: pageNumber);
     notifyListeners();
     return providerPublicExperience!.results!;
   }
