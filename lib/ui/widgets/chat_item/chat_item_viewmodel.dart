@@ -8,9 +8,10 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class ChatItemViewModel extends FutureViewModel<String?> {
-  ChatItemViewModel({this.id, this.isUser});
+  ChatItemViewModel({this.id, this.context, this.isUser});
   final int? id;
   final bool? isUser;
+  BuildContext? context;
 
   final _navigationService = locator<NavigationService>();
   final _authService = locator<AuthService>();
@@ -30,8 +31,8 @@ class ChatItemViewModel extends FutureViewModel<String?> {
     return await _authService.getUserPicture(context: context, token: token, userId: id);
   }
 
-  Future<String?> getProviderPicture({context}) async {
-    PublicProviderModel? publicProviderModel = await _providerApiService.getPublicProviderInfo(providerId: id);
+  Future<String?> getProviderPicture() async {
+    PublicProviderModel? publicProviderModel = await _providerApiService.getPublicProviderInfo(providerId: id, context: context);
 
     return publicProviderModel!.response!.image;
   }
