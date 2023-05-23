@@ -25,8 +25,9 @@ class SignUpOtpViewModel extends BaseViewModel {
     _navigationService.clearStackAndShowView(view,);
   }
 
-  Future<StatusCode> register({Map<String, dynamic>? body, bool? hasImage}) async {
+  Future<StatusCode> register({Map<String, dynamic>? body, context, bool? hasImage}) async {
     return await _authService.register(
+      context: context,
       hasImage: hasImage,
       body: body,
     ).then((response) {
@@ -45,12 +46,12 @@ class SignUpOtpViewModel extends BaseViewModel {
 
   }
 
-  Future<bool> verifyPhoneNumber({String? phoneNumber}) async {
-    return await _authService.verifyPhoneNumber(phoneNumber: phoneNumber,);
+  Future<bool> verifyPhoneNumber({String? phoneNumber, context}) async {
+    return await _authService.verifyPhoneNumber(phoneNumber: phoneNumber, context: context);
   }
 
-  void resendCode({String? phoneNumber}) {
-    verifyPhoneNumber(phoneNumber: phoneNumber);
+  void resendCode({String? phoneNumber, context}) {
+    verifyPhoneNumber(phoneNumber: phoneNumber, context: context);
     const oneSec = Duration(seconds: 1);
     _timer = Timer.periodic(oneSec, (Timer timer) {
       if (start == 0) {
