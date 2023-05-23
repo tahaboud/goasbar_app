@@ -77,12 +77,7 @@ class SignUpOtpView extends HookWidget {
                             animationDuration: const Duration(milliseconds: 200),
                           ).show(context);
                         } else if (value == StatusCode.other){
-                          MotionToast.warning(
-                            title: const Text("Register Failed"),
-                            description: const Text("An error has occurred, please try again"),
-                            animationCurve: Curves.easeIn,
-                            animationDuration: const Duration(milliseconds: 200),
-                          ).show(context);
+
                         } else {
                           model.navigateTo(view: const HomeView(isUser: true));
                         }
