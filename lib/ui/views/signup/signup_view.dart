@@ -101,7 +101,7 @@ class SignUpView extends HookWidget {
                 )
               ).gestures(
                 onTap: phone.text.isNotEmpty ? () {
-                  model.verifyPhoneNumber(phoneNumber: "+966${phone.text}").then((value) {
+                  model.verifyPhoneNumber(phoneNumber: "+966${phone.text}", context: context).then((value) {
                     model.updateIsClicked(value: false);
                     if (value) {
                       model.navigateTo(view: SignUpOtpView(phone: phone.text, body: body, hasImage: hasImage));
