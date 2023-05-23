@@ -103,7 +103,7 @@ class RequestPasswordView extends HookWidget {
                     )
                 ).gestures(
                   onTap: phoneNumber.text.isNotEmpty ? () {
-                    model.forgetPassword(phoneNumber: "+966${phoneNumber.text}").then((value) {
+                    model.forgetPassword(context: context, phoneNumber: "+966${phoneNumber.text}").then((value) {
                       if (value!) {
                         model.navigateTo(view: SecurityView(phoneNumber: "+966${phoneNumber.text}",));
                       } else {
