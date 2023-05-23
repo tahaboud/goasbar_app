@@ -174,7 +174,7 @@ class NewTimingView extends HookWidget {
 
                         model.updateTiming(context: context, body: body, timingId: timingResponse.id,).then((value) {
                           if (value == null) {
-                            showMotionToast(context: context, title: 'Timing Update Failed', msg: "Timing could not be updated", type: MotionToastType.error);
+
                           } else {
                             completer(SheetResponse(confirmed: true));
                           }
@@ -191,7 +191,7 @@ class NewTimingView extends HookWidget {
 
                       model.createTiming(context: context, body: body, experienceId: request.customData.id,).then((value) {
                         if (value == null) {
-                          showMotionToast(context: context, type: MotionToastType.error, title: "Timing Creation Failed", msg: "An error has occurred, please try again.");
+
                         } else {
                           completer(SheetResponse(confirmed: true));
                         }
