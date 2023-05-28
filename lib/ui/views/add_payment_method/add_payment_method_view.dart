@@ -4,6 +4,7 @@ import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/ui/views/add_payment_method/add_payment_method_viewmodel.dart';
 import 'package:goasbar/ui/widgets/info_item.dart';
+import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -40,7 +41,7 @@ class AddPaymentMethodView extends HookWidget {
                               model.back();
                             }
                         ),
-                        Text('Add more payment methods'.tr(), style: TextStyle(fontSize: 21),),
+                        Text('Add more payment methods'.tr(), style: const TextStyle(fontSize: 21),),
                       ],
                     ),
                     verticalSpaceLarge,
@@ -99,11 +100,12 @@ class AddPaymentMethodView extends HookWidget {
                         gradient: kMainGradient,
                       ),
                       child: Center(
-                        child: Text('Link To My Account'.tr(), style: const TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+                        child: model.isClicked! ? const Loader() : Text('Link To My Account'.tr(), style: const TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
                       ),
                     ).gestures(
-                      onTap: () async {
+                      onTap: model.isClicked! ? () {} : () async {
                         if (cardNumber.text.isNotEmpty && cardHolder.text.isNotEmpty && expiryDate.text.isNotEmpty && cvv.text.isNotEmpty) {
+                          model.updateIsClicked(value: true);
                           model.saveCard(
                             context: context,
                             cardType: model.selectedCardType == 1 ? "MADA" : "VISA",
