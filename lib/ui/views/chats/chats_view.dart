@@ -13,8 +13,9 @@ import 'package:stacked/stacked.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class ChatsView extends HookWidget {
-  const ChatsView({Key? key, this.user,}) : super(key: key,);
+  const ChatsView({Key? key, this.user, this.userToken}) : super(key: key,);
   final UserModel? user;
+  final String? userToken;
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +43,9 @@ class ChatsView extends HookWidget {
               ),
             ).padding(horizontal: 20),
             verticalSpaceMedium,
-            Text('Chats'.tr(), style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),).alignment(Alignment.centerLeft),
+            Text('Chats'.tr(), style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),).alignment(Alignment.centerLeft),
             verticalSpaceMedium,
-            model.isBusy ? const Loader().center() : StreamBuilder(
+            userToken == null ? const SizedBox() : model.isBusy ? const Loader().center() : StreamBuilder(
               stream: model.stream,
               builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (!snapshot.hasData) {
@@ -65,17 +66,48 @@ class ChatsView extends HookWidget {
                 for (var chat in chats) {
                   Map<String, dynamic> data = chat.data()! as Map<String, dynamic>;
 
-                  int? providerId = user!.id == data["members"][1] ? int.parse(data["members"][0]) : int.parse(data["members"][1]);
-                  String? providerName = user!.id == data["members"][1] ? data["member_names"][0] : data["member_names"][1];
+                  int? notMeId;
+                  int? meId;
+                  String? chatId;
+                  String? notMeName;
+                  chatId = chat.id;
 
-                  messagesItems.add(
-                    ChatItem(
-                      isUser: !user!.isProvider!,
-                      receiverName: providerName,
-                      receiverId: providerId,
-                      onTap: () => model.navigateTo(view: ChatWithAgencyView(userId: user!.id, providerId: providerId, providerName: providerName,)),
-                    ),
-                  );
+                  if (user!.userName == data["member_names"]![0]) {
+                    notMeId = int.parse(data["members"][1]);
+                    notMeName = data["member_names"][1];
+                    meId = int.parse(data["members"][0]);
+                  } else {
+                    if (user!.userName == data["member_names"]![1]) {
+                      notMeId = int.parse(data["members"][0]);
+                      notMeName = data["member_names"][0];
+                      meId = int.parse(data["members"][1]);
+                    } else {
+                      if (user!.id == int.parse(data["members"][0])) {
+                        notMeId = int.parse(data["members"][1]);
+                        notMeName = data["member_names"][1];
+                        meId = int.parse(data["members"][0]);
+                      } else if (user!.id == int.parse(data["members"][1])) {
+                        notMeId = int.parse(data["members"][0]);
+                        notMeName = data["member_names"][0];
+                        meId = int.parse(data["members"][1]);
+                      }
+                    }
+                  }
+
+                  print("**********************");
+                  print(chatId);
+                  print("**********************");
+
+                  if (notMeId != null) {
+                    messagesItems.add(
+                      ChatItem(
+                        isUser: !user!.isProvider!,
+                        receiverName: notMeName,
+                        receiverId: notMeId,
+                        onTap: () => model.navigateTo(view: ChatWithAgencyView(meId: meId, notMeId: notMeId, chatId: chatId, notMeName: notMeName,)),
+                      ),
+                    );
+                  }
                 }
 
                 return SingleChildScrollView(
@@ -91,7 +123,7 @@ class ChatsView extends HookWidget {
           ],
         );
       },
-      viewModelBuilder: () => ChatsViewModel(),
+      viewModelBuilder: () => ChatsViewModel(context: context,),
     );
   }
 }
