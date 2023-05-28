@@ -6,7 +6,7 @@ import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
-import 'package:goasbar/ui/views/chat_with_agency/chat_with_agency_view.dart';
+import 'package:goasbar/ui/views/chat_with_agency_from_trip_detail/chat_with_agency_from_trip_detail_view.dart';
 import 'package:goasbar/ui/views/confirm_booking/confirm_booking_view.dart';
 import 'package:goasbar/ui/views/login/login_view.dart';
 import 'package:goasbar/ui/views/provider_profile/provider_profile_view.dart';
@@ -239,7 +239,7 @@ class TripDetailView extends HookWidget {
                     children: [
                       Image.asset("assets/icons/communication.png",),
                       horizontalSpaceSmall,
-                      Text('Start Chat'.tr(), style: const TextStyle(color: kMainColor1,),).gestures(onTap: () => model.navigateTo(view: user == null ? const LoginView() : ChatWithAgencyView(providerId: experience!.providerId, userId: user!.id, providerName: "Provider",))),
+                      Text('Start Chat'.tr(), style: const TextStyle(color: kMainColor1,),).gestures(onTap: () => model.navigateTo(view: user == null ? const LoginView() : ChatWithAgencyFromTripDetailView(providerId: experience!.providerId, meId: user!.id, notMeName: experience!.providerNickname, notMeId: experience!.providerId,))),
                     ],
                   ).padding(horizontal: 20),
                   verticalSpaceRegular,
