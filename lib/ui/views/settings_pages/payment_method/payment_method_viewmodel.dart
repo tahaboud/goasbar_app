@@ -16,7 +16,7 @@ class PaymentMethodViewModel extends FutureViewModel<CardsModel?> {
   final _authService = locator<AuthService>();
   CardsModel? userCards;
 
-  void navigateTo({view}) {
+  Future navigateTo({view}) async{
     _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
   }
 
