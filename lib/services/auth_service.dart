@@ -281,7 +281,7 @@ class AuthService {
     });
   }
 
-  Future<String?> getRegistrationStatus({id, String? token, context, cardType}) async {
+  Future<String?> saveCardAndGetRegistrationStatus({id, String? token, context, cardType}) async {
     return http.put(
       Uri.parse("$baseUrl/api/auth/cards/"),
       headers: {
@@ -302,29 +302,7 @@ class AuthService {
         unAuthClearAndRestart(context: context,);
         return null;
       } else {
-        return null;
-      }
-    });
-  }
-
-  //TODO not working
-  Future<String?> saveNewCard({String? token, context, body}) async {
-    return http.put(
-      Uri.parse("$baseUrl/api/auth/cards/"),
-      headers: {
-        "Accept-Language": "en-US",
-        "Authorization": "Token $token",
-      },
-      body: body,
-    ).then((response) {
-      print(response.body);
-      if (response.statusCode == 201) {
-        return "null";
-      } else if (response.statusCode == 401) {
-        unAuthClearAndRestart(context: context,);
-        return null;
-      } else {
-        showMotionToast(context: context, title: 'Save Card Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Create Booking Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
         return null;
       }
     });
