@@ -66,6 +66,7 @@ class BookingApiService {
         "Authorization": "Token $token",
       },
     ).then((response) {
+      print(response.body);
       if (response.statusCode == 200) {
         if (jsonDecode(response.body)['response'] == "Booking is confirmed") {
           return true;
