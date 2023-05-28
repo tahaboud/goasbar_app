@@ -9,10 +9,11 @@ import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class ChatWithAgencyView extends HookWidget {
-  const ChatWithAgencyView({Key? key, this.userId, this.providerId, this.providerName}) : super(key: key);
-  final int? providerId;
-  final int? userId;
-  final String? providerName;
+  const ChatWithAgencyView({Key? key, this.meId, this.chatId, this.notMeName, this.notMeId}) : super(key: key);
+  final String? chatId;
+  final int? notMeId;
+  final int? meId;
+  final String? notMeName;
 
   @override
   Widget build(BuildContext context) {
@@ -36,19 +37,19 @@ class ChatWithAgencyView extends HookWidget {
                           model.back();
                         }
                     ),
-                    Text(providerName!, style: const TextStyle(fontSize: 21),),
+                    Text(notMeName!, style: const TextStyle(fontSize: 21),),
                   ],
                 ),
                 verticalSpaceMedium,
                 Expanded(
-                  child: !model.dataReady ? const Loader().center() : StreamMessagesView(chatId: model.chatTokenProvider!.chatId!, providerId: providerId),
+                  child: StreamMessagesView(chatId: chatId, notMeId: notMeId, meId: meId),
                 ),
                 TextField(
                   controller: message,
                   decoration: InputDecoration(
                     hintText: 'Send a message',
                     hintStyle: const TextStyle(fontSize: 14),
-                    suffixIcon: Image.asset("assets/icons/import.png").gestures(onTap: () => model.sendMessage(providerId: providerId!.toString(), message: message, userId: userId!.toString())),
+                    suffixIcon: Image.asset("assets/icons/import.png").gestures(onTap: () => model.sendMessage(chatId: chatId, notMeId: notMeId!.toString(), message: message, meId: meId!.toString())),
                     // icon: Image.asset("assets/icons/file.png").gestures(onTap: () => model.file()),
                     fillColor: kTextFiledGrayColor,
                     filled: true,
@@ -66,7 +67,7 @@ class ChatWithAgencyView extends HookWidget {
           ),
         ),
       ),
-      viewModelBuilder: () => ChatWithAgencyViewModel(context: context, providerId: providerId),
+      viewModelBuilder: () => ChatWithAgencyViewModel(context: context, ),
     );
   }
 }
