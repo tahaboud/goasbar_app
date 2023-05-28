@@ -12,7 +12,6 @@ import 'package:motion_toast/resources/arrays.dart';
 class ChatApiService {
   final _authService = locator<AuthService>();
 
-  //TODO not working
   Future<String?> getUserFireStoreToken({context, String? token}) async {
     return http.get(
       Uri.parse("$baseUrl/api/chat/"),
@@ -33,7 +32,7 @@ class ChatApiService {
     });
   }
 
-  Future<ChatTokenProviderModel?> getUserFireStoreTokenAndProviderChatId({context, String? token, int? providerId}) async {
+  Future<ChatTokenProviderModel?> getProviderFireStoreTokenAndChatId({context, String? token, int? providerId}) async {
     return http.get(
       Uri.parse("$baseUrl/api/chat/$providerId/"),
       headers: {
@@ -41,6 +40,8 @@ class ChatApiService {
         "Authorization": "Token $token",
       },
     ).then((response) {
+      print(providerId);
+      print(response.body);
       if (response.statusCode == 201) {
         return ChatTokenProviderModel.fromJson(jsonDecode(response.body));
       } else if (response.statusCode == 401) {
