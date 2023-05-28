@@ -171,6 +171,13 @@ public class MainActivity extends FlutterActivity implements ITransactionListene
 
                                 try {
                                     transaction = new Transaction(paymentParams);
+                                    paymentProvider.setThreeDSWorkflowListener(new ThreeDSWorkflowListener() {
+                                        @Override
+                                        public Activity onThreeDSChallengeRequired() {
+                                            return MainActivity.this;
+                                        }
+                                    });
+
                                     paymentProvider.registerTransaction(transaction, MainActivity.this);
                                 } catch (PaymentException ee) {
                                     ee.printStackTrace();
@@ -180,22 +187,28 @@ public class MainActivity extends FlutterActivity implements ITransactionListene
                             }
                         } else if (call.method.equals("paywithsavedcard")) {
                             checkoutId = call.argument("checkoutid");
-                            brand = call.argument("brand");
+                            brands = call.argument("brand");
                             tokenId = call.argument("tokenid");
                             cvv = call.argument("cvv");
 
                             try {
-                                TokenPaymentParams paymentParams = new TokenPaymentParams(checkoutid, tokenId, brand, cvv);
+                                TokenPaymentParams paymentParams = new TokenPaymentParams(checkoutId, tokenId, brands, cvv);
 
-                                Toast.makeText(getBaseContext(),"Start",Toast.LENGTH_LONG).show();
                                 // Set shopper result URL
                                 paymentParams.setShopperResultUrl("goasbar://result");
 
 
                                 Transaction transaction = null;
-
+                                Toast.makeText(getBaseContext(),"Start",Toast.LENGTH_LONG).show();
                                 try {
                                     transaction = new Transaction(paymentParams);
+                                    paymentProvider.setThreeDSWorkflowListener(new ThreeDSWorkflowListener() {
+                                        @Override
+                                        public Activity onThreeDSChallengeRequired() {
+                                            return MainActivity.this;
+                                        }
+                                    });
+
                                     paymentProvider.registerTransaction(transaction, MainActivity.this);
                                 } catch (PaymentException ee) {
                                     ee.printStackTrace();
@@ -307,7 +320,6 @@ public class MainActivity extends FlutterActivity implements ITransactionListene
 
         if (transaction.getTransactionType() == TransactionType.SYNC) {
 
-            Log.i("msg",String.valueOf(transaction));
             success("SYNC");
         } else {
             /* wait for the callback in the s */
