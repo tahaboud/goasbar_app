@@ -1,11 +1,14 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/animation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class ChatsViewModel extends StreamViewModel<QuerySnapshot<Map<String, dynamic>>> {
+  ChatsViewModel({this.context,});
+  BuildContext? context;
+
   bool isDone = false;
   final _navigationService = locator<NavigationService>();
   final _fireStore = FirebaseFirestore.instance;
