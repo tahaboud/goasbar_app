@@ -61,7 +61,9 @@ class PaymentMethodView extends StatelessWidget {
                     ),
                   ).gestures(
                     onTap: () async {
-                      model.navigateTo(view: const AddPaymentMethodView());
+                      model.navigateTo(view: const AddPaymentMethodView()).then((value) {
+                        model.futureToRun();
+                      });
                     },
                   ),
                 ],
