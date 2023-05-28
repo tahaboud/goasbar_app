@@ -3,7 +3,6 @@ import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
-import 'package:goasbar/ui/views/bookings_history/bookings_history_view.dart';
 import 'package:goasbar/ui/views/edit_profile/edit_profile_view.dart';
 import 'package:goasbar/ui/views/login/login_view.dart';
 import 'package:goasbar/ui/views/navbar/settings/settings_viewmodel.dart';
@@ -110,7 +109,6 @@ class SettingsView extends HookWidget {
                     item1Parameter: isUser! ? model.user!.isProvider! ? 'Update Info'.tr() : "Apply now".tr() : "Apply now".tr(),
                     onTapParameter: isUser! ? model.user!.isProvider! ? () => model.showGeneralInfoBottomSheet() : () => model.showGeneralInfoBottomSheet() : () {model.navigateTo(view: const LoginView());},
                     item2Image: 'security',
-                    additionalParameterOnTap: isUser! ? () => model.navigateTo(view: BookingsHistoryView(user: model.user!,)) : () {},
                     item2Title: 'Security'.tr(),
                     item2Parameter: "",
                     onItem1Tap: !isUser! ? () {model.navigateTo(view: const LoginView());} : model.user!.isProvider! ? () => model.navigateTo(view: const PostExperienceView()) : () => model.showGeneralInfoBottomSheet(),
