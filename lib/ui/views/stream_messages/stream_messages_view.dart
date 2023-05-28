@@ -9,9 +9,10 @@ import 'package:goasbar/ui/widgets/seen_widget_sender.dart';
 import 'package:stacked/stacked.dart';
 
 class StreamMessagesView extends HookWidget {
-  const StreamMessagesView({super.key, this.chatId, this.providerId});
+  const StreamMessagesView({super.key, this.chatId, this.notMeId, this.meId});
   final String? chatId;
-  final int? providerId;
+  final int? notMeId;
+  final int? meId;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +55,7 @@ class StreamMessagesView extends HookWidget {
             }
 
             for (var message in messages) {
-              if (message.get("receiverID") == providerId.toString()) {
+              if (message.get("senderID") != meId.toString()) {
                 messagesBubble.add(Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -63,7 +64,7 @@ class StreamMessagesView extends HookWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        MessageBubble(isSender: true, message: message.get("text").toString()),
+                        MessageBubble(isReciever: true, message: message.get("text").toString()),
                         verticalSpaceTiny,
                         if (message.get("text") == messages.last.get("text"))
                           SeenWidgetSender(time: time),
@@ -77,7 +78,7 @@ class StreamMessagesView extends HookWidget {
                 messagesBubble.add(Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    MessageBubble(message: message.get("text"), isSender: false),
+                    MessageBubble(message: message.get("text"), isReciever: false),
                     verticalSpaceTiny,
                     if (message.get("text") == messages.last.get("text"))
                       SeenWidgetMe(time: time,),
