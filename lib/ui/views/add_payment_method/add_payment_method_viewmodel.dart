@@ -1,10 +1,9 @@
 import 'package:flutter/animation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/services/auth_service.dart';
 import 'package:goasbar/services/token_service.dart';
-import 'package:goasbar/shared/ui_helpers.dart';
-import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -14,6 +13,12 @@ class AddPaymentMethodViewModel extends BaseViewModel {
   final _navigationService = locator<NavigationService>();
   final _tokenService = locator<TokenService>();
   final _authService = locator<AuthService>();
+  bool? isClicked = false;
+
+  updateIsClicked({value}) {
+    isClicked = value;
+    notifyListeners();
+  }
 
   void navigateTo({view}) {
     _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
@@ -41,8 +46,16 @@ class AddPaymentMethodViewModel extends BaseViewModel {
           "expiryYear": "20$expiryYear",
           "cvv": cVV,
         });
+        updateIsClicked(value: false);
         print(result);
-        _authService.getRegistrationStatus(id: value, context: context, token: token, cardType: cardType);
+        _authService.saveCardAndGetRegistrationStatus(id: value, context: context, token: token, cardType: cardType).then((value) {
+          if (value != null) {
+            Navigator.pop(context);
+            Navigator.pop(context);
+          } else {
+            Navigator.pop(context);
+          }
+        });
       } on PlatformException catch (e) {
 
       }
