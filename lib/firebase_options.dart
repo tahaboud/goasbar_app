@@ -50,22 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyB7WqF8Ec0871gynwuVpdibYLeiCpCm9UI',
-    appId: '1:59603340838:android:e840927f8209419071e0e7',
-    messagingSenderId: '59603340838',
-    projectId: 'asbar-49052',
-    databaseURL: 'https://asbar-49052-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'asbar-49052.appspot.com',
+    apiKey: 'AIzaSyDcJ5oK0ByMGr4kiVRqp9Zz51_nrccD6XI',
+    appId: '1:401000499670:android:fc054189f2be870440fc77',
+    messagingSenderId: '401000499670',
+    projectId: 'goasbar',
+    storageBucket: 'goasbar.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCi7b3McMQOD0XbOf7yXrdS2gFMSOs-vwo',
-    appId: '1:59603340838:ios:0471ce3abe26ff8371e0e7',
-    messagingSenderId: '59603340838',
-    projectId: 'asbar-49052',
-    databaseURL: 'https://asbar-49052-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'asbar-49052.appspot.com',
-    iosClientId: '59603340838-agg2jp6sl42d6331om7omta1dffdfoo1.apps.googleusercontent.com',
+    apiKey: 'AIzaSyC6FdmRDSLsvCvBaPuEDpFxv7miJndnu6Q',
+    appId: '1:401000499670:ios:7bb783f40a5d7e0440fc77',
+    messagingSenderId: '401000499670',
+    projectId: 'goasbar',
+    storageBucket: 'goasbar.appspot.com',
     iosBundleId: 'com.goasbar.goAsbarApp',
   );
 }
