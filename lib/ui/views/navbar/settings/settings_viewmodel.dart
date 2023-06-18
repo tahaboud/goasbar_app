@@ -26,10 +26,16 @@ class SettingsViewModel extends FutureViewModel<UserModel?> {
   File? file;
   ProviderModel? provider;
   bool? isClicked = false;
+  bool? isClicked2 = false;
   UserModel? user;
 
   updateIsClicked({value}) {
     isClicked = value;
+    notifyListeners();
+  }
+
+  updateIsClicked2({value}) {
+    isClicked2 = value;
     notifyListeners();
   }
 
@@ -76,6 +82,11 @@ class SettingsViewModel extends FutureViewModel<UserModel?> {
   Future<bool?> logout({context}) async {
     updateIsClicked(value: true);
     return _authService.logout(context: context, token: await _tokenService.getTokenValue());
+  }
+
+  Future<bool?> deleteAccount({context}) async {
+    updateIsClicked2(value: true);
+    return _authService.deleteAccount(context: context, token: await _tokenService.getTokenValue());
   }
 
   clearToken () {

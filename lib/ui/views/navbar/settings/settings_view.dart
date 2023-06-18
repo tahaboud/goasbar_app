@@ -129,25 +129,53 @@ class SettingsView extends HookWidget {
                     isUser: isUser!,
                   ),
                   verticalSpaceMedium,
-                  !isUser! ? const SizedBox() : Container(
-                    height: 50,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      color: Colors.redAccent,
-                    ),
-                    child: model.isClicked! ? const Loader().center() : Text('Logout'.tr(), style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
-                  ).gestures(onTap: () {
-                    model.logout(context: context).then((value) {
-                      model.updateIsClicked(value: false);
-                      if (value!) {
-                        showMotionToast(context: context, title: 'Logout Success', msg: "Have a good day, see you later", type: MotionToastType.error);
-                        model.clearToken();
-                        model.clearAndNavigateTo(view: const LoginView());
-                      } else {
+                  !isUser! ? const SizedBox() : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children : [
+                      Container(
+                        width: screenWidthPercentage(context, percentage: 0.4),
+                        height: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.all(Radius.circular(10)),
+                          color: Colors.white,
+                          border: Border.all(width: 1, color: Colors.redAccent),
+                        ),
+                        child: model.isClicked! ? const Loader().center() : Text('Logout'.tr(), style: const TextStyle(color: Colors.redAccent, fontSize: 16, fontWeight: FontWeight.w500),).center(),
+                      ).gestures(onTap: () {
+                        model.logout(context: context).then((value) {
+                          model.updateIsClicked(value: false);
+                          if (value!) {
+                            showMotionToast(context: context, title: 'Logout Success', msg: "Have a good day, see you later", type: MotionToastType.error);
+                            model.clearToken();
+                            model.clearAndNavigateTo(view: const LoginView());
+                          } else {
 
-                      }
-                    });
-                  }),
+                          }
+                        });
+                      }),
+
+                      Container(
+                        width: screenWidthPercentage(context, percentage: 0.4),
+                        height: 50,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          color: Colors.redAccent,
+                        ),
+                        child: model.isClicked2! ? const Loader().center() : Text('Delete Account'.tr(), style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
+                      ).gestures(onTap: () {
+                        model.deleteAccount(context: context).then((value) {
+                          model.updateIsClicked2(value: false);
+                          if (value!) {
+                            showMotionToast(context: context, title: 'Delete Account Success', msg: "Have a good day, see you later", type: MotionToastType.error);
+                            model.clearToken();
+                            model.clearAndNavigateTo(view: const LoginView());
+                          } else {
+
+                          }
+                        });
+                      }),
+                    ],
+                  ),
                   !isUser! ? const SizedBox() : verticalSpaceLarge,
                 ],
               ),

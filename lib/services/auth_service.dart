@@ -329,6 +329,27 @@ class AuthService {
     });
   }
 
+  Future<bool?> deleteAccount({String? token, context}) async {
+    return http.post(
+      Uri.parse("$baseUrl/api/auth/delete/"),
+      headers: {
+        "Accept-Language": "en-US",
+        "Content-Type": "application/json",
+        "Authorization": "Token $token",
+      },
+    ).then((response) {
+      if (response.statusCode == 204) {
+        return true;
+      } else if (response.statusCode == 401) {
+        unAuthClearAndRestart(context: context,);
+        return null;
+      } else {
+        showMotionToast(context: context, title: 'Delete Account Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
+        return false;
+      }
+    });
+  }
+
   unAuthClearAndRestart({BuildContext? context}) {
     showMotionToast(context: context!, type: MotionToastType.error, msg: "Your session has expired, you must login again", title: 'Unauthorized');
     _tokenService.clearToken();
