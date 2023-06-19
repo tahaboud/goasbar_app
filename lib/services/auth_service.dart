@@ -330,7 +330,7 @@ class AuthService {
   }
 
   Future<bool?> deleteAccount({String? token, context}) async {
-    return http.post(
+    return http.delete(
       Uri.parse("$baseUrl/api/auth/delete/"),
       headers: {
         "Accept-Language": "en-US",
@@ -338,7 +338,7 @@ class AuthService {
         "Authorization": "Token $token",
       },
     ).then((response) {
-      if (response.statusCode == 204) {
+      if (response.statusCode == 200) {
         return true;
       } else if (response.statusCode == 401) {
         unAuthClearAndRestart(context: context,);
