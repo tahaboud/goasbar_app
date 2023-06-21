@@ -163,16 +163,37 @@ class SettingsView extends HookWidget {
                         ),
                         child: model.isClicked2! ? const Loader().center() : Text('Delete Account'.tr(), style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
                       ).gestures(onTap: () {
-                        model.deleteAccount(context: context).then((value) {
-                          model.updateIsClicked2(value: false);
-                          if (value!) {
-                            showMotionToast(context: context, title: 'Delete Account Success', msg: "Have a good day, see you later", type: MotionToastType.error);
-                            model.clearToken();
-                            model.clearAndNavigateTo(view: const LoginView());
-                          } else {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text("Do you want to delete your account?").tr(),
+                            actions: <Widget>[
+                              ElevatedButton(
+                                child: Text("Yes".tr()),
+                                onPressed: () {
+                                  Navigator.pop(context, false);
+                                  model.deleteAccount(context: context).then((value) {
+                                    model.updateIsClicked2(value: false);
+                                    if (value!) {
+                                      showMotionToast(context: context, title: 'Delete Account Success', msg: "Have a good day, see you later", type: MotionToastType.error);
+                                      model.clearToken();
+                                      model.clearAndNavigateTo(view: const LoginView());
+                                    } else {
 
-                          }
-                        });
+                                    }
+                                  });
+                                },
+                              ),
+                              ElevatedButton(
+                                child: Text("No".tr()),
+                                onPressed: () {
+                                  Navigator.pop(context, false);
+                                },
+                              )
+                            ],
+                          ),
+                        );
+
                       }),
                     ],
                   ),
