@@ -1,3 +1,4 @@
+import 'package:goasbar/ui/widgets/dialogs/add_data/add_data_view.dart';
 import 'package:goasbar/ui/widgets/dialogs/available_places_dialog.dart';
 import 'package:goasbar/ui/widgets/dialogs/booking_list/booking_list_dialog.dart';
 import 'package:goasbar/ui/widgets/dialogs/error_dialog.dart';
@@ -31,6 +32,9 @@ void setupDialogUi() {
 
     DialogType.bookingList : (BuildContext context, DialogRequest dialogRequest, Function(DialogResponse) completer)
         => Dialog(child: BookingListDialog(dialogRequest: dialogRequest, onDialogTap: completer,),),
+
+    DialogType.addData : (BuildContext context, DialogRequest dialogRequest, Function(DialogResponse) completer)
+        => Dialog(child: AddDataView(dialogRequest: dialogRequest, onDialogTap: completer,),),
 
     DialogType.profile : (BuildContext context, DialogRequest dialogRequest, Function(DialogResponse) completer)
         => Dialog(child: ProfileBookedDialog(dialogRequest: dialogRequest, onDialogTap: completer,),),
