@@ -15,10 +15,10 @@ class CompleteProfileViewModel extends BaseViewModel {
   bool isObscure = true;
   TextEditingController gender = TextEditingController();
   TextEditingController birthDate = TextEditingController();
+  String? city = "".tr();
   final _navigationService = locator<NavigationService>();
   final _dialogService = locator<DialogService>();
   final _validationService = locator<ValidationService>();
-  String? city = "Riyadh".tr();
   File? file;
   bool? hasImage = false;
   final _mediaService = locator<MediaService>();
