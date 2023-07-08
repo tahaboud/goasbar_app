@@ -440,15 +440,48 @@ class ConfirmBookingView extends HookWidget {
 
                       if (affiliateSet.isNotEmpty) body.addAll({"affiliate_set": affiliateSet,});
 
-                      if (isOkay!) {
-                        model.createBooking(context: context, body: body, timingId: model.timingListModel!.results![model.selectedIndex!].id).then((value) {
-                          model.updateIsClicked(value: false);
-                          if (value != null) {
-                            model.navigateTo(view: CheckoutView(experience: experience, user: user, usersCount: model.numberOfGuests! + 1, booking: value));
-                          } else {
+                      bool? addCity = false, addGender = false, addBirthdate = false;
 
+
+
+                      if (user!.birthDate == null) {
+                        addBirthdate = true;
+                      }
+                      if (user!.city == null) {
+                        addCity = true;
+                      }
+                      if (user!.gender == null) {
+                        addGender = true;
+                      } if (addGender || addBirthdate || addCity) {
+                        model.showDialog(
+                          addGender: addGender,
+                          addBirthdate: addBirthdate,
+                          addCity: addCity,
+                          execute: () {
+                            if (isOkay!) {
+                              model.updateIsClicked(value: true);
+                              model.createBooking(context: context, body: body, timingId: model.timingListModel!.results![model.selectedIndex!].id).then((value) {
+                                model.updateIsClicked(value: false);
+                                if (value != null) {
+                                  model.navigateTo(view: CheckoutView(experience: experience, user: user, usersCount: model.numberOfGuests! + 1, booking: value));
+                                } else {
+
+                                }
+                              });
+                            }
                           }
-                        });
+                        );
+                      } else {
+                        if (isOkay!) {
+                          model.createBooking(context: context, body: body, timingId: model.timingListModel!.results![model.selectedIndex!].id).then((value) {
+                            model.updateIsClicked(value: false);
+                            if (value != null) {
+                              model.navigateTo(view: CheckoutView(experience: experience, user: user, usersCount: model.numberOfGuests! + 1, booking: value));
+                            } else {
+
+                            }
+                          });
+                        }
                       }
                     }
                   },
