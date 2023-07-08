@@ -98,7 +98,7 @@ class CompleteProfileView extends HookWidget {
                     readOnly: true,
                     controller: model.gender,
                     decoration: InputDecoration(
-                      hintText: 'Male'.tr(),
+                      hintText: 'Select the Gender'.tr(),
                       hintStyle: const TextStyle(fontSize: 14),
                       suffixIcon: Image.asset('assets/icons/drop_down.png')
                           .gestures(onTap: () {
@@ -127,7 +127,7 @@ class CompleteProfileView extends HookWidget {
                         .gestures(onTap: () {
                         model.showBirthDayPicker(context);
                     }),
-                    prefixIcon: Text(' Birthday '.tr(), style: TextStyle(color: kMainColor2, fontSize: 14),).padding(vertical: 20, horizontal: 10),
+                    prefixIcon: Text(' Birthday '.tr(), style: const TextStyle(color: kMainColor2, fontSize: 14),).padding(vertical: 20, horizontal: 10),
                     fillColor: kTextFiledGrayColor,
                     filled: true,
                     border: OutlineInputBorder(
@@ -163,10 +163,10 @@ class CompleteProfileView extends HookWidget {
                               ),
                               onChanged: (value) => model.updateCity(value: value),
                               items: cities.map((c) => DropdownMenuItem(
-                                value: "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}",
+                                value: c == "" ? c : "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}",
                                 onTap: () {},
                                 child: SizedBox(
-                                  child: Text("${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}", style: const TextStyle(fontFamily: 'Cairo'),),
+                                  child: Text(c == "" ? c : "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}", style: const TextStyle(fontFamily: 'Cairo'),),
                                 ),
                               )).toList(),
                             ),
@@ -231,7 +231,7 @@ class CompleteProfileView extends HookWidget {
                   decoration: InputDecoration(
                     hintText: 'Re-Password'.tr(),
                     hintStyle: const TextStyle(fontSize: 14),
-                    prefixIcon: Text(' Re-Password '.tr(), style: TextStyle(color: kMainColor2, fontSize: 14),).padding(vertical: 20, horizontal: 10),
+                    prefixIcon: Text(' Re-Password '.tr(), style: const TextStyle(color: kMainColor2, fontSize: 14),).padding(vertical: 20, horizontal: 10),
                     suffixIcon: const Icon(Icons.remove_red_eye_outlined, size: 17)
                         .gestures(
                         onTap: () {
@@ -256,15 +256,13 @@ class CompleteProfileView extends HookWidget {
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                     gradient: firstName.text.isNotEmpty && email.text.isNotEmpty && firstName.text.isNotEmpty
                         && lastName.text.isNotEmpty && password.text.isNotEmpty
-                        && rePassword.text.isNotEmpty && model.birthDate.text.isNotEmpty
-                        && model.gender.text.isNotEmpty ? kMainGradient : kMainDisabledGradient,
+                        && rePassword.text.isNotEmpty ? kMainGradient : kMainDisabledGradient,
                   ),
-                  child: Text('Continue'.tr(), style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
+                  child: Text('Continue'.tr(), style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
                 ).gestures(
                   onTap: firstName.text.isNotEmpty && email.text.isNotEmpty && firstName.text.isNotEmpty
                       && lastName.text.isNotEmpty && password.text.isNotEmpty
-                      && rePassword.text.isNotEmpty && model.birthDate.text.isNotEmpty
-                      && model.gender.text.isNotEmpty ? () async {
+                      && rePassword.text.isNotEmpty ? () async {
 
                     Map<String, dynamic> body = {
                       "username": "${firstName.text}_${lastName.text}",
@@ -272,11 +270,11 @@ class CompleteProfileView extends HookWidget {
                       "password": password.text,
                       "first_name": firstName.text,
                       "last_name": lastName.text,
-                      "birth_date": model.birthDate.text,
-                      "gender": model.gender.text[0],
+                      "birth_date": model.birthDate.text == "" ? "" : model.birthDate.text,
+                      "gender": model.gender.text.isNotEmpty ? model.gender.text[0] : "",
                       "phone_number": "",
                       "verification_code": "",
-                      "city": model.city!.replaceAll(' ', '_').toUpperCase(),
+                      "city": model.city == "" ? model.city! : model.city!.replaceAll(' ', '_').toUpperCase(),
                     };
 
                     if (model.file != null) {
