@@ -29,6 +29,7 @@ class SearchViewModel extends BaseViewModel {
     List<String> list = [];
     list.add('Search by Region'.tr());
     list.addAll(cities);
+    list.removeAt(1);
 
     return list;
   }
