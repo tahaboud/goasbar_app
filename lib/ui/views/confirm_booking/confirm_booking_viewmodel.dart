@@ -141,6 +141,15 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
 
   int formatDay(String date) => int.parse(date.substring(8,10).toString());
 
+  showDialog({addGender, addBirthdate, addCity, Function? execute}) {
+    _dialogService.showCustomDialog(
+      variant: DialogType.addData,
+      data: {'addGender': addGender, 'addBirthdate': addBirthdate, 'addCity': addCity,}
+    ).whenComplete(() {
+      execute!();
+    });
+  }
+
   int formatMonth(String date) => int.parse(date.substring(5,7).toString());
 
   int formatYear(String date) => int.parse(date.substring(0,4).toString());
