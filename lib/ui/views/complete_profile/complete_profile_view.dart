@@ -104,7 +104,7 @@ class CompleteProfileView extends HookWidget {
                           .gestures(onTap: () {
                         model.showSelectionDialog(gen: model.gender.text);
                       }),
-                      prefixIcon: const Text(' Gender ', style: TextStyle(color: kMainColor2, fontSize: 14),).padding(vertical: 20, horizontal: 10),
+                      prefixIcon: const Text(' Gender (Optional)', style: TextStyle(color: kMainColor2, fontSize: 14),).padding(vertical: 20, horizontal: 10),
                       fillColor: kTextFiledGrayColor,
                       filled: true,
                       border: OutlineInputBorder(
@@ -127,7 +127,7 @@ class CompleteProfileView extends HookWidget {
                         .gestures(onTap: () {
                         model.showBirthDayPicker(context);
                     }),
-                    prefixIcon: Text(' Birthday '.tr(), style: const TextStyle(color: kMainColor2, fontSize: 14),).padding(vertical: 20, horizontal: 10),
+                    prefixIcon: Text(' Birthday (Optional)'.tr(), style: const TextStyle(color: kMainColor2, fontSize: 14),).padding(vertical: 20, horizontal: 10),
                     fillColor: kTextFiledGrayColor,
                     filled: true,
                     border: OutlineInputBorder(
@@ -148,7 +148,7 @@ class CompleteProfileView extends HookWidget {
                   ),
                   child: Row(
                     children: [
-                      const Text(' City ', style: TextStyle(color: kMainColor2, fontSize: 14),).padding(vertical: 20, horizontal: 10),
+                      const Text(' City (Optional)', style: TextStyle(color: kMainColor2, fontSize: 14),).padding(vertical: 20, horizontal: 10),
                       Expanded(
                         child: DropdownButtonHideUnderline(
                           child: ButtonTheme(
