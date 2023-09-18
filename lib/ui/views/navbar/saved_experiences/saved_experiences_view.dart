@@ -9,9 +9,10 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class SavedExperiencesView extends HookWidget {
-  const SavedExperiencesView({Key? key, this.text, this.user}) : super(key: key);
+  const SavedExperiencesView({Key? key, this.text, this.isUser, this.user}) : super(key: key);
   final String? text;
   final UserModel? user;
+  final bool? isUser;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +40,7 @@ class SavedExperiencesView extends HookWidget {
                     shrinkWrap: true,
                     itemCount: model.experienceResults!.length,
                     itemBuilder: (context, index) {
-                      return SavedExperience(experience: model.experienceResults![index], futureToRun: () => model.futureToRun(), unFavorite: () => model.updateUserData(context: context, index: index), user: user,);
+                      return SavedExperience(isUser: isUser, experience: model.experienceResults![index], futureToRun: () => model.futureToRun(), unFavorite: () => model.updateUserData(context: context, index: index), user: user,);
                     },)
                   ),
                 ],

@@ -21,12 +21,12 @@ class ChatApiService {
       },
     ).then((response) {
       if (response.statusCode == 201) {
-        return jsonDecode(response.body)["firestore_token"];
+        return jsonDecode(utf8.decode(response.bodyBytes))["firestore_token"];
       } else if (response.statusCode == 401) {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
-        showMotionToast(context: context, title: 'Connection Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Connection Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
         return null;
       }
     });
@@ -40,10 +40,8 @@ class ChatApiService {
         "Authorization": "Token $token",
       },
     ).then((response) {
-      print(providerId);
-      print(response.body);
       if (response.statusCode == 201) {
-        return ChatTokenProviderModel.fromJson(jsonDecode(response.body));
+        return ChatTokenProviderModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
       } else if (response.statusCode == 401) {
         _authService.unAuthClearAndRestart(context: context,);
         return null;

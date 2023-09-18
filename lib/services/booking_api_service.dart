@@ -26,12 +26,12 @@ class BookingApiService {
       body: jsonEncode(body),
     ).then((response) {
       if (response.statusCode == 201) {
-        return BookingModel.fromJson(jsonDecode(response.body));
+        return BookingModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
       } else if (response.statusCode == 401) {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
-        showMotionToast(context: context, title: 'Create Booking Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Create Booking Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
         return null;
       }
     });
@@ -46,19 +46,22 @@ class BookingApiService {
       },
       body: body,
     ).then((response) {
+      print(response.statusCode);
+      print(response.body);
       if (response.statusCode == 200) {
-        return jsonDecode(response.body)['checkoutId'];
+        return jsonDecode(utf8.decode(response.bodyBytes))['checkoutId'];
       } else if (response.statusCode == 401) {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
-        showMotionToast(context: context, title: 'Prepare Checkout Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Prepare Checkout Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
         return null;
       }
     });
   }
 
   Future<bool?> getPaymentStatus({context, String? token, int? bookingId}) async {
+    print(bookingId);
     return http.get(
       Uri.parse("$baseUrl/api/booking/payment/$bookingId/"),
       headers: {
@@ -66,11 +69,10 @@ class BookingApiService {
         "Authorization": "Token $token",
       },
     ).then((response) {
+      print(response.statusCode);
       print(response.body);
       if (response.statusCode == 200) {
-        if (jsonDecode(response.body)['response'] == "Booking is confirmed") {
-          return true;
-        }
+        return true;
       } else if (response.statusCode == 401) {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
@@ -100,7 +102,6 @@ class BookingApiService {
   }
 
   Future<ProviderTimingBooking?> getProviderTimingBookings({context, String? token, int? timingId, int? page}) async {
-    print(timingId);
     return http.get(
       Uri.parse("$baseUrl/api/booking/provider/$timingId/?page=$page"),
       headers: {
@@ -108,9 +109,8 @@ class BookingApiService {
         "Authorization": "Token $token",
       },
     ).then((response) {
-      print(response.body);
       if (response.statusCode == 200) {
-        return ProviderTimingBooking.fromJson(jsonDecode(response.body));
+        return ProviderTimingBooking.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
       } else if (response.statusCode == 401) {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
@@ -128,14 +128,13 @@ class BookingApiService {
         "Authorization": "Token $token",
       },
     ).then((response) {
-      print(response.body);
       if (response.statusCode == 200) {
         return true;
       } else if (response.statusCode == 401) {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
-        showMotionToast(context: context, title: 'Delete Booking Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Delete Booking Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
         return false;
       }
     });

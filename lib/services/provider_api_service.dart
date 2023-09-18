@@ -24,12 +24,12 @@ class ProviderApiService {
       body: body,
     ).then((response) {
       if (response.statusCode == 201) {
-        return ProviderModel.fromJson(jsonDecode(response.body));
+        return ProviderModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
       } else if (response.statusCode == 401) {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
-        showMotionToast(context: context, title: 'Create Provider Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Create Provider Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
         return null;
       }
     });
@@ -44,7 +44,7 @@ class ProviderApiService {
       },
     ).then((response) {
       if (response.statusCode == 200) {
-        return ProviderModel.fromJson(jsonDecode(response.body));
+        return ProviderModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
       } else if (response.statusCode == 401) {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
@@ -62,7 +62,7 @@ class ProviderApiService {
       },
     ).then((response) {
       if (response.statusCode == 200) {
-        return PublicProviderModel.fromJson(jsonDecode(response.body));
+        return PublicProviderModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
       } else {
         return null;
       }
@@ -77,7 +77,7 @@ class ProviderApiService {
       },
     ).then((response) {
       if (response.statusCode == 200) {
-        return ProviderPublicExperienceModel.fromJson(jsonDecode(response.body));
+        return ProviderPublicExperienceModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
       } else {
         return null;
       }
@@ -94,12 +94,12 @@ class ProviderApiService {
       body: body,
     ).then((response) {
       if (response.statusCode == 200) {
-        return ProviderModel.fromJson(jsonDecode(response.body));
+        return ProviderModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
       } else if (response.statusCode == 401) {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
-        showMotionToast(context: context, title: 'Update Provider Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Update Provider Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
         return null;
       }
     });

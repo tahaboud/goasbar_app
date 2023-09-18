@@ -57,6 +57,7 @@ class LoginView extends HookWidget {
               verticalSpaceSmall,
               TextField(
                 controller: userName,
+                onChanged: (text) => model.changedEmail(text),
                 decoration: InputDecoration(
                   hintText: "Email".tr(),
                   hintStyle: const TextStyle(fontSize: 14),
@@ -79,6 +80,7 @@ class LoginView extends HookWidget {
                 obscureText: model.isObscure,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: (value) => model.validatePassword(value: value),
+                onChanged: (text) => model.changedPass(text),
                 decoration: InputDecoration(
                   hintText: 'password'.tr(),
                   hintStyle: const TextStyle(fontSize: 14),
@@ -110,7 +112,7 @@ class LoginView extends HookWidget {
                 height: 50,
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  gradient: userName.text.isNotEmpty && password.text.isNotEmpty ? kMainGradient : kMainDisabledGradient,
+                  gradient: model.email!.isNotEmpty && model.password!.isNotEmpty ? kMainGradient : kMainDisabledGradient,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -118,14 +120,14 @@ class LoginView extends HookWidget {
                     const Spacer(),
                     const Spacer(),
                     const Spacer(),
-                    model.isClicked! ? const Loader().center() : Text('Continue'.tr(), style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),),
+                    model.isClicked! ? const Loader().center() : Text('Continue'.tr(), style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),),
                     const Spacer(),
                     const Spacer(),
                     Image.asset("assets/icons/person_login.png",).padding(horizontal: 15),
                   ],
                 )
               ).gestures(
-                onTap: userName.text.isNotEmpty && password.text.isNotEmpty ? () {
+                onTap: model.email!.isNotEmpty && model.password!.isNotEmpty ? () {
                   model.login(body: {
                     "email": userName.text,
                     "password": password.text,
@@ -140,7 +142,7 @@ class LoginView extends HookWidget {
                 } : () {},
               ),
               verticalSpaceRegular,
-               Text("You didn't have account yet ?".tr(), style: TextStyle(color: Color(0xff647382), fontWeight: FontWeight.w500, fontSize: 15),)
+               Text("You don't have an account yet?".tr(), style: const TextStyle(color: Color(0xff647382), fontWeight: FontWeight.w500, fontSize: 15),)
                   .center(),
               verticalSpaceRegular,
 
@@ -160,7 +162,7 @@ class LoginView extends HookWidget {
                       const Spacer(),
                       const Spacer(),
                       const Spacer(),
-                      Text('Sign Up'.tr(), style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500),),
+                      Text('Sign Up'.tr(), style: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500),),
                       const Spacer(),
                       const Spacer(),
                       Image.asset("assets/icons/person_signup.png",).padding(horizontal: 15),

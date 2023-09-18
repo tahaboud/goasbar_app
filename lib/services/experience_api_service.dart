@@ -21,6 +21,23 @@ class ExperienceApiService {
     Dio dio = Dio();
     FormData formData = FormData.fromMap(body!);
 
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (RequestOptions options, RequestInterceptorHandler handler) {
+          return handler.next(options);
+        },
+        onResponse: (Response response, ResponseInterceptorHandler handler) {
+          return handler.next(response);
+        },
+        onError: (e, ErrorInterceptorHandler handler) {
+          Map<String, dynamic> response = Map<String, dynamic>.from(e.response!.data);
+          showMotionToast(context: context, title: 'Create Experience Failed', msg: response['errors'][0]['detail'], type: MotionToastType.error);
+
+          return handler.next(e);
+        },
+      ),
+    );
+
     return dio.post(
       "$baseUrl/api/experience/provider/",
       options: Options(
@@ -32,6 +49,7 @@ class ExperienceApiService {
       ),
       data: formData,
     ).then((response) {
+      print(response.data);
       if (response.statusCode == 201) {
         return ExperienceResults.fromJson(response.data['response']);
       } else if (response.statusCode == 401) {
@@ -41,6 +59,8 @@ class ExperienceApiService {
         showMotionToast(context: context, title: 'Create Experience Failed', msg: response.data["errors"]['detail'], type: MotionToastType.error);
         return null;
       }
+    }).catchError((onError) {
+      print(onError);
     });
   }
 
@@ -86,7 +106,7 @@ class ExperienceApiService {
       },
     ).then((response) {
       if (response.statusCode == 200) {
-        return TimingListModel.fromJson(jsonDecode(response.body));
+        return TimingListModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
       } else {
         return null;
       }
@@ -131,14 +151,14 @@ class ExperienceApiService {
         },
         body: jsonEncode(body),
       ).then((response) {
-        print(response.body);
+
         if (response.statusCode == 200) {
-          return ExperienceResults.fromJson(jsonDecode(response.body));
+          return ExperienceResults.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
         } else if (response.statusCode == 401) {
           _authService.unAuthClearAndRestart(context: context,);
           return null;
         } else {
-          showMotionToast(context: context, title: 'Error', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
+          showMotionToast(context: context, title: 'Error', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
           return null;
         }
       });
@@ -159,7 +179,7 @@ class ExperienceApiService {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
-        showMotionToast(context: context, title: 'Delete Experience Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Delete Experience Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
         return false;
       }
     });
@@ -179,7 +199,7 @@ class ExperienceApiService {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
-        showMotionToast(context: context, title: 'Update Experience Image Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Update Experience Image Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
         return false;
       }
     });

@@ -3,7 +3,7 @@ import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/chat_with_agency/chat_with_agency_viewmodel.dart';
 import 'package:goasbar/ui/views/stream_messages/stream_messages_view.dart';
-import 'package:goasbar/ui/widgets/loader.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -47,7 +47,7 @@ class ChatWithAgencyView extends HookWidget {
                 TextField(
                   controller: message,
                   decoration: InputDecoration(
-                    hintText: 'Send a message',
+                    hintText: 'Send a message'.tr(),
                     hintStyle: const TextStyle(fontSize: 14),
                     suffixIcon: Image.asset("assets/icons/import.png").gestures(onTap: () => model.sendMessage(chatId: chatId, notMeId: notMeId!.toString(), message: message, meId: meId!.toString())),
                     // icon: Image.asset("assets/icons/file.png").gestures(onTap: () => model.file()),

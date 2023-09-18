@@ -26,20 +26,20 @@ class SplashView extends StatelessWidget {
                   Image.asset(
                     "assets/images/splash/splash_img2.png",
                     height: screenHeightPercentage(context, percentage: 0.28),
-                  ).translate(offset: !model.isDone ? Offset(size.width + 60 - 150, 70) : Offset(size.width - 50 - 150, 70), animate: true,)
+                  ).translate(offset: !model.isDone ? Offset(size.width + 60 - 150, 70) : Offset(context.locale == const Locale('ar', 'SA') ? -20 : size.width - 180, 70), animate: true,)
                       .opacity(!model.isDone? 0.0 : 1.0, animate: true)
                       .animate(const Duration(milliseconds: 1000), Curves.easeIn),
 
                   Image.asset(
                     "assets/images/splash/splash_img3.png",
-                  ).translate(offset: !model.isDone ? const Offset(65, 280) : const Offset(65, 210), animate: true, )
+                  ).translate(offset: !model.isDone ? const Offset(65, 280) : Offset(context.locale == const Locale('ar', 'SA') ? -60 : 65, 210), animate: true, )
                       .opacity(!model.isDone? 0.0 : 1.0, animate: true)
                       .animate(const Duration(milliseconds: 1000), Curves.easeIn),
 
                   Image.asset(
                     "assets/images/splash/splash_img1.png",
                     height: screenHeightPercentage(context, percentage: 0.3),
-                  ).translate(offset: !model.isDone ? const Offset(-60, 100) : const Offset(20, 70), animate: true, )
+                  ).translate(offset: !model.isDone ? const Offset(-60, 100) : Offset(context.locale == const Locale('ar', 'SA') ? -250 : 20, 70), animate: true, )
                       .opacity(!model.isDone? 0.0 : 1.0, animate: true)
                       .animate(const Duration(milliseconds: 1000), Curves.easeIn),
 
@@ -52,7 +52,7 @@ class SplashView extends StatelessWidget {
                         gradient: kMainGradient,
                       ),
                     ),
-                  ).translate(offset: const Offset(95, 450)),
+                  ).translate(offset: Offset(context.locale == const Locale('ar', 'SA') ? -25 : 95, 450)),
 
 
                   RichText(
@@ -75,14 +75,14 @@ class SplashView extends StatelessWidget {
                           ),
                         ]
                     ),
-                  ).translate(offset: !model.isDone ? const Offset(-60, 400) : const Offset(30, 400), animate: true, )
+                  ).translate(offset: !model.isDone ? const Offset(-60, 400) : Offset(context.locale == const Locale('ar', 'SA') ? -30 : 30, 400), animate: true, )
                       .opacity(!model.isDone ? 0.0 : 1.0, animate: true)
                       .animate(const Duration(milliseconds: 1000), Curves.easeIn),
 
                   Text(
                     "splash_text".tr(),
                     style: const TextStyle(color: kMainGray, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),
-                  ).translate(offset: const Offset(30, 570)),
+                  ).translate(offset: Offset(context.locale == const Locale('ar', 'SA') ? -30 : 30, 570)),
 
 
                 ],

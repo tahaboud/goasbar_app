@@ -6,7 +6,7 @@ import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/shared/textfield_formatters/card_expiration_formatter.dart';
 import 'package:goasbar/shared/textfield_formatters/card_number_formatter.dart';
 import 'package:string_validator/string_validator.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization/easy_localization.dart' as easy;
 
 class InfoItem extends StatelessWidget {
   const InfoItem({
@@ -71,6 +71,8 @@ class InfoItem extends StatelessWidget {
               } : (value) {
                 return null;
               },
+              textDirection: TextDirection.ltr,
+              textAlign: TextAlign.right,
               autovalidateMode: label == "Minimum age".tr() ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
               maxLength: label == "Identity number" ? 10 : label == "Minimum age".tr() ? 2 : null,
               keyboardType: label == "Identity number" || label == "IBAN" || label == "Duration (hours)".tr() || label == "Card Number".tr() || label == "Expiration Date".tr() || label == "CVV" || label == "Minimum age".tr() ? TextInputType.number : TextInputType.text,

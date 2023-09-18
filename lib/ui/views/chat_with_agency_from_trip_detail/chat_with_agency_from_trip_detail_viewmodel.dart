@@ -37,33 +37,7 @@ class ChatWithAgencyFromTripDetailViewModel extends FutureViewModel<ChatTokenPro
     String? token = await _tokenService.getTokenValue();
     chatTokenProvider = await _chatApiService.getProviderFireStoreTokenAndChatId(context: context, token: token, providerId: providerId);
     notifyListeners();
-    return await auth(token: chatTokenProvider!.fireStoreToken).then((value) {
-      if (value != null) {
-        return chatTokenProvider;
-      } else {
-        return null;
-      }
-    });
-  }
-
-  Future<UserCredential?> auth({token}) async {
-    try {
-      final userCredential = await FirebaseAuth.instance.signInWithCustomToken(token);
-      print("Sign-in successful.");
-      return userCredential;
-    } on FirebaseAuthException catch (e) {
-      switch (e.code) {
-        case "invalid-custom-token":
-          print("The supplied token is not a Firebase custom auth token.");
-          return null;
-        case "custom-token-mismatch":
-          print("The supplied token is for a different Firebase project.");
-          return null;
-        default:
-          print("Unkown error.");
-          return null;
-      }
-    }
+    return chatTokenProvider;
   }
 
   Future sendMessage({String? meId, String? notMeId, TextEditingController? message,}) async {

@@ -47,7 +47,7 @@ class ForgetPasswordView extends HookWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text('Forget your\nPassword ?'.tr(), style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
+                    Text('Forget your\nPassword ?'.tr(), style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
                   ],
                 ),
                 verticalSpaceMedium,
@@ -56,7 +56,7 @@ class ForgetPasswordView extends HookWidget {
                   children: [
                     Text(
                       "Dont worry".tr(),
-                      style: TextStyle(fontSize: 14, color: kMainGray),
+                      style: const TextStyle(fontSize: 14, color: kMainGray),
                     ),
                   ],
                 ),
@@ -94,7 +94,7 @@ class ForgetPasswordView extends HookWidget {
                         const Spacer(),
                         const Spacer(),
                         const Spacer(),
-                        Text('Send Verification Code'.tr(), style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),),
+                        Text('Send Verification Code'.tr(), style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),),
                         const Spacer(),
                         const Spacer(),
                         Image.asset("assets/icons/forget_password.png",).padding(horizontal: 15),
@@ -110,7 +110,7 @@ class ForgetPasswordView extends HookWidget {
                           animationCurve: Curves.easeIn,
                           animationDuration: const Duration(milliseconds: 200),
                         ).show(context);
-                        model.navigateTo(view: const ResetPasswordView());
+                        model.navigateTo(view: ResetPasswordView(phoneNumber: "+966${phoneNumber.text}",));
                       } else {
 
                       }

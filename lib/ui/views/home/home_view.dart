@@ -83,11 +83,11 @@ class HomeView extends StatelessWidget {
       case 0:
         return ExperienceView(isUser: isUser, user: user);
       case 1:
-        return SearchView(user: user);
+        return SearchView(user: user, isUser: isUser,);
       case 2:
-        return isUser! ? TripsView(text: "Trips", user: user) : const MustLoginFirstView(text: 'Trips');
+        return isUser! ? TripsView(text: "Trips".tr(), user: user) : MustLoginFirstView(text: 'Trips'.tr());
       case 3:
-        return isUser! ? SavedExperiencesView(text: 'Saved Experiences', user: user) : const MustLoginFirstView(text: 'Saved Experiences',);
+        return isUser! ? SavedExperiencesView(isUser: isUser, text: 'Saved Experiences'.tr(), user: user) : MustLoginFirstView(text: 'Saved Experiences'.tr(),);
       case 4:
         return SettingsView(isUser: isUser, user: user);
       default:

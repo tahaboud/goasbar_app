@@ -48,19 +48,6 @@ class TripItemViewModel extends FutureViewModel<bool?> {
     await _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
   }
 
-  Future showReviewBottomSheet() async {
-    var response = await _bottomSheetService.showCustomSheet(
-      variant: BottomSheetType.review,
-      isScrollControlled: true,
-      barrierDismissible: true,
-      data: user,
-    );
-
-    if (response!.confirmed) {
-      return true;
-    }
-  }
-
   bool getIsFav () {
     favoriteList = user!.favoriteExperiences;
     isFav = favoriteList!.contains(experience!.id);

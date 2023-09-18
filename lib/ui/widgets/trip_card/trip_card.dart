@@ -18,9 +18,11 @@ class TripItem extends StatelessWidget {
     Key? key,
     this.experience,
     this.user,
+    this.isUser,
   }) : super(key: key);
   final ExperienceResults? experience;
   final UserModel? user;
+  final bool? isUser;
 
   @override
   Widget build(BuildContext context) {
@@ -101,8 +103,8 @@ class TripItem extends StatelessWidget {
                         const Spacer(),
                         Row(
                           children: [
-                            Text('${experience!.price!} SR', style: const TextStyle(color: kMainColor1, fontSize: 9)),
-                            Text(' / Person'.tr(), style: TextStyle(color: kMainGray, fontSize: 9)),
+                            Text('${experience!.price!} ${"SR".tr()}', style: const TextStyle(color: kMainColor1, fontSize: 9)),
+                            Text(' / Person'.tr(), style: const TextStyle(color: kMainGray, fontSize: 9)),
                           ],
                         ),
                         horizontalSpaceSmall,
@@ -143,7 +145,7 @@ class TripItem extends StatelessWidget {
             ),
           ],
         ).gestures(onTap: () async {
-          model.navigateTo(view: TripDetailView(experience: experience, user: user)).then((value) {
+          model.navigateTo(view: TripDetailView(experience: experience, user: user, isUser: isUser)).then((value) {
             model.futureToRun();
           });
         });

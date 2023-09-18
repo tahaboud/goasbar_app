@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:goasbar/shared/colors.dart';
@@ -24,21 +25,21 @@ class TypeOfIdentityDialog extends HookWidget {
         children: [
           Container(
             height: 40,
-            color : dialogRequest!.data == 'IDENTITY' ? kMainDisabledGray : Colors.white,
-            child: const Text('IDENTITY')
+            color : dialogRequest!.data == 'National Identity'.tr() ? kMainDisabledGray : Colors.white,
+            child: Text('National Identity'.tr())
                 .center(),
           ).gestures(onTap: () {
-            onDialogTap!(DialogResponse(data: 'IDENTITY',));
+            onDialogTap!(DialogResponse(data: 'National Identity'.tr(),));
           }),
           const Divider(height: 1, thickness: 2),
           // verticalSpaceRegular,
           Container(
             height: 40,
-            color : dialogRequest!.data == 'REGISTRATION' ? kMainDisabledGray : Colors.white,
-            child: const Text('REGISTRATION')
+            color : dialogRequest!.data == 'Commercial Registration'.tr() ? kMainDisabledGray : Colors.white,
+            child: Text('Commercial Registration'.tr())
                 .center(),
           ).gestures(onTap: () {
-            onDialogTap!(DialogResponse(data: 'REGISTRATION',));
+            onDialogTap!(DialogResponse(data: 'Commercial Registration'.tr(),));
           }),
         ],
       ),

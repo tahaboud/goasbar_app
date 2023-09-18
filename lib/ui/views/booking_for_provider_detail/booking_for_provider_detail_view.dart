@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:goasbar/data_models/provider_public_experience_response.dart';
 import 'package:goasbar/data_models/user_model.dart';
+import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/booking_for_provider_detail/booking_for_provider_detail_viewmodel.dart';
@@ -93,7 +94,7 @@ class BookingForProviderDetailView extends HookWidget {
                                   ),
                                 ).height(40)
                                     .width(100)
-                                    .gestures(onTap: () => model.share(link: providerPublicExperience!.slug)),
+                                    .gestures(onTap: () => model.share(link: "$baseUrl/experience/${providerPublicExperience!.slug}")),
                                 horizontalSpaceSmall,
                                 user == null ? const SizedBox() : model.isBusy ? const SizedBox() : Container(
                                     decoration: BoxDecoration(
@@ -169,9 +170,6 @@ class BookingForProviderDetailView extends HookWidget {
               ),
             ),
             verticalSpaceRegular,
-            Text('${'Get your experience this weekend \nwith amazing trip in'.tr()} ${providerPublicExperience!.city![0]}${providerPublicExperience!.city!.substring(1).replaceAll('_', ' ').toLowerCase()}', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 22),)
-                .padding(horizontal: 20),
-            verticalSpaceRegular,
             Row(
               children: [
                 Image.asset("assets/icons/location.png"),
@@ -220,6 +218,18 @@ class BookingForProviderDetailView extends HookWidget {
                       Image.asset("assets/icons/starting_point.png",),
                       horizontalSpaceSmall,
                       Text('Starting Point'.tr(),),
+                      const Spacer(),
+                      Row(
+                        children: [
+                          Image.asset("assets/icons/map_link.png", color: kMainColor1),
+                          horizontalSpaceTiny,
+                          Text("Google maps".tr(), style: const TextStyle(color: kGrayText),),
+                        ],
+                      ).gestures(onTap: () {
+                        if (model.latLon != null) {
+                          model.launchMaps(latLon: model.latLon);
+                        }
+                      }),
                     ],
                   ).padding(horizontal: 20),
                   model.kGooglePlex == null ? const SizedBox() : verticalSpaceRegular,
@@ -252,12 +262,12 @@ class BookingForProviderDetailView extends HookWidget {
                     ],
                   ).padding(horizontal: 20),
                   if (providerPublicExperience!.requirements != null)
-                    for (var requirement in providerPublicExperience!.requirements!.split('\n'))
+                    for (var requirement in providerPublicExperience!.requirements!.split(';'))
                       if (requirement.isNotEmpty)
                         NoteItem(text: requirement,).padding(horizontal: 20),
                   providerPublicExperience!.requirements == null ? const SizedBox() : verticalSpaceSmall,
                   if (providerPublicExperience!.providedGoods != null)
-                    for (var providedGood in providerPublicExperience!.providedGoods!.split('\n'))
+                    for (var providedGood in providerPublicExperience!.providedGoods!.split(';'))
                       if (providedGood.isNotEmpty)
                         NoteItem(text: providedGood,).padding(horizontal: 20),
                   providerPublicExperience!.providedGoods == null ? const SizedBox() : verticalSpaceSmall,
@@ -272,8 +282,8 @@ class BookingForProviderDetailView extends HookWidget {
                   children: [
                     Row(
                       children: [
-                        Text('${providerPublicExperience!.price!} SR', style: const TextStyle(color: kMainColor1, fontSize: 18)),
-                        Text(' / Person'.tr(), style: TextStyle(color: kMainGray, fontSize: 18)),
+                        Text('${providerPublicExperience!.price!} ${"SR".tr()}', style: const TextStyle(color: kMainColor1, fontSize: 18)),
+                        Text(' / Person'.tr(), style: const TextStyle(color: kMainGray, fontSize: 18)),
                       ],
                     ),
                     verticalSpaceTiny,

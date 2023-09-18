@@ -138,7 +138,7 @@ class AddExperienceInfoViewModel extends BaseViewModel {
       }
 
       if (experience!.providedGoods != null) {
-        for (var providedGood in experience!.providedGoods!.split('\n')) {
+        for (var providedGood in experience!.providedGoods!.split(';')) {
           if (providedGood.isNotEmpty) {
             if (providedGoodsController1.text.isEmpty) {
               providedGoodsController1.text = providedGood;
@@ -156,7 +156,7 @@ class AddExperienceInfoViewModel extends BaseViewModel {
       }
 
       if (experience!.requirements != null) {
-        for (var requirement in experience!.requirements!.split('\n')) {
+        for (var requirement in experience!.requirements!.split(';')) {
           if (requirement.isNotEmpty) {
             if (requirementsController1.text.isEmpty) {
               requirementsController1.text = requirement;

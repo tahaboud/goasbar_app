@@ -161,7 +161,7 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
     DateTime dateTime = DateTime(year, month, day);
 
     int date = dateTime.weekday;
-    return weekDays[date];
+    return weekDays[date - 1];
   }
 
   Future<BookingModel?> createBooking({int? timingId, Map<String, dynamic>? body, context}) async {

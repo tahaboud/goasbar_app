@@ -234,7 +234,7 @@ class AddExperienceView extends HookWidget {
                       gradient: kMainGradient,
                     ),
                     child: Center(
-                      child: Text('NEXT'.tr(), style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+                      child: Text('NEXT'.tr(), style: const TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
                     ),
                   ).gestures(
                     onTap: () {
@@ -402,7 +402,7 @@ class AddExperienceView extends HookWidget {
                           gradient: kMainGradient,
                         ),
                         child: Center(
-                          child: Text('NEXT'.tr(), style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+                          child: Text('NEXT'.tr(), style: const TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
                         ),
                       ).gestures(
                         onTap: () {
@@ -753,27 +753,27 @@ class AddExperienceView extends HookWidget {
                           gradient: kMainGradient,
                         ),
                         child: Center(
-                          child: Text('NEXT'.tr(), style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+                          child: Text('NEXT'.tr(), style: const TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
                         ),
                       ).gestures(
                         onTap: () {
-                          if (model.providedGoodsController1.text.isNotEmpty) model.updateProvidedGoodsText(text: "${model.providedGoodsController1.text}\n${model.providedGoodsText}");
-                          if (model.providedGoodsController2.text.isNotEmpty) model.updateProvidedGoodsText(text: "${model.providedGoodsController2.text}\n${model.providedGoodsText}");
-                          if (model.providedGoodsController3.text.isNotEmpty) model.updateProvidedGoodsText(text: "${model.providedGoodsController3.text}\n${model.providedGoodsText}");
-                          if (model.providedGoodsController4.text.isNotEmpty) model.updateProvidedGoodsText(text: "${model.providedGoodsController4.text}\n${model.providedGoodsText}");
+                          if (model.providedGoodsController1.text.isNotEmpty) model.updateProvidedGoodsText(text: "${model.providedGoodsController1.text};${model.providedGoodsText}");
+                          if (model.providedGoodsController2.text.isNotEmpty) model.updateProvidedGoodsText(text: "${model.providedGoodsController2.text};${model.providedGoodsText}");
+                          if (model.providedGoodsController3.text.isNotEmpty) model.updateProvidedGoodsText(text: "${model.providedGoodsController3.text};${model.providedGoodsText}");
+                          if (model.providedGoodsController4.text.isNotEmpty) model.updateProvidedGoodsText(text: "${model.providedGoodsController4.text};${model.providedGoodsText}");
                           for (var i = 0; i < model.addedProvidedGoodsControllers.length; i++) {
                             if (model.addedProvidedGoodsControllers[i].text.isNotEmpty) {
-                              model.updateProvidedGoodsText(text: "${model.addedProvidedGoodsControllers[i].text}\n${model.providedGoodsText}");
+                              model.updateProvidedGoodsText(text: "${model.addedProvidedGoodsControllers[i].text};${model.providedGoodsText}");
                             }
                           }
 
-                          if (model.requirementsController1.text.isNotEmpty) model.updateRequirementsText(text: "${model.requirementsController1.text}\n${model.requirementsText}");
-                          if (model.requirementsController2.text.isNotEmpty) model.updateRequirementsText(text: "${model.requirementsController2.text}\n${model.requirementsText}");
-                          if (model.requirementsController3.text.isNotEmpty) model.updateRequirementsText(text: "${model.requirementsController3.text}\n${model.requirementsText}");
-                          if (model.requirementsController4.text.isNotEmpty) model.updateRequirementsText(text: "${model.requirementsController4.text}\n${model.requirementsText}");
+                          if (model.requirementsController1.text.isNotEmpty) model.updateRequirementsText(text: "${model.requirementsController1.text};${model.requirementsText}");
+                          if (model.requirementsController2.text.isNotEmpty) model.updateRequirementsText(text: "${model.requirementsController2.text};${model.requirementsText}");
+                          if (model.requirementsController3.text.isNotEmpty) model.updateRequirementsText(text: "${model.requirementsController3.text};${model.requirementsText}");
+                          if (model.requirementsController4.text.isNotEmpty) model.updateRequirementsText(text: "${model.requirementsController4.text};${model.requirementsText}");
                           for (var i = 0; i < model.addedRequirementsControllers.length; i++) {
                             if (model.addedRequirementsControllers[i].text.isNotEmpty) {
-                              model.updateRequirementsText(text: "${model.addedRequirementsControllers[i].text}\n${model.requirementsText}");
+                              model.updateRequirementsText(text: "${model.addedRequirementsControllers[i].text};${model.requirementsText}");
                             }
                           }
 
@@ -852,10 +852,10 @@ class AddExperienceView extends HookWidget {
                               ),
                               onChanged: (value) => model.updateCity(value: value),
                               items: cities.map((c) => DropdownMenuItem(
-                                value: "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}",
+                                value: context!.locale == const Locale('ar', 'SA') ? c : "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}",
                                 onTap: () {},
                                 child: SizedBox(
-                                  child: Text("${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}", style: const TextStyle(fontFamily: 'Cairo'),),
+                                  child: Text(context!.locale == const Locale('ar', 'SA') ? c : "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}", style: const TextStyle(fontFamily: 'Cairo'),),
                                 ),
                               )).toList(),
                             ),
@@ -863,7 +863,7 @@ class AddExperienceView extends HookWidget {
                         ),
                       ),
                       verticalSpaceRegular,
-                      Text("Starting point".tr(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                      Text("Starting Point".tr(), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                       verticalSpaceSmall,
                       Container(
                         height: 50,
@@ -883,7 +883,7 @@ class AddExperienceView extends HookWidget {
                               children: [
                                 Image.asset("assets/icons/map_link.png", color: kMainColor1),
                                 horizontalSpaceTiny,
-                                Text("Google maps".tr(), style: TextStyle(color: kGrayText),),
+                                Text("Google maps".tr(), style: const TextStyle(color: kGrayText),),
                               ],
                             ).gestures(onTap: () {
                               if (model.latLon != null) {
@@ -993,7 +993,7 @@ class AddExperienceView extends HookWidget {
                     children: [
                       const Icon(Icons.close, size: 30,).gestures(onTap: () =>model.back(),),
                       horizontalSpaceTiny,
-                      Text('EXPERIENCE TIMING'.tr(), style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                      Text('EXPERIENCE TIMING'.tr(), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                       Row(
                         children: [
                           Container(
@@ -1022,7 +1022,7 @@ class AddExperienceView extends HookWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       verticalSpaceSmall,
-                      Text('When you will make the experience?'.tr(), style: TextStyle(fontWeight: FontWeight.bold),),
+                      Text('When you will make the experience?'.tr(), style: const TextStyle(fontWeight: FontWeight.bold),),
                       verticalSpaceSmall,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1116,23 +1116,23 @@ class AddExperienceView extends HookWidget {
                   // ).gestures(onTap: () => model.showNewTimingBottomSheet(date: , experienceId: ,)),
 
                   verticalSpaceRegular,
-                  Text('Pricing'.tr(), style: TextStyle(fontWeight: FontWeight.bold),),
+                  Text('Pricing'.tr(), style: const TextStyle(fontWeight: FontWeight.bold),),
                   verticalSpaceSmall,
                   SizedBox(
                     height: 50,
                     child: TextField(
                       controller: price,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintText: '05.00',
-                        hintStyle: TextStyle(fontSize: 14),
-                        suffix: Text("SR", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                        hintStyle: const TextStyle(fontSize: 14),
+                        suffix: Text("SR".tr(), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
                         fillColor: kTextFiledMainColor,
                         filled: true,
-                        focusedBorder: OutlineInputBorder(
+                        focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.transparent),
                         ),
-                        enabledBorder: OutlineInputBorder(
+                        enabledBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.transparent),
                         ),
                       ),
@@ -1152,7 +1152,7 @@ class AddExperienceView extends HookWidget {
                           gradient: kMainGradient,
                         ),
                         child: model.isClicked! ? const Loader().center() : Center(
-                          child: Text('PUBLISH'.tr(), style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+                          child: Text('PUBLISH'.tr(), style: const TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
                         ),
                       ).gestures(
                         onTap: () async {
@@ -1161,6 +1161,7 @@ class AddExperienceView extends HookWidget {
                             if (double.parse(price.text) > 1) {
                               Map<String, dynamic>? body = {};
                               Map<String, dynamic>? timingBody = {};
+
 
                               if (request.data != null) {
                                 if (title.text != request.data.title) body.addAll({'title': title.text});
@@ -1249,13 +1250,11 @@ class AddExperienceView extends HookWidget {
                                 body.addAll({'price': price.text});
 
                                 if (model.mainImage != null) {
-                                  if (!model.mainImage!.path.contains("/media/")) {
-                                    var pickedFile = await MultipartFile.fromFile(
-                                      model.mainImage!.path,
-                                      filename: model.mainImage!.path.substring(model.mainImage!.absolute.path.lastIndexOf('/') + 1),
-                                    );
-                                    body.addAll({'profile_image': pickedFile});
-                                  }
+                                  var pickedFile = await MultipartFile.fromFile(
+                                    model.mainImage!.path,
+                                    filename: model.mainImage!.path.substring(model.mainImage!.absolute.path.lastIndexOf('/') + 1),
+                                  );
+                                  body.addAll({'profile_image': pickedFile});
                                 }
 
                                 if (model.images! > 0) {

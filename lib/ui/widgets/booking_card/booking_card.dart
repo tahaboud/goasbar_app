@@ -42,8 +42,8 @@ class BookingItem extends StatelessWidget {
                       const Spacer(),
                       Row(
                         children: [
-                          Text('${bookingsList!.price!} SR', style: const TextStyle(color: kMainColor1, )),
-                          Text(' / Person'.tr(), style: TextStyle(color: kMainGray,)),
+                          Text('${bookingsList!.price!} ${"SR".tr()}', style: const TextStyle(color: kMainColor1, )),
+                          Text(' / Person'.tr(), style: const TextStyle(color: kMainGray,)),
                         ],
                       ),
                       horizontalSpaceSmall,

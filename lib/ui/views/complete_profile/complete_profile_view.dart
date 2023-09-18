@@ -163,10 +163,10 @@ class CompleteProfileView extends HookWidget {
                               ),
                               onChanged: (value) => model.updateCity(value: value),
                               items: cities.map((c) => DropdownMenuItem(
-                                value: c == "" ? c : "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}",
+                                value: context!.locale == const Locale('ar', 'SA') ? c : c == "" ? c : "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}",
                                 onTap: () {},
                                 child: SizedBox(
-                                  child: Text(c == "" ? c : "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}", style: const TextStyle(fontFamily: 'Cairo'),),
+                                  child: Text(context!.locale == const Locale('ar', 'SA') ? c : c == "" ? c : "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}", style: const TextStyle(fontFamily: 'Cairo'),),
                                 ),
                               )).toList(),
                             ),

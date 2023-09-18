@@ -98,7 +98,7 @@ class SearchViewModel extends BaseViewModel {
 
     from = formatted1;
     to = formatted2;
-    searchDate.text = "from $from to $to";
+    searchDate.text = "${"from".tr()} $from ${"to".tr()} $to";
     notifyListeners();
   }
 

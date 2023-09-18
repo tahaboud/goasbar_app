@@ -25,6 +25,6 @@ class SupportViewModel extends BaseViewModel {
   }
 
   void launchPhoneCall() {
-    _urlService.launchPhoneCall(phoneNumber: "+966 (483) -565 9898");
+    _urlService.launchLink(link: "http://wa.me/966535584402");
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:styled_widget/styled_widget.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class PreviousButton extends StatelessWidget {
   const PreviousButton({
@@ -19,8 +20,8 @@ class PreviousButton extends StatelessWidget {
           borderRadius: const BorderRadius.all(Radius.circular(10)),
           border: Border.all(color: kMainColor1, width: 1.5)
       ),
-      child: const Center(
-        child: Text('PREVIOUS', style: TextStyle(color: kMainColor1, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+      child: Center(
+        child: Text('PREVIOUS'.tr(), style: const TextStyle(color: kMainColor1, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
       ),
     ).gestures(
       onTap: () => onTap!(),

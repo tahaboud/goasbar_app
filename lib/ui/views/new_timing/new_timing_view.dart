@@ -145,7 +145,7 @@ class NewTimingView extends HookWidget {
                   gradient: kMainGradient,
                 ),
                 child: Center(
-                  child: Text('NEXT'.tr(), style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+                  child: Text('NEXT'.tr(), style: const TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
                 ),
               ).gestures(
                 onTap: () {

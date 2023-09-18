@@ -66,15 +66,15 @@ class ExperienceView extends HookWidget {
                 ),
                 verticalSpaceMedium,
                 model.isBusy ? const Loader().center()
-                    : !model.dataReady ? const Text('No experience under this category').center() : model.experienceModels!.count == 0
-                    ? const Text('No experience under this category').center() : Expanded(child: ListView.builder(
+                    : !model.dataReady ? Text('No experience under this category'.tr()).center() : model.experienceModels!.count == 0
+                    ? Text('No experience under this category'.tr()).center() : Expanded(child: ListView.builder(
                       physics: const BouncingScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: model.experienceModels!.count,
                       itemBuilder: (context, index) {
                         return CreationAwareListItem(
                           itemCreated: () => model.getPublicExperiencesFromNextPage(index: index + 1),
-                          child: TripItem(experience: model.experienceModels!.results![index], user: user),
+                          child: TripItem(experience: model.experienceModels!.results![index], user: user, isUser: isUser),
                         );
                       },
                     )

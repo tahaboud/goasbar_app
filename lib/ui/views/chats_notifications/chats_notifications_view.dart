@@ -54,7 +54,7 @@ class ChatsNotificationsView extends HookWidget {
                 ),
                 verticalSpaceMedium,
                 !model.dataReady ? const SizedBox() : model.indexTab == 1
-                    ? ChatsView(user: user!, userToken: model.userToken) : const NotificationsView(),
+                    ? ChatsView(user: user!, userToken: model.userToken,) : const NotificationsView(),
               ],
             ),
           ),

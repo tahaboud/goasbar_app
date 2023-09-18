@@ -21,14 +21,14 @@ class ReviewApiService {
       },
       body: body,
     ).then((response) {
-      print(response.body);
+
       if (response.statusCode == 201) {
-        return ReviewModel.fromJson(jsonDecode(response.body));
+        return ReviewModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
       } else if (response.statusCode == 401) {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
-        showMotionToast(context: context, title: 'Create Review Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Create Review Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
         return null;
       }
     });
@@ -44,14 +44,14 @@ class ReviewApiService {
       body: body,
     ).then((response) {
       print(body);
-      print(response.body);
+
       if (response.statusCode == 200) {
-        return ReviewModel.fromJson(jsonDecode(response.body));
+        return ReviewModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
       } else if (response.statusCode == 401) {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
-        showMotionToast(context: context, title: 'Update Review Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Update Review Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
         return null;
       }
     });
@@ -72,7 +72,7 @@ class ReviewApiService {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
-        showMotionToast(context: context, title: 'Delete Review Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Delete Review Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
         return false;
       }
     });

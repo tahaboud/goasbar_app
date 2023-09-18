@@ -81,8 +81,8 @@ class BookingItemForProviderView extends StatelessWidget {
                         const Spacer(),
                         Row(
                           children: [
-                            Text('${providerPublicExperience!.price!} SR', style: const TextStyle(color: kMainColor1, fontSize: 9)),
-                            Text(' / Person'.tr(), style: TextStyle(color: kMainGray, fontSize: 9)),
+                            Text('${providerPublicExperience!.price!} ${"SR".tr()}', style: const TextStyle(color: kMainColor1, fontSize: 9)),
+                            Text(' / Person'.tr(), style: const TextStyle(color: kMainGray, fontSize: 9)),
                           ],
                         ),
                         horizontalSpaceSmall,

@@ -105,11 +105,11 @@ class SettingsView extends HookWidget {
                   verticalSpaceRegular,
                   SettingsCard(
                     item1Image: 'hosted',
-                    item1Title: isUser! ? model.user!.isProvider! ? 'Post a new experience'.tr() : 'Be Hosted'.tr() : 'Be Hosted'.tr(),
+                    item1Title: isUser! ? model.user!.isProvider! ? 'Post a new experience'.tr() : 'Become a provider'.tr() : 'Become a provider'.tr(),
                     item1Parameter: isUser! ? model.user!.isProvider! ? 'Update Info'.tr() : "Apply now".tr() : "Apply now".tr(),
                     onTapParameter: isUser! ? model.user!.isProvider! ? () => model.showGeneralInfoBottomSheet() : () => model.showGeneralInfoBottomSheet() : () {model.navigateTo(view: const LoginView());},
                     item2Image: 'security',
-                    item2Title: 'Security'.tr(),
+                    item2Title: 'Change password'.tr(),
                     item2Parameter: "",
                     onItem1Tap: !isUser! ? () {model.navigateTo(view: const LoginView());} : model.user!.isProvider! ? () => model.navigateTo(view: const PostExperienceView()) : () => model.showGeneralInfoBottomSheet(),
                     onItem2Tap: () => model.navigateTo(view: const RequestPasswordView()),

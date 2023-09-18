@@ -30,9 +30,9 @@ class MustLoginFirstView extends HookWidget {
                   verticalSpaceMedium,
                   Text(text!, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),),
                   verticalSpaceMedium,
-                  const Text('You must to login first', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),),
+                  const Text('You must login first', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),),
                   verticalSpaceRegular,
-                  const Text('When you be ready for take your experience \nJoin with us and create your account', style: TextStyle(color: kMainGray)),
+                  const Text('When you are ready to take your experience,\njoin us and create your account', style: TextStyle(color: kMainGray)),
                   verticalSpaceLarge,
                   Container(
                     height: 50,
@@ -51,7 +51,7 @@ class MustLoginFirstView extends HookWidget {
                   verticalSpaceMedium,
                   Image.asset("assets/images/login_first.png"),
                   verticalSpaceLarge,
-                  const Text("You didn't have account yet ?", style: TextStyle(color: kMainGray)).center(),
+                  const Text("You don't have an account yet?", style: TextStyle(color: kMainGray)).center(),
                   verticalSpaceRegular,
                   Container(
                     height: 50,

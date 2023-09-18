@@ -15,7 +15,7 @@ class CompleteProfileViewModel extends BaseViewModel {
   bool isObscure = true;
   TextEditingController gender = TextEditingController();
   TextEditingController birthDate = TextEditingController();
-  String? city = "".tr();
+  String? city = "";
   final _navigationService = locator<NavigationService>();
   final _dialogService = locator<DialogService>();
   final _validationService = locator<ValidationService>();

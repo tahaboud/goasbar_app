@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
@@ -28,7 +29,8 @@ class SettingsCardItem extends StatelessWidget {
             Text(title!),
           ],
         ),
-        Text(parameter!, style: TextStyle(color: kMainColor2.withOpacity(0.8)),).gestures(onTap: onTapParameter),
+        parameter == "Update Info".tr() ? Text(parameter!, style: TextStyle(color: kMainColor2.withOpacity(0.8)),).gestures(onTap: onTapParameter)
+            : Text(parameter!, style: TextStyle(color: kMainColor2.withOpacity(0.8)),),
       ],
     ).padding(horizontal: 20);
   }

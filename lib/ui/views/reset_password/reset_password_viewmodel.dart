@@ -1,5 +1,6 @@
 import 'package:flutter/animation.dart';
 import 'package:goasbar/app/app.locator.dart';
+import 'package:goasbar/services/auth_service.dart';
 import 'package:goasbar/services/validation_service.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -8,6 +9,7 @@ class ResetPasswordViewModel extends BaseViewModel {
   bool isObscure = true;
   final _navigationService = locator<NavigationService>();
   final _validationService = locator<ValidationService>();
+  final _authService = locator<AuthService>();
 
   void changeObscure() {
     isObscure = !isObscure;
@@ -28,5 +30,9 @@ class ResetPasswordViewModel extends BaseViewModel {
 
   String? validateRePassword ({String? password, String? rePassword}) {
     return _validationService.rePasswordValidation(password: password, rePassword: rePassword);
+  }
+
+  Future<bool?> resetPassword({String? phoneNumber, String? code, String? password, context}) async {
+    return await _authService.resetPassword(phoneNumber: phoneNumber, code: code, password: password, context: context);
   }
 }

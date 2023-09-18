@@ -17,9 +17,11 @@ class SavedExperience extends StatelessWidget {
     this.unFavorite,
     this.futureToRun,
     this.user,
+    this.isUser,
   }) : super(key: key);
   final ExperienceResults? experience;
   final UserModel? user;
+  final bool? isUser;
   final Function()? unFavorite;
   final Function()? futureToRun;
 
@@ -80,12 +82,12 @@ class SavedExperience extends StatelessWidget {
               child: Row(
                 children: [
                   horizontalSpaceSmall,
-                  Text('${experience!.price!} SR${" / Person".tr()}', style: const TextStyle(color: Colors.white, fontSize: 10)),
+                  Text('${experience!.price!} ${"SR".tr()}${" / Person".tr()}', style: const TextStyle(color: Colors.white, fontSize: 10)),
                 ],
               ),
             )
           ],
-        ).center().gestures(onTap: () => model.navigateTo(view: TripDetailView(experience: experience, user: user,),).then((value) {
+        ).center().gestures(onTap: () => model.navigateTo(view: TripDetailView(isUser: isUser, experience: experience, user: user,),).then((value) {
           futureToRun!();
         }));
       },

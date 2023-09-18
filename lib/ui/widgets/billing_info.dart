@@ -2,6 +2,7 @@ import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/ui/widgets/dot_item.dart';
 import 'package:goasbar/ui/widgets/info_item.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
+import 'package:goasbar/ui/widgets/previous_button.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter/material.dart';
@@ -21,9 +22,11 @@ class BillingInfo extends StatelessWidget {
     this.showErrorDialog,
     this.onTapSubmit,
     this.isClicked,
+    required this.pageController,
   }) : super(key: key);
 
   final TextEditingController twitter;
+  final PageController pageController;
   final TextEditingController instagram;
   final TextEditingController facebook;
   final TextEditingController bankName;
@@ -116,33 +119,39 @@ class BillingInfo extends StatelessWidget {
             hintText: 'SA xxxx xxxx - xxxx - xxxxx',
           ),
           verticalSpaceMedium,
-          Container(
-            width: MediaQuery.of(context).size.width - 60,
-            height: 50,
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              gradient: kMainGradient,
-            ),
-            child: isClicked! ? const Loader().center() : Center(
-              child: Text('SUBMIT'.tr(), style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
-            ),
-          ).gestures(
-            onTap: () {
-              if (bankName.text.isNotEmpty && bankAccountNumber.text.isNotEmpty && iban.text.isNotEmpty) {
-                if (iban.text.replaceAll(' ', '').length != 23) {
-                  MotionToast.warning(
-                    title: const Text("Incorrect IBAN Format"),
-                    description: const Text("IBAN must be 23 digits length."),
-                    animationCurve: Curves.easeIn,
-                    animationDuration: const Duration(milliseconds: 200),
-                  ).show(context);
-                } else {
-                  onTapSubmit!();
-                }
-              } else {
-                showErrorDialog!();
-              }
-            },
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              PreviousButton(onTap: () => pageController.jumpToPage(1)),
+              Container(
+                width: screenWidthPercentage(context, percentage: 0.4),
+                height: 50,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  gradient: kMainGradient,
+                ),
+                child: isClicked! ? const Loader().center() : Center(
+                  child: Text('SUBMIT'.tr(), style: const TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+                ),
+              ).gestures(
+                onTap: () {
+                  if (bankName.text.isNotEmpty && bankAccountNumber.text.isNotEmpty && iban.text.isNotEmpty) {
+                    if (iban.text.replaceAll(' ', '').length != 23) {
+                      MotionToast.warning(
+                        title: const Text("Incorrect IBAN Format"),
+                        description: const Text("IBAN must be 23 digits length."),
+                        animationCurve: Curves.easeIn,
+                        animationDuration: const Duration(milliseconds: 200),
+                      ).show(context);
+                    } else {
+                      onTapSubmit!();
+                    }
+                  } else {
+                    showErrorDialog!();
+                  }
+                },
+              ),
+            ],
           ),
           verticalSpaceRegular,
         ],

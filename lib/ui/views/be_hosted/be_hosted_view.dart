@@ -99,6 +99,7 @@ class BeHostedView extends HookWidget {
             ),
             BillingInfo(
               twitter: twitter,
+              pageController: pageController,
               instagram: instagram,
               facebook: facebook,
               bankName: bankName,

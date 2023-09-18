@@ -1,6 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/app/app.locator.dart';
+import 'package:goasbar/data_models/chat_token_provider_model.dart';
 import 'package:goasbar/services/chat_api_service.dart';
 import 'package:goasbar/services/token_service.dart';
 import 'package:stacked/stacked.dart';
@@ -32,35 +32,9 @@ class ChatsNotificationsViewModel extends FutureViewModel<String?> {
 
   Future<String?> getUserFireStoreToken() async {
     String? token = await _tokenService.getTokenValue();
-    userToken = await _chatApiService.getUserFireStoreToken(context: context, token: token, );
+    ChatTokenProviderModel? userToken = await _chatApiService.getProviderFireStoreTokenAndChatId(context: context, token: token, providerId: 1);
     notifyListeners();
-    return await auth(token: userToken!).then((value) {
-      if (value != null) {
-        return userToken;
-      } else {
-        return null;
-      }
-    });
-  }
-
-  Future<UserCredential?> auth({token}) async {
-    try {
-      final userCredential = await FirebaseAuth.instance.signInWithCustomToken(token);
-      print("Sign-in successful.");
-      return userCredential;
-    } on FirebaseAuthException catch (e) {
-      switch (e.code) {
-        case "invalid-custom-token":
-          print("The supplied token is not a Firebase custom auth token.");
-          return null;
-        case "custom-token-mismatch":
-          print("The supplied token is for a different Firebase project.");
-          return null;
-        default:
-          print("Unkown error.");
-          return null;
-      }
-    }
+    return userToken!.chatId;
   }
 
   @override

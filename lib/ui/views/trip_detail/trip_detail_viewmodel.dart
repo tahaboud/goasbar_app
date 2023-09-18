@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/experience_response.dart';
@@ -13,6 +11,7 @@ import 'package:goasbar/services/timing_api_service.dart';
 import 'package:goasbar/services/token_service.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:share_plus/share_plus.dart';
@@ -21,7 +20,8 @@ class TripDetailViewModel extends FutureViewModel<PublicProviderModel?> {
   UserModel? user;
   ExperienceResults? experience;
   BuildContext? context;
-  TripDetailViewModel({this.context, this.user, this.experience});
+  bool? isUser;
+  TripDetailViewModel({this.context, this.user, this.experience, this.isUser});
 
   bool isFav = false;
   int pageIndex = 1;
@@ -37,6 +37,10 @@ class TripDetailViewModel extends FutureViewModel<PublicProviderModel?> {
   Completer<GoogleMapController> controller = Completer();
   List<Marker> customMarkers = [];
   LatLng? latLon;
+
+  launchMaps ({LatLng? latLon}) {
+    MapsLauncher.launchCoordinates(latLon!.latitude, latLon.longitude);
+  }
 
   void addFavorites({int? experienceId, context}) {
     isFav = !isFav;
@@ -91,9 +95,11 @@ class TripDetailViewModel extends FutureViewModel<PublicProviderModel?> {
   }
 
   bool getIsFav () {
-    favoriteList = user!.favoriteExperiences;
-    isFav = favoriteList!.contains(experience!.id);
-    notifyListeners();
+    if (isUser!) {
+      favoriteList = user!.favoriteExperiences;
+      isFav = favoriteList!.contains(experience!.id);
+      notifyListeners();
+    }
 
     return isFav;
   }
@@ -124,9 +130,12 @@ class TripDetailViewModel extends FutureViewModel<PublicProviderModel?> {
   }
 
   Future<PublicProviderModel?> getProvider () async {
-    if (user != null) getIsFav();
-    getTimingsList();
+    if (isUser!) getIsFav();
+    if (isUser!) getTimingsList(context: context);
     provider = await _providerApiService.getPublicProviderInfo(providerId: experience!.providerId, );
+    print(user!.id);
+    print(user!.providerId);
+    print(provider!.response!.id);
     setMapAndMarker();
     notifyListeners();
 

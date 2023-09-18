@@ -6,7 +6,7 @@ import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization/easy_localization.dart' as easy;
 
 class SupportView extends HookWidget {
   const SupportView({Key? key}) : super(key: key);
@@ -32,20 +32,20 @@ class SupportView extends HookWidget {
                             model.back();
                           }
                       ),
-                      Text('Support Center'.tr(), style: TextStyle(fontSize: 21),),
+                      Text('Support Center'.tr(), style: const TextStyle(fontSize: 21),),
                     ],
                   ),
                   verticalSpaceMedium,
                   Expanded(
                     child: Column(
                       children: [
-                        Text("contact us".tr(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                        Text("contact us".tr(), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
                         verticalSpaceMedium,
                         Row(
                           children: const [
                             Icon(Icons.phone_outlined, size: 35,),
                             horizontalSpaceSmall,
-                            Text("+966 535 584 402", style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),)
+                            Text("+966 535 584 402", style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500), textDirection: TextDirection.ltr,)
                           ],
                         ).gestures(onTap: () => model.launchPhoneCall()),
                         verticalSpaceMedium,

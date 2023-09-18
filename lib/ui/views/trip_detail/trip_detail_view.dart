@@ -23,8 +23,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 
 class TripDetailView extends HookWidget {
-  const TripDetailView({Key? key, this.experience, this.user}) : super(key: key);
+  const TripDetailView({Key? key, this.experience, this.user, this.isUser}) : super(key: key);
   final ExperienceResults? experience;
+  final bool? isUser;
   final UserModel? user;
 
   @override
@@ -96,9 +97,9 @@ class TripDetailView extends HookWidget {
                                   ),
                                 ).height(40)
                                     .width(100)
-                                    .gestures(onTap: () => model.share(link: experience!.slug)),
+                                    .gestures(onTap: () => model.share(link: "$baseUrl/experience/${experience!.slug}")),
                                 horizontalSpaceSmall,
-                                user == null ? const SizedBox() : Container(
+                                !isUser! ? const SizedBox() : Container(
                                     decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(10),
@@ -172,18 +173,16 @@ class TripDetailView extends HookWidget {
               ),
             ),
             verticalSpaceRegular,
-            Text('${"Get your experience this weekend \nwith amazing trip in".tr()} ${experience!.city![0]}${experience!.city!.substring(1).replaceAll('_', ' ').toLowerCase()}', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 22),)
-                .padding(horizontal: 20),
-            verticalSpaceRegular,
+            verticalSpaceSmall,
             Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(experience!.reviews! > 1 ? '${experience!.reviews} ${"reviews".tr()}' : '${experience!.reviews} ${'review'.tr()}'),
                 Image.asset("assets/icons/location.png"),
                 horizontalSpaceTiny,
                 SizedBox(
                   width: screenWidthPercentage(context, percentage: 0.7),
-                  child: Text("${experience!.city![0]}${experience!.city!.substring(1).replaceAll('_', ' ').toLowerCase()} , ${'Duration'.tr()} : ${experience!.duration} ${double.parse(experience!.duration!) <= 1 ? "Hour".tr() : "Hours".tr()} ${model.timingListModel == null ? "" : model.timingListModel!.count! > 0 ? "| Start at ${model.timingListModel!.results![0].startTime!.substring(0, 5)}" : ''}", overflow: TextOverflow.clip, style: const TextStyle(color: kMainGray, fontSize: 11)),
+                  child: Text("${experience!.city![0]}${experience!.city!.substring(1).replaceAll('_', ' ').toLowerCase()} , ${'Duration'.tr()} : ${experience!.duration} ${double.parse(experience!.duration!) <= 1 ? "Hour".tr() : "Hours".tr()} ${!isUser! ? "" : model.timingListModel == null ? "" : model.timingListModel!.count! > 0 ? "| Start at ${model.timingListModel!.results![0].startTime!.substring(0, 5)}" : ''}", overflow: TextOverflow.clip, style: const TextStyle(color: kMainGray, fontSize: 11)),
                 ),
               ],
             ).padding(horizontal: 20),
@@ -201,13 +200,13 @@ class TripDetailView extends HookWidget {
                         children: [
                           Text('${"Hosted by".tr()} :', style: const TextStyle(fontSize: 16)),
                           Text(' ${model.provider!.response!.nickname}', style: const TextStyle(fontSize: 16, color: kMainColor1)).gestures(
-                            onTap: () => model.navigateTo(view: ProviderProfileView(provider: model.provider!.response!, user: user),)
+                            onTap: !isUser! ? () {} : () => model.navigateTo(view: ProviderProfileView(provider: model.provider!.response!, user: user),)
                           ),
                         ],
                       ),
                       !model.dataReady ? Image.asset("assets/images/by_user.png").borderRadius(all: 50).height(50).width(50)
                           : Image.network("$baseUrl${model.provider!.response!.image}", height: 35,).clipRRect(all: 30).gestures(
-                          onTap: () => model.navigateTo(view: ProviderProfileView(provider: model.provider!.response!, user: user)),
+                          onTap: !isUser! ? () {} : () => model.navigateTo(view: ProviderProfileView(provider: model.provider!.response!, user: user)),
                       ),
                     ],
                   ).padding(horizontal: 20),
@@ -234,8 +233,8 @@ class TripDetailView extends HookWidget {
                       Text(experience!.gender! == "None" ? 'Valid for All' : experience!.gender!, style: const TextStyle(color: kMainDisabledGray),)
                     ],
                   ).padding(horizontal: 20),
-                  experience!.providerId == user!.providerId ? const SizedBox() : verticalSpaceRegular,
-                  experience!.providerId == user!.providerId ? const SizedBox() : Row(
+                  !isUser! ? const SizedBox() : experience!.providerId == user!.providerId ? const SizedBox() : verticalSpaceRegular,
+                  !isUser! ? const SizedBox() : experience!.providerId == user!.providerId ? const SizedBox() : Row(
                     children: [
                       Image.asset("assets/icons/communication.png",),
                       horizontalSpaceSmall,
@@ -248,6 +247,18 @@ class TripDetailView extends HookWidget {
                       Image.asset("assets/icons/starting_point.png",),
                       horizontalSpaceSmall,
                       Text('Starting Point'.tr(),),
+                      const Spacer(),
+                      Row(
+                        children: [
+                          Image.asset("assets/icons/map_link.png", color: kMainColor1),
+                          horizontalSpaceTiny,
+                          Text("Google maps".tr(), style: const TextStyle(color: kGrayText),),
+                        ],
+                      ).gestures(onTap: () {
+                        if (model.latLon != null) {
+                          model.launchMaps(latLon: model.latLon);
+                        }
+                      }),
                     ],
                   ).padding(horizontal: 20),
                   model.kGooglePlex == null ? const SizedBox() : verticalSpaceRegular,
@@ -280,12 +291,12 @@ class TripDetailView extends HookWidget {
                     ],
                   ).padding(horizontal: 20,),
                   if (experience!.requirements != null)
-                    for (var requirement in experience!.requirements!.split('\n'))
+                    for (var requirement in experience!.requirements!.split(';'))
                       if (requirement.isNotEmpty)
                         NoteItem(text: requirement,).padding(horizontal: 20),
                   experience!.requirements == null ? const SizedBox() : verticalSpaceSmall,
                   if (experience!.providedGoods != null)
-                    for (var providedGood in experience!.providedGoods!.split('\n'))
+                    for (var providedGood in experience!.providedGoods!.split(';'))
                       if (providedGood.isNotEmpty)
                         NoteItem(text: providedGood,).padding(horizontal: 20),
                   experience!.providedGoods == null ? const SizedBox() : verticalSpaceSmall,
@@ -300,12 +311,12 @@ class TripDetailView extends HookWidget {
                   children: [
                     Row(
                       children: [
-                        Text('${experience!.price!} SR', style: const TextStyle(color: kMainColor1, fontSize: 18)),
+                        Text('${experience!.price!} ${"SR".tr()}', style: const TextStyle(color: kMainColor1, fontSize: 18)),
                         Text(' / Person'.tr(), style: const TextStyle(color: kMainGray, fontSize: 18)),
                       ],
                     ),
                     verticalSpaceTiny,
-                    Text(model.timingListModel == null ? "" : model.timingListModel!.count! > 0 ? model.formatMonthYear(model.timingListModel!.results![0].date) : "", style: const TextStyle(fontSize: 13, color: kGrayText),)
+                    !isUser! ? const SizedBox() : Text(model.timingListModel == null ? "" : model.timingListModel!.count! > 0 ? model.formatMonthYear(model.timingListModel!.results![0].date) : "", style: const TextStyle(fontSize: 13, color: kGrayText),)
                   ],
                 ),
                 Container(
@@ -318,7 +329,11 @@ class TripDetailView extends HookWidget {
                   child: Text('Book Now'.tr(), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),)
                       .center()
                       .gestures(onTap: () {
-                        model.navigateTo(view: user == null ? const LoginView() : ConfirmBookingView(experience: experience, user: user,));
+                        if (!isUser! ) {
+                          model.navigateTo(view: const LoginView());
+                        } else {
+                          model.navigateTo(view: ConfirmBookingView(experience: experience, user: user,));
+                        }
                   }),
                 ),
               ],
@@ -326,7 +341,7 @@ class TripDetailView extends HookWidget {
           ],
         ),
       ),
-      viewModelBuilder: () => TripDetailViewModel(context: context, user: user, experience: experience),
+      viewModelBuilder: () => TripDetailViewModel(context: context, user: user, experience: experience, isUser: isUser),
     );
   }
 }

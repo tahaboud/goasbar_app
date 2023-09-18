@@ -35,7 +35,6 @@ class AuthService {
         ),
         data: formData,
       ).then((response) {
-        print(response.data);
         if (response.statusCode == 201) {
           return AuthResponse.fromJson(response.data);
         } if (response.statusCode == 429) {
@@ -53,13 +52,12 @@ class AuthService {
         },
         body: body,
       ).then((response) {
-        print(response.body);
         if (response.statusCode == 201) {
-          return AuthResponse.fromJson(jsonDecode(response.body));
+          return AuthResponse.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
         } if (response.statusCode == 429) {
           return StatusCode.throttled;
         } else {
-          showMotionToast(context: context, title: 'Registration Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
+          showMotionToast(context: context, title: 'Registration Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
           return null;
         }
       });
@@ -77,12 +75,10 @@ class AuthService {
         "language_code": "en",
       },
     ).then((response) {
-      print(response.body);
-      print(phoneNumber);
       if (response.statusCode == 200) {
         return true;
       } else {
-        showMotionToast(context: context, title: 'Phone Verification Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Phone Verification Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
         return false;
       }
     });
@@ -96,12 +92,11 @@ class AuthService {
       },
       body: body,
     ).then((response) async {
-      print(response.body);
       if (response.statusCode == 200) {
-        return AuthResponse.fromJson(jsonDecode(response.body));
+        return AuthResponse.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
       }
       else {
-        showMotionToast(context: context, title: 'login Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'login Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
         return AuthResponse();
       }
     });
@@ -115,9 +110,8 @@ class AuthService {
         "Authorization": "Token $token",
       },
     ).then((response) {
-      print(response.body);
       if (response.statusCode == 200) {
-        return UserModel.fromJson(jsonDecode(response.body)['user']);
+        return UserModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes))['user']);
       } else if (response.statusCode == 401) {
         unAuthClearAndRestart(context: context,);
         return null;
@@ -136,7 +130,7 @@ class AuthService {
       },
     ).then((response) {
       if (response.statusCode == 200) {
-        return jsonDecode(response.body)['response']["image"];
+        return jsonDecode(utf8.decode(response.bodyBytes))['response']["image"];
       } else if (response.statusCode == 401) {
         unAuthClearAndRestart(context: context,);
         return null;
@@ -214,7 +208,7 @@ class AuthService {
       if (response.statusCode == 200) {
         return true;
       } else {
-        showMotionToast(context: context, title: 'Request Password Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Request Password Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
         return false;
       }
     });
@@ -235,7 +229,7 @@ class AuthService {
       if (response.statusCode == 200) {
         return true;
       } else {
-        showMotionToast(context: context, title: 'Reset Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Reset Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
         return false;
       }
     });
@@ -249,9 +243,8 @@ class AuthService {
         "Authorization": "Token $token",
       },
     ).then((response) {
-      print(response.body);
       if (response.statusCode == 200) {
-        return CardsModel.fromJson(jsonDecode(response.body));
+        return CardsModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
       } else if (response.statusCode == 401) {
         unAuthClearAndRestart(context: context,);
         return null;
@@ -271,7 +264,7 @@ class AuthService {
       body: body,
     ).then((response) {
       if (response.statusCode == 201) {
-        return jsonDecode(response.body)['id'];
+        return jsonDecode(utf8.decode(response.bodyBytes))['id'];
       } else if (response.statusCode == 401) {
         unAuthClearAndRestart(context: context,);
         return null;
@@ -293,16 +286,13 @@ class AuthService {
         "card_type": cardType,
       },
     ).then((response) {
-      print("----------------------------");
-      print(response.body);
-      print("----------------------------");
       if (response.statusCode == 200) {
-        return jsonDecode(response.body)['id'];
+        return jsonDecode(utf8.decode(response.bodyBytes))['id'];
       } else if (response.statusCode == 401) {
         unAuthClearAndRestart(context: context,);
         return null;
       } else {
-        showMotionToast(context: context, title: 'Create Booking Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Create Booking Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
         return null;
       }
     });
@@ -323,7 +313,7 @@ class AuthService {
         unAuthClearAndRestart(context: context,);
         return null;
       } else {
-        showMotionToast(context: context, title: 'Logout Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Logout Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
         return false;
       }
     });
@@ -344,7 +334,7 @@ class AuthService {
         unAuthClearAndRestart(context: context,);
         return null;
       } else {
-        showMotionToast(context: context, title: 'Delete Account Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Delete Account Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
         return false;
       }
     });

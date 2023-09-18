@@ -1,6 +1,7 @@
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/ui/widgets/dot_item.dart';
 import 'package:goasbar/ui/widgets/info_item.dart';
+import 'package:goasbar/ui/widgets/previous_button.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter/material.dart';
@@ -154,33 +155,39 @@ class DocInfo extends StatelessWidget {
             ),
           ).gestures(onTap: onTapPickImage,),
           verticalSpaceLarge,
-          Container(
-            width: MediaQuery.of(context).size.width - 60,
-            height: 50,
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              gradient: kMainGradient,
-            ),
-            child: Center(
-              child: Text('NEXT'.tr(), style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
-            ),
-          ).gestures(
-            onTap: () {
-              if (typeOfIdentity!.text.isNotEmpty && identityNumber.text.isNotEmpty) {
-                if (identityNumber.text.length != 10) {
-                  MotionToast.warning(
-                    title: const Text("Incorrect Identity Number"),
-                    description: const Text("identity number must be 10 digits length"),
-                    animationCurve: Curves.easeIn,
-                    animationDuration: const Duration(milliseconds: 200),
-                  ).show(context);
-                } else {
-                  pageController.jumpToPage(2);
-                }
-              } else {
-                showErrorDialog!();
-              }
-            },
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              PreviousButton(onTap: () => pageController.jumpToPage(0)),
+              Container(
+                width: screenWidthPercentage(context, percentage: 0.4),
+                height: 50,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  gradient: kMainGradient,
+                ),
+                child: Center(
+                  child: Text('NEXT'.tr(), style: const TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+                ),
+              ).gestures(
+                onTap: () {
+                  if (typeOfIdentity!.text.isNotEmpty && identityNumber.text.isNotEmpty) {
+                    if (identityNumber.text.length != 10) {
+                      MotionToast.warning(
+                        title: const Text("Incorrect Identity Number"),
+                        description: const Text("identity number must be 10 digits length"),
+                        animationCurve: Curves.easeIn,
+                        animationDuration: const Duration(milliseconds: 200),
+                      ).show(context);
+                    } else {
+                      pageController.jumpToPage(2);
+                    }
+                  } else {
+                    showErrorDialog!();
+                  }
+                },
+              ),
+            ],
           ),
           verticalSpaceRegular,
         ],

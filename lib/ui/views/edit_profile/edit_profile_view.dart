@@ -102,14 +102,7 @@ class EditProfileView extends HookWidget {
                                 ),
                               ],
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Image.asset("assets/icons/export.png").gestures(onTap: () => model.pickImage()),
-                                verticalSpaceSmall,
-                                const Text("50 %", style: TextStyle(color: kGrayText),),
-                              ],
-                            ),
+                            Image.asset("assets/icons/export.png").gestures(onTap: () => model.pickImage()),
                           ],
                         ),
                       ),

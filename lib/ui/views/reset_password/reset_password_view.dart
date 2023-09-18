@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
-import 'package:goasbar/ui/views/complete_profile/complete_profile_view.dart';
 import 'package:goasbar/ui/views/reset_password/reset_password_viewmodel.dart';
+import 'package:motion_toast/motion_toast.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class ResetPasswordView extends HookWidget {
-  const ResetPasswordView({Key? key}) : super(key: key);
+  const ResetPasswordView({Key? key, this.phoneNumber}) : super(key: key);
+  final String? phoneNumber;
 
   @override
   Widget build(BuildContext context) {
     final password = useTextEditingController();
     final rePassword = useTextEditingController();
+    final code = useTextEditingController();
 
     return ViewModelBuilder<ResetPasswordViewModel>.reactive(
       builder: (context, model, child) => Scaffold(
@@ -100,6 +102,32 @@ class ResetPasswordView extends HookWidget {
                 ),
                 verticalSpaceMedium,
                 Row(
+                  children: const [
+                    horizontalSpaceSmall,
+                    Text("Code")
+                  ],
+                ),
+                verticalSpaceSmall,
+                TextField(
+                  controller: code,
+                  maxLength: 5,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    hintText: 'Code',
+                    hintStyle: const TextStyle(fontSize: 14),
+                    fillColor: kTextFiledMainColor,
+                    filled: true,
+                    counterText: "",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    enabledBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(color: kTextFiledGrayColor),
+                    ),
+                  ),
+                ),
+                verticalSpaceMedium,
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Column(
@@ -158,7 +186,23 @@ class ResetPasswordView extends HookWidget {
                     )
                 ).gestures(
                   onTap: password.text.isNotEmpty && rePassword.text.isNotEmpty ? () {
-                    model.navigateTo(view: const CompleteProfileView());
+                    if (code.text.length == 5) {
+                      model.resetPassword(context: context, phoneNumber: phoneNumber, code: code.text, password: password.text).then((value) {
+                        if (value!) {
+                          model.back();
+                          model.back();
+                        } else {
+
+                        }
+                      });
+                    } else {
+                      MotionToast.warning(
+                        title: const Text("Warning"),
+                        description: const Text("Code must be 5 numbers!!"),
+                        animationCurve: Curves.easeIn,
+                        animationDuration: const Duration(milliseconds: 200),
+                      ).show(context);
+                    }
                   } : () {},
                 ),
               ],

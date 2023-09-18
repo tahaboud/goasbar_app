@@ -16,8 +16,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class SearchView extends HookWidget {
-  const SearchView({Key? key, this.user}) : super(key: key);
+  const SearchView({Key? key, this.isUser, this.user}) : super(key: key);
   final UserModel? user;
+  final bool? isUser;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +37,7 @@ class SearchView extends HookWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   verticalSpaceMedium,
-                  Text('Where are you going ?'.tr(), style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),),
+                  Text('Where are you going ?'.tr(), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),),
                   verticalSpaceMedium,
                   TextField(
                     controller: title,
@@ -289,7 +290,7 @@ class SearchView extends HookWidget {
                     ],
                   ),
                   verticalSpaceLarge,
-                  model.experienceModels == null ? const SizedBox() : model.isBusy ? const Loader().center() : const Text('Your results', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),),
+                  model.experienceModels == null ? const SizedBox() : model.isBusy ? const Loader().center() : Text('Your results'.tr(), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),),
                   model.experienceModels == null ? const SizedBox() : verticalSpaceMedium,
                   model.experienceModels == null ? const SizedBox() : model.isBusy ? const SizedBox() : model.experienceModels!.count == 0 ? const Text('No results found with this specifications').center() : SizedBox(
                     height: 255,
@@ -373,8 +374,8 @@ class SearchView extends HookWidget {
                                   children: [
                                     Row(
                                       children: [
-                                        Text('${model.experienceModels!.results![index].price!} SR', style: const TextStyle(color: kMainColor1, fontSize: 9)),
-                                        Text(' / Person'.tr(), style: TextStyle(color: kMainGray, fontSize: 9)),
+                                        Text('${model.experienceModels!.results![index].price!} ${"SR".tr()}', style: const TextStyle(color: kMainColor1, fontSize: 9)),
+                                        Text(' / Person'.tr(), style: const TextStyle(color: kMainGray, fontSize: 9)),
                                       ],
                                     ),
                                     Container(
@@ -393,7 +394,7 @@ class SearchView extends HookWidget {
                               ],
                             ),
                           ).gestures(
-                            onTap: () => model.navigateTo(view: TripDetailView(experience: model.experienceModels!.results![index], user: user)),
+                            onTap: () => model.navigateTo(view: TripDetailView(isUser: isUser, experience: model.experienceModels!.results![index], user: user)),
                           ),
                         );
                       },

@@ -49,8 +49,8 @@ class TripsView extends HookWidget {
                   ),
                   verticalSpaceMedium,
                   model.isBusy ? const Loader().center()
-                      : !model.dataReady ? const Text('No trips right now').center() : model.data!.isEmpty
-                      ? const Text('No trips right now').center() : Expanded(child: ListView.builder(
+                      : !model.dataReady ? Text('No trips right now'.tr()).center() : model.data!.isEmpty
+                      ? Text('No trips right now'.tr()).center() : Expanded(child: ListView.builder(
                     physics: const BouncingScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: model.data!.length,

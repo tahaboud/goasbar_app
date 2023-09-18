@@ -60,7 +60,7 @@ class TimingItem extends StatelessWidget {
                 children: [
                   Image.asset("assets/icons/map_link.png", color: kMainColor1),
                   horizontalSpaceSmall,
-                  Text("Google maps".tr(), style: TextStyle(color: kGrayText),)
+                  Text("Google maps".tr(), style: const TextStyle(color: kGrayText),)
                 ],
               ),
             ).gestures(onTap: launchMaps),

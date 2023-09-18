@@ -15,6 +15,8 @@ class LoginViewModel extends BaseViewModel {
   final _authService = locator<AuthService>();
   AuthResponse? authResponse;
   bool? isClicked = false;
+  String? email = "";
+  String? password = "";
 
   updateIsClicked({value}) {
     isClicked = value;
@@ -23,6 +25,16 @@ class LoginViewModel extends BaseViewModel {
 
   void changeObscure() {
     isObscure = !isObscure;
+    notifyListeners();
+  }
+
+  void changedEmail(text) {
+    email = text;
+    notifyListeners();
+  }
+
+  void changedPass(text) {
+    password = text;
     notifyListeners();
   }
 

@@ -11,6 +11,7 @@ import 'package:goasbar/services/provider_api_service.dart';
 import 'package:goasbar/services/token_service.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -33,6 +34,10 @@ class BookingForProviderDetailViewModel extends FutureViewModel<PublicProviderMo
   Completer<GoogleMapController> controller = Completer();
   List<Marker> customMarkers = [];
   LatLng? latLon;
+
+  launchMaps ({LatLng? latLon}) {
+    MapsLauncher.launchCoordinates(latLon!.latitude, latLon.longitude);
+  }
 
   void addFavorites({int? experienceId, context}) {
     isFav = !isFav;

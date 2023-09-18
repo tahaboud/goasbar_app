@@ -12,9 +12,9 @@ class BookingsListModel {
     count = json['count'];
     next = json['next'];
     previous = json['previous'];
-    if (json['results'] != null) {
+    if (json['response'] != null) {
       results = <BookingsListResults>[];
-      json['results'].forEach((v) {
+      json['response'].forEach((v) {
         results!.add(BookingsListResults.fromJson(v));
       });
     }
@@ -26,7 +26,7 @@ class BookingsListModel {
     data['next'] = next;
     data['previous'] = previous;
     if (results != null) {
-      data['results'] = results!.map((v) => v.toJson()).toList();
+      data['response'] = results!.map((v) => v.toJson()).toList();
     }
     return data;
   }

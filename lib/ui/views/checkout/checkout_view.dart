@@ -235,7 +235,7 @@ class CheckoutView extends HookWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text('Ticket Price'.tr(), style: const TextStyle(fontSize: 16)),
-                          Text('${double.parse(experience!.price!) * usersCount!} SR', style: const TextStyle(fontSize: 16)),
+                          Text('${double.parse(experience!.price!) * usersCount!} ${"SR".tr()}', style: const TextStyle(fontSize: 16)),
                         ],
                       ),
                       verticalSpaceRegular,
@@ -243,7 +243,7 @@ class CheckoutView extends HookWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text('Fare Tax'.tr(), style: const TextStyle(fontSize: 16)),
-                          const Text('00.00 SR', style: TextStyle(fontSize: 16)),
+                          Text('00.00 ${"SR".tr()}', style: const TextStyle(fontSize: 16)),
                         ],
                       ),
                       verticalSpaceLarge,
@@ -252,15 +252,13 @@ class CheckoutView extends HookWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text('Total Amount'.tr(), style: const TextStyle(fontSize: 16)),
-                          Text('${double.parse(experience!.price!) * usersCount!} SR', style: const TextStyle(fontSize: 16)),
+                          Text('${double.parse(experience!.price!) * usersCount!} ${"SR".tr()}', style: const TextStyle(fontSize: 16)),
                         ],
                       ),
                     ],
                   ),
                 ),
                 verticalSpaceLarge,
-                Text('Payment Terms and Conditions'.tr(), style: const TextStyle(color: Color(0xff223263)),),
-                verticalSpaceRegular,
                 Container(
                   width: MediaQuery.of(context).size.width - 30,
                   height: 50,
@@ -270,7 +268,7 @@ class CheckoutView extends HookWidget {
                   ),
                   child: model.isClicked! ? const Loader().center() : Text('Continue with Payment'.tr(), style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
                 ).gestures(
-                  onTap:  () {
+                  onTap: model.isClicked! ? () {} : () {
                     if (model.selectedRegisteredCard!.registrationId != "") {
                       if (cvv.text.isEmpty) {
                         showMotionToast(context: context, title: 'Warning, CVV is required', msg: "Please enter your cvv", type: MotionToastType.warning);

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/notifications/notifications_viewmodel.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
-import 'package:goasbar/ui/widgets/notification_item.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:stacked/stacked.dart';
 
 class NotificationsView extends StatelessWidget {
@@ -15,9 +15,9 @@ class NotificationsView extends StatelessWidget {
     return ViewModelBuilder<NotificationsViewModel>.reactive(
       builder: (context, model, child) {
         return model.isBusy ? const Loader() : Column(
-          children: const [
+          children: [
             verticalSpaceMedium,
-            Text('This page is not available right now'),
+            Text('This page is not available right now'.tr()),
             // Row(
             //   mainAxisAlignment: MainAxisAlignment.center,
             //   children: [

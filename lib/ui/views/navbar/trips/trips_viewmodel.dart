@@ -62,6 +62,7 @@ class TripsViewModel extends FutureViewModel<List<BookingsListResults?>?> {
     }
 
     pageNumber = 1;
+    data = [];
     notifyListeners();
 
     getUserBookings(query: query, page: pageNumber);
@@ -80,9 +81,11 @@ class TripsViewModel extends FutureViewModel<List<BookingsListResults?>?> {
 
   Future<List<BookingsListResults?>?> getUserBookings({int? page, String? query}) async {
     String? token = await _tokenService.getTokenValue();
+
     bookingsListModel = await _bookingApiService.getUserBookings(token: token, context: context, page: page, query: query);
+    data = bookingsListModel!.results;
     notifyListeners();
-    return bookingsListModel!.results ?? [];
+    return data ?? [];
   }
 
   @override

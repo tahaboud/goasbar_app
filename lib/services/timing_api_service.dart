@@ -23,14 +23,14 @@ class TimingApiService {
       },
       body: body,
     ).then((response) {
-      print(response.body);
+
       if (response.statusCode == 201) {
-        return TimingModel.fromJson(jsonDecode(response.body));
+        return TimingModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
       } else if (response.statusCode == 401) {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
-        showMotionToast(context: context, title: 'Create Timing Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Create Timing Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
         return null;
       }
     });
@@ -46,12 +46,12 @@ class TimingApiService {
       body: body,
     ).then((response) {
       if (response.statusCode == 200) {
-        return TimingModel.fromJson(jsonDecode(response.body));
+        return TimingModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
       } else if (response.statusCode == 401) {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
-        showMotionToast(context: context, title: 'Update Timing Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Update Timing Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
         return null;
       }
     });
@@ -66,7 +66,7 @@ class TimingApiService {
       },
     ).then((response) {
       if (response.statusCode == 200) {
-        return TimingListModel.fromJson(jsonDecode(response.body));
+        return TimingListModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
       } else if (response.statusCode == 401) {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
@@ -90,7 +90,7 @@ class TimingApiService {
         _authService.unAuthClearAndRestart(context: context,);
         return null;
       } else {
-        showMotionToast(context: context, title: 'Delete Timing Failed', msg: jsonDecode(response.body)["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(context: context, title: 'Delete Timing Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
         return false;
       }
     });

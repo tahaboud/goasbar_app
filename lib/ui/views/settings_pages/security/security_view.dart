@@ -16,7 +16,7 @@ class SecurityView extends HookWidget {
   Widget build(BuildContext context) {
     final code = useTextEditingController();
     final password = useTextEditingController();
-    final newPassword = useTextEditingController();
+    final rePassword = useTextEditingController();
 
     return ViewModelBuilder<SecurityViewModel>.reactive(
       builder: (context, model, child) => Scaffold(
@@ -81,7 +81,7 @@ class SecurityView extends HookWidget {
                         Row(
                           children: const [
                             horizontalSpaceSmall,
-                            Text("Current password")
+                            Text("Password")
                           ],
                         ),
                         verticalSpaceSmall,
@@ -91,7 +91,7 @@ class SecurityView extends HookWidget {
                           obscureText: model.isObscure,
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           decoration: InputDecoration(
-                            hintText: 'Current Password',
+                            hintText: 'Password',
                             hintStyle: const TextStyle(fontSize: 14),
                             suffixIcon: const Icon(Icons.remove_red_eye_outlined, size: 17)
                                 .gestures(
@@ -113,17 +113,17 @@ class SecurityView extends HookWidget {
                         Row(
                           children: const [
                             horizontalSpaceSmall,
-                            Text("New password")
+                            Text("Re-Password")
                           ],
                         ),
                         verticalSpaceSmall,
                         TextFormField(
-                          controller: newPassword,
+                          controller: rePassword,
                           validator: (value) => model.validatePassword(value: value),
                           obscureText: model.isObscure,
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           decoration: InputDecoration(
-                            hintText: 'New Password',
+                            hintText: 'Re-Password',
                             hintStyle: const TextStyle(fontSize: 14),
                             suffixIcon: const Icon(Icons.remove_red_eye_outlined, size: 17)
                                 .gestures(
@@ -150,7 +150,7 @@ class SecurityView extends HookWidget {
                       height: 50,
                       decoration: BoxDecoration(
                         borderRadius: const BorderRadius.all(Radius.circular(10)),
-                        gradient: password.text.isNotEmpty && newPassword.text.isNotEmpty ? kMainGradient : kMainDisabledGradient,
+                        gradient: password.text.isNotEmpty && rePassword.text.isNotEmpty ? kMainGradient : kMainDisabledGradient,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -165,7 +165,7 @@ class SecurityView extends HookWidget {
                         ],
                       )
                   ).gestures(
-                    onTap: password.text.isNotEmpty && newPassword.text.isNotEmpty && code.text.isNotEmpty ? () {
+                    onTap: password.text.isNotEmpty && rePassword.text.isNotEmpty && code.text.isNotEmpty ? () {
                       if (code.text.length == 5) {
                         model.resetPassword(context: context, phoneNumber: phoneNumber, code: code.text, password: password.text).then((value) {
                           if (value!) {
