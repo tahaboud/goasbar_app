@@ -5,19 +5,10 @@ import 'package:flutter/services.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/cards_model.dart';
 import 'package:goasbar/data_models/user_model.dart';
-import 'package:goasbar/enum/dialog_type.dart';
-import 'package:goasbar/services/auth_service.dart';
 import 'package:goasbar/services/booking_api_service.dart';
 import 'package:goasbar/services/token_service.dart';
-import 'package:goasbar/shared/ui_helpers.dart';
-import 'package:goasbar/ui/views/home/home_view.dart';
-import 'package:hyperpay_plugin/model/custom_ui.dart';
-import 'package:hyperpay_plugin/model/ready_ui.dart';
-import 'package:hyperpay_plugin/model/stored_cards.dart';
-import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
-import 'package:hyperpay_plugin/flutter_hyperpay.dart';
 
 class CheckoutViewModel extends FutureViewModel<CardsModel?> {
   BuildContext? context;
@@ -27,17 +18,15 @@ class CheckoutViewModel extends FutureViewModel<CardsModel?> {
   final _navigationService = locator<NavigationService>();
   int? selectedPaymentMethod = 1;
   final _tokenService = locator<TokenService>();
-  final _authService = locator<AuthService>();
   CardsModel? userCards;
-  final _dialogService = locator<DialogService>();
   final _bookingApiService = locator<BookingApiService>();
   bool? waitUntilFinish = false;
   bool? isClicked = false;
-  FlutterHyperPay? flutterHyperPay;
   Response? selectedRegisteredCard = Response(registrationId: "");
 
   void navigateTo({view}) {
-    _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
+    _navigationService.navigateWithTransition(view,
+        curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
   }
 
   void back() {
@@ -63,168 +52,109 @@ class CheckoutViewModel extends FutureViewModel<CardsModel?> {
     notifyListeners();
   }
 
-  Future prepareCheckoutTokenization({context, cvv, int? bookingId, Map? body, registrationId, brand, user}) async {
-    print(body);
+  Future prepareCheckoutTokenization(
+      {context,
+      cvv,
+      int? bookingId,
+      Map? body,
+      registrationId,
+      brand,
+      user}) async {
     updateIsClicked(value: true);
     String? token = await _tokenService.getTokenValue();
-    await _bookingApiService.prepareCheckout(context: context, token: token, bookingId: bookingId, body: body,).then((value) async{
+    await _bookingApiService
+        .prepareCheckout(
+      context: context,
+      token: token,
+      bookingId: bookingId,
+      body: body,
+    )
+        .then((value) async {
+      updateIsClicked(value: false);
+    });
+  }
+
+  Future prepareCheckoutApplePayment({
+    context,
+    UserModel? user,
+    int? bookingId,
+    Map? body,
+  }) async {
+    updateIsClicked(value: true);
+    String? token = await _tokenService.getTokenValue();
+    await _bookingApiService
+        .prepareCheckout(
+      context: context,
+      token: token,
+      bookingId: bookingId,
+      body: body,
+    )
+        .then((value) {
+      updateIsClicked(value: false);
+    });
+  }
+
+  Future prepareCheckoutPayment({
+    context,
+    UserModel? user,
+    int? bookingId,
+    Map? body,
+    String? cardNumber,
+    String? cardHolder,
+    String? expiryMonth,
+    String? expiryYear,
+    String? cVV,
+  }) async {
+    updateIsClicked(value: true);
+    String? token = await _tokenService.getTokenValue();
+    await _bookingApiService
+        .prepareCheckout(
+      context: context,
+      token: token,
+      bookingId: bookingId,
+      body: body,
+    )
+        .then((value) {
       updateIsClicked(value: false);
       if (value != null) {
-        print(brand);
-        print(cvv);
-        print(value);
-        print(registrationId);
-
-        try {
-
-          flutterHyperPay = FlutterHyperPay(
-            shopperResultUrl: InAppPaymentSetting.shopperResultUrl,
-            paymentMode:  PaymentMode.live,
-            lang: InAppPaymentSetting.getLang(),
-          );
-
-          if (Platform.isIOS) {
-            PaymentResultData paymentResultData = await flutterHyperPay!.payWithSoredCards(
-              storedCards: StoredCards(
-                checkoutId: value,
-                cvv: cvv,
-                tokenId: registrationId,
-                brandName: brand,
-                paymentType: "DB",
-              ),
+        platform.invokeMethod("gethyperpayresponse", <String, dynamic>{
+          "checkoutId": value,
+          "type": "CustomUI",
+          "mode": "LIVE",
+          "lang": "en_us",
+          "ShopperResultUrl": "goasbar://result",
+          "brand": "VISA",
+          "card_number": cardNumber,
+          "holder_name": cardHolder,
+          "year": "20$expiryYear",
+          "month": expiryMonth,
+          "cvv": cVV,
+          "EnabledTokenization": "false",
+        }).then((value) {
+          if (value == "SYNC") {
+            _bookingApiService.getPaymentStatus(
+              context: context,
+              token: token,
+              bookingId: bookingId,
             );
-            if (paymentResultData.paymentResult == PaymentResult.success ||
-                paymentResultData.paymentResult == PaymentResult.sync) {
-
-              print('-------------------------------------');
-              print('DONE');
-
-              _dialogService.showCustomDialog(variant: DialogType.waitingUntilPaymentFinished, barrierDismissible: false, );
-
-              bool? bookingState = await _bookingApiService.getPaymentStatus(context: context, token: token, bookingId: bookingId);
-              if (bookingState!) {
-                Navigator.pop(context);
-                _navigationService.clearTillFirstAndShowView(const HomeView(isUser: true,));
-              } else {
-                Navigator.pop(context);
-              }
-            } else {
-              showMotionToast(context: context, title: 'Error Payment', msg: "Payment Failed, Please Retry Payment", type: MotionToastType.error);
-            }
-          } else {
-            final String result = await platform.invokeMethod('paywithsavedcard', {
-              "checkoutid": value,
-              "brand": brand,
-              "tokenid": registrationId,
-              "cvv": cvv,
-            }).then((value) {
-              print(value);
-              return value;
-            });
-            print(result);
-            if (result == "SYNC") {
-
-              print('-------------------------------------');
-              print('DONE');
-
-              _dialogService.showCustomDialog(variant: DialogType.waitingUntilPaymentFinished, barrierDismissible: false, );
-
-              bool? bookingState = await _bookingApiService.getPaymentStatus(context: context, token: token, bookingId: bookingId);
-              print(bookingId);
-              if (bookingState!) {
-                Navigator.pop(context);
-                _navigationService.clearTillFirstAndShowView(const HomeView(isUser: true,));
-              } else {
-                Navigator.pop(context);
-              }
-            } else {
-              showMotionToast(context: context, title: 'Error Payment', msg: "Payment Failed, Please Retry Payment", type: MotionToastType.error);
-            }
           }
-
-        } on PlatformException catch (e) {
-          print(e);
-
-        }
+        }).catchError((e) {});
       }
     });
   }
 
-  Future prepareCheckoutApplePayment({context, UserModel? user, int? bookingId, Map? body,}) async {
-
-    updateIsClicked(value: true);
-    String? token = await _tokenService.getTokenValue();
-    print(body);
-    await _bookingApiService.prepareCheckout(context: context, token: token, bookingId: bookingId, body: body,).then((value) {
-      updateIsClicked(value: false);
-      if (value != null) {
-        flutterHyperPay = FlutterHyperPay(
-          shopperResultUrl: InAppPaymentSetting.shopperResultUrl,
-          paymentMode:  PaymentMode.live,
-          lang: InAppPaymentSetting.getLang(),
-        );
-
-        payApplePayReadyUI(checkoutId: value, context: context, token: token, user: user, bookingId: bookingId);
-      }
-    });
-  }
-
-  payApplePayReadyUI({required String checkoutId, context, UserModel? user, int? bookingId, String? token,}) async {
-    PaymentResultData paymentResultData;
-    paymentResultData = await flutterHyperPay!.readyUICards(
-      readyUI: ReadyUI(
-        brandsName: ["MADA", "VISA" ,"MASTER", "APPLEPAY"],
-        checkoutId: checkoutId,
-        merchantIdApplePayIOS: InAppPaymentSetting.merchantId, // applepay
-        countryCodeApplePayIOS: InAppPaymentSetting.countryCode, // applePay
-        companyNameApplePayIOS: "Go Asbar", // applePay
-        themColorHexIOS: "#000000",// FOR IOS ONLY
-        setStorePaymentDetailsMode: false, // store payment details for future use
-      ),
-    );
-
-    if (paymentResultData.paymentResult == PaymentResult.success ||
-        paymentResultData.paymentResult == PaymentResult.sync) {
-
-      print('-------------------------------------');
-      print(paymentResultData.paymentResult);
-      print('DONE');
-
-      _dialogService.showCustomDialog(variant: DialogType.waitingUntilPaymentFinished, barrierDismissible: false, );
-
-      bool? bookingState = await _bookingApiService.getPaymentStatus(context: context, token: token, bookingId: bookingId);
-      print(bookingState);
-      if (bookingState!) {
-        Navigator.pop(context);
-        //TODO Update to see booking pages
-        _navigationService.clearTillFirstAndShowView(const HomeView(isUser: true,));
-      } else {
-        Navigator.pop(context);
-      }
-    } else {
-      showMotionToast(context: context, title: 'Error Payment', msg: "Payment Failed, Please Retry Payment", type: MotionToastType.error);
-    }
-  }
-
-  Future prepareCheckoutPayment({context, UserModel? user, int? bookingId, Map? body, String? cardNumber, String? cardHolder,
-    String? expiryMonth, String? expiryYear, String? cVV,}) async {
-
-    updateIsClicked(value: true);
-    String? token = await _tokenService.getTokenValue();
-    print(body);
-    await _bookingApiService.prepareCheckout(context: context, token: token, bookingId: bookingId, body: body,).then((value) {
-      updateIsClicked(value: false);
-      if (value != null) {
-        payWithCard(context: context, user: user, bookingId: bookingId, token: token, checkoutId: value, cardHolder: cardHolder, cardNumber: cardNumber,
-          cVV: cVV, expiryMonth: expiryMonth, expiryYear: "20$expiryYear", brand: body!['payment_method'],);
-      }
-    });
-  }
-
-  Future payWithCard({context, UserModel? user, int? bookingId, String? token, String? checkoutId,
-    String? cardNumber, String? cardHolder, String? expiryMonth, String? expiryYear,
-    String? cVV, String? brand}) async {
-
+  Future payWithCard(
+      {context,
+      UserModel? user,
+      int? bookingId,
+      String? token,
+      String? checkoutId,
+      String? cardNumber,
+      String? cardHolder,
+      String? expiryMonth,
+      String? expiryYear,
+      String? cVV,
+      String? brand}) async {
     payWithCardCustomUi(
       user: user,
       context: context,
@@ -233,86 +163,42 @@ class CheckoutViewModel extends FutureViewModel<CardsModel?> {
       cardNumber: cardNumber!,
       brandName: brand!,
       checkoutId: checkoutId!,
-      cvv: int.parse(cVV!),
+      cvv: cVV as String,
       holderName: cardHolder,
-      month: int.parse(expiryMonth!),
-      year: int.parse(expiryYear!),
+      month: expiryMonth as String,
+      year: expiryYear as String,
     );
-
   }
 
   payWithCardCustomUi(
-      {required String brandName, String? holderName, int? month, int? year, int? cvv,
-        context, UserModel? user, int? bookingId, String? token,
-        required String checkoutId , required String cardNumber}) async {
-    PaymentResultData paymentResultData;
-
-    flutterHyperPay = FlutterHyperPay(
-      shopperResultUrl: InAppPaymentSetting.shopperResultUrl,
-      paymentMode:  PaymentMode.live,
-      lang: InAppPaymentSetting.getLang(),
-    );
-
-
-    print(month);
-    print(brandName);
-    print(checkoutId);
-    print(holderName);
-    print(year);
-    print(cvv);
-    print(cardNumber.replaceAll(" ", ""));
-    paymentResultData = await flutterHyperPay!.customUICards(
-      customUI: CustomUI(
-        brandName: brandName,
-        checkoutId: checkoutId,
-        cardNumber: "4575530053479625",
-        holderName: "OSAMA MOGAITOOF",
-        month: "06",
-        year: "2025",
-        cvv: "611",
-        enabledTokenization: false, // default
-      ),
-    ).then((value) {
-      print("testtt");
-      print(value);
+      {required String brandName,
+      String? holderName,
+      String? month,
+      String? year,
+      String? cvv,
+      context,
+      UserModel? user,
+      int? bookingId,
+      String? token,
+      required String checkoutId,
+      required String cardNumber}) async {
+    platform.invokeMethod("gethyperpayresponse", <String, dynamic>{
+      "checkoutId": checkoutId,
+      "type": "CustomUI",
+      "mode": "LIVE",
+      "lang": "en_us",
+      "ShopperResultUrl": "goasbar://result",
+      "brand": brandName,
+      "card_number": cardNumber,
+      "holder_name": holderName,
+      "year": year,
+      "month": month,
+      "cvv": cvv,
+      "EnabledTokenization": "false",
+    }).then((value) {
       return value;
-    }).catchError((e) {
-      print("failed testtt");
-      print(e);
-
-    });
-
-    print(paymentResultData.paymentResult);
-    if (paymentResultData.paymentResult == PaymentResult.success ||
-        paymentResultData.paymentResult == PaymentResult.sync) {
-
-      print('-------------------------------------');
-      print('DONE');
-
-      _dialogService.showCustomDialog(variant: DialogType.waitingUntilPaymentFinished, barrierDismissible: false, );
-
-      bool? bookingState = await _bookingApiService.getPaymentStatus(context: context, token: token, bookingId: bookingId);
-      if (bookingState!) {
-        Navigator.pop(context);
-        _navigationService.clearTillFirstAndShowView(const HomeView(isUser: true,));
-      } else {
-        Navigator.pop(context);
-      }
-    } else {
-      showMotionToast(context: context, title: 'Error Payment', msg: "Payment Failed, Please Retry Payment", type: MotionToastType.error);
-    }
+    }).catchError((e) {});
   }
-
-  // Future<CardsModel?> getUserCards () async {
-  //   String? token = await _tokenService.getTokenValue();
-  //   return _authService.getUserCards(context: context, token: token).then((value) {
-  //     if (value != null) {
-  //       userCards = value;
-  //       notifyListeners();
-  //     }
-  //     return userCards;
-  //   });
-  // }
 
   @override
   Future<CardsModel?> futureToRun() async {
@@ -322,12 +208,12 @@ class CheckoutViewModel extends FutureViewModel<CardsModel?> {
 }
 
 class InAppPaymentSetting {
-  static const String shopperResultUrl= "goasbar://result";
-  static const String merchantId= "merchant.com.goasbar.goAsbarApp";
-  static const String countryCode="SA";
+  static const String shopperResultUrl = "goasbar://result";
+  static const String merchantId = "merchant.com.goasbar.goAsbarApp";
+  static const String countryCode = "SA";
   static getLang() {
     if (Platform.isIOS) {
-      return  "en"; // ar
+      return "en"; // ar
     } else {
       return "en_US"; // ar_AR
     }

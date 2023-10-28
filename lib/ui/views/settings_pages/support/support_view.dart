@@ -25,41 +25,59 @@ class SupportView extends HookWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      const Icon(CupertinoIcons.arrow_turn_up_left).height(40)
+                      const Icon(CupertinoIcons.arrow_turn_up_left)
+                          .height(40)
                           .width(40)
-                          .gestures(
-                          onTap: () {
-                            model.back();
-                          }
+                          .gestures(onTap: () {
+                        model.back();
+                      }),
+                      Text(
+                        'Support Center'.tr(),
+                        style: const TextStyle(fontSize: 21),
                       ),
-                      Text('Support Center'.tr(), style: const TextStyle(fontSize: 21),),
                     ],
                   ),
                   verticalSpaceMedium,
                   Expanded(
                     child: Column(
                       children: [
-                        Text("contact us".tr(), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                        Text("contact us".tr(),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18)),
                         verticalSpaceMedium,
-                        Row(
-                          children: const [
-                            Icon(Icons.phone_outlined, size: 35,),
+                        const Row(
+                          children: [
+                            Icon(
+                              Icons.phone_outlined,
+                              size: 35,
+                            ),
                             horizontalSpaceSmall,
-                            Text("+966 535 584 402", style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500), textDirection: TextDirection.ltr,)
+                            Text(
+                              "+966 535 584 402",
+                              style: TextStyle(
+                                  fontSize: 22, fontWeight: FontWeight.w500),
+                              textDirection: TextDirection.ltr,
+                            )
                           ],
                         ).gestures(onTap: () => model.launchPhoneCall()),
                         verticalSpaceMedium,
-                        Row(
-                          children: const [
-                            Icon(Icons.email_outlined, size: 35,),
+                        const Row(
+                          children: [
+                            Icon(
+                              Icons.email_outlined,
+                              size: 35,
+                            ),
                             horizontalSpaceSmall,
-                            Text("info@goasbar.com", style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),)
+                            Text(
+                              "info@goasbar.com",
+                              style: TextStyle(
+                                  fontSize: 22, fontWeight: FontWeight.w500),
+                            )
                           ],
                         ).gestures(onTap: () => model.launchEmail()),
                       ],
                     ),
                   ),
-
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     height: 50,
@@ -68,7 +86,14 @@ class SupportView extends HookWidget {
                       gradient: kMainGradient,
                     ),
                     child: Center(
-                      child: Text('Go to Website'.tr(), style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+                      child: Text(
+                        'Go to Website'.tr(),
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Poppins',
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500),
+                      ),
                     ),
                   ).gestures(
                     onTap: () async {

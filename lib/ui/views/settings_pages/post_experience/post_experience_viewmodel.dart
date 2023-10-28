@@ -21,7 +21,8 @@ class PostExperienceViewModel extends FutureViewModel<List<ExperienceResults>> {
   int pageNumber = 1;
 
   void navigateTo({view}) {
-    _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
+    _navigationService.navigateWithTransition(view,
+        curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
   }
 
   void back() {
@@ -53,8 +54,9 @@ class PostExperienceViewModel extends FutureViewModel<List<ExperienceResults>> {
     if (index! % 10 == 0) {
       pageNumber++;
       String? token = await _tokenService.getTokenValue();
-      print("index : $index");
-      ExperienceModel? experienceModelsList = await _experienceApiService.getProviderExperiences(token: token, context: context, page: pageNumber);
+      ExperienceModel? experienceModelsList =
+          await _experienceApiService.getProviderExperiences(
+              token: token, context: context, page: pageNumber);
       experienceModels!.results!.addAll(experienceModelsList!.results!);
       notifyListeners();
     }
@@ -62,13 +64,17 @@ class PostExperienceViewModel extends FutureViewModel<List<ExperienceResults>> {
 
   Future<ExperienceModel?> getProviderExperiences({context}) async {
     String? token = await _tokenService.getTokenValue();
-    return await _experienceApiService.getProviderExperiences(token: token, context: context, page: pageNumber);
+    return await _experienceApiService.getProviderExperiences(
+        token: token, context: context, page: pageNumber);
   }
 
   Future<bool?> deleteExperience({int? experienceId, context}) async {
     String? token = await _tokenService.getTokenValue();
     setBusy(true);
-    return await _experienceApiService.deleteExperience(context: context, token: token, experienceId: experienceId).then((value) async {
+    return await _experienceApiService
+        .deleteExperience(
+            context: context, token: token, experienceId: experienceId)
+        .then((value) async {
       if (value != null && value) {
         isCollapsed = [];
         data = await futureToRun();

@@ -31,9 +31,12 @@ class ChatItem extends StatelessWidget {
               width: 50,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: model.isBusy ? const AssetImage("assets/images/message_pic.png")
-                      : model.data == null ? const AssetImage("assets/images/message_pic.png")
-                      : NetworkImage('$baseUrl${model.data}') as ImageProvider,
+                  image: model.isBusy
+                      ? const AssetImage("assets/images/message_pic.png")
+                      : model.data == null
+                          ? const AssetImage("assets/images/message_pic.png")
+                          : NetworkImage('$baseUrl${model.data}')
+                              as ImageProvider,
                   fit: BoxFit.cover,
                 ),
                 borderRadius: BorderRadius.circular(5),
@@ -43,9 +46,15 @@ class ChatItem extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(receiverName!,),
+                Text(
+                  receiverName!,
+                ),
                 verticalSpaceSmall,
-                Text('Check your last messages'.tr(), style: TextStyle(color: kMainDisabledGray, fontSize: 12),)
+                Text(
+                  'Check your last messages'.tr(),
+                  style:
+                      const TextStyle(color: kMainDisabledGray, fontSize: 12),
+                )
               ],
             ),
             //TODO add non read messages
@@ -65,7 +74,8 @@ class ChatItem extends StatelessWidget {
           ],
         ).padding(bottom: 20).gestures(onTap: onTap);
       },
-      viewModelBuilder: () => ChatItemViewModel(id: receiverId, isUser: isUser, context: context),
+      viewModelBuilder: () =>
+          ChatItemViewModel(id: receiverId, isUser: isUser, context: context),
     );
   }
 }

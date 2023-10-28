@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 
 const Color kMainColor1 = Color(0xff3AB5AF);

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/chat_token_provider_model.dart';
@@ -5,10 +6,9 @@ import 'package:goasbar/services/chat_api_service.dart';
 import 'package:goasbar/services/token_service.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
-class ChatWithAgencyFromTripDetailViewModel extends FutureViewModel<ChatTokenProviderModel?> {
+class ChatWithAgencyFromTripDetailViewModel
+    extends FutureViewModel<ChatTokenProviderModel?> {
   ChatWithAgencyFromTripDetailViewModel({this.context, this.providerId});
   BuildContext? context;
   int? providerId;
@@ -21,7 +21,8 @@ class ChatWithAgencyFromTripDetailViewModel extends FutureViewModel<ChatTokenPro
   final _fireStore = FirebaseFirestore.instance;
 
   void navigateTo({view}) {
-    _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
+    _navigationService.navigateWithTransition(view,
+        curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
   }
 
   void back() {
@@ -33,16 +34,28 @@ class ChatWithAgencyFromTripDetailViewModel extends FutureViewModel<ChatTokenPro
     notifyListeners();
   }
 
-  Future<ChatTokenProviderModel?> getUserFireStoreTokenAndProviderChatId() async {
+  Future<ChatTokenProviderModel?>
+      getUserFireStoreTokenAndProviderChatId() async {
     String? token = await _tokenService.getTokenValue();
-    chatTokenProvider = await _chatApiService.getProviderFireStoreTokenAndChatId(context: context, token: token, providerId: providerId);
+    chatTokenProvider =
+        await _chatApiService.getProviderFireStoreTokenAndChatId(
+            context: context, token: token, providerId: providerId);
     notifyListeners();
     return chatTokenProvider;
   }
 
-  Future sendMessage({String? meId, String? notMeId, TextEditingController? message,}) async {
+  Future sendMessage({
+    String? meId,
+    String? notMeId,
+    TextEditingController? message,
+  }) async {
     if (message!.text.isNotEmpty) {
-      await _fireStore.collection("chats").doc(chatTokenProvider!.chatId).collection("messages").doc().set({
+      await _fireStore
+          .collection("chats")
+          .doc(chatTokenProvider!.chatId)
+          .collection("messages")
+          .doc()
+          .set({
         "createdAt": DateTime.now(),
         "receiverID": notMeId,
         "senderID": meId,

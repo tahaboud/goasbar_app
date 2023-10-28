@@ -1,14 +1,13 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/request_reset/request_password_viewmodel.dart';
 import 'package:goasbar/ui/views/settings_pages/security/security_view.dart';
-import 'package:motion_toast/motion_toast.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class RequestPasswordView extends HookWidget {
   const RequestPasswordView({Key? key, this.phone}) : super(key: key);
@@ -29,14 +28,18 @@ class RequestPasswordView extends HookWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const Icon(CupertinoIcons.arrow_turn_up_left).height(40)
+                    const Icon(CupertinoIcons.arrow_turn_up_left)
+                        .height(40)
                         .width(40)
                         .gestures(
                       onTap: () {
                         model.back();
                       },
                     ),
-                    Text('Security Information'.tr(), style: TextStyle(fontSize: 21),),
+                    Text(
+                      'Security Information'.tr(),
+                      style: const TextStyle(fontSize: 21),
+                    ),
                   ],
                 ),
                 verticalSpaceMedium,
@@ -48,7 +51,11 @@ class RequestPasswordView extends HookWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text('Forget your Password ?'.tr(), style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
+                    Text(
+                      'Forget your Password ?'.tr(),
+                      style: const TextStyle(
+                          fontSize: 30, fontWeight: FontWeight.bold),
+                    ),
                   ],
                 ),
                 verticalSpaceMedium,
@@ -57,7 +64,7 @@ class RequestPasswordView extends HookWidget {
                   children: [
                     Text(
                       "Dont worry".tr(),
-                      style: TextStyle(fontSize: 14, color: kMainGray),
+                      style: const TextStyle(fontSize: 14, color: kMainGray),
                     ),
                   ],
                 ),
@@ -70,7 +77,10 @@ class RequestPasswordView extends HookWidget {
                     hintText: 'xx x - xx x - xx x',
                     hintStyle: const TextStyle(fontSize: 14),
                     // prefixText: 'Saudi Arabia ( +966 ) | ',
-                    prefixIcon: const Text(' ( +966 )  |', style: TextStyle(color: kMainGray, fontSize: 14),).padding(vertical: 20, horizontal: 10),
+                    prefixIcon: const Text(
+                      ' ( +966 )  |',
+                      style: TextStyle(color: kMainGray, fontSize: 14),
+                    ).padding(vertical: 20, horizontal: 10),
                     fillColor: kTextFiledGrayColor,
                     filled: true,
                     border: OutlineInputBorder(
@@ -87,7 +97,9 @@ class RequestPasswordView extends HookWidget {
                     height: 50,
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
-                      gradient: phoneNumber.text.isNotEmpty ? kMainGradient : kMainDisabledGradient,
+                      gradient: phoneNumber.text.isNotEmpty
+                          ? kMainGradient
+                          : kMainDisabledGradient,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -95,22 +107,36 @@ class RequestPasswordView extends HookWidget {
                         const Spacer(),
                         const Spacer(),
                         const Spacer(),
-                        Text('Send Verification Code'.tr(), style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),),
+                        Text(
+                          'Send Verification Code'.tr(),
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500),
+                        ),
                         const Spacer(),
                         const Spacer(),
-                        Image.asset("assets/icons/forget_password.png",).padding(horizontal: 15),
+                        Image.asset(
+                          "assets/icons/forget_password.png",
+                        ).padding(horizontal: 15),
                       ],
-                    )
-                ).gestures(
-                  onTap: phoneNumber.text.isNotEmpty ? () {
-                    model.forgetPassword(context: context, phoneNumber: "+966${phoneNumber.text}").then((value) {
-                      if (value!) {
-                        model.navigateTo(view: SecurityView(phoneNumber: "+966${phoneNumber.text}",));
-                      } else {
-
-                      }
-                    });
-                  } : () {},
+                    )).gestures(
+                  onTap: phoneNumber.text.isNotEmpty
+                      ? () {
+                          model
+                              .forgetPassword(
+                                  context: context,
+                                  phoneNumber: "+966${phoneNumber.text}")
+                              .then((value) {
+                            if (value!) {
+                              model.navigateTo(
+                                  view: SecurityView(
+                                phoneNumber: "+966${phoneNumber.text}",
+                              ));
+                            } else {}
+                          });
+                        }
+                      : () {},
                 ),
               ],
             ),

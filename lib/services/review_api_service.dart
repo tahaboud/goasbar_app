@@ -1,8 +1,8 @@
 // ignore_for_file: depend_on_referenced_packages
 import 'dart:convert';
+
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/review_model.dart';
-import 'package:goasbar/data_models/review_models/reviews_list_model.dart';
 import 'package:goasbar/services/auth_service.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
@@ -12,46 +12,65 @@ import 'package:motion_toast/resources/arrays.dart';
 class ReviewApiService {
   final _authService = locator<AuthService>();
 
-  Future<ReviewModel?> createReview({context, String? token, Map? body, int? bookingId}) async {
-    return http.post(
+  Future<ReviewModel?> createReview(
+      {context, String? token, Map? body, int? bookingId}) async {
+    return http
+        .post(
       Uri.parse("$baseUrl/api/review/$bookingId/"),
       headers: {
         "Accept-Language": "en-US",
         "Authorization": "Token $token",
       },
       body: body,
-    ).then((response) {
-
+    )
+        .then((response) {
       if (response.statusCode == 201) {
-        return ReviewModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+        return ReviewModel.fromJson(
+            jsonDecode(utf8.decode(response.bodyBytes)));
       } else if (response.statusCode == 401) {
-        _authService.unAuthClearAndRestart(context: context,);
+        _authService.unAuthClearAndRestart(
+          context: context,
+        );
         return null;
       } else {
-        showMotionToast(context: context, title: 'Create Review Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(
+            context: context,
+            title: 'Create Review Failed',
+            msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]
+                ['detail'],
+            type: MotionToastType.error);
         return null;
       }
     });
   }
 
-  Future<ReviewModel?> updateReview({String? token, Map? body, int? reviewId, context}) async {
-    return http.patch(
+  Future<ReviewModel?> updateReview(
+      {String? token, Map? body, int? reviewId, context}) async {
+    return http
+        .patch(
       Uri.parse("$baseUrl/api/review/$reviewId/"),
       headers: {
         "Accept-Language": "en-US",
         "Authorization": "Token $token",
       },
       body: body,
-    ).then((response) {
-      print(body);
-
+    )
+        .then((response) {
       if (response.statusCode == 200) {
-        return ReviewModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+        return ReviewModel.fromJson(
+            jsonDecode(utf8.decode(response.bodyBytes)));
       } else if (response.statusCode == 401) {
-        _authService.unAuthClearAndRestart(context: context,);
+        _authService.unAuthClearAndRestart(
+          context: context,
+        );
         return null;
       } else {
-        showMotionToast(context: context, title: 'Update Review Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(
+            context: context,
+            title: 'Update Review Failed',
+            msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]
+                ['detail'],
+            type: MotionToastType.error);
         return null;
       }
     });
@@ -69,10 +88,17 @@ class ReviewApiService {
       if (response.statusCode == 200) {
         return true;
       } else if (response.statusCode == 401) {
-        _authService.unAuthClearAndRestart(context: context,);
+        _authService.unAuthClearAndRestart(
+          context: context,
+        );
         return null;
       } else {
-        showMotionToast(context: context, title: 'Delete Review Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(
+            context: context,
+            title: 'Delete Review Failed',
+            msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]
+                ['detail'],
+            type: MotionToastType.error);
         return false;
       }
     });

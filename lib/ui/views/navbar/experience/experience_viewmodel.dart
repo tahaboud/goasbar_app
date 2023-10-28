@@ -1,4 +1,3 @@
-import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/experience_model.dart';
@@ -38,7 +37,8 @@ class ExperienceViewModel extends FutureViewModel<List<ExperienceResults?>?> {
   }
 
   void navigateTo({view}) {
-    _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
+    _navigationService.navigateWithTransition(view,
+        curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
   }
 
   void back() {
@@ -48,15 +48,19 @@ class ExperienceViewModel extends FutureViewModel<List<ExperienceResults?>?> {
   Future getPublicExperiencesFromNextPage({int? index}) async {
     if (index! % 10 == 0) {
       pageNumber++;
-      print("index : $index");
-      ExperienceModel? experienceModelsList = await _experienceApiService.getPublicExperiences(page: pageNumber);
+      ExperienceModel? experienceModelsList =
+          await _experienceApiService.getPublicExperiences(page: pageNumber);
       experienceModels!.results!.addAll(experienceModelsList!.results!);
       notifyListeners();
     }
   }
 
-  Future<List<ExperienceResults?>?> getPublicExperiences({String? query, int? page}) async {
-    experienceModels = await _experienceApiService.getPublicExperiences(query: query, page: page,);
+  Future<List<ExperienceResults?>?> getPublicExperiences(
+      {String? query, int? page}) async {
+    experienceModels = await _experienceApiService.getPublicExperiences(
+      query: query,
+      page: page,
+    );
     notifyListeners();
     return experienceModels!.results ?? [];
   }

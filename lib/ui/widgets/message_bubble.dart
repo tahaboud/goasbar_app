@@ -1,7 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:styled_widget/styled_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:goasbar/shared/ui_helpers.dart';
 
 class MessageBubble extends StatelessWidget {
   const MessageBubble({
@@ -28,10 +27,18 @@ class MessageBubble extends StatelessWidget {
         ).decorated(
           color: isReciever! ? kAgencyColor : kMainColor1,
           borderRadius: BorderRadius.only(
-            topRight: isReciever! ? const Radius.circular(20) : const Radius.circular(5),
-            bottomRight: isReciever! ? const Radius.circular(20) : const Radius.circular(5),
-            topLeft: isReciever! ? const Radius.circular(5) : const Radius.circular(20),
-            bottomLeft: isReciever! ? const Radius.circular(5) : const Radius.circular(20),
+            topRight: isReciever!
+                ? const Radius.circular(20)
+                : const Radius.circular(5),
+            bottomRight: isReciever!
+                ? const Radius.circular(20)
+                : const Radius.circular(5),
+            topLeft: isReciever!
+                ? const Radius.circular(5)
+                : const Radius.circular(20),
+            bottomLeft: isReciever!
+                ? const Radius.circular(5)
+                : const Radius.circular(20),
           ),
         ),
       ],

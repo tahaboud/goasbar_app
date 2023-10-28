@@ -1,13 +1,13 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:goasbar/shared/colors.dart';
+import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/widgets/dot_item.dart';
 import 'package:goasbar/ui/widgets/info_item.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:goasbar/ui/widgets/previous_button.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:styled_widget/styled_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:goasbar/shared/ui_helpers.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class BillingInfo extends StatelessWidget {
   const BillingInfo({
@@ -43,7 +43,10 @@ class BillingInfo extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       height: screenHeightPercentage(context, percentage: 0.85),
       decoration: const BoxDecoration(
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(18), topRight: Radius.circular(18),),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(18),
+          topRight: Radius.circular(18),
+        ),
         color: Colors.white,
       ),
       child: ListView(
@@ -52,21 +55,29 @@ class BillingInfo extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Icon(Icons.close, size: 30,).gestures(onTap: onTapBack),
+              const Icon(
+                Icons.close,
+                size: 30,
+              ).gestures(onTap: onTapBack),
               horizontalSpaceTiny,
-              const Text('BILLING INFORMATION', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+              const Text('BILLING INFORMATION',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
               Row(
                 children: [
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const Text('3 - 3', style: TextStyle(color: kMainColor1, fontSize: 14, fontWeight: FontWeight.bold),).center(),
-                  ).width(40)
-                      .height(40)
-                      .opacity(0.6),
-                  Row(
-                    children: const [
+                    child: const Text(
+                      '3 - 3',
+                      style: TextStyle(
+                          color: kMainColor1,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold),
+                    ).center(),
+                  ).width(40).height(40).opacity(0.6),
+                  const Row(
+                    children: [
                       DotItem(condition: false, color: kMainColor1),
                       horizontalSpaceTiny,
                       DotItem(condition: false, color: kMainColor1),
@@ -79,7 +90,10 @@ class BillingInfo extends StatelessWidget {
             ],
           ),
           verticalSpaceMedium,
-          const Text('SOCIAL MEDIA', style: TextStyle(fontWeight: FontWeight.bold),),
+          const Text(
+            'SOCIAL MEDIA',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
           verticalSpaceSmall,
           InfoItem(
             controller: twitter,
@@ -99,7 +113,10 @@ class BillingInfo extends StatelessWidget {
             hintText: 'www.facebook.com/account',
           ),
           verticalSpaceRegular,
-          const Text('Bank information', style: TextStyle(fontWeight: FontWeight.bold),),
+          const Text(
+            'Bank information',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
           verticalSpaceSmall,
           InfoItem(
             controller: bankName,
@@ -130,16 +147,28 @@ class BillingInfo extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   gradient: kMainGradient,
                 ),
-                child: isClicked! ? const Loader().center() : Center(
-                  child: Text('SUBMIT'.tr(), style: const TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
-                ),
+                child: isClicked!
+                    ? const Loader().center()
+                    : Center(
+                        child: Text(
+                          'SUBMIT'.tr(),
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Poppins',
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
               ).gestures(
                 onTap: () {
-                  if (bankName.text.isNotEmpty && bankAccountNumber.text.isNotEmpty && iban.text.isNotEmpty) {
+                  if (bankName.text.isNotEmpty &&
+                      bankAccountNumber.text.isNotEmpty &&
+                      iban.text.isNotEmpty) {
                     if (iban.text.replaceAll(' ', '').length != 23) {
                       MotionToast.warning(
                         title: const Text("Incorrect IBAN Format"),
-                        description: const Text("IBAN must be 23 digits length."),
+                        description:
+                            const Text("IBAN must be 23 digits length."),
                         animationCurve: Curves.easeIn,
                         animationDuration: const Duration(milliseconds: 200),
                       ).show(context);

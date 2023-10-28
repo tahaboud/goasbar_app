@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/experience_response.dart';
@@ -12,9 +13,9 @@ import 'package:goasbar/services/token_service.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maps_launcher/maps_launcher.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
-import 'package:share_plus/share_plus.dart';
 
 class TripDetailViewModel extends FutureViewModel<PublicProviderModel?> {
   UserModel? user;
@@ -38,13 +39,14 @@ class TripDetailViewModel extends FutureViewModel<PublicProviderModel?> {
   List<Marker> customMarkers = [];
   LatLng? latLon;
 
-  launchMaps ({LatLng? latLon}) {
+  launchMaps({LatLng? latLon}) {
     MapsLauncher.launchCoordinates(latLon!.latitude, latLon.longitude);
   }
 
   void addFavorites({int? experienceId, context}) {
     isFav = !isFav;
-    updateUserData(experienceId: experienceId, isRemove: isFav, context: context);
+    updateUserData(
+        experienceId: experienceId, isRemove: isFav, context: context);
     notifyListeners();
   }
 
@@ -55,15 +57,23 @@ class TripDetailViewModel extends FutureViewModel<PublicProviderModel?> {
     favoriteList = user!.favoriteExperiences;
 
     if (!isRemove!) {
-      if (favoriteList!.contains(experienceId!)) favoriteList!.remove(experienceId);
+      if (favoriteList!.contains(experienceId!)) {
+        favoriteList!.remove(experienceId);
+      }
     } else {
-      if (!favoriteList!.contains(experienceId!)) favoriteList!.add(experienceId);
+      if (!favoriteList!.contains(experienceId!)) {
+        favoriteList!.add(experienceId);
+      }
     }
 
     notifyListeners();
-    _authService.updateFavoritesUser(context: context, token: token, body: {
-      "favorite_experiences": favoriteList,
-    },);
+    _authService.updateFavoritesUser(
+      context: context,
+      token: token,
+      body: {
+        "favorite_experiences": favoriteList,
+      },
+    );
   }
 
   void changeIndex({index}) {
@@ -72,7 +82,8 @@ class TripDetailViewModel extends FutureViewModel<PublicProviderModel?> {
   }
 
   void navigateTo({view}) {
-    _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
+    _navigationService.navigateWithTransition(view,
+        curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
   }
 
   void back() {
@@ -83,18 +94,18 @@ class TripDetailViewModel extends FutureViewModel<PublicProviderModel?> {
     Share.share('check out this experience $link');
   }
 
-  String formatYear(String date) => date.substring(0,4).toString();
+  String formatYear(String date) => date.substring(0, 4).toString();
 
-  String formatDay(String date) => date.substring(8,10).toString();
+  String formatDay(String date) => date.substring(8, 10).toString();
 
   String formatMonthYear(String? dateTime) {
     final String year = formatYear(dateTime!);
     final String day = formatDay(dateTime);
-    final String month = shortMonths[int.parse(dateTime.substring(5,7))];
+    final String month = shortMonths[int.parse(dateTime.substring(5, 7))];
     return '$day $month $year';
   }
 
-  bool getIsFav () {
+  bool getIsFav() {
     if (isUser!) {
       favoriteList = user!.favoriteExperiences;
       isFav = favoriteList!.contains(experience!.id);
@@ -126,16 +137,16 @@ class TripDetailViewModel extends FutureViewModel<PublicProviderModel?> {
 
   getTimingsList({context}) async {
     String? token = await _tokenService.getTokenValue();
-    timingListModel = await _timingApiService.getTimingsList(context: context, token: token, experienceId: experience!.id, page: 1);
+    timingListModel = await _timingApiService.getTimingsList(
+        context: context, token: token, experienceId: experience!.id, page: 1);
   }
 
-  Future<PublicProviderModel?> getProvider () async {
+  Future<PublicProviderModel?> getProvider() async {
     if (isUser!) getIsFav();
     if (isUser!) getTimingsList(context: context);
-    provider = await _providerApiService.getPublicProviderInfo(providerId: experience!.providerId, );
-    print(user!.id);
-    print(user!.providerId);
-    print(provider!.response!.id);
+    provider = await _providerApiService.getPublicProviderInfo(
+      providerId: experience!.providerId,
+    );
     setMapAndMarker();
     notifyListeners();
 

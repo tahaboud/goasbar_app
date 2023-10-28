@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/provider_public_experience_response.dart';
@@ -16,11 +15,13 @@ import 'package:share_plus/share_plus.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
-class BookingForProviderDetailViewModel extends FutureViewModel<PublicProviderModel?> {
+class BookingForProviderDetailViewModel
+    extends FutureViewModel<PublicProviderModel?> {
   UserModel? user;
   BuildContext? context;
   ProviderPublicExperienceResults? providerPublicExperience;
-  BookingForProviderDetailViewModel({this.user, this.providerPublicExperience, this.context});
+  BookingForProviderDetailViewModel(
+      {this.user, this.providerPublicExperience, this.context});
 
   bool isFav = false;
   int pageIndex = 1;
@@ -35,13 +36,14 @@ class BookingForProviderDetailViewModel extends FutureViewModel<PublicProviderMo
   List<Marker> customMarkers = [];
   LatLng? latLon;
 
-  launchMaps ({LatLng? latLon}) {
+  launchMaps({LatLng? latLon}) {
     MapsLauncher.launchCoordinates(latLon!.latitude, latLon.longitude);
   }
 
   void addFavorites({int? experienceId, context}) {
     isFav = !isFav;
-    updateUserData(experienceId: experienceId, isRemove: isFav, context: context);
+    updateUserData(
+        experienceId: experienceId, isRemove: isFav, context: context);
     notifyListeners();
   }
 
@@ -52,15 +54,23 @@ class BookingForProviderDetailViewModel extends FutureViewModel<PublicProviderMo
     favoriteList = user!.favoriteExperiences;
 
     if (!isRemove!) {
-      if (favoriteList!.contains(experienceId!)) favoriteList!.remove(experienceId);
+      if (favoriteList!.contains(experienceId!)) {
+        favoriteList!.remove(experienceId);
+      }
     } else {
-      if (!favoriteList!.contains(experienceId!)) favoriteList!.add(experienceId);
+      if (!favoriteList!.contains(experienceId!)) {
+        favoriteList!.add(experienceId);
+      }
     }
 
     notifyListeners();
-    _authService.updateFavoritesUser(context: context, token: token, body: {
-      "favorite_experiences": favoriteList,
-    },);
+    _authService.updateFavoritesUser(
+      context: context,
+      token: token,
+      body: {
+        "favorite_experiences": favoriteList,
+      },
+    );
   }
 
   void changeIndex({index}) {
@@ -69,7 +79,8 @@ class BookingForProviderDetailViewModel extends FutureViewModel<PublicProviderMo
   }
 
   void navigateTo({view}) {
-    _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
+    _navigationService.navigateWithTransition(view,
+        curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
   }
 
   void back() {
@@ -80,18 +91,18 @@ class BookingForProviderDetailViewModel extends FutureViewModel<PublicProviderMo
     Share.share('check out this experience $link');
   }
 
-  String formatYear(String date) => date.substring(0,4).toString();
+  String formatYear(String date) => date.substring(0, 4).toString();
 
-  String formatDay(String date) => date.substring(8,10).toString();
+  String formatDay(String date) => date.substring(8, 10).toString();
 
   String formatMonthYear(String? dateTime) {
     final String year = formatYear(dateTime!);
     final String day = formatDay(dateTime);
-    final String month = shortMonths[int.parse(dateTime.substring(5,7))];
+    final String month = shortMonths[int.parse(dateTime.substring(5, 7))];
     return '$day $month $year';
   }
 
-  bool getIsFav () {
+  bool getIsFav() {
     favoriteList = user!.favoriteExperiences;
     isFav = favoriteList!.contains(providerPublicExperience!.id);
     notifyListeners();
@@ -99,12 +110,15 @@ class BookingForProviderDetailViewModel extends FutureViewModel<PublicProviderMo
     return isFav;
   }
 
-  Future<PublicProviderModel?> getProvider () async {
+  Future<PublicProviderModel?> getProvider() async {
     if (user != null) getIsFav();
-    provider = await _providerApiService.getPublicProviderInfo(providerId: providerPublicExperience!.providerId);
-    if (providerPublicExperience!.latitude != null && providerPublicExperience!.longitude != null) {
+    provider = await _providerApiService.getPublicProviderInfo(
+        providerId: providerPublicExperience!.providerId);
+    if (providerPublicExperience!.latitude != null &&
+        providerPublicExperience!.longitude != null) {
       kGooglePlex = CameraPosition(
-        target: LatLng(providerPublicExperience!.latitude, providerPublicExperience!.longitude),
+        target: LatLng(providerPublicExperience!.latitude,
+            providerPublicExperience!.longitude),
         zoom: 13.4746,
       );
     }

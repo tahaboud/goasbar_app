@@ -1,10 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:goasbar/shared/colors.dart';
+import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/widgets/dot_item.dart';
 import 'package:goasbar/ui/widgets/info_item.dart';
 import 'package:styled_widget/styled_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:goasbar/shared/ui_helpers.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class GeneralInfo extends StatelessWidget {
   const GeneralInfo({
@@ -38,7 +38,10 @@ class GeneralInfo extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       height: screenHeightPercentage(context, percentage: 0.85),
       decoration: const BoxDecoration(
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(18), topRight: Radius.circular(18),),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(18),
+          topRight: Radius.circular(18),
+        ),
         color: Colors.white,
       ),
       child: ListView(
@@ -49,21 +52,30 @@ class GeneralInfo extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Icon(Icons.close, size: 30,).gestures(onTap: onTapBack),
+              const Icon(
+                Icons.close,
+                size: 30,
+              ).gestures(onTap: onTapBack),
               horizontalSpaceTiny,
-              Text('GENERAL INFORMATION'.tr(), style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+              Text('GENERAL INFORMATION'.tr(),
+                  style: const TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.bold)),
               Row(
                 children: [
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const Text('1 - 3', style: TextStyle(color: kMainColor1, fontSize: 14, fontWeight: FontWeight.bold),).center(),
-                  ).width(40)
-                      .height(40)
-                      .opacity(0.6),
-                  Row(
-                    children: const [
+                    child: const Text(
+                      '1 - 3',
+                      style: TextStyle(
+                          color: kMainColor1,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold),
+                    ).center(),
+                  ).width(40).height(40).opacity(0.6),
+                  const Row(
+                    children: [
                       DotItem(condition: true, color: kMainColor1),
                       horizontalSpaceTiny,
                       DotItem(condition: false, color: kMainColor1),
@@ -76,7 +88,10 @@ class GeneralInfo extends StatelessWidget {
             ],
           ),
           verticalSpaceMedium,
-          const Text('Displayed name', style: TextStyle(fontWeight: FontWeight.bold),),
+          const Text(
+            'Displayed name',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
           verticalSpaceSmall,
           InfoItem(
             controller: name,
@@ -90,7 +105,10 @@ class GeneralInfo extends StatelessWidget {
             hintText: 'Tell us more about yourself',
           ),
           verticalSpaceRegular,
-          const Text('Contact information', style: TextStyle(fontWeight: FontWeight.bold),),
+          const Text(
+            'Contact information',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
           verticalSpaceSmall,
           Container(
             decoration: BoxDecoration(
@@ -185,11 +203,21 @@ class GeneralInfo extends StatelessWidget {
               gradient: kMainGradient,
             ),
             child: Center(
-              child: Text('NEXT'.tr(), style: const TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+              child: Text(
+                'NEXT'.tr(),
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Poppins',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500),
+              ),
             ),
           ).gestures(
             onTap: () {
-              if (name.text.isNotEmpty && bio.text.isNotEmpty && email.text.isNotEmpty && phone.text.isNotEmpty) {
+              if (name.text.isNotEmpty &&
+                  bio.text.isNotEmpty &&
+                  email.text.isNotEmpty &&
+                  phone.text.isNotEmpty) {
                 pageController.jumpToPage(1);
               } else {
                 showErrorDialog!();

@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/widgets/dialogs/add_data/add_data_viewmodel.dart';
@@ -20,7 +19,8 @@ class AddDataView extends HookWidget {
     return ViewModelBuilder<AddDataViewModel>.reactive(
       builder: (context, model, child) {
         return Dialog(
-          insetPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+          insetPadding:
+              const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -34,10 +34,12 @@ class AddDataView extends HookWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const Text("Add Your Information", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),)
-                    .center(),
+                const Text(
+                  "Add Your Information",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ).center(),
                 verticalSpaceMedium,
-                if (dialogRequest!.data['addBirthdate'])...[
+                if (dialogRequest!.data['addBirthdate']) ...[
                   TextField(
                     readOnly: true,
                     controller: model.birthDate,
@@ -48,7 +50,11 @@ class AddDataView extends HookWidget {
                           .gestures(onTap: () {
                         model.showBirthDayPicker(context);
                       }),
-                      prefixIcon: Text(' Birthday '.tr(), style: const TextStyle(color: kMainColor2, fontSize: 14),).padding(vertical: 20, horizontal: 10),
+                      prefixIcon: Text(
+                        ' Birthday '.tr(),
+                        style:
+                            const TextStyle(color: kMainColor2, fontSize: 14),
+                      ).padding(vertical: 20, horizontal: 10),
                       fillColor: kTextFiledGrayColor,
                       filled: true,
                       border: OutlineInputBorder(
@@ -61,7 +67,7 @@ class AddDataView extends HookWidget {
                   ),
                   verticalSpaceMedium,
                 ],
-                if (dialogRequest!.data['addGender'])...[
+                if (dialogRequest!.data['addGender']) ...[
                   SizedBox(
                     height: 60,
                     child: TextField(
@@ -74,7 +80,10 @@ class AddDataView extends HookWidget {
                             .gestures(onTap: () {
                           model.showSelectionDialog(gen: model.gender.text);
                         }),
-                        prefixIcon: const Text(' Gender ', style: TextStyle(color: kMainColor2, fontSize: 14),).padding(vertical: 20, horizontal: 10),
+                        prefixIcon: const Text(
+                          ' Gender ',
+                          style: TextStyle(color: kMainColor2, fontSize: 14),
+                        ).padding(vertical: 20, horizontal: 10),
                         fillColor: kTextFiledGrayColor,
                         filled: true,
                         border: OutlineInputBorder(
@@ -88,7 +97,7 @@ class AddDataView extends HookWidget {
                   ),
                   verticalSpaceMedium,
                 ],
-                if (dialogRequest!.data['addCity'])...[
+                if (dialogRequest!.data['addCity']) ...[
                   Container(
                     height: 60,
                     width: screenWidthPercentage(context, percentage: 1),
@@ -98,7 +107,10 @@ class AddDataView extends HookWidget {
                     ),
                     child: Row(
                       children: [
-                        const Text(' City ', style: TextStyle(color: kMainColor2, fontSize: 14),).padding(vertical: 20, horizontal: 10),
+                        const Text(
+                          ' City ',
+                          style: TextStyle(color: kMainColor2, fontSize: 14),
+                        ).padding(vertical: 20, horizontal: 10),
                         Expanded(
                           child: DropdownButtonHideUnderline(
                             child: ButtonTheme(
@@ -111,14 +123,23 @@ class AddDataView extends HookWidget {
                                   color: Colors.black,
                                   fontSize: 14,
                                 ),
-                                onChanged: (value) => model.updateCity(value: value),
-                                items: model.citiesWithNone().map((c) => DropdownMenuItem(
-                                  value: "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}",
-                                  onTap: () {},
-                                  child: SizedBox(
-                                    child: Text("${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}", style: const TextStyle(fontFamily: 'Cairo'),),
-                                  ),
-                                )).toList(),
+                                onChanged: (value) =>
+                                    model.updateCity(value: value),
+                                items: model
+                                    .citiesWithNone()
+                                    .map((c) => DropdownMenuItem(
+                                          value:
+                                              "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}",
+                                          onTap: () {},
+                                          child: SizedBox(
+                                            child: Text(
+                                              "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}",
+                                              style: const TextStyle(
+                                                  fontFamily: 'Cairo'),
+                                            ),
+                                          ),
+                                        ))
+                                    .toList(),
                               ),
                             ),
                           ),
@@ -126,38 +147,51 @@ class AddDataView extends HookWidget {
                       ],
                     ),
                   ),
-
                 ],
                 const Spacer(),
                 Container(
                   height: 40,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: kMainGray, width: 1.2)
-                  ),
-                  child: Text('NEXT'.tr(), style: const TextStyle(color: kMainColor1),).center(),
+                      border: Border.all(color: kMainGray, width: 1.2)),
+                  child: Text(
+                    'NEXT'.tr(),
+                    style: const TextStyle(color: kMainColor1),
+                  ).center(),
                 ).gestures(onTap: () {
                   Map<String, dynamic>? body = {};
-                  if (dialogRequest!.data['addBirthdate']) body.addAll({'birth_date': model.birthDate.text});
-                  if (dialogRequest!.data['addGender']) body.addAll({'gender': model.gender.text[0]});
-                  if (dialogRequest!.data['addCity']) body.addAll({'city': model.city});
+                  if (dialogRequest!.data['addBirthdate']) {
+                    body.addAll({'birth_date': model.birthDate.text});
+                  }
+                  if (dialogRequest!.data['addGender']) {
+                    body.addAll({'gender': model.gender.text[0]});
+                  }
+                  if (dialogRequest!.data['addCity']) {
+                    body.addAll({'city': model.city});
+                  }
 
                   if (body != {}) {
-                    model.updateUserData(context: context, body: body,).then((value) async {
+                    model
+                        .updateUserData(
+                      context: context,
+                      body: body,
+                    )
+                        .then((value) async {
                       model.updateIsClicked(value: false);
                       if (value != null) {
                         model.back();
-                      } else {
-
-                      }
+                      } else {}
                     });
                   }
                 }),
               ],
             ),
           ),
-        ).height(screenHeightPercentage(context, percentage: 0.2 + ((dialogRequest!.data['addCity'] ? 0.15 : 0) +
-          (dialogRequest!.data['addCity'] ? 0.15 : 0) + (dialogRequest!.data['addCity'] ? 0.15 : 0))));
+        ).height(screenHeightPercentage(context,
+            percentage: 0.2 +
+                ((dialogRequest!.data['addCity'] ? 0.15 : 0) +
+                    (dialogRequest!.data['addCity'] ? 0.15 : 0) +
+                    (dialogRequest!.data['addCity'] ? 0.15 : 0))));
       },
       viewModelBuilder: () => AddDataViewModel(),
     );

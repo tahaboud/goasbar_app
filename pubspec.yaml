@@ -1,12 +1,12 @@
 name: goasbar
 description: Go Asbar is an Air Bnb look a like for a Saoudi Startup
 
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 version: 1.0.0+2
 
 environment:
-  sdk: '>=2.18.5 <3.0.0'
+  sdk: ">=2.18.5 <3.0.0"
 
 dependencies:
   flutter:
@@ -16,7 +16,7 @@ dependencies:
   easy_localization: ^3.0.1
   styled_widget: ^0.4.1
   flutter_hooks: ^0.18.5+1
-  pinput: ^2.2.19
+  pinput: ^3.0.1
   string_validator: ^0.3.0
   animations: ^2.0.7
   carousel_slider: ^4.2.1
@@ -28,7 +28,6 @@ dependencies:
   maps_launcher: ^2.2.0
   flutter_rating_bar: ^4.0.1
   share_plus: ^6.3.2
-  hyperpay_plugin: ^2.0.5
 
   # Media Service
   image_picker: ^0.8.6
@@ -57,6 +56,7 @@ dependencies:
   # google maps
   google_maps_flutter: ^2.2.5
   geocoding: ^2.1.0
+  webview_flutter: ^4.4.1
 
 dev_dependencies:
   flutter_test:
@@ -82,7 +82,6 @@ flutter_application_id:
 flutter:
   uses-material-design: true
 
-
   assets:
     - assets/images/
     - assets/images/splash/
@@ -93,7 +92,6 @@ flutter:
     - assets/icons/checkout/
     - assets/icons/settings/
     - assets/fonts/
-
 
   fonts:
     - family: Roboto

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/experience_response.dart';
@@ -11,7 +10,8 @@ import 'package:goasbar/services/token_service.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
-class SavedExperiencesViewModel extends FutureViewModel<List<ExperienceResults?>> {
+class SavedExperiencesViewModel
+    extends FutureViewModel<List<ExperienceResults?>> {
   final UserModel? user;
   BuildContext? context;
   SavedExperiencesViewModel({this.user, this.context});
@@ -25,7 +25,8 @@ class SavedExperiencesViewModel extends FutureViewModel<List<ExperienceResults?>
   List<int>? favoriteList = [];
 
   void navigateTo({view}) {
-    _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
+    _navigationService.navigateWithTransition(view,
+        curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
   }
 
   void back() {
@@ -43,9 +44,13 @@ class SavedExperiencesViewModel extends FutureViewModel<List<ExperienceResults?>
     favoriteList!.removeAt(index!);
     notifyListeners();
     setBusy(true);
-    _authService.updateFavoritesUser(context: context, token: token, body: {
-      "favorite_experiences": favoriteList,
-    },).then((value) {
+    _authService.updateFavoritesUser(
+      context: context,
+      token: token,
+      body: {
+        "favorite_experiences": favoriteList,
+      },
+    ).then((value) {
       if (value != null) {
         experienceResults!.removeAt(index);
         notifyListeners();
@@ -57,7 +62,11 @@ class SavedExperiencesViewModel extends FutureViewModel<List<ExperienceResults?>
   Future<List<ExperienceResults?>> getFavoriteExperiences() async {
     favoriteList = await getUserData();
     if (favoriteList!.isNotEmpty) {
-      return await _experienceApiService.getPublicExperiences(page: 1, ).then((value) {
+      return await _experienceApiService
+          .getPublicExperiences(
+        page: 1,
+      )
+          .then((value) {
         if (value != null) {
           experienceResults = [];
           for (var experience in value.results!) {

@@ -14,8 +14,10 @@ import 'package:motion_toast/resources/arrays.dart';
 class BookingApiService {
   final _authService = locator<AuthService>();
 
-  Future<BookingModel?> createBooking({context, String? token, int? timingId, Map? body}) async {
-    return http.post(
+  Future<BookingModel?> createBooking(
+      {context, String? token, int? timingId, Map? body}) async {
+    return http
+        .post(
       Uri.parse("$baseUrl/api/booking/$timingId/"),
       headers: {
         "Accept-Language": "en-US",
@@ -24,57 +26,74 @@ class BookingApiService {
         "Content-Type": "application/json"
       },
       body: jsonEncode(body),
-    ).then((response) {
+    )
+        .then((response) {
       if (response.statusCode == 201) {
-        return BookingModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+        return BookingModel.fromJson(
+            jsonDecode(utf8.decode(response.bodyBytes)));
       } else if (response.statusCode == 401) {
-        _authService.unAuthClearAndRestart(context: context,);
+        _authService.unAuthClearAndRestart(
+          context: context,
+        );
         return null;
       } else {
-        showMotionToast(context: context, title: 'Create Booking Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(
+            context: context,
+            title: 'Create Booking Failed',
+            msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]
+                ['detail'],
+            type: MotionToastType.error);
         return null;
       }
     });
   }
 
-  Future<String?> prepareCheckout({String? token, int? bookingId, Map? body, context}) async {
-    return http.post(
+  Future<String?> prepareCheckout(
+      {String? token, int? bookingId, Map? body, context}) async {
+    return http
+        .post(
       Uri.parse("$baseUrl/api/booking/payment/$bookingId/"),
       headers: {
         "Accept-Language": "en-US",
         "Authorization": "Token $token",
       },
       body: body,
-    ).then((response) {
-      print(response.statusCode);
-      print(response.body);
+    )
+        .then((response) {
       if (response.statusCode == 200) {
         return jsonDecode(utf8.decode(response.bodyBytes))['checkoutId'];
       } else if (response.statusCode == 401) {
-        _authService.unAuthClearAndRestart(context: context,);
+        _authService.unAuthClearAndRestart(
+          context: context,
+        );
         return null;
       } else {
-        showMotionToast(context: context, title: 'Prepare Checkout Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(
+            context: context,
+            title: 'Prepare Checkout Failed',
+            msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]
+                ['detail'],
+            type: MotionToastType.error);
         return null;
       }
     });
   }
 
-  Future<bool?> getPaymentStatus({context, String? token, int? bookingId}) async {
-    print(bookingId);
+  Future<bool?> getPaymentStatus(
+      {context, String? token, int? bookingId, String? paymentId}) async {
     return http.get(
-      Uri.parse("$baseUrl/api/booking/payment/$bookingId/"),
+      Uri.parse("$baseUrl/api/booking/payment/$bookingId/?$paymentId"),
       headers: {
         "Accept-Language": "en-US",
         "Authorization": "Token $token",
       },
     ).then((response) {
-      print(response.statusCode);
-      print(response.body);
       if (response.statusCode == 200) {
         return true;
       } else if (response.statusCode == 401) {
-        _authService.unAuthClearAndRestart(context: context,);
+        _authService.unAuthClearAndRestart(
+          context: context,
+        );
         return null;
       } else {
         return false;
@@ -82,7 +101,8 @@ class BookingApiService {
     });
   }
 
-  Future<BookingsListModel?> getUserBookings({context, String? token, int? page, String? query = ''}) async {
+  Future<BookingsListModel?> getUserBookings(
+      {context, String? token, int? page, String? query = ''}) async {
     return http.get(
       Uri.parse("$baseUrl/api/booking/?page=$page&$query"),
       headers: {
@@ -91,9 +111,12 @@ class BookingApiService {
       },
     ).then((response) {
       if (response.statusCode == 200) {
-        return BookingsListModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+        return BookingsListModel.fromJson(
+            jsonDecode(utf8.decode(response.bodyBytes)));
       } else if (response.statusCode == 401) {
-        _authService.unAuthClearAndRestart(context: context,);
+        _authService.unAuthClearAndRestart(
+          context: context,
+        );
         return null;
       } else {
         return null;
@@ -101,7 +124,8 @@ class BookingApiService {
     });
   }
 
-  Future<ProviderTimingBooking?> getProviderTimingBookings({context, String? token, int? timingId, int? page}) async {
+  Future<ProviderTimingBooking?> getProviderTimingBookings(
+      {context, String? token, int? timingId, int? page}) async {
     return http.get(
       Uri.parse("$baseUrl/api/booking/provider/$timingId/?page=$page"),
       headers: {
@@ -110,9 +134,12 @@ class BookingApiService {
       },
     ).then((response) {
       if (response.statusCode == 200) {
-        return ProviderTimingBooking.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+        return ProviderTimingBooking.fromJson(
+            jsonDecode(utf8.decode(response.bodyBytes)));
       } else if (response.statusCode == 401) {
-        _authService.unAuthClearAndRestart(context: context,);
+        _authService.unAuthClearAndRestart(
+          context: context,
+        );
         return null;
       } else {
         return null;
@@ -131,10 +158,17 @@ class BookingApiService {
       if (response.statusCode == 200) {
         return true;
       } else if (response.statusCode == 401) {
-        _authService.unAuthClearAndRestart(context: context,);
+        _authService.unAuthClearAndRestart(
+          context: context,
+        );
         return null;
       } else {
-        showMotionToast(context: context, title: 'Delete Booking Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(
+            context: context,
+            title: 'Delete Booking Failed',
+            msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]
+                ['detail'],
+            type: MotionToastType.error);
         return false;
       }
     });

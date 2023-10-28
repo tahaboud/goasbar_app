@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
@@ -8,7 +9,6 @@ import 'package:goasbar/ui/widgets/profile_booked/profile_booked_view.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:styled_widget/styled_widget.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class BookingListDialog extends HookWidget {
   final DialogRequest? dialogRequest;
@@ -36,33 +36,50 @@ class BookingListDialog extends HookWidget {
               children: [
                 Text(
                   "Booking List".tr(),
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+                  style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
                 ),
                 verticalSpaceMedium,
-                !model.dataReady ? const Loader().center() : Expanded(
-                  child: ListView.builder(
-                    itemCount: model.data!.length,
-                    physics: const BouncingScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return CreationAwareListItem(
-                        itemCreated: () => model.getProviderTimingBookingsFromNextPage(index: index + 1),
-                        child: Column(
-                          children: [
-                            ProfileBookedView(booking: model.data![index]!, experience: dialogRequest!.customData, index: index,),
-                            const Divider(height: 30, thickness: 1,),
-                          ],
+                !model.dataReady
+                    ? const Loader().center()
+                    : Expanded(
+                        child: ListView.builder(
+                          itemCount: model.data!.length,
+                          physics: const BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            return CreationAwareListItem(
+                              itemCreated: () =>
+                                  model.getProviderTimingBookingsFromNextPage(
+                                      index: index + 1),
+                              child: Column(
+                                children: [
+                                  ProfileBookedView(
+                                    booking: model.data![index]!,
+                                    experience: dialogRequest!.customData,
+                                    index: index,
+                                  ),
+                                  const Divider(
+                                    height: 30,
+                                    thickness: 1,
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
-                ),
+                      ),
               ],
             ),
           ),
         ).height(62 * 7);
       },
-      viewModelBuilder: () => BookingListDialogViewModel(context: context, timingId: dialogRequest!.data,),
+      viewModelBuilder: () => BookingListDialogViewModel(
+        context: context,
+        timingId: dialogRequest!.data,
+      ),
     );
   }
 }

@@ -6,7 +6,6 @@ import 'package:goasbar/ui/views/be_hosted/be_hosted_viewmodel.dart';
 import 'package:goasbar/ui/widgets/billing_info.dart';
 import 'package:goasbar/ui/widgets/doc_info.dart';
 import 'package:goasbar/ui/widgets/general_info.dart';
-import 'package:motion_toast/motion_toast.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:styled_widget/styled_widget.dart';
@@ -46,14 +45,25 @@ class BeHostedView extends HookWidget {
               phone.text = model.provider!.response!.phoneNumber!;
               identityNumber.text = model.provider!.response!.identity!;
               bankName.text = model.provider!.response!.bankName!;
-              bankAccountNumber.text = model.provider!.response!.bankAccountNumber!;
-              model.typeOfIdentity.text = model.provider!.response!.identityType!;
-              iban.text = model.writeIbanFormat(iban: model.provider!.response!.iBAN!)!;
+              bankAccountNumber.text =
+                  model.provider!.response!.bankAccountNumber!;
+              model.typeOfIdentity.text =
+                  model.provider!.response!.identityType!;
+              iban.text =
+                  model.writeIbanFormat(iban: model.provider!.response!.iBAN!)!;
 
-              if (model.provider!.response!.website != null) website.text = model.provider!.response!.website!;
-              if (model.provider!.response!.twitterAccount != null) twitter.text = model.provider!.response!.twitterAccount!;
-              if (model.provider!.response!.facebookAccount != null) facebook.text = model.provider!.response!.facebookAccount!;
-              if (model.provider!.response!.instagramAccount != null) instagram.text = model.provider!.response!.instagramAccount!;
+              if (model.provider!.response!.website != null) {
+                website.text = model.provider!.response!.website!;
+              }
+              if (model.provider!.response!.twitterAccount != null) {
+                twitter.text = model.provider!.response!.twitterAccount!;
+              }
+              if (model.provider!.response!.facebookAccount != null) {
+                facebook.text = model.provider!.response!.facebookAccount!;
+              }
+              if (model.provider!.response!.instagramAccount != null) {
+                instagram.text = model.provider!.response!.instagramAccount!;
+              }
 
               once = false;
             }
@@ -93,7 +103,8 @@ class BeHostedView extends HookWidget {
               pageController: pageController,
               onTapBack: () => model.back(),
               typeOfIdentity: model.typeOfIdentity,
-              onTapShowTypeOfIdentity: () => model.showTypeOfIdentityDialog(type: ''),
+              onTapShowTypeOfIdentity: () =>
+                  model.showTypeOfIdentityDialog(type: ''),
               onTapPickImage: () => model.pickImage(),
               showErrorDialog: () => model.showErrorDialog(),
             ),
@@ -147,36 +158,77 @@ class BeHostedView extends HookWidget {
                     });
                   }
 
-                  model.beHostedProvider(context: context, body: body,).then((value) {
+                  model
+                      .beHostedProvider(
+                    context: context,
+                    body: body,
+                  )
+                      .then((value) {
                     model.updateIsClicked(value: false);
                     if (value != null) {
                       completer(SheetResponse(confirmed: true));
-                    } else {
-
-                    }
+                    } else {}
                   });
                 } else {
                   Map? body = {};
 
-                  if (name.text != model.provider!.response!.nickname!) body.addAll({'nickname': name.text});
-                  if (identityNumber.text != model.provider!.response!.identity!) body.addAll({'identity': identityNumber.text});
-                  if (model.typeOfIdentity.text != model.provider!.response!.identityType!) body.addAll({'identity_type': model.typeOfIdentity.text});
-                  if (bio.text != model.provider!.response!.about!) body.addAll({'about': bio.text});
-                  if (bankName.text != model.provider!.response!.bankName!) body.addAll({'bank_name': bankName.text});
-                  if (bankAccountNumber.text != model.provider!.response!.bankAccountNumber!) body.addAll({'bank_account_number': bankAccountNumber.text});
-                  if (iban.text.replaceAll(' ', '') != model.provider!.response!.iBAN!) body.addAll({'IBAN': iban.text});
-                  if (website.text != model.provider!.response!.website && website.text.isNotEmpty) body.addAll({'website': website.text});
-                  if (twitter.text != model.provider!.response!.twitterAccount && twitter.text.isNotEmpty) body.addAll({'twitter_account': twitter.text});
-                  if (facebook.text != model.provider!.response!.facebookAccount && facebook.text.isNotEmpty) body.addAll({'facebook_account': facebook.text});
-                  if (instagram.text != model.provider!.response!.instagramAccount && instagram.text.isNotEmpty) body.addAll({'instagram_account': instagram.text});
-                  if (model.file != model.provider!.response!.docImage) body.addAll({'doc_image': model.file});
+                  if (name.text != model.provider!.response!.nickname!) {
+                    body.addAll({'nickname': name.text});
+                  }
+                  if (identityNumber.text !=
+                      model.provider!.response!.identity!) {
+                    body.addAll({'identity': identityNumber.text});
+                  }
+                  if (model.typeOfIdentity.text !=
+                      model.provider!.response!.identityType!) {
+                    body.addAll({'identity_type': model.typeOfIdentity.text});
+                  }
+                  if (bio.text != model.provider!.response!.about!) {
+                    body.addAll({'about': bio.text});
+                  }
+                  if (bankName.text != model.provider!.response!.bankName!) {
+                    body.addAll({'bank_name': bankName.text});
+                  }
+                  if (bankAccountNumber.text !=
+                      model.provider!.response!.bankAccountNumber!) {
+                    body.addAll(
+                        {'bank_account_number': bankAccountNumber.text});
+                  }
+                  if (iban.text.replaceAll(' ', '') !=
+                      model.provider!.response!.iBAN!) {
+                    body.addAll({'IBAN': iban.text});
+                  }
+                  if (website.text != model.provider!.response!.website &&
+                      website.text.isNotEmpty) {
+                    body.addAll({'website': website.text});
+                  }
+                  if (twitter.text !=
+                          model.provider!.response!.twitterAccount &&
+                      twitter.text.isNotEmpty) {
+                    body.addAll({'twitter_account': twitter.text});
+                  }
+                  if (facebook.text !=
+                          model.provider!.response!.facebookAccount &&
+                      facebook.text.isNotEmpty) {
+                    body.addAll({'facebook_account': facebook.text});
+                  }
+                  if (instagram.text !=
+                          model.provider!.response!.instagramAccount &&
+                      instagram.text.isNotEmpty) {
+                    body.addAll({'instagram_account': instagram.text});
+                  }
+                  if (model.file != model.provider!.response!.docImage) {
+                    body.addAll({'doc_image': model.file});
+                  }
 
-                  model.updateProvider(body: body,).then((value) {
+                  model
+                      .updateProvider(
+                    body: body,
+                  )
+                      .then((value) {
                     if (value != null) {
                       model.back();
-                    } else {
-
-                    }
+                    } else {}
                   });
                 }
               },

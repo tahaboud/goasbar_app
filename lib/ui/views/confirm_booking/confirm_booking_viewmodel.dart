@@ -44,7 +44,8 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
     notifyListeners();
   }
 
-  Map<String, dynamic> affiliateSetToJson({firstName, lastName, age, gender, phone}) {
+  Map<String, dynamic> affiliateSetToJson(
+      {firstName, lastName, age, gender, phone}) {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['first_name'] = firstName;
     data['last_name'] = lastName;
@@ -56,7 +57,8 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
   }
 
   void navigateTo({view}) {
-    _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
+    _navigationService.navigateWithTransition(view,
+        curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
   }
 
   void back() {
@@ -94,11 +96,11 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
     notifyListeners();
   }
 
-  String? validatePhoneNumber ({String? value}) {
+  String? validatePhoneNumber({String? value}) {
     return _validationService.validatePhoneNumber(value);
   }
 
-  String? validateIsNumeric ({String? value}) {
+  String? validateIsNumeric({String? value}) {
     return _validationService.validateIsNumeric(value);
   }
 
@@ -139,20 +141,21 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
     }
   }
 
-  int formatDay(String date) => int.parse(date.substring(8,10).toString());
+  int formatDay(String date) => int.parse(date.substring(8, 10).toString());
 
   showDialog({addGender, addBirthdate, addCity, Function? execute}) {
-    _dialogService.showCustomDialog(
-      variant: DialogType.addData,
-      data: {'addGender': addGender, 'addBirthdate': addBirthdate, 'addCity': addCity,}
-    ).whenComplete(() {
+    _dialogService.showCustomDialog(variant: DialogType.addData, data: {
+      'addGender': addGender,
+      'addBirthdate': addBirthdate,
+      'addCity': addCity,
+    }).whenComplete(() {
       execute!();
     });
   }
 
-  int formatMonth(String date) => int.parse(date.substring(5,7).toString());
+  int formatMonth(String date) => int.parse(date.substring(5, 7).toString());
 
-  int formatYear(String date) => int.parse(date.substring(0,4).toString());
+  int formatYear(String date) => int.parse(date.substring(0, 4).toString());
 
   formatDate(String? formattedDate) {
     final int year = formatYear(formattedDate!);
@@ -164,26 +167,30 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
     return weekDays[date - 1];
   }
 
-  Future<BookingModel?> createBooking({int? timingId, Map<String, dynamic>? body, context}) async {
+  Future<BookingModel?> createBooking(
+      {int? timingId, Map<String, dynamic>? body, context}) async {
     updateIsClicked(value: true);
     String? token = await _tokenService.getTokenValue();
-    booking = await _bookingApiService.createBooking(context: context, token: token, timingId: timingId, body: body);
-
+    booking = await _bookingApiService.createBooking(
+        context: context, token: token, timingId: timingId, body: body);
+    booking?.tokensd = token;
     return booking;
   }
 
   Future getExperiencePublicTimingsFromNextPage({int? index}) async {
     if (index! % 10 == 0) {
       pageNumber++;
-      print("index : $index");
-      TimingListModel? timingList = await _experienceApiService.getExperiencePublicTimings(experienceId: experienceId, page: pageNumber);
+      TimingListModel? timingList =
+          await _experienceApiService.getExperiencePublicTimings(
+              experienceId: experienceId, page: pageNumber);
       timingListModel!.results!.addAll(timingList!.results!);
       notifyListeners();
     }
   }
 
   Future<TimingListModel?> getExperiencePublicTimings() async {
-    timingListModel = await _experienceApiService.getExperiencePublicTimings(experienceId: experienceId, page: pageNumber);
+    timingListModel = await _experienceApiService.getExperiencePublicTimings(
+        experienceId: experienceId, page: pageNumber);
     notifyListeners();
 
     return timingListModel;

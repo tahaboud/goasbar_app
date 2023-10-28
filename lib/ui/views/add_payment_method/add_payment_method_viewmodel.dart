@@ -1,4 +1,3 @@
-import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:goasbar/app/app.locator.dart';
@@ -21,7 +20,8 @@ class AddPaymentMethodViewModel extends BaseViewModel {
   }
 
   void navigateTo({view}) {
-    _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
+    _navigationService.navigateWithTransition(view,
+        curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
   }
 
   void back() {
@@ -33,11 +33,20 @@ class AddPaymentMethodViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<String?> saveCard({String? cardType, cardNumber, String? cardHolder, cVV, expiryMonth, expiryYear, context}) async {
+  Future<String?> saveCard(
+      {String? cardType,
+      cardNumber,
+      String? cardHolder,
+      cVV,
+      expiryMonth,
+      expiryYear,
+      context}) async {
     String? token = await _tokenService.getTokenValue();
-    await _authService.getRegistrationId(body: {"card_type": cardType,}, context: context, token: token).then((value) async {
+    await _authService.getRegistrationId(body: {
+      "card_type": cardType,
+    }, context: context, token: token).then((value) async {
       try {
-        final String result = await platform.invokeMethod('savecard', {
+        await platform.invokeMethod('savecard', {
           "checkoutid": value,
           "number": cardNumber,
           "brand": cardType,
@@ -47,8 +56,10 @@ class AddPaymentMethodViewModel extends BaseViewModel {
           "cvv": cVV,
         });
         updateIsClicked(value: false);
-        print(result);
-        _authService.saveCardAndGetRegistrationStatus(id: value, context: context, token: token, cardType: cardType).then((value) {
+        _authService
+            .saveCardAndGetRegistrationStatus(
+                id: value, context: context, token: token, cardType: cardType)
+            .then((value) {
           if (value != null) {
             Navigator.pop(context);
             Navigator.pop(context);
@@ -56,9 +67,10 @@ class AddPaymentMethodViewModel extends BaseViewModel {
             Navigator.pop(context);
           }
         });
-      } on PlatformException catch (e) {
-
+      } on PlatformException {
+        Navigator.pop(context);
       }
     });
+    return null;
   }
 }

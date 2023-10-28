@@ -19,7 +19,8 @@ class ProfileBookedDialog extends HookWidget {
     return ViewModelBuilder<ProfileBookedDialogViewModel>.reactive(
       builder: (context, model, child) {
         return Dialog(
-          insetPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+          insetPadding:
+              const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -36,24 +37,48 @@ class ProfileBookedDialog extends HookWidget {
                 Row(
                   children: [
                     Text(
-                      dialogRequest!.customData!['index'] < 9 ? "#0${dialogRequest!.customData!['index'] + 1}" : "#${dialogRequest!.customData!['index'] + 1}",
-                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+                      dialogRequest!.customData!['index'] < 9
+                          ? "#0${dialogRequest!.customData!['index'] + 1}"
+                          : "#${dialogRequest!.customData!['index'] + 1}",
+                      style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
                     ),
                     horizontalSpaceRegular,
                     Container(
-                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 25),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
-                        color: dialogRequest!.data!.status == "CONFIRMED" ? kMainColor1 : Colors.redAccent,
+                        color: dialogRequest!.data!.status == "CONFIRMED"
+                            ? kMainColor1
+                            : Colors.redAccent,
                       ),
-                      child: Text(dialogRequest!.data!.status!, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),).center(),
+                      child: Text(
+                        dialogRequest!.data!.status!,
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18),
+                      ).center(),
                     ),
                   ],
                 ),
                 verticalSpaceMedium,
-                Text("${dialogRequest!.data.user!.firstName} ${dialogRequest!.data.user!.lastName}", style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),).alignment(Alignment.centerLeft),
+                Text(
+                  "${dialogRequest!.data.user!.firstName} ${dialogRequest!.data.user!.lastName}",
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold),
+                ).alignment(Alignment.centerLeft),
                 verticalSpaceSmall,
-                const Text("- - - - - - - - - - - - - - - - - - - - - - -", style: TextStyle(color: kGrayText, fontSize: 20, fontWeight: FontWeight.bold),).alignment(Alignment.centerLeft),
+                const Text(
+                  "- - - - - - - - - - - - - - - - - - - - - - -",
+                  style: TextStyle(
+                      color: kGrayText,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                ).alignment(Alignment.centerLeft),
                 verticalSpaceMedium,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -64,25 +89,42 @@ class ProfileBookedDialog extends HookWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Issue Number".tr(), style: TextStyle(color: kGrayText, fontWeight: FontWeight.bold),),
+                            Text(
+                              "Issue Number".tr(),
+                              style: const TextStyle(
+                                  color: kGrayText,
+                                  fontWeight: FontWeight.bold),
+                            ),
                             verticalSpaceTiny,
-                            Text("${dialogRequest!.data.experienceTiming.date} ${dialogRequest!.data.experienceTiming.startTime.toString().substring(0, 5)}"),
+                            Text(
+                                "${dialogRequest!.data.experienceTiming.date} ${dialogRequest!.data.experienceTiming.startTime.toString().substring(0, 5)}"),
                           ],
                         ),
                         verticalSpaceMedium,
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("City".tr(), style: TextStyle(color: kGrayText, fontWeight: FontWeight.bold),),
+                            Text(
+                              "City".tr(),
+                              style: const TextStyle(
+                                  color: kGrayText,
+                                  fontWeight: FontWeight.bold),
+                            ),
                             verticalSpaceTiny,
-                            Text("${dialogRequest!.data.user!.city![0]}${dialogRequest!.data.user!.city!.substring(1).replaceAll('_', ' ').toLowerCase()}"),
+                            Text(
+                                "${dialogRequest!.data.user!.city![0]}${dialogRequest!.data.user!.city!.substring(1).replaceAll('_', ' ').toLowerCase()}"),
                           ],
                         ),
                         verticalSpaceMedium,
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Email".tr(), style: TextStyle(color: kGrayText, fontWeight: FontWeight.bold),),
+                            Text(
+                              "Email".tr(),
+                              style: const TextStyle(
+                                  color: kGrayText,
+                                  fontWeight: FontWeight.bold),
+                            ),
                             verticalSpaceTiny,
                             Text(dialogRequest!.data.user!.email),
                           ],
@@ -95,7 +137,12 @@ class ProfileBookedDialog extends HookWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Age".tr(), style: TextStyle(color: kGrayText, fontWeight: FontWeight.bold),),
+                            Text(
+                              "Age".tr(),
+                              style: const TextStyle(
+                                  color: kGrayText,
+                                  fontWeight: FontWeight.bold),
+                            ),
                             verticalSpaceTiny,
                             Text(dialogRequest!.data.user!.age.toString()),
                           ],
@@ -104,7 +151,12 @@ class ProfileBookedDialog extends HookWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Phone Number".tr(), style: TextStyle(color: kGrayText, fontWeight: FontWeight.bold),),
+                            Text(
+                              "Phone Number".tr(),
+                              style: const TextStyle(
+                                  color: kGrayText,
+                                  fontWeight: FontWeight.bold),
+                            ),
                             verticalSpaceTiny,
                             Text(dialogRequest!.data.user!.phoneNumber),
                           ],
@@ -113,9 +165,23 @@ class ProfileBookedDialog extends HookWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Affiliate".tr(), style: TextStyle(color: kGrayText, fontWeight: FontWeight.bold),),
+                            Text(
+                              "Affiliate".tr(),
+                              style: const TextStyle(
+                                  color: kGrayText,
+                                  fontWeight: FontWeight.bold),
+                            ),
                             verticalSpaceTiny,
-                            Text(dialogRequest!.data.affiliateSet.isEmpty ? "No".tr() : "Yes".tr(), style: TextStyle(color: dialogRequest!.data.affiliateSet.isEmpty ? Colors.redAccent : kMainColor1),),
+                            Text(
+                              dialogRequest!.data.affiliateSet.isEmpty
+                                  ? "No".tr()
+                                  : "Yes".tr(),
+                              style: TextStyle(
+                                  color:
+                                      dialogRequest!.data.affiliateSet.isEmpty
+                                          ? Colors.redAccent
+                                          : kMainColor1),
+                            ),
                           ],
                         )
                       ],
@@ -127,9 +193,11 @@ class ProfileBookedDialog extends HookWidget {
                   height: 40,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: kMainGray, width: 1.2)
-                  ),
-                  child: Text('View More Booking'.tr(), style: TextStyle(color: kGrayText),).center(),
+                      border: Border.all(color: kMainGray, width: 1.2)),
+                  child: Text(
+                    'View More Booking'.tr(),
+                    style: const TextStyle(color: kGrayText),
+                  ).center(),
                 ).gestures(onTap: () {
                   model.back();
                   model.back();
@@ -143,13 +211,21 @@ class ProfileBookedDialog extends HookWidget {
                     gradient: kMainGradient,
                   ),
                   child: Center(
-                    child: Text('ADD NEW BOOKING'.tr(), style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
+                    child: Text(
+                      'ADD NEW BOOKING'.tr(),
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Poppins',
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500),
+                    ),
                   ),
                 ).gestures(
                   onTap: () async {
                     model.back();
                     model.back();
-                    model.showNewTimingBottomSheet(experience: dialogRequest!.customData!['experience']);
+                    model.showNewTimingBottomSheet(
+                        experience: dialogRequest!.customData!['experience']);
                   },
                 ),
               ],

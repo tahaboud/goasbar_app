@@ -14,21 +14,33 @@ class NotificationItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Image.asset("assets/icons/logo_notification.png",),
+        Image.asset(
+          "assets/icons/logo_notification.png",
+        ),
         horizontalSpaceSmall,
-        Column(
+        const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Text('We have an update for you',),
+          children: [
+            Text(
+              'We have an update for you',
+            ),
             verticalSpaceSmall,
-            Text('New experinces from Elsalam egency', style: TextStyle(color: kMainDisabledGray, fontSize: 12),)
+            Text(
+              'New experinces from Elsalam egency',
+              style: TextStyle(color: kMainDisabledGray, fontSize: 12),
+            )
           ],
         ),
         const Spacer(),
-        Column(
+        const Column(
           crossAxisAlignment: CrossAxisAlignment.end,
-          children: const [
-            Text('2 min ago', style: TextStyle(color: kMainDisabledGray,),),
+          children: [
+            Text(
+              '2 min ago',
+              style: TextStyle(
+                color: kMainDisabledGray,
+              ),
+            ),
             verticalSpaceSmall,
           ],
         ),

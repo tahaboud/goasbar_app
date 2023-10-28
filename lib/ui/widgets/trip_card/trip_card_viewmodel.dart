@@ -2,7 +2,6 @@ import 'package:flutter/animation.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/experience_response.dart';
 import 'package:goasbar/data_models/user_model.dart';
-import 'package:goasbar/enum/bottom_sheet_type.dart';
 import 'package:goasbar/services/auth_service.dart';
 import 'package:goasbar/services/token_service.dart';
 import 'package:stacked/stacked.dart';
@@ -17,12 +16,12 @@ class TripItemViewModel extends FutureViewModel<bool?> {
   final _navigationService = locator<NavigationService>();
   final _tokenService = locator<TokenService>();
   final _authService = locator<AuthService>();
-  final _bottomSheetService = locator<BottomSheetService>();
   List<int>? favoriteList = [];
 
   void addFavorites({int? experienceId, context}) {
     isFav = !isFav;
-    updateUserData(context: context, experienceId: experienceId, isRemove: isFav);
+    updateUserData(
+        context: context, experienceId: experienceId, isRemove: isFav);
     notifyListeners();
   }
 
@@ -33,22 +32,31 @@ class TripItemViewModel extends FutureViewModel<bool?> {
     favoriteList = user!.favoriteExperiences;
 
     if (!isRemove!) {
-      if (favoriteList!.contains(experienceId!)) favoriteList!.remove(experienceId);
+      if (favoriteList!.contains(experienceId!)) {
+        favoriteList!.remove(experienceId);
+      }
     } else {
-      if (!favoriteList!.contains(experienceId!)) favoriteList!.add(experienceId);
+      if (!favoriteList!.contains(experienceId!)) {
+        favoriteList!.add(experienceId);
+      }
     }
 
     notifyListeners();
-    _authService.updateFavoritesUser(context: context, token: token, body: {
-      "favorite_experiences": favoriteList,
-    },);
+    _authService.updateFavoritesUser(
+      context: context,
+      token: token,
+      body: {
+        "favorite_experiences": favoriteList,
+      },
+    );
   }
 
   navigateTo({view}) async {
-    await _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
+    await _navigationService.navigateWithTransition(view,
+        curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
   }
 
-  bool getIsFav () {
+  bool getIsFav() {
     favoriteList = user!.favoriteExperiences;
     isFav = favoriteList!.contains(experience!.id);
     notifyListeners();

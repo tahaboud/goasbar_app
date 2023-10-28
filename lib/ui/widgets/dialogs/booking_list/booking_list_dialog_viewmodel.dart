@@ -6,7 +6,8 @@ import 'package:goasbar/services/booking_api_service.dart';
 import 'package:goasbar/services/token_service.dart';
 import 'package:stacked/stacked.dart';
 
-class BookingListDialogViewModel extends FutureViewModel<List<ProviderTimingBookingResults?>> {
+class BookingListDialogViewModel
+    extends FutureViewModel<List<ProviderTimingBookingResults?>> {
   BookingListDialogViewModel({this.context, this.timingId});
   final int? timingId;
   BuildContext? context;
@@ -20,16 +21,22 @@ class BookingListDialogViewModel extends FutureViewModel<List<ProviderTimingBook
     if (index! % 10 == 0) {
       pageNumber++;
       String? token = await _tokenService.getTokenValue();
-      print("index : $index");
-      ProviderTimingBooking? providerTimingList = await _bookingApiService.getProviderTimingBookings(context: context, token: token, timingId: timingId, page: pageNumber);
+      ProviderTimingBooking? providerTimingList =
+          await _bookingApiService.getProviderTimingBookings(
+              context: context,
+              token: token,
+              timingId: timingId,
+              page: pageNumber);
       providerTimingBooking!.results!.addAll(providerTimingList!.results!);
       notifyListeners();
     }
   }
 
-  Future<List<ProviderTimingBookingResults?>> getProviderTimingBookings() async {
+  Future<List<ProviderTimingBookingResults?>>
+      getProviderTimingBookings() async {
     String? token = await _tokenService.getTokenValue();
-    providerTimingBooking = await _bookingApiService.getProviderTimingBookings(context: context, token: token, timingId: timingId, page: pageNumber);
+    providerTimingBooking = await _bookingApiService.getProviderTimingBookings(
+        context: context, token: token, timingId: timingId, page: pageNumber);
     notifyListeners();
 
     return providerTimingBooking!.results!;

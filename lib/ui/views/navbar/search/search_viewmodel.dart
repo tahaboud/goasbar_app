@@ -4,10 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/experience_model.dart';
 import 'package:goasbar/services/experience_api_service.dart';
+import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
-import 'package:goasbar/shared/app_configs.dart';
 
 class SearchViewModel extends BaseViewModel {
   SearchViewModel({this.context});
@@ -25,7 +25,7 @@ class SearchViewModel extends BaseViewModel {
   String? city = 'Search by Region'.tr();
   int pageNumber = 1;
 
-  List<String> citiesWithNone () {
+  List<String> citiesWithNone() {
     List<String> list = [];
     list.add('Search by Region'.tr());
     list.addAll(cities);
@@ -34,7 +34,7 @@ class SearchViewModel extends BaseViewModel {
     return list;
   }
 
-  List<String> categoriesWithNone () {
+  List<String> categoriesWithNone() {
     List<String> list = [];
     list.add('Experience Category'.tr());
     list.addAll(categories);
@@ -48,7 +48,8 @@ class SearchViewModel extends BaseViewModel {
   }
 
   void navigateTo({view}) {
-    _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
+    _navigationService.navigateWithTransition(view,
+        curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
   }
 
   void back() {
@@ -88,7 +89,6 @@ class SearchViewModel extends BaseViewModel {
       initialValue: [
         DateTime.now(),
       ],
-
       dialogSize: const Size(325, 340),
     );
 
@@ -105,17 +105,24 @@ class SearchViewModel extends BaseViewModel {
   Future getPublicExperiencesFromNextPage({int? index}) async {
     if (index! % 10 == 0) {
       pageNumber++;
-      print("index : $index");
-      ExperienceModel? experienceModelsList = await _experienceApiService.getPublicExperiences(page: pageNumber, );
+      ExperienceModel? experienceModelsList =
+          await _experienceApiService.getPublicExperiences(
+        page: pageNumber,
+      );
       experienceModels!.results!.addAll(experienceModelsList!.results!);
       notifyListeners();
     }
   }
 
-  getPublicExperiences({String? query,}) async {
+  getPublicExperiences({
+    String? query,
+  }) async {
     setBusy(true);
     experienceModels = null;
-    experienceModels = await _experienceApiService.getPublicExperiences(query: query, page: pageNumber, );
+    experienceModels = await _experienceApiService.getPublicExperiences(
+      query: query,
+      page: pageNumber,
+    );
     notifyListeners();
     setBusy(false);
     return experienceModels!;

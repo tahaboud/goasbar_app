@@ -25,7 +25,9 @@ class TripsViewModel extends FutureViewModel<List<BookingsListResults?>?> {
   Future<bool?> deleteBooking({int? bookingId, context}) async {
     String? token = await _tokenService.getTokenValue();
     setBusy(true);
-    return await _bookingApiService.deleteBooking(context: context, token: token, bookingId: bookingId).then((value) async {
+    return await _bookingApiService
+        .deleteBooking(context: context, token: token, bookingId: bookingId)
+        .then((value) async {
       if (value != null && value) {
         data = await futureToRun(page: 1);
       }
@@ -34,7 +36,8 @@ class TripsViewModel extends FutureViewModel<List<BookingsListResults?>?> {
     });
   }
 
-  Future showReviewBottomSheet({int? bookingId, ReviewModelBookingHistory? review, user}) async {
+  Future showReviewBottomSheet(
+      {int? bookingId, ReviewModelBookingHistory? review, user}) async {
     var response = await _bottomSheetService.showCustomSheet(
       variant: BottomSheetType.review,
       isScrollControlled: true,
@@ -72,17 +75,19 @@ class TripsViewModel extends FutureViewModel<List<BookingsListResults?>?> {
     if (index! % 10 == 0) {
       String? token = await _tokenService.getTokenValue();
       pageNumber++;
-      print("index : $index");
-      BookingsListModel? bookingResults = await _bookingApiService.getUserBookings(token: token, context: context, page: pageNumber);
+      BookingsListModel? bookingResults = await _bookingApiService
+          .getUserBookings(token: token, context: context, page: pageNumber);
       bookingsListModel!.results!.addAll(bookingResults!.results!);
       notifyListeners();
     }
   }
 
-  Future<List<BookingsListResults?>?> getUserBookings({int? page, String? query}) async {
+  Future<List<BookingsListResults?>?> getUserBookings(
+      {int? page, String? query}) async {
     String? token = await _tokenService.getTokenValue();
 
-    bookingsListModel = await _bookingApiService.getUserBookings(token: token, context: context, page: page, query: query);
+    bookingsListModel = await _bookingApiService.getUserBookings(
+        token: token, context: context, page: page, query: query);
     data = bookingsListModel!.results;
     notifyListeners();
     return data ?? [];
@@ -90,6 +95,6 @@ class TripsViewModel extends FutureViewModel<List<BookingsListResults?>?> {
 
   @override
   Future<List<BookingsListResults?>?> futureToRun({page}) async {
-    return await getUserBookings(page: page != null ? page : pageNumber);
+    return await getUserBookings(page: page ?? pageNumber);
   }
 }

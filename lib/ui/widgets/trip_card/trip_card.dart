@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/data_models/experience_response.dart';
@@ -11,7 +12,6 @@ import 'package:goasbar/ui/views/trip_detail/trip_detail_view.dart';
 import 'package:goasbar/ui/widgets/trip_card/trip_card_viewmodel.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class TripItem extends StatelessWidget {
   const TripItem({
@@ -27,16 +27,22 @@ class TripItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<TripItemViewModel>.reactive(
-      builder: (context, model, child)  {
+      builder: (context, model, child) {
         return Stack(
           children: [
             Container(
               margin: const EdgeInsets.symmetric(vertical: 10),
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  fit: experience!.profileImage != null ? experience!.profileImage!.contains('/asbar-icon.ico') ? BoxFit.cover : BoxFit.cover : BoxFit.contain,
-                  image: experience!.profileImage != null && !experience!.profileImage!.contains('/asbar-icon.ico')
-                      ? NetworkImage("$baseUrl${experience!.profileImage}") as ImageProvider
+                  fit: experience!.profileImage != null
+                      ? experience!.profileImage!.contains('/asbar-icon.ico')
+                          ? BoxFit.cover
+                          : BoxFit.cover
+                      : BoxFit.contain,
+                  image: experience!.profileImage != null &&
+                          !experience!.profileImage!.contains('/asbar-icon.ico')
+                      ? NetworkImage("$baseUrl${experience!.profileImage}")
+                          as ImageProvider
                       : const AssetImage("assets/images/image4.png"),
                 ),
                 borderRadius: BorderRadius.circular(15),
@@ -49,24 +55,38 @@ class TripItem extends StatelessWidget {
               right: 30,
               child: Row(
                 children: [
-                  user == null ? const SizedBox() : model.isBusy ? const SizedBox() : Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Icon(
-                      model.isFav ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
-                      color: model.isFav ? Colors.redAccent : Colors.black, size: 20,
-                    ).center()
-                        .gestures(onTap: () => model.addFavorites(context: context, experienceId: experience!.id))
-                  ).height(30)
-                      .width(30),
+                  user == null
+                      ? const SizedBox()
+                      : model.isBusy
+                          ? const SizedBox()
+                          : Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Icon(
+                                    model.isFav
+                                        ? CupertinoIcons.heart_fill
+                                        : CupertinoIcons.heart,
+                                    color: model.isFav
+                                        ? Colors.redAccent
+                                        : Colors.black,
+                                    size: 20,
+                                  ).center().gestures(
+                                      onTap: () => model.addFavorites(
+                                          context: context,
+                                          experienceId: experience!.id)))
+                              .height(30)
+                              .width(30),
                   horizontalSpaceSmall,
                   Chip(
                     backgroundColor: kMainColor1,
-                    label: Text(experience!.rate! == "0.00" ? "0.0" : experience!.rate!, style: const TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold)),
-                    avatar: const Icon(Icons.star, color: Colors.white, size: 20),
+                    label: Text(
+                        experience!.rate! == "0.00" ? "0.0" : experience!.rate!,
+                        style: const TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold)),
+                    avatar:
+                        const Icon(Icons.star, color: Colors.white, size: 20),
                   ),
                 ],
               ),
@@ -97,14 +117,22 @@ class TripItem extends StatelessWidget {
                         horizontalSpaceSmall,
                         SizedBox(
                           height: 20,
-                          width: screenWidthPercentage(context, percentage: 0.31),
-                          child: Text(experience!.title!, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.bold)),
+                          width:
+                              screenWidthPercentage(context, percentage: 0.31),
+                          child: Text(experience!.title!,
+                              overflow: TextOverflow.ellipsis,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold)),
                         ),
                         const Spacer(),
                         Row(
                           children: [
-                            Text('${experience!.price!} ${"SR".tr()}', style: const TextStyle(color: kMainColor1, fontSize: 9)),
-                            Text(' / Person'.tr(), style: const TextStyle(color: kMainGray, fontSize: 9)),
+                            Text('${experience!.price!} ${"SR".tr()}',
+                                style: const TextStyle(
+                                    color: kMainColor1, fontSize: 9)),
+                            Text(' / Person'.tr(),
+                                style: const TextStyle(
+                                    color: kMainGray, fontSize: 9)),
                           ],
                         ),
                         horizontalSpaceSmall,
@@ -116,14 +144,22 @@ class TripItem extends StatelessWidget {
                         horizontalSpaceSmall,
                         Image.asset("assets/icons/location.png"),
                         horizontalSpaceTiny,
-                        Text("${experience!.city![0]}${experience!.city!.substring(1).replaceAll('_', ' ').toLowerCase()}, ${experience!.duration!} ${double.parse(experience!.duration!) >= 2 ? 'Hours'.tr() : 'Hour'.tr()}", style: const TextStyle(color: kMainGray, fontSize: 11))
+                        Text(
+                            "${experience!.city![0]}${experience!.city!.substring(1).replaceAll('_', ' ').toLowerCase()}, ${experience!.duration!} ${double.parse(experience!.duration!) >= 2 ? 'Hours'.tr() : 'Hour'.tr()}",
+                            style:
+                                const TextStyle(color: kMainGray, fontSize: 11))
                       ],
                     ),
                     verticalSpaceSmall,
                     Row(
                       children: [
                         horizontalSpaceSmall,
-                        Flexible(child: Text(experience!.description!, style: const TextStyle(overflow: TextOverflow.ellipsis, color: kMainGray, fontSize: 10))),
+                        Flexible(
+                            child: Text(experience!.description!,
+                                style: const TextStyle(
+                                    overflow: TextOverflow.ellipsis,
+                                    color: kMainGray,
+                                    fontSize: 10))),
                         const Spacer(),
                         Container(
                           width: 70,
@@ -132,9 +168,21 @@ class TripItem extends StatelessWidget {
                             borderRadius: BorderRadius.all(Radius.circular(3)),
                             gradient: kMainGradient,
                           ),
-                          child: Text('Book Now'.tr(), style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w500),).center(),
+                          child: Text(
+                            'Book Now'.tr(),
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w500),
+                          ).center(),
                         ).gestures(onTap: () {
-                          model.navigateTo(view: user == null ? const LoginView() : ConfirmBookingView(experience: experience, user: user,));
+                          model.navigateTo(
+                              view: user == null
+                                  ? const LoginView()
+                                  : ConfirmBookingView(
+                                      experience: experience,
+                                      user: user,
+                                    ));
                         }),
                         horizontalSpaceSmall,
                       ],
@@ -145,12 +193,19 @@ class TripItem extends StatelessWidget {
             ),
           ],
         ).gestures(onTap: () async {
-          model.navigateTo(view: TripDetailView(experience: experience, user: user, isUser: isUser)).then((value) {
+          model
+              .navigateTo(
+                  view: TripDetailView(
+                      experience: experience, user: user, isUser: isUser))
+              .then((value) {
             model.futureToRun();
           });
         });
       },
-      viewModelBuilder: () => TripItemViewModel(user: user, experience: experience,),
+      viewModelBuilder: () => TripItemViewModel(
+        user: user,
+        experience: experience,
+      ),
     );
   }
 }

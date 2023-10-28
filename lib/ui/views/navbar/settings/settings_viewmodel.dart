@@ -1,6 +1,6 @@
 import 'dart:async';
+import 'dart:io';
 
-import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/provider_model.dart';
@@ -11,7 +11,6 @@ import 'package:goasbar/services/media_service.dart';
 import 'package:goasbar/services/token_service.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
-import 'dart:io';
 
 class SettingsViewModel extends FutureViewModel<UserModel?> {
   BuildContext? context;
@@ -40,13 +39,17 @@ class SettingsViewModel extends FutureViewModel<UserModel?> {
   }
 
   void navigateToWithResponse({view}) {
-    _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300))!.then((value) {
+    _navigationService
+        .navigateWithTransition(view,
+            curve: Curves.easeIn, duration: const Duration(milliseconds: 300))!
+        .then((value) {
       futureToRun();
     });
   }
 
   void navigateTo({view}) {
-    _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
+    _navigationService.navigateWithTransition(view,
+        curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
   }
 
   void clearAndNavigateTo({view}) {
@@ -57,7 +60,7 @@ class SettingsViewModel extends FutureViewModel<UserModel?> {
     _navigationService.back();
   }
 
-  Future pickImage () async {
+  Future pickImage() async {
     file = await _mediaService.getImage();
     if (file != null) {
       notifyListeners();
@@ -81,15 +84,17 @@ class SettingsViewModel extends FutureViewModel<UserModel?> {
 
   Future<bool?> logout({context}) async {
     updateIsClicked(value: true);
-    return _authService.logout(context: context, token: await _tokenService.getTokenValue());
+    return _authService.logout(
+        context: context, token: await _tokenService.getTokenValue());
   }
 
   Future<bool?> deleteAccount({context}) async {
     updateIsClicked2(value: true);
-    return _authService.deleteAccount(context: context, token: await _tokenService.getTokenValue());
+    return _authService.deleteAccount(
+        context: context, token: await _tokenService.getTokenValue());
   }
 
-  clearToken () {
+  clearToken() {
     _tokenService.clearToken();
   }
 

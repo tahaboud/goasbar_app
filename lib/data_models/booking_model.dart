@@ -2,6 +2,7 @@ import 'package:goasbar/data_models/booking_response.dart';
 
 class BookingModel {
   BookingResponse? response;
+  String? tokensd;
 
   BookingModel({this.response});
 

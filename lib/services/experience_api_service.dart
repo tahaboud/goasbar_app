@@ -17,7 +17,10 @@ import 'package:motion_toast/resources/arrays.dart';
 class ExperienceApiService {
   final _authService = locator<AuthService>();
 
-  Future<ExperienceResults?> createExperience({String? token, Map<String, dynamic>? body, BuildContext? context}) async {
+  Future<ExperienceResults?> createExperience(
+      {String? token,
+      Map<String, dynamic>? body,
+      BuildContext? context}) async {
     Dio dio = Dio();
     FormData formData = FormData.fromMap(body!);
 
@@ -30,15 +33,21 @@ class ExperienceApiService {
           return handler.next(response);
         },
         onError: (e, ErrorInterceptorHandler handler) {
-          Map<String, dynamic> response = Map<String, dynamic>.from(e.response!.data);
-          showMotionToast(context: context, title: 'Create Experience Failed', msg: response['errors'][0]['detail'], type: MotionToastType.error);
+          Map<String, dynamic> response =
+              Map<String, dynamic>.from(e.response!.data);
+          showMotionToast(
+              context: context,
+              title: 'Create Experience Failed',
+              msg: response['errors'][0]['detail'],
+              type: MotionToastType.error);
 
           return handler.next(e);
         },
       ),
     );
 
-    return dio.post(
+    return dio
+        .post(
       "$baseUrl/api/experience/provider/",
       options: Options(
         headers: {
@@ -48,23 +57,35 @@ class ExperienceApiService {
         },
       ),
       data: formData,
-    ).then((response) {
-      print(response.data);
+    )
+        .then((response) {
       if (response.statusCode == 201) {
         return ExperienceResults.fromJson(response.data['response']);
       } else if (response.statusCode == 401) {
-        _authService.unAuthClearAndRestart(context: context,);
+        _authService.unAuthClearAndRestart(
+          context: context,
+        );
         return null;
       } else {
-        showMotionToast(context: context, title: 'Create Experience Failed', msg: response.data["errors"]['detail'], type: MotionToastType.error);
+        showMotionToast(
+            context: context,
+            title: 'Create Experience Failed',
+            msg: response.data["errors"]['detail'],
+            type: MotionToastType.error);
         return null;
       }
     }).catchError((onError) {
-      print(onError);
+      showMotionToast(
+          context: context,
+          title: 'Create Experience Failed',
+          msg: onError,
+          type: MotionToastType.error);
+      return null;
     });
   }
 
-  Future<ExperienceModel?> getProviderExperiences({String? token, context, int? page}) async {
+  Future<ExperienceModel?> getProviderExperiences(
+      {String? token, context, int? page}) async {
     return http.get(
       Uri.parse("$baseUrl/api/experience/provider/?page=$page"),
       headers: {
@@ -73,9 +94,12 @@ class ExperienceApiService {
       },
     ).then((response) {
       if (response.statusCode == 200) {
-        return ExperienceModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+        return ExperienceModel.fromJson(
+            jsonDecode(utf8.decode(response.bodyBytes)));
       } else if (response.statusCode == 401) {
-        _authService.unAuthClearAndRestart(context: context,);
+        _authService.unAuthClearAndRestart(
+          context: context,
+        );
         return null;
       } else {
         return null;
@@ -83,22 +107,27 @@ class ExperienceApiService {
     });
   }
 
-  Future<ExperienceModel?> getPublicExperiences({String? query, int? page}) async {
+  Future<ExperienceModel?> getPublicExperiences(
+      {String? query, int? page}) async {
     return http.get(
-      Uri.parse(query != null && query.isNotEmpty ? "$baseUrl/api/experience/$query&page=$page" : "$baseUrl/api/experience/?page=$page"),
+      Uri.parse(query != null && query.isNotEmpty
+          ? "$baseUrl/api/experience/$query&page=$page"
+          : "$baseUrl/api/experience/?page=$page"),
       headers: {
         "Accept-Language": "en-US",
       },
     ).then((response) {
       if (response.statusCode == 200) {
-        return ExperienceModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+        return ExperienceModel.fromJson(
+            jsonDecode(utf8.decode(response.bodyBytes)));
       } else {
         return null;
       }
     });
   }
 
-  Future<TimingListModel?> getExperiencePublicTimings({int? experienceId, int? page}) async {
+  Future<TimingListModel?> getExperiencePublicTimings(
+      {int? experienceId, int? page}) async {
     return http.get(
       Uri.parse("$baseUrl/api/experience/timing/$experienceId/?page=$page"),
       headers: {
@@ -106,19 +135,26 @@ class ExperienceApiService {
       },
     ).then((response) {
       if (response.statusCode == 200) {
-        return TimingListModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+        return TimingListModel.fromJson(
+            jsonDecode(utf8.decode(response.bodyBytes)));
       } else {
         return null;
       }
     });
   }
 
-  Future<ExperienceResults?> updateExperience({String? token, bool? hasImages, Map<String, dynamic>? body, int? experienceId, context}) async {
+  Future<ExperienceResults?> updateExperience(
+      {String? token,
+      bool? hasImages,
+      Map<String, dynamic>? body,
+      int? experienceId,
+      context}) async {
     if (hasImages!) {
       Dio dio = Dio();
       FormData formData = FormData.fromMap(body!);
 
-      return dio.patch(
+      return dio
+          .patch(
         "$baseUrl/api/experience/provider/$experienceId/",
         options: Options(
           headers: {
@@ -129,19 +165,27 @@ class ExperienceApiService {
           },
         ),
         data: formData,
-      ).then((response) {
+      )
+          .then((response) {
         if (response.statusCode == 200) {
           return ExperienceResults.fromJson(response.data);
         } else if (response.statusCode == 401) {
-          _authService.unAuthClearAndRestart(context: context,);
+          _authService.unAuthClearAndRestart(
+            context: context,
+          );
           return null;
         } else {
-          showMotionToast(context: context, title: 'Update Experience Failed', msg: response.data["errors"]['detail'], type: MotionToastType.error);
+          showMotionToast(
+              context: context,
+              title: 'Update Experience Failed',
+              msg: response.data["errors"]['detail'],
+              type: MotionToastType.error);
           return null;
         }
       });
     } else {
-      return http.patch(
+      return http
+          .patch(
         Uri.parse("$baseUrl/api/experience/provider/$experienceId/"),
         headers: {
           "Accept-Language": "en-US",
@@ -150,22 +194,31 @@ class ExperienceApiService {
           "Content-Type": "application/json"
         },
         body: jsonEncode(body),
-      ).then((response) {
-
+      )
+          .then((response) {
         if (response.statusCode == 200) {
-          return ExperienceResults.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+          return ExperienceResults.fromJson(
+              jsonDecode(utf8.decode(response.bodyBytes)));
         } else if (response.statusCode == 401) {
-          _authService.unAuthClearAndRestart(context: context,);
+          _authService.unAuthClearAndRestart(
+            context: context,
+          );
           return null;
         } else {
-          showMotionToast(context: context, title: 'Error', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
+          showMotionToast(
+              context: context,
+              title: 'Error',
+              msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]
+                  ['detail'],
+              type: MotionToastType.error);
           return null;
         }
       });
     }
   }
 
-  Future<bool?> deleteExperience({String? token, int? experienceId, context}) async {
+  Future<bool?> deleteExperience(
+      {String? token, int? experienceId, context}) async {
     return http.delete(
       Uri.parse("$baseUrl/api/experience/provider/$experienceId/"),
       headers: {
@@ -176,16 +229,24 @@ class ExperienceApiService {
       if (response.statusCode == 200) {
         return true;
       } else if (response.statusCode == 401) {
-        _authService.unAuthClearAndRestart(context: context,);
+        _authService.unAuthClearAndRestart(
+          context: context,
+        );
         return null;
       } else {
-        showMotionToast(context: context, title: 'Delete Experience Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(
+            context: context,
+            title: 'Delete Experience Failed',
+            msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]
+                ['detail'],
+            type: MotionToastType.error);
         return false;
       }
     });
   }
 
-  Future<bool?> deleteExperienceImage({String? token, int? imageId, context}) async {
+  Future<bool?> deleteExperienceImage(
+      {String? token, int? imageId, context}) async {
     return http.delete(
       Uri.parse("$baseUrl/api/experience/images/$imageId/"),
       headers: {
@@ -196,10 +257,17 @@ class ExperienceApiService {
       if (response.statusCode == 200) {
         return true;
       } else if (response.statusCode == 401) {
-        _authService.unAuthClearAndRestart(context: context,);
+        _authService.unAuthClearAndRestart(
+          context: context,
+        );
         return null;
       } else {
-        showMotionToast(context: context, title: 'Update Experience Image Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(
+            context: context,
+            title: 'Update Experience Image Failed',
+            msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]
+                ['detail'],
+            type: MotionToastType.error);
         return false;
       }
     });

@@ -39,19 +39,21 @@ class LoginViewModel extends BaseViewModel {
   }
 
   void navigateTo({view}) {
-    _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
+    _navigationService.navigateWithTransition(view,
+        curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
   }
 
   void clearAndNavigateTo({view}) {
-    _navigationService.clearStackAndShowView(view,);
+    _navigationService.clearStackAndShowView(
+      view,
+    );
   }
 
-
-  String? validatePassword ({String? value}) {
+  String? validatePassword({String? value}) {
     return _validationService.passwordValidation(value);
   }
 
-  setToken ({token}) {
+  setToken({token}) {
     _tokenService.setTokenValue(token);
   }
 

@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:goasbar/data_models/experience_response.dart';
 import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/enum/incdecrease.dart';
@@ -13,8 +15,6 @@ import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class ConfirmBookingView extends HookWidget {
   const ConfirmBookingView({Key? key, this.experience, this.user}) : super(key: key);
@@ -43,7 +43,7 @@ class ConfirmBookingView extends HookWidget {
                           model.back();
                         }
                     ),
-                    Text('Confirm Your Booking'.tr(), style: TextStyle(fontSize: 21),),
+                    Text('Confirm Your Booking'.tr(), style: const TextStyle(fontSize: 21),),
                   ],
                 ),
                 verticalSpaceMedium,
@@ -99,7 +99,7 @@ class ConfirmBookingView extends HookWidget {
                     Row(
                       children: [
                         horizontalSpaceSmall,
-                        Text('Availability'.tr(), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
+                        Text('Availability'.tr(), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
                       ],
                     ),
                     Row(
@@ -227,7 +227,7 @@ class ConfirmBookingView extends HookWidget {
                     Row(
                       children: [
                         horizontalSpaceSmall,
-                        Text('Number of Guests'.tr(), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
+                        Text('Number of Guests'.tr(), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
                       ],
                     ),
                     Row(
@@ -358,7 +358,7 @@ class ConfirmBookingView extends HookWidget {
                     Row(
                       children: [
                         horizontalSpaceSmall,
-                        Text('Trip Coupon'.tr(), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
+                        Text('Trip Coupon'.tr(), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
                       ],
                     ),
                     Row(
@@ -395,7 +395,7 @@ class ConfirmBookingView extends HookWidget {
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                     gradient: kMainGradient,
                   ),
-                  child: model.isClicked! ? const Loader().center() : Text('Continue with Payment Send Request'.tr(), style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
+                  child: model.isClicked! ? const Loader().center() : Text('Continue with Payment Send Request'.tr(), style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),).center(),
                 ).gestures(
                   onTap:  () {
                     bool? isOkay = true;

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -5,7 +6,6 @@ import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:styled_widget/styled_widget.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class AvailablePlacesDialog extends HookWidget {
   final DialogRequest? dialogRequest;
@@ -25,9 +25,9 @@ class AvailablePlacesDialog extends HookWidget {
       ),
       child: Column(
         children: [
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.end,
-            children: const [
+            children: [
               Icon(CupertinoIcons.clear_circled, size: 20),
               horizontalSpaceSmall,
             ],
@@ -36,16 +36,21 @@ class AvailablePlacesDialog extends HookWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: const [
+              const Row(
+                children: [
                   horizontalSpaceMedium,
                   Text('Booked Places : '),
                 ],
               ),
               Row(
                 children: [
-                  Text(dialogRequest!.data.capacity.toString(), style: const TextStyle(color: kMainColor1),),
-                  Text(" ${"Seats".tr()}",),
+                  Text(
+                    dialogRequest!.data.capacity.toString(),
+                    style: const TextStyle(color: kMainColor1),
+                  ),
+                  Text(
+                    " ${"Seats".tr()}",
+                  ),
                   horizontalSpaceMedium,
                 ],
               ),
@@ -63,8 +68,13 @@ class AvailablePlacesDialog extends HookWidget {
               ),
               Row(
                 children: [
-                  Text(dialogRequest!.data.availability.toString(), style: const TextStyle(color: kMainColor1),),
-                  Text(" ${"Seats".tr()}",),
+                  Text(
+                    dialogRequest!.data.availability.toString(),
+                    style: const TextStyle(color: kMainColor1),
+                  ),
+                  Text(
+                    " ${"Seats".tr()}",
+                  ),
                   horizontalSpaceMedium,
                 ],
               )

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -10,7 +11,6 @@ import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:styled_widget/styled_widget.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class ReviewView extends HookWidget {
   ReviewView({Key? key, required this.request, required this.completer})
@@ -25,7 +25,9 @@ class ReviewView extends HookWidget {
   Widget build(BuildContext context) {
     var comment = useTextEditingController();
     if (request.data['review'] != null && once!) {
-      if (request.data['review'].comment != null) comment.text = request.data['review'].comment;
+      if (request.data['review'].comment != null) {
+        comment.text = request.data['review'].comment;
+      }
 
       once = false;
     }
@@ -35,7 +37,10 @@ class ReviewView extends HookWidget {
         height: screenHeightPercentage(context, percentage: 0.85),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
         decoration: const BoxDecoration(
-          borderRadius: BorderRadius.only(topLeft: Radius.circular(18), topRight: Radius.circular(18),),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(18),
+            topRight: Radius.circular(18),
+          ),
           color: Colors.white,
         ),
         child: SingleChildScrollView(
@@ -45,8 +50,18 @@ class ReviewView extends HookWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Leave your feedback', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)).alignment(Alignment.centerLeft),
-                  const Icon(Icons.close, size: 30,).gestures(onTap: () =>model.back(),).alignment(Alignment.centerLeft),
+                  const Text('Leave your feedback',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold))
+                      .alignment(Alignment.centerLeft),
+                  const Icon(
+                    Icons.close,
+                    size: 30,
+                  )
+                      .gestures(
+                        onTap: () => model.back(),
+                      )
+                      .alignment(Alignment.centerLeft),
                 ],
               ),
               verticalSpaceMedium,
@@ -58,8 +73,12 @@ class ReviewView extends HookWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(100),
                       image: DecorationImage(
-                        image: request.data['user'] != null ? NetworkImage("$baseUrl${request.data!['user'].image}",)
-                            : const AssetImage("assets/images/avatar.png") as ImageProvider,
+                        image: request.data['user'] != null
+                            ? NetworkImage(
+                                "$baseUrl${request.data!['user'].image}",
+                              )
+                            : const AssetImage("assets/images/avatar.png")
+                                as ImageProvider,
                         // : FileImage(model.file!) as ImageProvider,
                         fit: BoxFit.cover,
                       ),
@@ -70,8 +89,12 @@ class ReviewView extends HookWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        request.data['user'] != null ? "${request.data['user'].firstName} ${request.data['user'].lastName}" : "",
-                        style: const TextStyle(fontWeight: FontWeight.bold,),
+                        request.data['user'] != null
+                            ? "${request.data['user'].firstName} ${request.data['user'].lastName}"
+                            : "",
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       verticalSpaceTiny,
                       SizedBox(
@@ -97,16 +120,22 @@ class ReviewView extends HookWidget {
                   filled: true,
                   counterStyle: const TextStyle(color: kMainColor1),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(color: Colors.black)
-                  ),
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(color: Colors.black)),
                   enabledBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black, ),
+                    borderSide: BorderSide(
+                      color: Colors.black,
+                    ),
                   ),
                 ),
               ),
               verticalSpaceMedium,
-              const Text('Tell us more', style: TextStyle(fontWeight: FontWeight.bold,),).alignment(Alignment.centerLeft),
+              const Text(
+                'Tell us more',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ).alignment(Alignment.centerLeft),
               verticalSpaceSmall,
               Container(
                 height: 120,
@@ -119,12 +148,17 @@ class ReviewView extends HookWidget {
                   children: [
                     const Text(
                       'Evaluation of the professionalism of \nTrip provider',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16,),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                     verticalSpaceSmall,
                     RatingBar.builder(
-                      initialRating: request.data['review'] != null ? double.parse(request.data['review'].rate) : 0,
+                      initialRating: request.data['review'] != null
+                          ? double.parse(request.data['review'].rate)
+                          : 0,
                       minRating: 0,
                       direction: Axis.horizontal,
                       allowHalfRating: true,
@@ -150,26 +184,45 @@ class ReviewView extends HookWidget {
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   gradient: kMainGradient,
                 ),
-                child: model.isClicked! ? const Loader().center() : Center(
-                  child: Text('SUBMIT'.tr(), style: TextStyle(color: Colors.white, fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.w500),),
-                ),
+                child: model.isClicked!
+                    ? const Loader().center()
+                    : Center(
+                        child: Text(
+                          'SUBMIT'.tr(),
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Poppins',
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
               ).gestures(
                 onTap: () {
                   if (request.data['review'] != null) {
                     Map? body = {};
 
-                    if (model.ratingHasChanged!) body.addAll({"rate": model.rating.toString(),});
+                    if (model.ratingHasChanged!) {
+                      body.addAll({
+                        "rate": model.rating.toString(),
+                      });
+                    }
 
-                    if (comment.text != request.data['review'].comment && comment.text.isNotEmpty) body.addAll({'comment': comment.text});
+                    if (comment.text != request.data['review'].comment &&
+                        comment.text.isNotEmpty) {
+                      body.addAll({'comment': comment.text});
+                    }
 
                     if (body.isNotEmpty) {
-                      model.updateReview(context: context, reviewId: request.data['review'].id, body: body).then((value) {
+                      model
+                          .updateReview(
+                              context: context,
+                              reviewId: request.data['review'].id,
+                              body: body)
+                          .then((value) {
                         model.updateIsClicked(value: false);
                         if (value is ReviewModel) {
                           completer(SheetResponse(confirmed: true));
-                        } else {
-
-                        }
+                        } else {}
                       });
                     } else {
                       completer(SheetResponse(confirmed: false));
@@ -179,15 +232,20 @@ class ReviewView extends HookWidget {
                       "rate": model.rating.toString(),
                     };
 
-                    if (comment.text.isNotEmpty) body.addAll({'comment': comment.text});
+                    if (comment.text.isNotEmpty) {
+                      body.addAll({'comment': comment.text});
+                    }
 
-                    model.createReview(context: context, bookingId: request.customData, body: body).then((value) {
+                    model
+                        .createReview(
+                            context: context,
+                            bookingId: request.customData,
+                            body: body)
+                        .then((value) {
                       model.updateIsClicked(value: false);
                       if (value is ReviewModel) {
                         completer(SheetResponse(confirmed: true));
-                      } else {
-
-                      }
+                      } else {}
                     });
                   }
                 },

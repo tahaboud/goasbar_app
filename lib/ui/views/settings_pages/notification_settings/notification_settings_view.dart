@@ -1,12 +1,12 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/settings_pages/notification_settings/notification_settings_viewmodel.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class NotificationSettingsView extends HookWidget {
   const NotificationSettingsView({Key? key}) : super(key: key);
@@ -23,18 +23,23 @@ class NotificationSettingsView extends HookWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const Icon(CupertinoIcons.arrow_turn_up_left).height(40)
+                    const Icon(CupertinoIcons.arrow_turn_up_left)
+                        .height(40)
                         .width(40)
-                        .gestures(
-                        onTap: () {
-                          model.back();
-                        }
+                        .gestures(onTap: () {
+                      model.back();
+                    }),
+                    Text(
+                      'Notifications'.tr(),
+                      style: const TextStyle(fontSize: 21),
                     ),
-                    Text('Notifications'.tr(), style: TextStyle(fontSize: 21),),
                   ],
                 ),
                 verticalSpaceMedium,
-                const Text("General", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),).alignment(Alignment.centerLeft),
+                const Text(
+                  "General",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                ).alignment(Alignment.centerLeft),
                 verticalSpaceSmall,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -81,7 +86,10 @@ class NotificationSettingsView extends HookWidget {
                 verticalSpaceSmall,
                 const Divider(thickness: 1),
                 verticalSpaceSmall,
-                const Text("System Updates", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),).alignment(Alignment.centerLeft),
+                const Text(
+                  "System Updates",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                ).alignment(Alignment.centerLeft),
                 verticalSpaceSmall,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -156,7 +164,10 @@ class NotificationSettingsView extends HookWidget {
                 verticalSpaceSmall,
                 const Divider(thickness: 1),
                 verticalSpaceSmall,
-                const Text("Others", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),).alignment(Alignment.centerLeft),
+                const Text(
+                  "Others",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                ).alignment(Alignment.centerLeft),
                 verticalSpaceSmall,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
