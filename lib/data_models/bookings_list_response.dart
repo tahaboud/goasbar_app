@@ -1,5 +1,6 @@
 import 'package:goasbar/data_models/affiliate_set_model.dart';
 import 'package:goasbar/data_models/experience_booking_timing_model.dart';
+import 'package:goasbar/data_models/experience_response.dart';
 import 'package:goasbar/data_models/review_model_booking_history.dart';
 
 class BookingsListResults {
@@ -11,16 +12,18 @@ class BookingsListResults {
   String? price;
   List<AffiliateSet>? affiliateSet;
   ReviewModelBookingHistory? review;
+  ExperienceResults? experience;
 
   BookingsListResults(
       {this.id,
-        this.experienceTiming,
-        this.status,
-        this.creationDate,
-        this.cancelationComment,
-        this.price,
-        this.review,
-        this.affiliateSet});
+      this.experienceTiming,
+      this.status,
+      this.creationDate,
+      this.cancelationComment,
+      this.price,
+      this.review,
+      this.affiliateSet,
+      this.experience});
 
   BookingsListResults.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -31,13 +34,18 @@ class BookingsListResults {
     creationDate = json['creation_date'];
     cancelationComment = json['cancelation_comment'];
     price = json['price'];
-    review = json['review'] != null ? ReviewModelBookingHistory.fromJson(json['review']) : null;
+    review = json['review'] != null
+        ? ReviewModelBookingHistory.fromJson(json['review'])
+        : null;
     if (json['affiliate_set'] != null) {
       affiliateSet = <AffiliateSet>[];
       json['affiliate_set'].forEach((v) {
         affiliateSet!.add(AffiliateSet.fromJson(v));
       });
     }
+    experience = json['experience_timing'] != null
+        ? ExperienceResults.fromJson(json['experience_timing']["experience"])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -54,8 +62,7 @@ class BookingsListResults {
       data['review'] = review!.toJson();
     }
     if (affiliateSet != null) {
-      data['affiliate_set'] =
-          affiliateSet!.map((v) => v.toJson()).toList();
+      data['affiliate_set'] = affiliateSet!.map((v) => v.toJson()).toList();
     }
     return data;
   }

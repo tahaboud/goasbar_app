@@ -1,22 +1,22 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/data_models/bookings_list_response.dart';
+import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
+import 'package:goasbar/ui/views/trip_detail/trip_detail_view.dart';
 import 'package:goasbar/ui/widgets/booking_card/booking_card_viewmodel.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class BookingItem extends StatelessWidget {
-  const BookingItem({
-    Key? key,
-    this.bookingsList,
-    this.onDelete,
-    this.onUpdate,
-  }) : super(key: key);
+  const BookingItem(
+      {Key? key, this.bookingsList, this.onDelete, this.onUpdate, this.user})
+      : super(key: key);
   final BookingsListResults? bookingsList;
   final Function? onDelete;
   final Function? onUpdate;
+  final UserModel? user;
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +63,7 @@ class BookingItem extends StatelessWidget {
                       Image.asset("assets/icons/location.png"),
                       horizontalSpaceTiny,
                       Text(
-                          "${bookingsList!.experienceTiming!.place!}, ${double.parse(bookingsList!.experienceTiming!.duration!) >= 2 ? 'Hours'.tr() : 'Hour'.tr()}",
+                          "${bookingsList!.experienceTiming!.place!}, ${double.parse(bookingsList!.experienceTiming!.duration!)} ${double.parse(bookingsList!.experienceTiming!.duration!) >= 2 ? 'Hours'.tr() : 'Hour'.tr()}",
                           style:
                               const TextStyle(color: kMainGray, fontSize: 11)),
                       const Spacer(),
@@ -93,7 +93,8 @@ class BookingItem extends StatelessWidget {
                       horizontalSpaceSmall,
                       Image.asset("assets/icons/birth_date.png"),
                       horizontalSpaceTiny,
-                      Text("The ${bookingsList!.experienceTiming!.date!}",
+                      Text(
+                          "The ${bookingsList!.experienceTiming!.date!} at ${bookingsList!.experienceTiming!.startTime}",
                           style:
                               const TextStyle(color: kMainGray, fontSize: 11)),
                       const Spacer(),
@@ -178,7 +179,17 @@ class BookingItem extends StatelessWidget {
                   verticalSpaceSmall,
                 ],
               ),
-            ).center(),
+            ).center().gestures(
+                onTap: () => {
+                  print(bookingsList!.experience),
+                  model.navigateTo(
+                      view: TripDetailView(
+                        isUser: true,
+                        experience: bookingsList!.experience,
+                        user: user,
+                        showBookingFooter: false,
+                      ),
+                    )}),
           ],
         );
       },
