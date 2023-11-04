@@ -7,6 +7,7 @@ import 'package:goasbar/data_models/experience_response.dart';
 import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/services/booking_api_service.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
+import 'package:goasbar/ui/views/home/home_view.dart';
 import 'package:goasbar/ui/views/navbar/trips/trips_view.dart';
 import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -60,9 +61,9 @@ class _CheckoutViewState extends State<CheckoutView> {
                 if (context.mounted) {
                   Navigator.pop(context);
 
-                  _navigationService.navigateToView(TripsView(
-                    text: "Trips".tr(),
-                    user: widget.user,
+                  _navigationService.clearTillFirstAndShowView(const HomeView(
+                    isUser: true,
+                    index: 2,
                   ));
                   showMotionToast(
                       context: context,
@@ -83,8 +84,10 @@ class _CheckoutViewState extends State<CheckoutView> {
             } else if (request.url.startsWith("https://oppwa.com") ||
                 request.url.startsWith("https://eu-prod.oppwa.com")) {
               return NavigationDecision.navigate;
+            } else if (request.url.startsWith("https://www.goasbar.com")) {
+              return NavigationDecision.prevent;
             }
-            return NavigationDecision.prevent;
+            return NavigationDecision.navigate;
           },
         ),
       )
