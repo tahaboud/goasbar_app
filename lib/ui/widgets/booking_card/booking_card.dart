@@ -181,15 +181,15 @@ class BookingItem extends StatelessWidget {
               ),
             ).center().gestures(
                 onTap: () => {
-                  print(bookingsList!.experience),
-                  model.navigateTo(
-                      view: TripDetailView(
-                        isUser: true,
-                        experience: bookingsList!.experience,
-                        user: user,
-                        showBookingFooter: false,
-                      ),
-                    )}),
+                      model.navigateTo(
+                        view: TripDetailView(
+                          isUser: true,
+                          experience: bookingsList!.experience,
+                          user: user,
+                          showBookingFooter: false,
+                        ),
+                      )
+                    }),
           ],
         );
       },
