@@ -37,7 +37,7 @@
     <key>NSMicrophoneUsageDescription</key>
     <string>Go Asbar would like to use your audio</string>
     <key>NSPhotoLibraryUsageDescription</key>
-    <string>Giving access to your gallery allows easy upload of your photos for profile usage or using it in an experience.</string>
+    <string>Giving access to your gallery allows easy upload of your photos to use it as a profile photo or as an experience photo.</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
