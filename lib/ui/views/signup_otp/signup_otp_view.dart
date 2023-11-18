@@ -1,10 +1,10 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:goasbar/enum/status_code.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
-import 'package:goasbar/ui/views/home/home_view.dart';
+import 'package:goasbar/ui/views/complete_profile/complete_profile_view.dart';
 import 'package:goasbar/ui/views/signup_otp/signup_otp_viewmodel.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:pinput/pinput.dart';
@@ -12,11 +12,9 @@ import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class SignUpOtpView extends HookWidget {
-  const SignUpOtpView({Key? key, this.phone, this.body, this.hasImage})
-      : super(key: key);
+  SignUpOtpView({Key? key, this.phone}) : super(key: key);
   final String? phone;
-  final bool? hasImage;
-  final Map<String, dynamic>? body;
+  Map<String, dynamic> body = {};
 
   @override
   Widget build(BuildContext context) {
@@ -60,39 +58,43 @@ class SignUpOtpView extends HookWidget {
                 ),
                 verticalSpaceSmall,
                 Text(
-                  '${"We sent it to +966".tr()} $phone',
+                  '${"We sent it to:".tr()} \n +966$phone',
                   style: const TextStyle(color: kMainGray),
                 ),
                 const Spacer(),
-                Pinput(
-                  controller: codeController,
-                  length: 5,
-                  defaultPinTheme: defaultPinTheme,
-                  onCompleted: (code) {
-                    if (codeController.text.length == 5) {
-                      body!["phone_number"] = "+966$phone";
-                      body!["verification_code"] = code;
+                Directionality(
+                    textDirection: TextDirection.ltr,
+                    child: Pinput(
+                      controller: codeController,
+                      length: 5,
+                      defaultPinTheme: defaultPinTheme,
+                      onCompleted: (code) {
+                        if (codeController.text.length == 5) {
+                          body["phone_number"] = "+966$phone";
+                          body["verification_code"] = code;
 
-                      model
-                          .register(
-                              body: body!, hasImage: hasImage, context: context)
-                          .then((value) {
-                        if (value == StatusCode.throttled) {
-                          MotionToast.error(
-                            title: const Text("Register Failed"),
-                            description: const Text("Request was throttled."),
-                            animationCurve: Curves.easeIn,
-                            animationDuration:
-                                const Duration(milliseconds: 200),
-                          ).show(context);
-                        } else if (value == StatusCode.other) {
-                        } else {
-                          model.navigateTo(view: const HomeView(isUser: true));
+                          model
+                              .checkVerificationCode(
+                                  body: body, context: context)
+                              .then((value) {
+                            if (value == StatusCode.throttled) {
+                              MotionToast.error(
+                                title: const Text("Register Failed"),
+                                description:
+                                    const Text("Request was throttled."),
+                                animationCurve: Curves.easeIn,
+                                animationDuration:
+                                    const Duration(milliseconds: 200),
+                              ).show(context);
+                            } else if (value == StatusCode.other) {
+                            } else {
+                              model.navigateTo(
+                                  view: CompleteProfileView(body: body));
+                            }
+                          });
                         }
-                      });
-                    }
-                  },
-                ),
+                      },
+                    )),
                 const Spacer(),
                 Text(
                   'New code ${model.startStr}',

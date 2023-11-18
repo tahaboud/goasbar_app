@@ -2,31 +2,35 @@
 
 import 'dart:async';
 import 'dart:convert';
+
+import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/auth_response.dart';
-import 'package:dio/dio.dart';
+import 'package:goasbar/data_models/cards_model.dart';
 import 'package:goasbar/data_models/user_model.dart';
+import 'package:goasbar/enum/status_code.dart';
 import 'package:goasbar/services/token_service.dart';
 import 'package:goasbar/shared/app_configs.dart';
-import 'package:goasbar/enum/status_code.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/splash/splash_view.dart';
 import 'package:http/http.dart' as http;
 import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked_services/stacked_services.dart';
-import 'package:goasbar/data_models/cards_model.dart';
 
 class AuthService {
   final _navigationService = locator<NavigationService>();
   final _tokenService = locator<TokenService>();
 
-  Future<dynamic> register({Map<String, dynamic>? body, bool? hasImage, context}) async {
+  Future<dynamic> register(
+      {Map<String, dynamic>? body, bool? hasImage, context}) async {
     if (hasImage!) {
       Dio dio = Dio();
       FormData formData = FormData.fromMap(body!);
 
-      return dio.post(
+      return dio
+          .post(
         "$baseUrl/api/auth/register/",
         options: Options(
           headers: {
@@ -34,34 +38,78 @@ class AuthService {
           },
         ),
         data: formData,
-      ).then((response) {
+      )
+          .then((response) {
         if (response.statusCode == 201) {
           return AuthResponse.fromJson(response.data);
-        } if (response.statusCode == 429) {
+        }
+        if (response.statusCode == 429) {
           return StatusCode.throttled;
         } else {
-          showMotionToast(context: context, title: 'Registration Failed', msg: response.data["errors"]['detail'], type: MotionToastType.error);
+          showMotionToast(
+              context: context,
+              title: 'Registration Failed',
+              msg: response.data["errors"]['detail'],
+              type: MotionToastType.error);
           return null;
         }
       });
     } else {
-      return http.post(
+      return http
+          .post(
         Uri.parse("$baseUrl/api/auth/register/"),
         headers: {
           "Accept-Language": "en-US",
         },
         body: body,
-      ).then((response) {
+      )
+          .then((response) {
         if (response.statusCode == 201) {
-          return AuthResponse.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
-        } if (response.statusCode == 429) {
+          return AuthResponse.fromJson(
+              jsonDecode(utf8.decode(response.bodyBytes)));
+        }
+        if (response.statusCode == 429) {
           return StatusCode.throttled;
         } else {
-          showMotionToast(context: context, title: 'Registration Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
+          showMotionToast(
+              context: context,
+              title: 'Registration Failed',
+              msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]
+                  ['detail'],
+              type: MotionToastType.error);
           return null;
         }
       });
     }
+  }
+
+  Future<dynamic> checkVerificationCode(
+      {Map<String, dynamic>? body, context}) async {
+    return http
+        .post(
+      Uri.parse("$baseUrl/api/auth/check-code/"),
+      headers: {
+        "Accept-Language": "en-US",
+      },
+      body: body,
+    )
+        .then((response) {
+      if (response.statusCode == 200) {
+        return AuthResponse.fromJson(
+            jsonDecode(utf8.decode(response.bodyBytes)));
+      }
+      if (response.statusCode == 429) {
+        return StatusCode.throttled;
+      } else {
+        showMotionToast(
+            context: context,
+            title: "Invalid Code.".tr(),
+            msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]
+                ['detail'],
+            type: MotionToastType.error);
+        return null;
+      }
+    });
   }
 
   Future<bool> verifyPhoneNumber({String? phoneNumber, context}) async {
@@ -78,25 +126,37 @@ class AuthService {
       if (response.statusCode == 200) {
         return true;
       } else {
-        showMotionToast(context: context, title: 'Phone Verification Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(
+            context: context,
+            title: 'Phone Verification Failed',
+            msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]
+                ['detail'],
+            type: MotionToastType.error);
         return false;
       }
     });
   }
 
   Future<AuthResponse> login({Map? body, context}) async {
-    return http.post(
+    return http
+        .post(
       Uri.parse("$baseUrl/api/auth/login/"),
       headers: {
         "Accept-Language": "en-US",
       },
       body: body,
-    ).then((response) async {
+    )
+        .then((response) async {
       if (response.statusCode == 200) {
-        return AuthResponse.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
-      }
-      else {
-        showMotionToast(context: context, title: 'login Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
+        return AuthResponse.fromJson(
+            jsonDecode(utf8.decode(response.bodyBytes)));
+      } else {
+        showMotionToast(
+            context: context,
+            title: 'login Failed',
+            msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]
+                ['detail'],
+            type: MotionToastType.error);
         return AuthResponse();
       }
     });
@@ -111,9 +171,12 @@ class AuthService {
       },
     ).then((response) {
       if (response.statusCode == 200) {
-        return UserModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes))['user']);
+        return UserModel.fromJson(
+            jsonDecode(utf8.decode(response.bodyBytes))['user']);
       } else if (response.statusCode == 401) {
-        unAuthClearAndRestart(context: context,);
+        unAuthClearAndRestart(
+          context: context,
+        );
         return null;
       } else {
         return null;
@@ -132,7 +195,9 @@ class AuthService {
       if (response.statusCode == 200) {
         return jsonDecode(utf8.decode(response.bodyBytes))['response']["image"];
       } else if (response.statusCode == 401) {
-        unAuthClearAndRestart(context: context,);
+        unAuthClearAndRestart(
+          context: context,
+        );
         return null;
       } else {
         return null;
@@ -140,11 +205,13 @@ class AuthService {
     });
   }
 
-  Future<UserModel?> updateFavoritesUser({String? token, Map<String, dynamic>? body, context}) async {
+  Future<UserModel?> updateFavoritesUser(
+      {String? token, Map<String, dynamic>? body, context}) async {
     Dio dio = Dio();
     FormData formData = FormData.fromMap(body!);
 
-    return dio.patch(
+    return dio
+        .patch(
       "$baseUrl/api/auth/user/",
       options: Options(
         headers: {
@@ -154,24 +221,33 @@ class AuthService {
         },
       ),
       data: formData,
-    ).then((response) {
+    )
+        .then((response) {
       if (response.statusCode == 201) {
         return UserModel.fromJson(response.data['user']);
       } else if (response.statusCode == 401) {
-        unAuthClearAndRestart(context: context,);
+        unAuthClearAndRestart(
+          context: context,
+        );
         return null;
       } else {
-        showMotionToast(context: context, title: 'Update Favorites Failed', msg: response.data["errors"]['detail'], type: MotionToastType.error);
+        showMotionToast(
+            context: context,
+            title: 'Update Favorites Failed',
+            msg: response.data["errors"]['detail'],
+            type: MotionToastType.error);
         return null;
       }
     });
   }
 
-  Future<UserModel?> updateUserData({String? token, Map<String, dynamic>? body, context}) async {
+  Future<UserModel?> updateUserData(
+      {String? token, Map<String, dynamic>? body, context}) async {
     Dio dio = Dio();
     FormData formData = FormData.fromMap(body!);
 
-    return dio.patch(
+    return dio
+        .patch(
       "$baseUrl/api/auth/user/",
       options: Options(
         headers: {
@@ -181,14 +257,21 @@ class AuthService {
         },
       ),
       data: formData,
-    ).then((response) {
+    )
+        .then((response) {
       if (response.statusCode == 201) {
         return UserModel.fromJson(response.data['user']);
       } else if (response.statusCode == 401) {
-        unAuthClearAndRestart(context: context,);
+        unAuthClearAndRestart(
+          context: context,
+        );
         return null;
       } else {
-        showMotionToast(context: context, title: 'Update Failed', msg: response.data["errors"]['detail'], type: MotionToastType.error);
+        showMotionToast(
+            context: context,
+            title: 'Update Failed',
+            msg: response.data["errors"]['detail'],
+            type: MotionToastType.error);
         return null;
       }
     });
@@ -200,21 +283,24 @@ class AuthService {
       headers: {
         "Accept-Language": "en-US",
       },
-      body: {
-        "phone_number": "$phoneNumber",
-        "language_code": "en"
-      },
+      body: {"phone_number": "$phoneNumber", "language_code": "en"},
     ).then((response) {
       if (response.statusCode == 200) {
         return true;
       } else {
-        showMotionToast(context: context, title: 'Request Password Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(
+            context: context,
+            title: 'Request Password Failed',
+            msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]
+                ['detail'],
+            type: MotionToastType.error);
         return false;
       }
     });
   }
 
-  Future<bool?> resetPassword({String? phoneNumber, String? code, String? password, context}) async {
+  Future<bool?> resetPassword(
+      {String? phoneNumber, String? code, String? password, context}) async {
     return http.post(
       Uri.parse("$baseUrl/api/auth/password-reset/"),
       headers: {
@@ -229,13 +315,21 @@ class AuthService {
       if (response.statusCode == 200) {
         return true;
       } else {
-        showMotionToast(context: context, title: 'Reset Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(
+            context: context,
+            title: 'Reset Failed',
+            msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]
+                ['detail'],
+            type: MotionToastType.error);
         return false;
       }
     });
   }
 
-  Future<CardsModel?> getUserCards({String? token, context,}) async {
+  Future<CardsModel?> getUserCards({
+    String? token,
+    context,
+  }) async {
     return http.get(
       Uri.parse("$baseUrl/api/auth/cards/"),
       headers: {
@@ -246,7 +340,9 @@ class AuthService {
       if (response.statusCode == 200) {
         return CardsModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
       } else if (response.statusCode == 401) {
-        unAuthClearAndRestart(context: context,);
+        unAuthClearAndRestart(
+          context: context,
+        );
         return null;
       } else {
         return null;
@@ -255,18 +351,22 @@ class AuthService {
   }
 
   Future<String?> getRegistrationId({String? token, context, body}) async {
-    return http.post(
+    return http
+        .post(
       Uri.parse("$baseUrl/api/auth/cards/"),
       headers: {
         "Accept-Language": "en-US",
         "Authorization": "Token $token",
       },
       body: body,
-    ).then((response) {
+    )
+        .then((response) {
       if (response.statusCode == 201) {
         return jsonDecode(utf8.decode(response.bodyBytes))['id'];
       } else if (response.statusCode == 401) {
-        unAuthClearAndRestart(context: context,);
+        unAuthClearAndRestart(
+          context: context,
+        );
         return null;
       } else {
         return null;
@@ -274,7 +374,8 @@ class AuthService {
     });
   }
 
-  Future<String?> saveCardAndGetRegistrationStatus({id, String? token, context, cardType}) async {
+  Future<String?> saveCardAndGetRegistrationStatus(
+      {id, String? token, context, cardType}) async {
     return http.put(
       Uri.parse("$baseUrl/api/auth/cards/"),
       headers: {
@@ -289,10 +390,17 @@ class AuthService {
       if (response.statusCode == 200) {
         return jsonDecode(utf8.decode(response.bodyBytes))['id'];
       } else if (response.statusCode == 401) {
-        unAuthClearAndRestart(context: context,);
+        unAuthClearAndRestart(
+          context: context,
+        );
         return null;
       } else {
-        showMotionToast(context: context, title: 'Create Booking Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(
+            context: context,
+            title: 'Create Booking Failed',
+            msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]
+                ['detail'],
+            type: MotionToastType.error);
         return null;
       }
     });
@@ -310,10 +418,17 @@ class AuthService {
       if (response.statusCode == 204) {
         return true;
       } else if (response.statusCode == 401) {
-        unAuthClearAndRestart(context: context,);
+        unAuthClearAndRestart(
+          context: context,
+        );
         return null;
       } else {
-        showMotionToast(context: context, title: 'Logout Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(
+            context: context,
+            title: 'Logout Failed',
+            msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]
+                ['detail'],
+            type: MotionToastType.error);
         return false;
       }
     });
@@ -331,17 +446,28 @@ class AuthService {
       if (response.statusCode == 200) {
         return true;
       } else if (response.statusCode == 401) {
-        unAuthClearAndRestart(context: context,);
+        unAuthClearAndRestart(
+          context: context,
+        );
         return null;
       } else {
-        showMotionToast(context: context, title: 'Delete Account Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(
+            context: context,
+            title: 'Delete Account Failed',
+            msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]
+                ['detail'],
+            type: MotionToastType.error);
         return false;
       }
     });
   }
 
   unAuthClearAndRestart({BuildContext? context}) {
-    showMotionToast(context: context!, type: MotionToastType.error, msg: "Your session has expired, you must login again", title: 'Unauthorized');
+    showMotionToast(
+        context: context!,
+        type: MotionToastType.error,
+        msg: "Your session has expired, you must login again",
+        title: 'Unauthorized');
     _tokenService.clearToken();
     Timer(const Duration(milliseconds: 1000), () {
       _navigationService.clearStackAndShowView(const SplashView());

@@ -27,12 +27,11 @@ class SignUpOtpViewModel extends BaseViewModel {
     );
   }
 
-  Future<StatusCode> register(
-      {Map<String, dynamic>? body, context, bool? hasImage}) async {
+  Future<StatusCode> checkVerificationCode(
+      {Map<String, dynamic>? body, context}) async {
     return await _authService
-        .register(
+        .checkVerificationCode(
       context: context,
-      hasImage: hasImage,
       body: body,
     )
         .then((response) {
@@ -42,7 +41,6 @@ class SignUpOtpViewModel extends BaseViewModel {
         return StatusCode.throttled;
       } else {
         authResponse = response;
-        _tokenService.setTokenValue(authResponse!.token!);
         notifyListeners();
         return StatusCode.ok;
       }

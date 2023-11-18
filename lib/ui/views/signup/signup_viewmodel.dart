@@ -27,15 +27,17 @@ class SignUpViewModel extends BaseViewModel {
   }
 
   void navigateTo({view}) {
-    _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
+    _navigationService.navigateWithTransition(view,
+        curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
   }
 
-  String? validatePhoneNumber ({String? value}) {
+  String? validatePhoneNumber({String? value}) {
     return _validationService.validatePhoneNumber(value);
   }
 
   Future<bool> verifyPhoneNumber({String? phoneNumber, context}) async {
     updateIsClicked(value: true);
-    return await _authService.verifyPhoneNumber(phoneNumber: phoneNumber, context: context);
+    return await _authService.verifyPhoneNumber(
+        phoneNumber: phoneNumber, context: context);
   }
 }

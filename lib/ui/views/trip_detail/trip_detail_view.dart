@@ -38,8 +38,6 @@ class TripDetailView extends HookWidget {
   @override
   Widget build(BuildContext context) {
     var pageController = usePageController();
-    print("hisd");
-    print(experience);
     return ViewModelBuilder<TripDetailViewModel>.reactive(
       builder: (context, model, child) => Scaffold(
         extendBodyBehindAppBar: true,

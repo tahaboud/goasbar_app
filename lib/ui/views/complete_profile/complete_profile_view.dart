@@ -1,29 +1,282 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter/services.dart';
+import 'package:goasbar/enum/status_code.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/complete_profile/complete_profile_viewmodel.dart';
-import 'package:goasbar/ui/views/signup/signup_view.dart';
+import 'package:goasbar/ui/views/home/home_view.dart';
+import 'package:goasbar/ui/widgets/loader.dart';
+import 'package:motion_toast/motion_toast.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 
-class CompleteProfileView extends HookWidget {
-  const CompleteProfileView({
+class CompleteProfileView extends StatefulWidget {
+  CompleteProfileView({
     Key? key,
+    required this.body,
   }) : super(key: key);
+  Map<String, dynamic> body;
+
+  @override
+  State<CompleteProfileView> createState() => _CompleteProfileView();
+}
+
+class _CompleteProfileView extends State<CompleteProfileView> {
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController rePasswordController = TextEditingController();
+  TextEditingController genderController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
+  TextEditingController cityController =
+      TextEditingController(text: "Select your city".tr());
+  File? profile_picture;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  bool firstNameIsValid = false;
+  bool lastNameIsValid = false;
+  bool emailIsValid = false;
+  bool passwordIsValid = false;
+  bool rePasswordIsValid = false;
+  bool genderIsValid = false;
+  bool dateIsValid = false;
+  bool cityIsValid = false;
+
+  bool formIsValid = false;
+
+  bool isLoading = false;
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is removed from the widget tree.
+    // This also removes the _printLatestValue listener.
+    firstNameController.dispose();
+    lastNameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    rePasswordController.dispose();
+    genderController.dispose();
+    dateController.dispose();
+    cityController.dispose();
+    super.dispose();
+  }
+
+  void _onFirstNameChanged() {
+    firstNameIsValid = CompleteProfileViewModel()
+            .validateFirstName(value: firstNameController.text) ==
+        null;
+    bool oldFormIsValid = formIsValid;
+    formIsValid = firstNameIsValid &&
+        lastNameIsValid &&
+        emailIsValid &&
+        passwordIsValid &&
+        rePasswordIsValid &&
+        genderIsValid &&
+        dateIsValid &&
+        cityIsValid;
+    if (oldFormIsValid != formIsValid) {
+      setState(() {});
+    }
+  }
+
+  void _onLastNameChanged() {
+    lastNameIsValid = CompleteProfileViewModel()
+            .validateLastName(value: lastNameController.text) ==
+        null;
+    bool oldFormIsValid = formIsValid;
+    formIsValid = firstNameIsValid &&
+        lastNameIsValid &&
+        emailIsValid &&
+        passwordIsValid &&
+        rePasswordIsValid &&
+        genderIsValid &&
+        dateIsValid &&
+        cityIsValid;
+    if (oldFormIsValid != formIsValid) {
+      setState(() {});
+    }
+  }
+
+  void _onEmailChanged() {
+    emailIsValid =
+        CompleteProfileViewModel().validateEmail(value: emailController.text) ==
+            null;
+    bool oldFormIsValid = formIsValid;
+    formIsValid = firstNameIsValid &&
+        lastNameIsValid &&
+        emailIsValid &&
+        passwordIsValid &&
+        rePasswordIsValid &&
+        genderIsValid &&
+        dateIsValid &&
+        cityIsValid;
+    if (oldFormIsValid != formIsValid) {
+      setState(() {});
+    }
+  }
+
+  void _onPasswordChanged() {
+    passwordIsValid = CompleteProfileViewModel()
+            .validatePassword(value: passwordController.text) ==
+        null;
+    bool oldFormIsValid = formIsValid;
+    formIsValid = firstNameIsValid &&
+        lastNameIsValid &&
+        emailIsValid &&
+        passwordIsValid &&
+        rePasswordIsValid &&
+        genderIsValid &&
+        dateIsValid &&
+        cityIsValid;
+    if (oldFormIsValid != formIsValid) {
+      setState(() {});
+    }
+  }
+
+  void _onRePasswordChanged() {
+    rePasswordIsValid = CompleteProfileViewModel().validateRePassword(
+            password: passwordController.text,
+            rePassword: rePasswordController.text) ==
+        null;
+    bool oldFormIsValid = formIsValid;
+    formIsValid = firstNameIsValid &&
+        lastNameIsValid &&
+        emailIsValid &&
+        passwordIsValid &&
+        rePasswordIsValid &&
+        genderIsValid &&
+        dateIsValid &&
+        cityIsValid;
+    if (oldFormIsValid != formIsValid) {
+      setState(() {});
+    }
+  }
+
+  void _onGenderChanged() {
+    genderIsValid = genderController.text == "Male".tr() ||
+        genderController.text == "Female".tr();
+    bool oldFormIsValid = formIsValid;
+    formIsValid = firstNameIsValid &&
+        lastNameIsValid &&
+        emailIsValid &&
+        passwordIsValid &&
+        rePasswordIsValid &&
+        genderIsValid &&
+        dateIsValid &&
+        cityIsValid;
+    if (oldFormIsValid != formIsValid) {
+      setState(() {});
+    }
+  }
+
+  void _onDateChanged() {
+    dateIsValid = dateController.text != "";
+    bool oldFormIsValid = formIsValid;
+    formIsValid = firstNameIsValid &&
+        lastNameIsValid &&
+        emailIsValid &&
+        passwordIsValid &&
+        rePasswordIsValid &&
+        genderIsValid &&
+        dateIsValid &&
+        cityIsValid;
+    if (oldFormIsValid != formIsValid) {
+      setState(() {});
+    }
+  }
+
+  void _onCityChanged() {
+    cityIsValid = cities.contains(cityController.text);
+    bool oldFormIsValid = formIsValid;
+    formIsValid = firstNameIsValid &&
+        lastNameIsValid &&
+        emailIsValid &&
+        passwordIsValid &&
+        rePasswordIsValid &&
+        genderIsValid &&
+        dateIsValid &&
+        cityIsValid;
+    if (oldFormIsValid != formIsValid) {
+      setState(() {});
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Start listening to changes.
+    firstNameController.addListener(_onFirstNameChanged);
+    lastNameController.addListener(_onLastNameChanged);
+    emailController.addListener(_onEmailChanged);
+    passwordController.addListener(_onPasswordChanged);
+    rePasswordController.addListener(_onRePasswordChanged);
+    genderController.addListener(_onGenderChanged);
+    cityController.addListener(_onCityChanged);
+    dateController.addListener(_onDateChanged);
+  }
+
+  void onSubmit() async {
+    setState(() {
+      isLoading = true;
+    });
+    widget.body["username"] =
+        "${firstNameController.text}_${lastNameController.text}";
+    widget.body["email"] = emailController.text;
+    widget.body["password"] = passwordController.text;
+    widget.body["first_name"] = firstNameController.text;
+    widget.body["last_name"] = lastNameController.text;
+    widget.body["birth_date"] = dateController.text;
+    widget.body["gender"] = genderMap[genderController.text];
+    widget.body["city"] = citiesMap[cityController.text];
+    if (profile_picture != null) {
+      var pickedFile = await MultipartFile.fromFile(
+        profile_picture!.path,
+        filename: profile_picture!.path
+            .substring(profile_picture!.absolute.path.lastIndexOf('/') + 1),
+      );
+
+      widget.body.addAll({
+        "image": pickedFile,
+      });
+    }
+    CompleteProfileViewModel()
+        .register(
+            body: widget.body,
+            context: context,
+            hasImage: profile_picture != null)
+        .then((value) => {
+              if (value == StatusCode.throttled)
+                {
+                  MotionToast.error(
+                    title: const Text("Register Failed"),
+                    description: const Text("Request was throttled."),
+                    animationCurve: Curves.easeIn,
+                    animationDuration: const Duration(milliseconds: 200),
+                  ).show(context),
+                  isLoading = false
+                }
+              else if (value == StatusCode.other)
+                {isLoading = false}
+              else
+                {
+                  CompleteProfileViewModel().navigateTo(
+                      view: const HomeView(
+                    isUser: true,
+                  ))
+                }
+            });
+  }
 
   @override
   Widget build(BuildContext context) {
-    var firstName = useTextEditingController();
-    var lastName = useTextEditingController();
-    var email = useTextEditingController();
-    final password = useTextEditingController();
-    final rePassword = useTextEditingController();
-
     return ViewModelBuilder<CompleteProfileViewModel>.reactive(
       builder: (context, model, child) => Scaffold(
         body: SafeArea(
@@ -41,7 +294,7 @@ class CompleteProfileView extends HookWidget {
                 ).alignment(Alignment.centerLeft),
                 verticalSpaceLarge,
                 Text(
-                  'Profile'.tr(),
+                  'Complete your profile'.tr(),
                   style: const TextStyle(fontSize: 32),
                 ).center(),
                 verticalSpaceSmall,
@@ -62,18 +315,22 @@ class CompleteProfileView extends HookWidget {
                       width: 5,
                     ),
                     image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: model.file != null
-                          ? FileImage(model.file!) as ImageProvider
+                      fit: BoxFit.contain,
+                      image: profile_picture != null
+                          ? FileImage(profile_picture as File) as ImageProvider
                           : const AssetImage("assets/images/profile_image.png"),
                     ),
                   ),
-                ).gestures(onTap: () => model.pickImage()),
+                ).gestures(onTap: () {
+                  model.pickImage().then((value) => profile_picture = value);
+                }),
                 verticalSpaceMedium,
-                TextField(
-                  controller: firstName,
+                TextFormField(
+                  controller: firstNameController,
+                  validator: (value) => model.validateFirstName(value: value),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: InputDecoration(
-                    hintText: 'Abdeldjalil',
+                    hintText: "first name".tr(),
                     hintStyle: const TextStyle(fontSize: 14),
                     // prefixText: 'Saudi Arabia ( +966 ) | ',
                     prefixIcon: Text(
@@ -91,10 +348,12 @@ class CompleteProfileView extends HookWidget {
                   ),
                 ),
                 verticalSpaceMedium,
-                TextField(
-                  controller: lastName,
+                TextFormField(
+                  controller: lastNameController,
+                  validator: (value) => model.validateLastName(value: value),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: InputDecoration(
-                    hintText: 'Anas',
+                    hintText: "last name".tr(),
                     hintStyle: const TextStyle(fontSize: 14),
                     // prefixText: 'Saudi Arabia ( +966 ) | ',
                     prefixIcon: Text(
@@ -116,17 +375,23 @@ class CompleteProfileView extends HookWidget {
                   height: 60,
                   child: TextField(
                     readOnly: true,
-                    controller: model.gender,
+                    controller: genderController,
+                    onTap: () {
+                      model
+                          .showSelectionDialog(gen: genderController.text)
+                          .then((value) => {
+                                genderController.text = value,
+                                _onGenderChanged()
+                              });
+                    },
                     decoration: InputDecoration(
-                      hintText: 'Select the Gender'.tr(),
+                      hintText: 'Select your gender'.tr(),
                       hintStyle: const TextStyle(fontSize: 14),
-                      suffixIcon: Image.asset('assets/icons/drop_down.png')
-                          .gestures(onTap: () {
-                        model.showSelectionDialog(gen: model.gender.text);
-                      }),
-                      prefixIcon: const Text(
-                        ' Gender (Optional)',
-                        style: TextStyle(color: kMainColor2, fontSize: 14),
+                      suffixIcon: Image.asset('assets/icons/drop_down.png'),
+                      prefixIcon: Text(
+                        ' Gender '.tr(),
+                        style:
+                            const TextStyle(color: kMainColor2, fontSize: 14),
                       ).padding(vertical: 20, horizontal: 10),
                       fillColor: kTextFiledGrayColor,
                       filled: true,
@@ -142,16 +407,22 @@ class CompleteProfileView extends HookWidget {
                 verticalSpaceMedium,
                 TextField(
                   readOnly: true,
-                  controller: model.birthDate,
+                  onTap: () {
+                    model.showBirthDayPicker(context).then((value) =>
+                        {dateController.text = value, _onDateChanged()});
+                  },
+                  controller: dateController,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(8),
+                    _DateInputFormatter(),
+                  ],
                   decoration: InputDecoration(
-                    hintText: '25 . 10 1998',
+                    hintText: '2000-12-31',
                     hintStyle: const TextStyle(fontSize: 14),
-                    suffixIcon: Image.asset('assets/icons/birth_date.png')
-                        .gestures(onTap: () {
-                      model.showBirthDayPicker(context);
-                    }),
+                    suffixIcon: Image.asset('assets/icons/birth_date.png'),
                     prefixIcon: Text(
-                      ' Birthday (Optional)'.tr(),
+                      ' Date of birth '.tr(),
                       style: const TextStyle(color: kMainColor2, fontSize: 14),
                     ).padding(vertical: 20, horizontal: 10),
                     fillColor: kTextFiledGrayColor,
@@ -174,49 +445,40 @@ class CompleteProfileView extends HookWidget {
                   ),
                   child: Row(
                     children: [
-                      const Text(
-                        ' City (Optional)',
-                        style: TextStyle(color: kMainColor2, fontSize: 14),
+                      Text(
+                        ' City '.tr(),
+                        style:
+                            const TextStyle(color: kMainColor2, fontSize: 14),
                       ).padding(vertical: 20, horizontal: 10),
                       Expanded(
                         child: DropdownButtonHideUnderline(
                           child: ButtonTheme(
-                            alignedDropdown: true,
-                            child: DropdownButton<String>(
-                              value: model.city,
-                              iconSize: 24,
-                              icon: (null),
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 14,
-                              ),
-                              onChanged: (value) =>
-                                  model.updateCity(value: value),
-                              items: cities
-                                  .map((c) => DropdownMenuItem(
-                                        value: context.locale ==
-                                                const Locale('ar', 'SA')
-                                            ? c
-                                            : c == ""
-                                                ? c
-                                                : "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}",
-                                        onTap: () {},
-                                        child: SizedBox(
-                                          child: Text(
-                                            context.locale ==
-                                                    const Locale('ar', 'SA')
-                                                ? c
-                                                : c == ""
-                                                    ? c
-                                                    : "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}",
-                                            style: const TextStyle(
-                                                fontFamily: 'Cairo'),
-                                          ),
-                                        ),
-                                      ))
-                                  .toList(),
-                            ),
-                          ),
+                              alignedDropdown: true,
+                              child: DropdownButton<String>(
+                                  value: cityController.text,
+                                  iconSize: 24,
+                                  icon: (null),
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                  ),
+                                  onChanged: (value) => {
+                                        if (value != null)
+                                          {
+                                            setState(() {
+                                              cityController.text = value;
+                                            })
+                                          },
+                                      },
+                                  items: cities.map(
+                                    (e) {
+                                      return DropdownMenuItem(
+                                        value: e,
+                                        enabled: e != "Select your city".tr(),
+                                        child: Text(e),
+                                      );
+                                    },
+                                  ).toList())),
                         ),
                       ),
                     ],
@@ -224,16 +486,16 @@ class CompleteProfileView extends HookWidget {
                 ),
                 verticalSpaceMedium,
                 TextFormField(
-                  controller: email,
+                  controller: emailController,
                   validator: (value) => model.validateEmail(value: value),
                   keyboardType: TextInputType.emailAddress,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: InputDecoration(
-                    hintText: 'anas.yahya42@gmail.com',
+                    hintText: 'email@email.com',
                     hintStyle: const TextStyle(fontSize: 14),
-                    prefixIcon: const Text(
-                      ' Email ',
-                      style: TextStyle(color: kMainColor2, fontSize: 14),
+                    prefixIcon: Text(
+                      ' Email '.tr(),
+                      style: const TextStyle(color: kMainColor2, fontSize: 14),
                     ).padding(vertical: 20, horizontal: 10),
                     fillColor: kTextFiledGrayColor,
                     filled: true,
@@ -247,16 +509,16 @@ class CompleteProfileView extends HookWidget {
                 ),
                 verticalSpaceMedium,
                 TextFormField(
-                  controller: password,
+                  controller: passwordController,
                   validator: (value) => model.validatePassword(value: value),
                   obscureText: model.isObscure,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: InputDecoration(
-                    hintText: 'Password',
+                    hintText: 'Password'.tr(),
                     hintStyle: const TextStyle(fontSize: 14),
-                    prefixIcon: const Text(
-                      ' Password ',
-                      style: TextStyle(color: kMainColor2, fontSize: 14),
+                    prefixIcon: Text(
+                      ' Password '.tr(),
+                      style: const TextStyle(color: kMainColor2, fontSize: 14),
                     ).padding(vertical: 20, horizontal: 10),
                     suffixIcon:
                         const Icon(Icons.remove_red_eye_outlined, size: 17)
@@ -275,9 +537,10 @@ class CompleteProfileView extends HookWidget {
                 ),
                 verticalSpaceMedium,
                 TextFormField(
-                  controller: rePassword,
+                  key: _formKey,
+                  controller: rePasswordController,
                   validator: (value) => model.validateRePassword(
-                      password: password.text, rePassword: value),
+                      password: passwordController.text, rePassword: value),
                   obscureText: model.isObscure,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: InputDecoration(
@@ -308,69 +571,20 @@ class CompleteProfileView extends HookWidget {
                   height: 50,
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    gradient: firstName.text.isNotEmpty &&
-                            email.text.isNotEmpty &&
-                            firstName.text.isNotEmpty &&
-                            lastName.text.isNotEmpty &&
-                            password.text.isNotEmpty &&
-                            rePassword.text.isNotEmpty
-                        ? kMainGradient
-                        : kMainDisabledGradient,
+                    gradient:
+                        formIsValid ? kMainGradient : kMainDisabledGradient,
                   ),
-                  child: Text(
-                    'Continue'.tr(),
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500),
-                  ).center(),
+                  child: isLoading
+                      ? const Loader().center()
+                      : Text(
+                          'Continue'.tr(),
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500),
+                        ).center(),
                 ).gestures(
-                  onTap: firstName.text.isNotEmpty &&
-                          email.text.isNotEmpty &&
-                          firstName.text.isNotEmpty &&
-                          lastName.text.isNotEmpty &&
-                          password.text.isNotEmpty &&
-                          rePassword.text.isNotEmpty
-                      ? () async {
-                          Map<String, dynamic> body = {
-                            "username": "${firstName.text}_${lastName.text}",
-                            "email": email.text,
-                            "password": password.text,
-                            "first_name": firstName.text,
-                            "last_name": lastName.text,
-                            "birth_date": model.birthDate.text == ""
-                                ? ""
-                                : model.birthDate.text,
-                            "gender": model.gender.text.isNotEmpty
-                                ? model.gender.text[0]
-                                : "",
-                            "phone_number": "",
-                            "verification_code": "",
-                            "city": model.city == ""
-                                ? model.city!
-                                : model.city!
-                                    .replaceAll(' ', '_')
-                                    .toUpperCase(),
-                          };
-
-                          if (model.file != null) {
-                            var pickedFile = await MultipartFile.fromFile(
-                              model.file!.path,
-                              filename: model.file!.path.substring(
-                                  model.file!.absolute.path.lastIndexOf('/') +
-                                      1),
-                            );
-
-                            body.addAll({
-                              "image": pickedFile,
-                            });
-                          }
-
-                          model.navigateTo(
-                              view: SignUpView(
-                                  body: body, hasImage: model.hasImage));
-                        }
-                      : () {},
+                  onTap: formIsValid && !isLoading ? onSubmit : null,
                 ),
               ],
             ),
@@ -379,5 +593,22 @@ class CompleteProfileView extends HookWidget {
       ),
       viewModelBuilder: () => CompleteProfileViewModel(),
     );
+  }
+}
+
+class _DateInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    // Implement custom formatting logic here
+    // For example, format as "YYYYMMDD"
+    if (newValue.text.length > 4 && newValue.text.contains(RegExp(r'\d{4}'))) {
+      return TextEditingValue(
+        text:
+            '${newValue.text.substring(0, 4)}-${newValue.text.substring(4, 6)}-${newValue.text.substring(6)}',
+        selection: TextSelection.collapsed(offset: newValue.selection.end + 2),
+      );
+    }
+    return newValue;
   }
 }
