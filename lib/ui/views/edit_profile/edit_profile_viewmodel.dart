@@ -42,18 +42,19 @@ class EditProfileViewModel extends FutureViewModel<dynamic> {
   }
 
   void navigateTo({view}) {
-    _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
+    _navigationService.navigateWithTransition(view,
+        curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
   }
 
   void back() {
     _navigationService.back();
   }
 
-  String? validateEmail ({String? value}) {
+  String? validateEmail({String? value}) {
     return _validationService.validateEmail(value);
   }
 
-  String? validatePhoneNumber ({String? value}) {
+  String? validatePhoneNumber({String? value}) {
     return _validationService.validatePhoneNumber(value);
   }
 
@@ -68,7 +69,6 @@ class EditProfileViewModel extends FutureViewModel<dynamic> {
   }
 
   void showBirthDayPicker(context) async {
-
     List<DateTime?>? picked = await showCalendarDatePicker2Dialog(
       context: context,
       config: CalendarDatePicker2WithActionButtonsConfig(
@@ -76,10 +76,9 @@ class EditProfileViewModel extends FutureViewModel<dynamic> {
         calendarType: CalendarDatePicker2Type.single,
         selectedDayHighlightColor: kMainColor1,
       ),
-      initialValue: [
+      value: [
         DateTime.now(),
       ],
-
       dialogSize: const Size(325, 340),
     );
 
@@ -90,7 +89,7 @@ class EditProfileViewModel extends FutureViewModel<dynamic> {
     notifyListeners();
   }
 
-  void pickImage () async {
+  void pickImage() async {
     file = await _mediaService.getImage();
     if (file != null) {
       notifyListeners();
@@ -99,7 +98,9 @@ class EditProfileViewModel extends FutureViewModel<dynamic> {
 
   Future<dynamic> getUserData({context}) async {
     String? token = await _tokenService.getTokenValue();
-    return _authService.getUserData(token: token, context: context).then((value) {
+    return _authService
+        .getUserData(token: token, context: context)
+        .then((value) {
       if (value != null) {
         user = value;
         notifyListeners();
@@ -114,7 +115,13 @@ class EditProfileViewModel extends FutureViewModel<dynamic> {
     updateIsClicked(value: true);
 
     String? token = await _tokenService.getTokenValue();
-    return _authService.updateUserData(context: context, token: token, body: body,).then((value) {
+    return _authService
+        .updateUserData(
+      context: context,
+      token: token,
+      body: body,
+    )
+        .then((value) {
       if (value != null) {
         user = value;
         notifyListeners();

@@ -14,7 +14,7 @@ import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class LoginView extends HookWidget {
-  const LoginView({Key? key}) : super(key: key);
+  const LoginView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +74,7 @@ class LoginView extends HookWidget {
               ),
               verticalSpaceSmall,
               TextField(
+                keyboardType: TextInputType.emailAddress,
                 controller: userName,
                 onChanged: (text) => model.changedEmail(text),
                 decoration: InputDecoration(
@@ -105,8 +106,6 @@ class LoginView extends HookWidget {
               TextFormField(
                 controller: password,
                 obscureText: model.isObscure,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                validator: (value) => model.validatePassword(value: value),
                 onChanged: (text) => model.changedPass(text),
                 decoration: InputDecoration(
                   hintText: 'password'.tr(),

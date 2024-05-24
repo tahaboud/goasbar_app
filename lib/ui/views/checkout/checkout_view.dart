@@ -8,19 +8,23 @@ import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/services/booking_api_service.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/home/home_view.dart';
-import 'package:goasbar/ui/views/navbar/trips/trips_view.dart';
 import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class CheckoutView extends StatefulHookWidget {
   const CheckoutView(
-      {Key? key, this.booking, this.experience, this.user, this.usersCount})
-      : super(key: key);
+      {super.key,
+      this.booking,
+      this.experience,
+      this.user,
+      this.usersCount,
+      this.paymentUrl});
   final ExperienceResults? experience;
   final UserModel? user;
   final BookingModel? booking;
   final int? usersCount;
+  final String? paymentUrl;
 
   @override
   State<CheckoutView> createState() => _CheckoutViewState();
@@ -50,13 +54,11 @@ class _CheckoutViewState extends State<CheckoutView> {
           onPageFinished: (String url) {},
           onWebResourceError: (WebResourceError error) {},
           onNavigationRequest: (NavigationRequest request) async {
-            if (request.url.startsWith('https://www.goasbar.com/booking/')) {
-              String paymentId = request.url.split("?")[1].split("&")[0];
+            if (request.url.startsWith('https://goasbar.com')) {
               bool? bookingState = await _bookingApiService.getPaymentStatus(
                   context: context,
                   token: widget.booking?.tokensd,
-                  bookingId: widget.booking?.response?.id,
-                  paymentId: paymentId);
+                  bookingId: widget.booking?.response?.id);
               if (bookingState!) {
                 if (context.mounted) {
                   Navigator.pop(context);
@@ -81,20 +83,15 @@ class _CheckoutViewState extends State<CheckoutView> {
                       type: MotionToastType.error);
                 }
               }
-            } else if (request.url.startsWith("https://oppwa.com") ||
-                request.url.startsWith("https://eu-prod.oppwa.com")) {
+            } else if (request.url
+                .startsWith("https://secure.clickpay.com.sa/")) {
               return NavigationDecision.navigate;
-            } else if (request.url.startsWith("https://www.goasbar.com")) {
-              return NavigationDecision.prevent;
             }
-            return NavigationDecision.navigate;
+            return NavigationDecision.prevent;
           },
         ),
       )
-      ..loadRequest(
-          Uri.parse(
-              'https://www.goasbar.com/booking/payment/app/${widget.booking?.response?.id}/'),
-          headers: headers);
+      ..loadRequest(Uri.parse(widget.paymentUrl as String), headers: headers);
   }
 
   @override

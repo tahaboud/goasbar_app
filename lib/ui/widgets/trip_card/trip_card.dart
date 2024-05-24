@@ -15,11 +15,11 @@ import 'package:styled_widget/styled_widget.dart';
 
 class TripItem extends StatelessWidget {
   const TripItem({
-    Key? key,
+    super.key,
     this.experience,
     this.user,
     this.isUser,
-  }) : super(key: key);
+  });
   final ExperienceResults? experience;
   final UserModel? user;
   final bool? isUser;
@@ -96,7 +96,7 @@ class TripItem extends StatelessWidget {
               left: 5,
               child: Container(
                 height: screenHeightPercentage(context, percentage: 0.13),
-                width: screenWidthPercentage(context, percentage: 0.7) - 60,
+                width: screenWidthPercentage(context, percentage: 0.7) - 50,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: Colors.white,

@@ -15,7 +15,7 @@ import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class TimingView extends HookWidget {
-  const TimingView({Key? key, this.experience}) : super(key: key);
+  const TimingView({super.key, this.experience});
   final ExperienceResults? experience;
 
   @override
@@ -78,11 +78,11 @@ class TimingView extends HookWidget {
                 ),
                 verticalSpaceRegular,
                 CalendarDatePicker2(
-                  initialValue: [
+                  value: [
                     model.selectedDate,
                   ],
                   config: CalendarDatePicker2Config(
-                      disableYearPicker: true,
+                      disableModePicker: true,
                       firstDate: DateTime.now(),
                       calendarType: CalendarDatePicker2Type.single,
                       selectedDayHighlightColor: kMainColor1,

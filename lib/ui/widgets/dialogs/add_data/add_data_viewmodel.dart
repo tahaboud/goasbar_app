@@ -15,7 +15,8 @@ class AddDataViewModel extends BaseViewModel {
   final _navigationService = locator<NavigationService>();
 
   void navigateTo({view}) {
-    _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
+    _navigationService.navigateWithTransition(view,
+        curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
   }
 
   void back() {
@@ -29,10 +30,9 @@ class AddDataViewModel extends BaseViewModel {
         calendarType: CalendarDatePicker2Type.single,
         selectedDayHighlightColor: kMainColor1,
       ),
-      initialValue: [
+      value: [
         DateTime.now(),
       ],
-
       dialogSize: const Size(325, 340),
     );
 
@@ -52,7 +52,7 @@ class AddDataViewModel extends BaseViewModel {
   final _authService = locator<AuthService>();
   final _tokenService = locator<TokenService>();
 
-  List<String> citiesWithNone () {
+  List<String> citiesWithNone() {
     List<String> list = [];
     list.addAll(cities);
     list.removeAt(0);
@@ -84,7 +84,13 @@ class AddDataViewModel extends BaseViewModel {
     updateIsClicked(value: true);
 
     String? token = await _tokenService.getTokenValue();
-    return _authService.updateUserData(context: context, token: token, body: body,).then((value) {
+    return _authService
+        .updateUserData(
+      context: context,
+      token: token,
+      body: body,
+    )
+        .then((value) {
       if (value != null) {
         user = value;
         notifyListeners();

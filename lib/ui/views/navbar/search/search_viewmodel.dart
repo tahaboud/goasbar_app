@@ -82,11 +82,11 @@ class SearchViewModel extends BaseViewModel {
     List<DateTime?>? picked = await showCalendarDatePicker2Dialog(
       context: context,
       config: CalendarDatePicker2WithActionButtonsConfig(
-        disableYearPicker: true,
+        disableModePicker: true,
         calendarType: CalendarDatePicker2Type.range,
         selectedDayHighlightColor: kMainColor1,
       ),
-      initialValue: [
+      value: [
         DateTime.now(),
       ],
       dialogSize: const Size(325, 340),

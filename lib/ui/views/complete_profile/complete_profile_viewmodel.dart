@@ -115,7 +115,7 @@ class CompleteProfileViewModel extends BaseViewModel {
         calendarType: CalendarDatePicker2Type.single,
         selectedDayHighlightColor: kMainColor1,
       ),
-      initialValue: [
+      value: [
         DateTime.now(),
       ],
       dialogSize: const Size(325, 340),

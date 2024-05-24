@@ -30,7 +30,8 @@ class NewTimingViewModel extends BaseViewModel {
   int pageIndex = 1;
 
   void navigateTo({view}) {
-    _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
+    _navigationService.navigateWithTransition(view,
+        curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
   }
 
   void clearAndNavigateTo({view}) {
@@ -46,16 +47,15 @@ class NewTimingViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-
-  String? validateEmail ({String? value}) {
+  String? validateEmail({String? value}) {
     return _validationService.validateEmail(value);
   }
 
-  String? validatePhoneNumber ({String? value}) {
+  String? validatePhoneNumber({String? value}) {
     return _validationService.validatePhoneNumber(value);
   }
 
-  void showTypeOfIdentityDialog({type}) async{
+  void showTypeOfIdentityDialog({type}) async {
     var response = await _dialogService.showCustomDialog(
       variant: DialogType.typeOfIdentity,
       data: type,
@@ -65,7 +65,7 @@ class NewTimingViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void pickImage () async {
+  void pickImage() async {
     file = await _mediaService.getImage();
     if (file != null) {
       notifyListeners();
@@ -78,7 +78,7 @@ class NewTimingViewModel extends BaseViewModel {
     );
   }
 
-  setToken ({token}) {
+  setToken({token}) {
     _tokenService.setTokenValue(token);
   }
 
@@ -89,8 +89,11 @@ class NewTimingViewModel extends BaseViewModel {
     );
 
     String dayPeriod = picked!.period == DayPeriod.pm ? "PM" : "AM";
-    String hour = picked.hourOfPeriod < 10 ? "0${picked.hourOfPeriod}" : "${picked.hourOfPeriod}";
-    String minute = picked.minute < 10 ? "0${picked.minute}" : "${picked.minute}";
+    String hour = picked.hourOfPeriod < 10
+        ? "0${picked.hourOfPeriod}"
+        : "${picked.hourOfPeriod}";
+    String minute =
+        picked.minute < 10 ? "0${picked.minute}" : "${picked.minute}";
 
     startTime.text = "$hour:$minute $dayPeriod";
 
@@ -112,15 +115,14 @@ class NewTimingViewModel extends BaseViewModel {
     List<DateTime?>? picked = await showCalendarDatePicker2Dialog(
       context: context,
       config: CalendarDatePicker2WithActionButtonsConfig(
-        disableYearPicker: true,
+        disableModePicker: true,
         firstDate: DateTime.now(),
         calendarType: CalendarDatePicker2Type.single,
         selectedDayHighlightColor: kMainColor1,
       ),
-      initialValue: [
+      value: [
         DateTime.now(),
       ],
-
       dialogSize: const Size(325, 340),
     );
 
@@ -131,13 +133,16 @@ class NewTimingViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<TimingModel?> createTiming ({Map? body, int? experienceId, context}) async {
+  Future<TimingModel?> createTiming(
+      {Map? body, int? experienceId, context}) async {
     String? token = await _tokenService.getTokenValue();
-    return await _timingApiService.createTiming(context: context, token: token, body: body, experienceId: experienceId);
+    return await _timingApiService.createTiming(
+        context: context, token: token, body: body, experienceId: experienceId);
   }
 
-  Future<TimingModel?> updateTiming ({Map? body, int? timingId, context}) async {
+  Future<TimingModel?> updateTiming({Map? body, int? timingId, context}) async {
     String? token = await _tokenService.getTokenValue();
-    return await _timingApiService.updateTiming(context: context, token: token, body: body, timingId: timingId);
+    return await _timingApiService.updateTiming(
+        context: context, token: token, body: body, timingId: timingId);
   }
 }

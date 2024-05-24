@@ -79,10 +79,13 @@ class BookingApiService {
     });
   }
 
-  Future<bool?> getPaymentStatus(
-      {context, String? token, int? bookingId, String? paymentId}) async {
+  Future<bool?> getPaymentStatus({
+    context,
+    String? token,
+    int? bookingId,
+  }) async {
     return http.get(
-      Uri.parse("$baseUrl/api/booking/payment/$bookingId/?$paymentId"),
+      Uri.parse("$baseUrl/api/booking/payment/$bookingId/"),
       headers: {
         "Accept-Language": "en-US",
         "Authorization": "Token $token",

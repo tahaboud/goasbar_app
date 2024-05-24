@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/experience_response.dart';
 import 'package:goasbar/data_models/image_set_model.dart';
@@ -20,7 +21,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
-import 'package:geocoding/geocoding.dart';
 
 class AddExperienceInfoViewModel extends BaseViewModel {
   AddExperienceInfoViewModel({this.experience});
@@ -69,14 +69,15 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   LatLng? latLon;
   Placemark? address;
 
-  Future getAddressFromCoordinates({LatLng? latLng})async {
-    List<Placemark> placemarks = await placemarkFromCoordinates(latLng!.latitude, latLng.longitude);
+  Future getAddressFromCoordinates({LatLng? latLng}) async {
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(latLng!.latitude, latLng.longitude);
     address = placemarks[0];
 
     notifyListeners();
   }
 
-  launchMaps ({LatLng? latLon}) {
+  launchMaps({LatLng? latLon}) {
     MapsLauncher.launchCoordinates(latLon!.latitude, latLon.longitude);
   }
 
@@ -114,14 +115,16 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   onStart() {
     if (experience != null) {
       setBusy(true);
-      if (experience!.latitude != null && experience!.longitude != null) latLon = LatLng(experience!.latitude, experience!.longitude);
+      if (experience!.latitude != null && experience!.longitude != null)
+        latLon = LatLng(experience!.latitude, experience!.longitude);
       if (experience!.latitude != null && experience!.longitude != null) {
         kGooglePlex = CameraPosition(
           target: LatLng(experience!.latitude, experience!.longitude),
           zoom: 13.4746,
         );
         mapToMarkers(LatLng(experience!.latitude, experience!.longitude));
-        getAddressFromCoordinates(latLng: LatLng(experience!.latitude, experience!.longitude));
+        getAddressFromCoordinates(
+            latLng: LatLng(experience!.latitude, experience!.longitude));
       } else {
         kGooglePlex = const CameraPosition(
           target: LatLng(24.720495, 46.675468),
@@ -131,7 +134,8 @@ class AddExperienceInfoViewModel extends BaseViewModel {
       city = getCity();
       genderConstraint = getGenderConstraint();
       selectedExperienceCategory = getSelectedExperienceCategory();
-      if (experience!.profileImage != null) mainImage = File(experience!.profileImage!);
+      if (experience!.profileImage != null)
+        mainImage = File(experience!.profileImage!);
       if (experience!.imageSet!.isNotEmpty) {
         additionalImages = experience!.imageSet;
         images = experience!.imageSet!.length;
@@ -188,7 +192,9 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   }
 
   String? getCity() {
-    city = experience != null ? "${experience!.city![0]}${experience!.city!.substring(1).replaceAll('_', ' ').toLowerCase()}" : null;
+    city = experience != null
+        ? "${experience!.city![0]}${experience!.city!.substring(1).replaceAll('_', ' ').toLowerCase()}"
+        : null;
     return city;
   }
 
@@ -197,10 +203,16 @@ class AddExperienceInfoViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  String? getGenderConstraint () {
-    genderConstraint = experience != null ? experience!.gender == "None" ? "No constrains".tr()
-      : experience!.gender == "FAMILIES" ? "Families only".tr() : experience!.gender == "MEN" ? "Men Only".tr()
-      : "Women Only".tr() : genderConstraints[0];
+  String? getGenderConstraint() {
+    genderConstraint = experience != null
+        ? experience!.gender == "None"
+            ? "No constrains".tr()
+            : experience!.gender == "FAMILIES"
+                ? "Families only".tr()
+                : experience!.gender == "MEN"
+                    ? "Men Only".tr()
+                    : "Women Only".tr()
+        : genderConstraints[0];
     return genderConstraint;
   }
 
@@ -219,18 +231,21 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   }
 
   List<dynamic>? getSelectedExperienceCategory() {
-    selectedExperienceCategory = experience != null ? experience!.categories!.isNotEmpty
-        ? experience!.categories! : [] : [];
+    selectedExperienceCategory = experience != null
+        ? experience!.categories!.isNotEmpty
+            ? experience!.categories!
+            : []
+        : [];
 
     return selectedExperienceCategory;
   }
 
-  void updateProvidedGoodsText ({String? text}) {
+  void updateProvidedGoodsText({String? text}) {
     providedGoodsText = text;
     notifyListeners();
   }
 
-  void updateRequirementsText ({String? text}) {
+  void updateRequirementsText({String? text}) {
     requirementsText = text;
     notifyListeners();
   }
@@ -248,7 +263,8 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   }
 
   void navigateTo({view}) {
-    _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
+    _navigationService.navigateWithTransition(view,
+        curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
   }
 
   void clearAndNavigateTo({view}) {
@@ -264,16 +280,15 @@ class AddExperienceInfoViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-
-  String? validateEmail ({String? value}) {
+  String? validateEmail({String? value}) {
     return _validationService.validateEmail(value);
   }
 
-  String? validatePhoneNumber ({String? value}) {
+  String? validatePhoneNumber({String? value}) {
     return _validationService.validatePhoneNumber(value);
   }
 
-  void pickMainImage () async {
+  void pickMainImage() async {
     mainImage = await _mediaService.getImage();
     if (mainImage != null) {
       isProfileImageFromLocal = true;
@@ -281,7 +296,7 @@ class AddExperienceInfoViewModel extends BaseViewModel {
     }
   }
 
-  void pickImage () async {
+  void pickImage() async {
     File? file;
     file = await _mediaService.getImage();
     if (file != null) {
@@ -314,15 +329,14 @@ class AddExperienceInfoViewModel extends BaseViewModel {
     List<DateTime?>? picked = await showCalendarDatePicker2Dialog(
       context: context,
       config: CalendarDatePicker2WithActionButtonsConfig(
-          disableYearPicker: true,
-          firstDate: DateTime.now(),
-          calendarType: CalendarDatePicker2Type.single,
-          selectedDayHighlightColor: kMainColor1,
+        disableModePicker: true,
+        firstDate: DateTime.now(),
+        calendarType: CalendarDatePicker2Type.single,
+        selectedDayHighlightColor: kMainColor1,
       ),
-      initialValue: [
+      value: [
         DateTime.now(),
       ],
-
       dialogSize: const Size(325, 340),
     );
 
@@ -340,8 +354,11 @@ class AddExperienceInfoViewModel extends BaseViewModel {
     );
 
     String dayPeriod = picked!.period == DayPeriod.pm ? "PM" : "AM";
-    String hour = picked.hourOfPeriod < 10 ? "0${picked.hourOfPeriod}" : "${picked.hourOfPeriod}";
-    String minute = picked.minute < 10 ? "0${picked.minute}" : "${picked.minute}";
+    String hour = picked.hourOfPeriod < 10
+        ? "0${picked.hourOfPeriod}"
+        : "${picked.hourOfPeriod}";
+    String minute =
+        picked.minute < 10 ? "0${picked.minute}" : "${picked.minute}";
 
     startTime.text = "$hour:$minute $dayPeriod";
 
@@ -371,12 +388,22 @@ class AddExperienceInfoViewModel extends BaseViewModel {
     }
   }
 
-  Future<ExperienceResults?> createExperience({context, Map<String, dynamic>? body, Map<String, dynamic>? timingBody,}) async {
+  Future<ExperienceResults?> createExperience({
+    context,
+    Map<String, dynamic>? body,
+    Map<String, dynamic>? timingBody,
+  }) async {
     updateIsClicked(value: true);
     String? token = await _tokenService.getTokenValue();
-    return await _experienceApiService.createExperience(token: token, body: body, context: context!).then((value) {
+    return await _experienceApiService
+        .createExperience(token: token, body: body, context: context!)
+        .then((value) {
       if (value is ExperienceResults) {
-        _timingApiService.createTiming(context: context, token: token, experienceId: value.id, body: timingBody);
+        _timingApiService.createTiming(
+            context: context,
+            token: token,
+            experienceId: value.id,
+            body: timingBody);
         return value;
       } else {
         return null;
@@ -384,10 +411,21 @@ class AddExperienceInfoViewModel extends BaseViewModel {
     });
   }
 
-  Future<ExperienceResults?> updateExperience({bool? hasImages, Map<String, dynamic>? body, context, int? experienceId}) async {
+  Future<ExperienceResults?> updateExperience(
+      {bool? hasImages,
+      Map<String, dynamic>? body,
+      context,
+      int? experienceId}) async {
     updateIsClicked(value: true);
     String? token = await _tokenService.getTokenValue();
-    return await _experienceApiService.updateExperience(context: context, hasImages: hasImages, token: token, body: body, experienceId: experienceId).then((value) {
+    return await _experienceApiService
+        .updateExperience(
+            context: context,
+            hasImages: hasImages,
+            token: token,
+            body: body,
+            experienceId: experienceId)
+        .then((value) {
       if (value is ExperienceResults) {
         return value;
       } else {
@@ -399,7 +437,13 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   Future<bool?> deleteExperienceImage({ImageSet? image, context}) async {
     String? token = await _tokenService.getTokenValue();
     setBusy(true);
-    return await _experienceApiService.deleteExperienceImage(token: token, imageId: image!.id, context: context,).then((value) async {
+    return await _experienceApiService
+        .deleteExperienceImage(
+      token: token,
+      imageId: image!.id,
+      context: context,
+    )
+        .then((value) async {
       additionalImages!.remove(image);
       images = images! - 1;
       notifyListeners();
