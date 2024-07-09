@@ -12,7 +12,7 @@ import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class SignUpOtpView extends HookWidget {
-  SignUpOtpView({Key? key, this.phone}) : super(key: key);
+  SignUpOtpView({super.key, this.phone});
   final String? phone;
   Map<String, dynamic> body = {};
 

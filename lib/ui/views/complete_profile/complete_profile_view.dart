@@ -18,9 +18,9 @@ import 'package:styled_widget/styled_widget.dart';
 
 class CompleteProfileView extends StatefulWidget {
   CompleteProfileView({
-    Key? key,
+    super.key,
     required this.body,
-  }) : super(key: key);
+  });
   Map<String, dynamic> body;
 
   @override
@@ -261,10 +261,16 @@ class _CompleteProfileView extends State<CompleteProfileView> {
                     animationCurve: Curves.easeIn,
                     animationDuration: const Duration(milliseconds: 200),
                   ).show(context),
-                  isLoading = false
+                  setState(() {
+                    isLoading = false;
+                  })
                 }
               else if (value == StatusCode.other)
-                {isLoading = false}
+                {
+                  setState(() {
+                    isLoading = false;
+                  })
+                }
               else
                 {
                   CompleteProfileViewModel().navigateTo(
