@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:goasbar/data_models/user_model.dart';
@@ -11,8 +12,7 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class BeHostedView extends HookWidget {
-  BeHostedView({Key? key, required this.request, required this.completer})
-      : super(key: key);
+  BeHostedView({super.key, required this.request, required this.completer});
 
   final SheetRequest request;
   final Function(SheetResponse) completer;
@@ -117,15 +117,21 @@ class BeHostedView extends HookWidget {
               bankAccountNumber: bankAccountNumber,
               iban: iban,
               isClicked: model.isClicked!,
-              onTapBack: () => model.back(),
+              updateIsClicked: (value) => model.updateIsClicked(value: value),
+              onTapBack: () {
+                model.back();
+              },
               showErrorDialog: () => model.showErrorDialog(),
-              onTapSubmit: () {
+              onTapSubmit: () async {
                 UserModel? user = request.data;
                 if (!user!.isProvider!) {
-                  Map? body = {
+                  Map<String, dynamic>? body = {
                     "nickname": name.text,
                     "identity": identityNumber.text,
-                    "identity_type": model.typeOfIdentity.text,
+                    "identity_type":
+                        model.typeOfIdentity.text == "National Identity"
+                            ? "IDENTITY"
+                            : "REGISTRATION",
                     "about": bio.text,
                     "bank_name": bankName.text,
                     "bank_account_number": bankAccountNumber.text,
@@ -143,8 +149,13 @@ class BeHostedView extends HookWidget {
                     });
                   }
                   if (model.file != null) {
+                    var pickedFile = await MultipartFile.fromFile(
+                      model.file!.path,
+                      filename: model.file!.path.substring(
+                          model.file!.absolute.path.lastIndexOf('/') + 1),
+                    );
                     body.addAll({
-                      "doc_image": model.file,
+                      "doc_image": pickedFile,
                     });
                   }
                   if (facebook.text.isNotEmpty) {
@@ -157,7 +168,7 @@ class BeHostedView extends HookWidget {
                       "instagram_account": instagram.text,
                     });
                   }
-
+                  model.updateIsClicked(value: true);
                   model
                       .beHostedProvider(
                     context: context,

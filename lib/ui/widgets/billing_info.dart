@@ -11,7 +11,7 @@ import 'package:styled_widget/styled_widget.dart';
 
 class BillingInfo extends StatelessWidget {
   const BillingInfo({
-    Key? key,
+    super.key,
     required this.twitter,
     required this.instagram,
     required this.facebook,
@@ -21,9 +21,10 @@ class BillingInfo extends StatelessWidget {
     this.onTapBack,
     this.showErrorDialog,
     this.onTapSubmit,
+    this.updateIsClicked,
     this.isClicked,
     required this.pageController,
-  }) : super(key: key);
+  });
 
   final TextEditingController twitter;
   final PageController pageController;
@@ -35,6 +36,7 @@ class BillingInfo extends StatelessWidget {
   final Function()? onTapBack;
   final Function? showErrorDialog;
   final Function()? onTapSubmit;
+  final Function(bool)? updateIsClicked;
   final bool? isClicked;
 
   @override
@@ -139,7 +141,10 @@ class BillingInfo extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              PreviousButton(onTap: () => pageController.jumpToPage(1)),
+              PreviousButton(onTap: () {
+                updateIsClicked!(false);
+                pageController.jumpToPage(1);
+              }),
               Container(
                 width: screenWidthPercentage(context, percentage: 0.4),
                 height: 50,
@@ -164,11 +169,11 @@ class BillingInfo extends StatelessWidget {
                   if (bankName.text.isNotEmpty &&
                       bankAccountNumber.text.isNotEmpty &&
                       iban.text.isNotEmpty) {
-                    if (iban.text.replaceAll(' ', '').length != 23) {
+                    if (iban.text.replaceAll(' ', '').length != 24) {
                       MotionToast.warning(
                         title: const Text("Incorrect IBAN Format"),
                         description:
-                            const Text("IBAN must be 23 digits length."),
+                            const Text("IBAN must be 24 digits length."),
                         animationCurve: Curves.easeIn,
                         animationDuration: const Duration(milliseconds: 200),
                       ).show(context);

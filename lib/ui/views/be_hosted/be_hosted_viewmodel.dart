@@ -33,7 +33,8 @@ class BeHostedInfoViewModel extends FutureViewModel<ProviderModel?> {
   }
 
   void navigateTo({view}) {
-    _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
+    _navigationService.navigateWithTransition(view,
+        curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
   }
 
   void clearAndNavigateTo({view}) {
@@ -49,16 +50,15 @@ class BeHostedInfoViewModel extends FutureViewModel<ProviderModel?> {
     notifyListeners();
   }
 
-
-  String? validateEmail ({String? value}) {
+  String? validateEmail({String? value}) {
     return _validationService.validateEmail(value);
   }
 
-  String? validatePhoneNumber ({String? value}) {
+  String? validatePhoneNumber({String? value}) {
     return _validationService.validatePhoneNumber(value);
   }
 
-  void showTypeOfIdentityDialog({type}) async{
+  void showTypeOfIdentityDialog({type}) async {
     var response = await _dialogService.showCustomDialog(
       variant: DialogType.typeOfIdentity,
       data: type,
@@ -68,7 +68,7 @@ class BeHostedInfoViewModel extends FutureViewModel<ProviderModel?> {
     notifyListeners();
   }
 
-  void pickImage () async {
+  void pickImage() async {
     file = await _mediaService.getImage();
     if (file != null) {
       notifyListeners();
@@ -85,7 +85,7 @@ class BeHostedInfoViewModel extends FutureViewModel<ProviderModel?> {
     String? temp = "";
     var lastI = 0;
     var i = 0;
-    for (i = 0; i < iban.length;i++) {
+    for (i = 0; i < iban.length; i++) {
       if (i % 5 == 0 && i != 0) {
         if (temp!.isEmpty) {
           temp = iban.substring(lastI, i);
@@ -101,17 +101,25 @@ class BeHostedInfoViewModel extends FutureViewModel<ProviderModel?> {
     return temp;
   }
 
-  Future<ProviderModel?> beHostedProvider({Map? body, context}) async {
-    updateIsClicked(value: true);
+  Future<ProviderModel?> beHostedProvider(
+      {Map<String, dynamic>? body, context}) async {
     String? token = await _tokenService.getTokenValue();
-    provider = await _providerApiService.createProvider(context: context, token: token, body: body,);
 
+    provider = await _providerApiService.createProvider(
+      context: context,
+      token: token,
+      body: body,
+    );
     return provider;
   }
 
   Future<ProviderModel?> updateProvider({Map? body}) async {
     String? token = await _tokenService.getTokenValue();
-    provider = await _providerApiService.updateProvider(context: context, token: token, body: body,);
+    provider = await _providerApiService.updateProvider(
+      context: context,
+      token: token,
+      body: body,
+    );
 
     return provider;
   }
@@ -119,7 +127,8 @@ class BeHostedInfoViewModel extends FutureViewModel<ProviderModel?> {
   @override
   Future<ProviderModel?> futureToRun() async {
     String? token = await _tokenService.getTokenValue();
-    provider = await _providerApiService.getProviderUserInfo(context: context, token: token);
+    provider = await _providerApiService.getProviderUserInfo(
+        context: context, token: token);
     if (provider == null) {
       return null;
     }

@@ -671,7 +671,6 @@ class ConfirmBookingView extends HookWidget {
                                       .results![model.selectedIndex!].id)
                               .then((value) {
                             model.updateIsClicked(value: false);
-                            print(value?.response);
                             if (value != null) {
                               model.navigateTo(
                                   view: CheckoutView(

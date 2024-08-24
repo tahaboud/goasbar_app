@@ -11,8 +11,7 @@ import 'package:styled_widget/styled_widget.dart';
 class AddDataView extends HookWidget {
   final DialogRequest? dialogRequest;
   final Function(DialogResponse)? onDialogTap;
-  const AddDataView({Key? key, this.dialogRequest, this.onDialogTap})
-      : super(key: key);
+  const AddDataView({super.key, this.dialogRequest, this.onDialogTap});
 
   @override
   Widget build(BuildContext context) {
@@ -188,7 +187,7 @@ class AddDataView extends HookWidget {
             ),
           ),
         ).height(screenHeightPercentage(context,
-            percentage: 0.2 +
+            percentage: 0.3 +
                 ((dialogRequest!.data['addCity'] ? 0.15 : 0) +
                     (dialogRequest!.data['addCity'] ? 0.15 : 0) +
                     (dialogRequest!.data['addCity'] ? 0.15 : 0))));

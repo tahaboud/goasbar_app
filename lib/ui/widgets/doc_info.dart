@@ -10,7 +10,7 @@ import 'package:styled_widget/styled_widget.dart';
 
 class DocInfo extends StatelessWidget {
   const DocInfo({
-    Key? key,
+    super.key,
     required this.identityNumber,
     required this.pageController,
     this.onTapBack,
@@ -19,7 +19,7 @@ class DocInfo extends StatelessWidget {
     this.condition,
     this.onTapPickImage,
     this.showErrorDialog,
-  }) : super(key: key);
+  });
 
   final TextEditingController identityNumber;
   final PageController pageController;
