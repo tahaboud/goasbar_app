@@ -3,7 +3,7 @@ description: Go Asbar is an Air Bnb look a like for a Saoudi Startup
 
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
-version: 1.1.1
+version: 1.1.4
 
 environment:
   sdk: ">=2.18.5 <3.0.0"
