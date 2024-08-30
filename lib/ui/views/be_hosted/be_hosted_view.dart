@@ -207,7 +207,7 @@ class BeHostedView extends HookWidget {
                   }
                   if (iban.text.replaceAll(' ', '') !=
                       model.provider!.response!.iBAN!) {
-                    body.addAll({'IBAN': iban.text});
+                    body.addAll({'IBAN': iban.text.replaceAll(' ', '')});
                   }
                   if (website.text != model.provider!.response!.website &&
                       website.text.isNotEmpty) {
@@ -228,7 +228,7 @@ class BeHostedView extends HookWidget {
                       instagram.text.isNotEmpty) {
                     body.addAll({'instagram_account': instagram.text});
                   }
-                  if (model.file != model.provider!.response!.docImage) {
+                  if (model.file != null) {
                     body.addAll({'doc_image': model.file});
                   }
 
