@@ -98,6 +98,7 @@ class InfoItem extends StatelessWidget {
                       label == "Minimum age".tr()
                   ? TextInputType.number
                   : TextInputType.text,
+              maxLines: 1,
               decoration: InputDecoration(
                 hintText: hintText!,
                 hintStyle: const TextStyle(fontSize: 14),
@@ -113,6 +114,8 @@ class InfoItem extends StatelessWidget {
                 enabledBorder: const OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.transparent),
                 ),
+                isDense: true,
+                contentPadding: const EdgeInsets.fromLTRB(5.0, 1.0, 5.0, 1.0),
               ),
             ),
           ),
