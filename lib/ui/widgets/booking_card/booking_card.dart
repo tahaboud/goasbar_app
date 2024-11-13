@@ -11,8 +11,7 @@ import 'package:styled_widget/styled_widget.dart';
 
 class BookingItem extends StatelessWidget {
   const BookingItem(
-      {Key? key, this.bookingsList, this.onDelete, this.onUpdate, this.user})
-      : super(key: key);
+      {super.key, this.bookingsList, this.onDelete, this.onUpdate, this.user});
   final BookingsListResults? bookingsList;
   final Function? onDelete;
   final Function? onUpdate;
@@ -35,26 +34,36 @@ class BookingItem extends StatelessWidget {
               child: Column(
                 children: [
                   verticalSpaceSmall,
-                  Row(
-                    children: [
-                      horizontalSpaceSmall,
-                      Text(bookingsList!.experienceTiming!.title!,
-                          style: const TextStyle(fontWeight: FontWeight.bold)),
-                      const Spacer(),
-                      Row(
-                        children: [
-                          Text('${bookingsList!.price!} ${"SR".tr()}',
-                              style: const TextStyle(
-                                color: kMainColor1,
-                              )),
-                          Text(' / Person'.tr(),
-                              style: const TextStyle(
-                                color: kMainGray,
-                              )),
-                        ],
-                      ),
-                      horizontalSpaceSmall,
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          flex: 12,
+                          child: Text(
+                            bookingsList!.experienceTiming!.title!,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
+                        const Spacer(),
+                        Row(
+                          children: [
+                            Text('${bookingsList!.price!} ${"SR".tr()}',
+                                style: const TextStyle(
+                                  color: kMainColor1,
+                                )),
+                            Text(' / Person'.tr(),
+                                style: const TextStyle(
+                                  color: kMainGray,
+                                )),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                   verticalSpaceSmall,
                   Row(

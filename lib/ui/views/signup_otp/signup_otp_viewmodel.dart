@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/auth_response.dart';
-import 'package:goasbar/enum/status_code.dart';
 import 'package:goasbar/services/auth_service.dart';
 import 'package:goasbar/services/token_service.dart';
 import 'package:stacked/stacked.dart';
@@ -27,7 +26,7 @@ class SignUpOtpViewModel extends BaseViewModel {
     );
   }
 
-  Future<StatusCode> checkVerificationCode(
+  Future<String> checkVerificationCode(
       {Map<String, dynamic>? body, context}) async {
     return await _authService
         .checkVerificationCode(
@@ -35,19 +34,11 @@ class SignUpOtpViewModel extends BaseViewModel {
       body: body,
     )
         .then((response) {
-      if (response == null) {
-        return StatusCode.other;
-      } else if (response == StatusCode.throttled) {
-        return StatusCode.throttled;
-      } else {
-        authResponse = response;
-        notifyListeners();
-        return StatusCode.ok;
-      }
+      return response;
     });
   }
 
-  Future<bool> verifyPhoneNumber({String? phoneNumber, context}) async {
+  Future<String> verifyPhoneNumber({String? phoneNumber, context}) async {
     return await _authService.verifyPhoneNumber(
         phoneNumber: phoneNumber, context: context);
   }

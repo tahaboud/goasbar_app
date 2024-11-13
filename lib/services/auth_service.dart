@@ -4,13 +4,11 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/auth_response.dart';
 import 'package:goasbar/data_models/cards_model.dart';
 import 'package:goasbar/data_models/user_model.dart';
-import 'package:goasbar/enum/status_code.dart';
 import 'package:goasbar/services/token_service.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
@@ -23,12 +21,10 @@ class AuthService {
   final _navigationService = locator<NavigationService>();
   final _tokenService = locator<TokenService>();
 
-  Future<dynamic> register(
-      {Map<String, dynamic>? body, bool? hasImage, context}) async {
+  Future<String> register({Map<String, dynamic>? body, bool? hasImage}) async {
     if (hasImage!) {
       Dio dio = Dio();
       FormData formData = FormData.fromMap(body!);
-
       return dio
           .post(
         "$baseUrl/api/auth/register/",
@@ -41,18 +37,18 @@ class AuthService {
       )
           .then((response) {
         if (response.statusCode == 201) {
-          return AuthResponse.fromJson(response.data);
+          _tokenService
+              .setTokenValue(AuthResponse.fromJson(response.data).token!);
+          return "success";
         }
-        if (response.statusCode == 429) {
-          return StatusCode.throttled;
-        } else {
-          showMotionToast(
-              context: context,
-              title: 'Registration Failed',
-              msg: response.data["errors"]['detail'],
-              type: MotionToastType.error);
-          return null;
+        return response.data["errors"][0]['detail'] as String;
+      }).catchError((error) {
+        if (error.runtimeType == DioException) {
+          if ([400, 429].contains(error.response.statusCode)) {
+            return error.response.data["errors"][0]["detail"] as String;
+          }
         }
+        return "internal_error";
       });
     } else {
       return http
@@ -65,25 +61,20 @@ class AuthService {
       )
           .then((response) {
         if (response.statusCode == 201) {
-          return AuthResponse.fromJson(
-              jsonDecode(utf8.decode(response.bodyBytes)));
+          _tokenService.setTokenValue(
+              AuthResponse.fromJson(jsonDecode(utf8.decode(response.bodyBytes)))
+                  .token!);
+          return "success";
         }
-        if (response.statusCode == 429) {
-          return StatusCode.throttled;
-        } else {
-          showMotionToast(
-              context: context,
-              title: 'Registration Failed',
-              msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]
-                  ['detail'],
-              type: MotionToastType.error);
-          return null;
-        }
+        return jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]
+            ['detail'] as String;
+      }).catchError((error) {
+        return "internal_error";
       });
     }
   }
 
-  Future<dynamic> checkVerificationCode(
+  Future<String> checkVerificationCode(
       {Map<String, dynamic>? body, context}) async {
     return http
         .post(
@@ -95,24 +86,20 @@ class AuthService {
     )
         .then((response) {
       if (response.statusCode == 200) {
-        return AuthResponse.fromJson(
-            jsonDecode(utf8.decode(response.bodyBytes)));
+        return "validOTP";
       }
       if (response.statusCode == 429) {
-        return StatusCode.throttled;
-      } else {
-        showMotionToast(
-            context: context,
-            title: "Invalid Code.".tr(),
-            msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]
-                ['detail'],
-            type: MotionToastType.error);
-        return null;
+        return jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]
+            ['detail'];
       }
+      if (response.statusCode == 400) {
+        return "invalidOTP";
+      }
+      return "serverError";
     });
   }
 
-  Future<bool> verifyPhoneNumber({String? phoneNumber, context}) async {
+  Future<String> verifyPhoneNumber({String? phoneNumber, context}) async {
     return http.post(
       Uri.parse("$baseUrl/api/auth/phone-number/"),
       headers: {
@@ -124,20 +111,15 @@ class AuthService {
       },
     ).then((response) {
       if (response.statusCode == 200) {
-        return true;
+        return "OTP sent";
       } else {
-        showMotionToast(
-            context: context,
-            title: 'Phone Verification Failed',
-            msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]
-                ['detail'],
-            type: MotionToastType.error);
-        return false;
+        return jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]
+            ['detail'];
       }
     });
   }
 
-  Future<AuthResponse> login({Map? body, context}) async {
+  Future<Object> login({Map? body, context}) async {
     return http
         .post(
       Uri.parse("$baseUrl/api/auth/login/"),
@@ -151,13 +133,8 @@ class AuthService {
         return AuthResponse.fromJson(
             jsonDecode(utf8.decode(response.bodyBytes)));
       } else {
-        showMotionToast(
-            context: context,
-            title: 'login Failed',
-            msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]
-                ['detail'],
-            type: MotionToastType.error);
-        return AuthResponse();
+        return jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]
+            ['detail'];
       }
     });
   }
@@ -277,7 +254,7 @@ class AuthService {
     });
   }
 
-  Future<bool?> requestResetPassword({String? phoneNumber, context}) async {
+  Future<String> requestResetPassword({String? phoneNumber, context}) async {
     return http.post(
       Uri.parse("$baseUrl/api/auth/request-password-reset/"),
       headers: {
@@ -286,15 +263,10 @@ class AuthService {
       body: {"phone_number": "$phoneNumber", "language_code": "en"},
     ).then((response) {
       if (response.statusCode == 200) {
-        return true;
+        return "request_reset_password_otp_sent";
       } else {
-        showMotionToast(
-            context: context,
-            title: 'Request Password Failed',
-            msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]
-                ['detail'],
-            type: MotionToastType.error);
-        return false;
+        return jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]
+            ['detail'];
       }
     });
   }

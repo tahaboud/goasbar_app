@@ -1,15 +1,15 @@
+import 'package:easy_localization/easy_localization.dart' hide TextDirection;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/settings_pages/language/language_viewmodel.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class LanguageView extends HookWidget {
-  const LanguageView({Key? key}) : super(key: key);
+  const LanguageView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,20 +21,28 @@ class LanguageView extends HookWidget {
             child: Column(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Icon(CupertinoIcons.arrow_turn_up_left).height(40)
-                        .width(40)
-                        .gestures(
-                        onTap: () {
-                          model.back();
-                        }
+                    IconButton(
+                      onPressed: model.back,
+                      icon: const Icon(CupertinoIcons.arrow_turn_up_right),
                     ),
-                    Text('Language'.tr(), style: const TextStyle(fontSize: 21),),
+                    Text(
+                      'Language'.tr(),
+                      style: const TextStyle(fontSize: 21),
+                    ),
                   ],
                 ),
                 verticalSpaceMedium,
-                Text("Suggested".tr(), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),).alignment(Alignment.centerLeft),
+                Directionality(
+                    textDirection: TextDirection.rtl,
+                    child: Text(
+                      "Suggested".tr(),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    )).alignment(Alignment.topRight),
                 verticalSpaceRegular,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -44,11 +52,18 @@ class LanguageView extends HookWidget {
                       width: 20,
                       height: 20,
                       decoration: BoxDecoration(
-                        color: model.lang == "ar" ? Colors.white : Colors.grey.shade300,
-                        border: Border.all(width: model.lang == "ar" ? 5 : 1, color: model.lang == "ar" ? kMainColor1 : Colors.grey),
-                        borderRadius: BorderRadius.circular(30)
-                      ),
-                    ).gestures(onTap: () => model.changeValue(value: "ar", context: context)),
+                          color: model.lang == "ar"
+                              ? Colors.white
+                              : Colors.grey.shade300,
+                          border: Border.all(
+                              width: model.lang == "ar" ? 5 : 1,
+                              color: model.lang == "ar"
+                                  ? kMainColor1
+                                  : Colors.grey),
+                          borderRadius: BorderRadius.circular(30)),
+                    ).gestures(
+                        onTap: () =>
+                            model.changeValue(value: "ar", context: context)),
                   ],
                 ),
                 verticalSpaceSmall,
@@ -60,11 +75,18 @@ class LanguageView extends HookWidget {
                       width: 20,
                       height: 20,
                       decoration: BoxDecoration(
-                          color: model.lang == "uk" ? Colors.white : Colors.grey.shade300,
-                          border: Border.all(width: model.lang == "uk" ? 5 : 1, color: model.lang == "uk" ? kMainColor1 : Colors.grey),
-                          borderRadius: BorderRadius.circular(30)
-                      ),
-                    ).gestures(onTap: () => model.changeValue(value: "uk", context: context)),
+                          color: model.lang == "uk"
+                              ? Colors.white
+                              : Colors.grey.shade300,
+                          border: Border.all(
+                              width: model.lang == "uk" ? 5 : 1,
+                              color: model.lang == "uk"
+                                  ? kMainColor1
+                                  : Colors.grey),
+                          borderRadius: BorderRadius.circular(30)),
+                    ).gestures(
+                        onTap: () =>
+                            model.changeValue(value: "uk", context: context)),
                   ],
                 ),
               ],

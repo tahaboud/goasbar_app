@@ -38,7 +38,6 @@ class BookingListDialogViewModel
     providerTimingBooking = await _bookingApiService.getProviderTimingBookings(
         context: context, token: token, timingId: timingId, page: pageNumber);
     notifyListeners();
-
     return providerTimingBooking!.results!;
   }
 

@@ -9,7 +9,7 @@ import 'package:goasbar/enum/dialog_type.dart';
 import 'package:goasbar/services/timing_api_service.dart';
 import 'package:goasbar/services/token_service.dart';
 import 'package:goasbar/shared/app_configs.dart';
-import 'package:maps_launcher/maps_launcher.dart';
+import 'package:map_launcher/map_launcher.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -119,8 +119,12 @@ class TimingViewModel extends FutureViewModel<dynamic> {
     notifyListeners();
   }
 
-  launchMaps({double? lat, double? long}) {
-    MapsLauncher.launchCoordinates(lat!, long!);
+  launchMaps({double? lat, double? long}) async {
+    final availableMaps = await MapLauncher.installedMaps;
+    await availableMaps.first.showMarker(
+      coords: Coords(lat!, long!),
+      title: "Meeting point",
+    );
   }
 
   Future<bool?> deleteTiming({int? timingId, int? experienceId}) async {

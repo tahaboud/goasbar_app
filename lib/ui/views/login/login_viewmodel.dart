@@ -18,7 +18,7 @@ class LoginViewModel extends BaseViewModel {
   String? email = "";
   String? password = "";
 
-  updateIsClicked({value}) {
+  updateIsClicked(bool value) {
     isClicked = value;
     notifyListeners();
   }
@@ -57,18 +57,20 @@ class LoginViewModel extends BaseViewModel {
     _tokenService.setTokenValue(token);
   }
 
-  Future<bool> login({Map? body, context}) async {
-    updateIsClicked(value: true);
-    authResponse = await _authService.login(
+  Future<String> login({Map? body, context}) async {
+    updateIsClicked(true);
+    Object response = await _authService.login(
       context: context,
       body: body,
     );
-    if (authResponse!.token != null) {
+
+    if (response is AuthResponse) {
+      authResponse = response;
       _tokenService.setTokenValue(authResponse!.token!);
       notifyListeners();
-      return true;
+      return "login success";
     } else {
-      return false;
+      return response as String;
     }
   }
 }

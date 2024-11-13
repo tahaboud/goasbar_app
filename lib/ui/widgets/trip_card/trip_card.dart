@@ -60,24 +60,25 @@ class TripItem extends StatelessWidget {
                       : model.isBusy
                           ? const SizedBox()
                           : Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Icon(
-                                    model.isFav
-                                        ? CupertinoIcons.heart_fill
-                                        : CupertinoIcons.heart,
-                                    color: model.isFav
-                                        ? Colors.redAccent
-                                        : Colors.black,
-                                    size: 20,
-                                  ).center().gestures(
-                                      onTap: () => model.addFavorites(
-                                          context: context,
-                                          experienceId: experience!.id)))
-                              .height(30)
-                              .width(30),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: IconButton(
+                                icon: Icon(
+                                  model.isFav
+                                      ? CupertinoIcons.heart_fill
+                                      : CupertinoIcons.heart,
+                                  color: model.isFav
+                                      ? Colors.redAccent
+                                      : Colors.black,
+                                  size: 20,
+                                ),
+                                onPressed: () => model.addFavorites(
+                                    context: context,
+                                    experienceId: experience!.id),
+                              ).height(40).width(40),
+                            ),
                   horizontalSpaceSmall,
                   Chip(
                     backgroundColor: kMainColor1,
@@ -162,28 +163,39 @@ class TripItem extends StatelessWidget {
                                     fontSize: 10))),
                         const Spacer(),
                         Container(
-                          width: 70,
-                          height: 25,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(3)),
-                            gradient: kMainGradient,
-                          ),
-                          child: Text(
-                            'Book Now'.tr(),
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 10,
-                                fontWeight: FontWeight.w500),
-                          ).center(),
-                        ).gestures(onTap: () {
-                          model.navigateTo(
-                              view: user == null
-                                  ? const LoginView()
-                                  : ConfirmBookingView(
-                                      experience: experience,
-                                      user: user,
-                                    ));
-                        }),
+                            width: 70,
+                            height: 25,
+                            decoration: const BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(3)),
+                              gradient: kMainGradient,
+                            ),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                shadowColor: Colors.transparent,
+                                padding: const EdgeInsets.all(0),
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(3))),
+                              ),
+                              child: Text(
+                                'Book Now'.tr(),
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              onPressed: () {
+                                model.navigateTo(
+                                    view: user == null
+                                        ? const LoginView()
+                                        : ConfirmBookingView(
+                                            experience: experience,
+                                            user: user,
+                                          ));
+                              },
+                            )),
                         horizontalSpaceSmall,
                       ],
                     )

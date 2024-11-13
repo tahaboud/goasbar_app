@@ -12,9 +12,9 @@ class ProviderTimingBooking {
     count = json['count'];
     next = json['next'];
     previous = json['previous'];
-    if (json['results'] != null) {
+    if (json['response'] != null) {
       results = <ProviderTimingBookingResults>[];
-      json['results'].forEach((v) {
+      json['response'].forEach((v) {
         results!.add(ProviderTimingBookingResults.fromJson(v));
       });
     }
@@ -31,4 +31,3 @@ class ProviderTimingBooking {
     return data;
   }
 }
-

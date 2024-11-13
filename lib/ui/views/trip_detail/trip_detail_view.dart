@@ -24,12 +24,11 @@ import 'package:styled_widget/styled_widget.dart';
 
 class TripDetailView extends HookWidget {
   const TripDetailView(
-      {Key? key,
+      {super.key,
       this.experience,
       this.user,
       this.isUser,
-      this.showBookingFooter = true})
-      : super(key: key);
+      this.showBookingFooter = true});
   final ExperienceResults? experience;
   final bool? isUser;
   final UserModel? user;
@@ -108,12 +107,19 @@ class TripDetailView extends HookWidget {
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(10),
                                     ),
-                                    child:
-                                        const Icon(Icons.arrow_back).center(),
-                                  )
-                                      .height(40)
-                                      .width(40)
-                                      .gestures(onTap: () => model.back()),
+                                    child: SizedBox(
+                                        height: 40,
+                                        width: 40,
+                                        child: IconButton(
+                                            icon: const Icon(Icons.arrow_back)
+                                                .center(),
+                                            onPressed: model.back,
+                                            style: IconButton.styleFrom(
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10))))),
+                                  ),
                                   Row(
                                     children: [
                                       Container(
@@ -262,7 +268,6 @@ class TripDetailView extends HookWidget {
                       Image.asset("assets/icons/location.png"),
                       horizontalSpaceTiny,
                       SizedBox(
-                        width: screenWidthPercentage(context, percentage: 0.7),
                         child: Text(
                             "${experience!.city![0]}${experience!.city!.substring(1).replaceAll('_', ' ').toLowerCase()} , ${'Duration'.tr()} : ${experience!.duration} ${double.parse(experience!.duration!) <= 1 ? "Hour".tr() : "Hours".tr()} ${!isUser! ? "" : model.timingListModel == null ? "" : model.timingListModel!.count! > 0 ? "| Start at ${model.timingListModel!.results![0].startTime!.substring(0, 5)}" : ''}",
                             overflow: TextOverflow.clip,
@@ -355,7 +360,7 @@ class TripDetailView extends HookWidget {
                             horizontalSpaceMedium,
                             Text(
                               experience!.gender! == "None"
-                                  ? 'Valid for All'
+                                  ? 'Valid for All'.tr()
                                   : experience!.gender!,
                               style: const TextStyle(color: kMainDisabledGray),
                             )
@@ -541,22 +546,32 @@ class TripDetailView extends HookWidget {
                                     BorderRadius.all(Radius.circular(8)),
                                 gradient: kMainGradient,
                               ),
-                              child: Text(
-                                'Book Now'.tr(),
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500),
-                              ).center().gestures(onTap: () {
-                                if (!isUser!) {
-                                  model.navigateTo(view: const LoginView());
-                                } else {
-                                  model.navigateTo(
-                                      view: ConfirmBookingView(
-                                    experience: experience,
-                                    user: user,
-                                  ));
-                                }
-                              }),
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.transparent,
+                                  shadowColor: Colors.transparent,
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(8))),
+                                ),
+                                child: Text(
+                                  'Book Now'.tr(),
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                onPressed: () {
+                                  if (!isUser!) {
+                                    model.navigateTo(view: const LoginView());
+                                  } else {
+                                    model.navigateTo(
+                                        view: ConfirmBookingView(
+                                      experience: experience,
+                                      user: user,
+                                    ));
+                                  }
+                                },
+                              ),
                             ),
                           ],
                         ).padding(horizontal: 20, vertical: 15)

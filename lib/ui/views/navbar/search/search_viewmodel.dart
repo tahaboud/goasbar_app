@@ -19,24 +19,23 @@ class SearchViewModel extends BaseViewModel {
   bool? isTokenExist;
   ExperienceModel? experienceModels;
   TextEditingController searchDate = TextEditingController();
-  String? from = '', to = '';
-  String? genderConstraint = genderConstraints[0];
-  String? category = 'Experience Category'.tr();
-  String? city = 'Search by Region'.tr();
+  String from = '', to = '';
+  String genderConstraint = genderConstraints[0];
+  String category = 'All categories';
+  String city = 'All cities';
   int pageNumber = 1;
 
   List<String> citiesWithNone() {
     List<String> list = [];
-    list.add('Search by Region'.tr());
+    list.add('All cities');
     list.addAll(cities);
-    list.removeAt(1);
 
     return list;
   }
 
   List<String> categoriesWithNone() {
     List<String> list = [];
-    list.add('Experience Category'.tr());
+    list.add('All categories');
     list.addAll(categories);
 
     return list;
@@ -56,17 +55,17 @@ class SearchViewModel extends BaseViewModel {
     _navigationService.back();
   }
 
-  updateCity({String? value}) {
+  updateCity({required String value}) {
     city = value;
     notifyListeners();
   }
 
-  updateCategory({String? value}) {
+  updateCategory({required String value}) {
     category = value;
     notifyListeners();
   }
 
-  updateGenderConstraint({String? value}) {
+  updateGenderConstraint({required String value}) {
     genderConstraint = value;
     notifyListeners();
   }
@@ -114,7 +113,7 @@ class SearchViewModel extends BaseViewModel {
     }
   }
 
-  getPublicExperiences({
+  Future<ExperienceModel?> getPublicExperiences({
     String? query,
   }) async {
     setBusy(true);

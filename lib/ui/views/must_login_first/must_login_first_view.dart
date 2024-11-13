@@ -10,92 +10,94 @@ import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class MustLoginFirstView extends HookWidget {
-  const MustLoginFirstView({Key? key, this.text}) : super(key: key);
+  const MustLoginFirstView({super.key, this.text});
   final String? text;
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<MustLoginFirstViewModel>.reactive(
       builder: (context, model, child) => Scaffold(
-        bottomNavigationBar: const BottomAppBar(),
-        body: SafeArea(
-            child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(vertical: 20),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                verticalSpaceMedium,
-                Text(
-                  text!,
-                  style: const TextStyle(
-                      fontSize: 22, fontWeight: FontWeight.bold),
-                ),
-                verticalSpaceMedium,
-                const Text(
-                  'You must login first',
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
-                ),
-                verticalSpaceRegular,
-                const Text(
-                    'When you are ready to take your experience,\njoin us and create your account',
-                    style: TextStyle(color: kMainGray)),
-                verticalSpaceLarge,
-                Container(
+          body: SafeArea(
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              verticalSpaceMedium,
+              Text(
+                text!,
+                style:
+                    const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              ),
+              verticalSpaceMedium,
+              Text(
+                'You must login first'.tr(),
+                style:
+                    const TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
+              ),
+              verticalSpaceRegular,
+              Text(
+                  'When you are ready to take your experience,\njoin us and create your account'
+                      .tr(),
+                  style: const TextStyle(color: kMainGray)),
+              verticalSpaceLarge,
+              Container(
                   height: 50,
                   decoration: const BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                     gradient: kMainGradient,
                   ),
-                  child: Center(
-                    child: Text(
-                      'sign_in'.tr(),
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Poppins',
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500),
+                  child: ElevatedButton(
+                    onPressed: () => model.navigateTo(view: const LoginView()),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                      minimumSize: Size.infinite,
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
                     ),
-                  ),
-                ).gestures(
-                  onTap: () {
-                    model.navigateTo(view: const LoginView());
-                  },
-                ),
-                verticalSpaceMedium,
-                Image.asset("assets/images/login_first.png"),
-                verticalSpaceLarge,
-                const Text("You don't have an account yet?",
-                        style: TextStyle(color: kMainGray))
-                    .center(),
-                verticalSpaceRegular,
-                Container(
+                    child: Text("sign_in".tr(),
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Poppins',
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500)),
+                  )),
+              verticalSpaceMedium,
+              Image.asset("assets/images/login_first.png"),
+              verticalSpaceLarge,
+              Text("You don't have an account yet?".tr(),
+                      style: const TextStyle(color: kMainGray))
+                  .center(),
+              verticalSpaceRegular,
+              Container(
                   height: 50,
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                     border: Border.all(color: Colors.black),
                   ),
-                  child: const Center(
+                  child: ElevatedButton(
+                    onPressed: () => model.navigateTo(view: const SignUpView()),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                      minimumSize: Size.infinite,
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                    ),
                     child: Text(
-                      'Sign Up',
-                      style: TextStyle(
+                      'Sign Up'.tr(),
+                      style: const TextStyle(
                           color: Colors.black,
                           fontFamily: 'Poppins',
                           fontSize: 16,
                           fontWeight: FontWeight.w500),
                     ),
-                  ),
-                ).gestures(
-                  onTap: () {
-                    model.navigateTo(view: const SignUpView());
-                  },
-                ),
-              ],
-            ),
+                  )),
+            ],
           ),
-        )),
-      ),
+        ),
+      )),
       viewModelBuilder: () => MustLoginFirstViewModel(),
     );
   }

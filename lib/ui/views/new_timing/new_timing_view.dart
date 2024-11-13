@@ -5,267 +5,242 @@ import 'package:goasbar/data_models/timing_response.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/new_timing/new_timing_viewmodel.dart';
-import 'package:motion_toast/resources/arrays.dart';
-import 'package:stacked/stacked.dart';
-import 'package:stacked_services/stacked_services.dart';
+import 'package:goasbar/ui/views/timing/timing_viewmodel.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class NewTimingView extends HookWidget {
-  NewTimingView({Key? key, required this.request, required this.completer})
-      : super(key: key);
+  const NewTimingView(
+      {super.key,
+      required this.model,
+      required this.experienceTitle,
+      required this.experienceId,
+      this.timing});
 
-  final SheetRequest request;
-  final Function(SheetResponse) completer;
-  bool? once = true;
+  final TimingViewModel model;
+  final String experienceTitle;
+  final int experienceId;
+  final TimingResponse? timing;
 
   @override
   Widget build(BuildContext context) {
-    var addPeople = useTextEditingController();
+    var numOfPeople = useTextEditingController();
+    var startDate = useTextEditingController();
+    var startTime = useTextEditingController();
+    final numOfPeopleError = useState<String?>(null);
+    final startDateError = useState<String?>(null);
+    final startTimeError = useState<String?>(null);
 
-    return ViewModelBuilder<NewTimingViewModel>.reactive(
-      builder: (context, model, child) {
-        if (!model.isBusy && once!) {
-          model.startDate.text = request.data;
-          if (request.customData is TimingResponse) {
-            model.startTime.text = request.customData.startTime;
-            addPeople.text = request.customData.capacity.toString();
-          }
-          if (request.customData is Map) {
-            model.startTime.text = request.customData['timing'].startTime;
-            addPeople.text = request.customData['timing'].capacity.toString();
-          }
-          once = false;
+    if (timing != null) {
+      numOfPeople.text = timing!.capacity.toString();
+      startDate.text = timing?.date ?? "";
+      startTime.text = timing?.startTime ?? "";
+    }
+
+    bool validateCreateTiming() {
+      bool isValid = true;
+      if (numOfPeople.text.isEmpty || int.parse(numOfPeople.text) < 1) {
+        numOfPeopleError.value = "Number of people must be greater than 1.";
+        isValid = false;
+      }
+      if (DateFormat("yyyy-MM-dd")
+              .parse(startDate.text)
+              .compareTo(DateTime.now()) <=
+          0) {
+        startDateError.value = "Date must be greater than today.";
+        isValid = false;
+      }
+      if (startTime.text.isEmpty) {
+        startTimeError.value = "This field is required.";
+        isValid = false;
+      }
+      return isValid;
+    }
+
+    void handleCreateTiming() {
+      final isValid = validateCreateTiming();
+      if (isValid) {
+        var body = {};
+        body.addAll({
+          "date": startDate.text,
+          "start_time": startTime.text,
+          "capacity": numOfPeople.text,
+        });
+
+        if (timing == null) {
+          NewTimingViewModel()
+              .createTiming(
+            context: context,
+            body: body,
+            experienceId: experienceId,
+          )
+              .then((value) {
+            model.back();
+            model.getTimingsList();
+          });
+        } else {
+          NewTimingViewModel()
+              .updateTiming(context: context, body: body, timingId: timing?.id)
+              .then((value) {
+            model.back();
+            model.getTimingsList();
+          });
         }
+      }
+    }
 
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          height: screenHeightPercentage(context, percentage: 0.85),
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(18),
-              topRight: Radius.circular(18),
-            ),
-            color: Colors.white,
-          ),
-          child: ListView(
-            // mainAxisAlignment: MainAxisAlignment.start,
-            // crossAxisAlignment: CrossAxisAlignment.start,
+    return Scaffold(
+        body: Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      height: screenHeightPercentage(context, percentage: 0.85),
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(18),
+          topRight: Radius.circular(18),
+        ),
+        color: Colors.white,
+      ),
+      child: ListView(
+        // mainAxisAlignment: MainAxisAlignment.start,
+        // crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          verticalSpaceSmall,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              verticalSpaceSmall,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Icon(
-                    Icons.close,
-                    size: 30,
-                  ).gestures(onTap: () => model.back()),
-                  Text(
-                      request.customData is TimingResponse ||
-                              request.customData is Map
-                          ? 'UPDATE TIMING'.tr()
-                          : 'NEW TIMING'.tr(),
-                      style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.bold)),
-                  horizontalSpaceLarge,
-                ],
-              ),
-              verticalSpaceLarge,
-              Text(
-                request.customData is TimingResponse ||
-                        request.customData is Map
-                    ? request.customData['experience'].title
-                    : request.customData!.title,
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
-              ),
-              const Divider(thickness: 1.2, height: 40),
-              verticalSpaceRegular,
-              const Text(
-                'Experience Date',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              verticalSpaceSmall,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    height: 58,
-                    width: screenWidthPercentage(context, percentage: 0.42),
-                    child: TextField(
-                      controller: model.startDate,
-                      readOnly: true,
-                      decoration: InputDecoration(
-                        hintText: '20 Sep 2022',
-                        hintStyle: const TextStyle(fontSize: 14),
-                        prefixIcon:
-                            Image.asset('assets/icons/birth_date.png').gestures(
-                          onTap: () => model.showStartDatePicker(context),
-                        ),
-                        fillColor: kTextFiledMainColor,
-                        filled: true,
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.transparent),
-                        ),
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.transparent),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 58,
-                    width: screenWidthPercentage(context, percentage: 0.42),
-                    child: TextField(
-                      controller: model.startTime,
-                      readOnly: true,
-                      decoration: InputDecoration(
-                        hintText: '8:30 AM',
-                        hintStyle: const TextStyle(fontSize: 14),
-                        prefixIcon: const Icon(Icons.access_time).gestures(
-                          onTap: () => model.showStartTimePicker(context),
-                        ),
-                        fillColor: kTextFiledMainColor,
-                        filled: true,
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.transparent),
-                        ),
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.transparent),
-                        ),
-                      ),
-                    ),
-                  ).gestures(
-                    onTap: () => model.showStartTimePicker(context),
-                  ),
-                ],
-              ),
-              verticalSpaceRegular,
-              Text(
-                'Capacity ( people )'.tr(),
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              verticalSpaceSmall,
+              const Icon(
+                Icons.close,
+                size: 30,
+              ).gestures(onTap: () => model.back()),
+              Text('NEW TIMING'.tr(),
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold)),
+              horizontalSpaceLarge,
+            ],
+          ),
+          verticalSpaceLarge,
+          Text(
+            experienceTitle,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+          ),
+          const Divider(thickness: 1.2, height: 40),
+          verticalSpaceRegular,
+          const Text(
+            'Experience Date',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          verticalSpaceSmall,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
               SizedBox(
                 height: 58,
+                width: screenWidthPercentage(context, percentage: 0.42),
                 child: TextField(
-                  controller: addPeople,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    hintText: 'Add people',
-                    hintStyle: TextStyle(fontSize: 14),
-                    prefixIcon: Icon(Icons.person_outline_rounded),
+                  controller: startDate,
+                  readOnly: true,
+                  decoration: InputDecoration(
+                    hintText: '20 Sep 2022',
+                    errorText: startDateError.value,
+                    hintStyle: const TextStyle(fontSize: 14),
+                    prefixIcon:
+                        Image.asset('assets/icons/birth_date.png').gestures(
+                      onTap: () => NewTimingViewModel()
+                          .showStartDatePicker(context, startDate),
+                    ),
                     fillColor: kTextFiledMainColor,
                     filled: true,
-                    focusedBorder: OutlineInputBorder(
+                    focusedBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.transparent),
                     ),
-                    enabledBorder: OutlineInputBorder(
+                    enabledBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.transparent),
                     ),
                   ),
                 ),
               ),
-              verticalSpaceMedium,
-              Container(
-                width: MediaQuery.of(context).size.width - 60,
-                height: 50,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  gradient: kMainGradient,
-                ),
-                child: Center(
-                  child: Text(
-                    'NEXT'.tr(),
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Poppins',
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500),
+              SizedBox(
+                height: 58,
+                width: screenWidthPercentage(context, percentage: 0.42),
+                child: TextField(
+                  controller: startTime,
+                  readOnly: true,
+                  decoration: InputDecoration(
+                    hintText: '8:30',
+                    errorText: startTimeError.value,
+                    hintStyle: const TextStyle(fontSize: 14),
+                    prefixIcon: const Icon(Icons.access_time).gestures(
+                      onTap: () => NewTimingViewModel()
+                          .showStartTimePicker(context, startTime),
+                    ),
+                    fillColor: kTextFiledMainColor,
+                    filled: true,
+                    focusedBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.transparent),
+                    ),
+                    enabledBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.transparent),
+                    ),
                   ),
                 ),
               ).gestures(
-                onTap: () {
-                  if (model.startDate.text.isNotEmpty &&
-                      model.startTime.text.isNotEmpty &&
-                      addPeople.text.isNotEmpty) {
-                    var body = {};
-                    if (request.customData is TimingResponse ||
-                        request.customData is Map) {
-                      TimingResponse? timingResponse;
-                      if (request.customData is Map) {
-                        timingResponse = request.customData['timing'];
-                      } else {
-                        timingResponse = request.customData;
-                      }
-
-                      if (model.pickedTimeForRequest != null) {
-                        body.addAll({"start_time": model.pickedTimeForRequest});
-                      }
-                      if (model.startDate.text != request.data) {
-                        body.addAll({"date": model.startDate.text});
-                      }
-                      if (addPeople.text !=
-                          timingResponse!.capacity.toString()) {
-                        body.addAll({"date": model.startDate.text});
-                      }
-                      if (model.startTime.text != timingResponse.startTime ||
-                          addPeople.text !=
-                              timingResponse.capacity.toString() ||
-                          model.startDate.text != request.data) {
-                        model
-                            .updateTiming(
-                          context: context,
-                          body: body,
-                          timingId: timingResponse.id,
-                        )
-                            .then((value) {
-                          if (value == null) {
-                          } else {
-                            completer(SheetResponse(confirmed: true));
-                          }
-                        });
-                      } else {
-                        showMotionToast(
-                            context: context,
-                            title: 'Warning',
-                            msg: "Update the timing first",
-                            type: MotionToastType.warning);
-                      }
-                    } else {
-                      body.addAll({
-                        "date": model.startDate.text,
-                        "start_time": model.pickedTimeForRequest,
-                        "capacity": addPeople.text,
-                      });
-
-                      model
-                          .createTiming(
-                        context: context,
-                        body: body,
-                        experienceId: request.customData.id,
-                      )
-                          .then((value) {
-                        if (value == null) {
-                        } else {
-                          completer(SheetResponse(confirmed: true));
-                        }
-                      });
-                    }
-                  } else {
-                    showMotionToast(
-                        context: context,
-                        type: MotionToastType.warning,
-                        title: "Warning",
-                        msg: "All files are mandatory.");
-                  }
-                },
+                onTap: () => NewTimingViewModel()
+                    .showStartTimePicker(context, startTime),
               ),
-              verticalSpaceRegular,
             ],
           ),
-        ).height(screenHeightPercentage(context, percentage: 0.85));
-      },
-      viewModelBuilder: () => NewTimingViewModel(),
-    );
+          verticalSpaceRegular,
+          Text(
+            'Capacity ( people )'.tr(),
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          verticalSpaceSmall,
+          SizedBox(
+            height: 58,
+            child: TextField(
+              controller: numOfPeople,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                hintText: 'Add people',
+                errorText: numOfPeopleError.value,
+                hintStyle: const TextStyle(fontSize: 14),
+                prefixIcon: const Icon(Icons.person_outline_rounded),
+                fillColor: kTextFiledMainColor,
+                filled: true,
+                focusedBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.transparent),
+                ),
+                enabledBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.transparent),
+                ),
+              ),
+            ),
+          ),
+          verticalSpaceMedium,
+          Container(
+            width: MediaQuery.of(context).size.width - 60,
+            height: 50,
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              gradient: kMainGradient,
+            ),
+            child: Center(
+              child: Text(
+                'NEXT'.tr(),
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Poppins',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500),
+              ),
+            ),
+          ).gestures(
+            onTap: () {
+              handleCreateTiming();
+            },
+          ),
+          verticalSpaceRegular,
+        ],
+      ),
+    ).height(screenHeightPercentage(context, percentage: 0.85)));
   }
 }

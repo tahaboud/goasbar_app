@@ -51,13 +51,13 @@ class PostExperienceViewModel extends FutureViewModel<List<ExperienceResults>> {
   }
 
   Future getProviderExperiencesFromNextPage({int? index}) async {
-    if (index! % 10 == 0) {
-      pageNumber++;
-      String? token = await _tokenService.getTokenValue();
-      ExperienceModel? experienceModelsList =
-          await _experienceApiService.getProviderExperiences(
-              token: token, context: context, page: pageNumber);
-      experienceModels!.results!.addAll(experienceModelsList!.results!);
+    pageNumber++;
+    String? token = await _tokenService.getTokenValue();
+    ExperienceModel? experienceModelsList =
+        await _experienceApiService.getProviderExperiences(
+            token: token, context: context, page: pageNumber);
+    if (experienceModelsList != null) {
+      experienceModels!.results!.addAll(experienceModelsList.results!);
       notifyListeners();
     }
   }

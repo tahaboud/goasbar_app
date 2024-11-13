@@ -22,8 +22,6 @@ class NewTimingViewModel extends BaseViewModel {
   final _tokenService = locator<TokenService>();
   final _timingApiService = locator<TimingApiService>();
 
-  TextEditingController startDate = TextEditingController();
-  TextEditingController startTime = TextEditingController();
   TextEditingController typeOfIdentity = TextEditingController();
   File? file;
   String? pickedTimeForRequest;
@@ -82,36 +80,28 @@ class NewTimingViewModel extends BaseViewModel {
     _tokenService.setTokenValue(token);
   }
 
-  void showStartTimePicker(context) async {
+  void showStartTimePicker(context, TextEditingController startTime) async {
     TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
+      builder: (BuildContext context, Widget? child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: child!,
+        );
+      },
     );
 
-    String dayPeriod = picked!.period == DayPeriod.pm ? "PM" : "AM";
-    String hour = picked.hourOfPeriod < 10
-        ? "0${picked.hourOfPeriod}"
-        : "${picked.hourOfPeriod}";
+    String hour = picked!.hour < 10 ? "0${picked.hour}" : "${picked.hour}";
     String minute =
         picked.minute < 10 ? "0${picked.minute}" : "${picked.minute}";
 
-    startTime.text = "$hour:$minute $dayPeriod";
-
-    if (picked.period == DayPeriod.am) {
-      pickedTimeForRequest = "$hour:$minute";
-    } else {
-      if (picked.hourOfPeriod == 12) {
-        pickedTimeForRequest = "00:$minute";
-      } else {
-        String hourInPm = "${picked.hourOfPeriod + 12}";
-        pickedTimeForRequest = "$hourInPm:$minute";
-      }
-    }
+    startTime.text = "$hour:$minute";
 
     notifyListeners();
   }
 
-  void showStartDatePicker(context) async {
+  void showStartDatePicker(context, TextEditingController startDate) async {
     List<DateTime?>? picked = await showCalendarDatePicker2Dialog(
       context: context,
       config: CalendarDatePicker2WithActionButtonsConfig(

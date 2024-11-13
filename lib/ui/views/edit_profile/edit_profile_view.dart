@@ -14,14 +14,13 @@ import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class EditProfileView extends HookWidget {
-  EditProfileView({Key? key}) : super(key: key);
+  EditProfileView({super.key});
   bool? once = true;
 
   @override
   Widget build(BuildContext context) {
     var firstName = useTextEditingController();
     var lastName = useTextEditingController();
-    var userName = useTextEditingController();
     var email = useTextEditingController();
     var phone = useTextEditingController();
 
@@ -30,7 +29,6 @@ class EditProfileView extends HookWidget {
         if (!model.isBusy && once!) {
           firstName.text = model.user!.firstName!;
           lastName.text = model.user!.lastName!;
-          userName.text = model.user!.userName!;
           email.text = model.user!.email!;
           phone.text = model.user!.phoneNumber!;
           model.gender.text =
@@ -139,12 +137,6 @@ class EditProfileView extends HookWidget {
                               controller: lastName,
                               label: 'Last name'.tr(),
                               hintText: 'Anes',
-                            ),
-                            verticalSpaceMedium,
-                            InfoItem(
-                              controller: userName,
-                              label: 'User name'.tr(),
-                              hintText: 'Abdeldjalil_Anes',
                             ),
                             verticalSpaceMedium,
                             Container(
@@ -307,7 +299,6 @@ class EditProfileView extends HookWidget {
                             ).gestures(
                               onTap: firstName.text != model.user!.firstName! ||
                                       lastName.text != model.user!.lastName! ||
-                                      userName.text != model.user!.userName! ||
                                       email.text != model.user!.email! ||
                                       phone.text != model.user!.phoneNumber! ||
                                       model.gender.text[0] !=
@@ -324,11 +315,6 @@ class EditProfileView extends HookWidget {
                                           model.user!.lastName!) {
                                         body.addAll(
                                             {'last_name': lastName.text});
-                                      }
-                                      if (userName.text !=
-                                          model.user!.userName!) {
-                                        body.addAll(
-                                            {'user_name': userName.text});
                                       }
                                       if (email.text != model.user!.email!) {
                                         body.addAll({'email': email.text});

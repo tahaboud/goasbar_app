@@ -1,10 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
+import 'package:goasbar/ui/views/add_experience/add_experience_view.dart';
 import 'package:goasbar/ui/views/settings_pages/post_experience/post_experience_viewmodel.dart';
 import 'package:goasbar/ui/views/timing/timing_view.dart';
 import 'package:goasbar/ui/widgets/creation_aware_item.dart';
@@ -14,7 +14,7 @@ import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class PostExperienceView extends HookWidget {
-  const PostExperienceView({Key? key}) : super(key: key);
+  const PostExperienceView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,22 +26,18 @@ class PostExperienceView extends HookWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const Icon(CupertinoIcons.arrow_turn_up_left)
-                      .height(40)
-                      .width(40)
-                      .gestures(onTap: () {
-                    model.back();
-                  }),
                   Text(
                     'My Experience'.tr(),
                     style: const TextStyle(fontSize: 21),
                   ),
                   const Spacer(),
-                  Text(
-                    "Add New Experience".tr(),
-                    style: const TextStyle(color: kMainColor1),
-                  ).gestures(
-                      onTap: () => model.showAddExperienceInfoBottomSheet())
+                  TextButton(
+                      onPressed: () =>
+                          model.navigateTo(view: const AddExperienceView()),
+                      child: Text(
+                        "Add New Experience".tr(),
+                        style: const TextStyle(color: kMainColor1),
+                      ))
                 ],
               ),
               verticalSpaceMedium,
@@ -51,12 +47,12 @@ class PostExperienceView extends HookWidget {
                       child: ListView.builder(
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: model.experienceModels!.count,
+                        itemCount: model.data?.length,
                         itemBuilder: (context, index) {
                           return CreationAwareListItem(
                             itemCreated: () =>
                                 model.getProviderExperiencesFromNextPage(
-                                    index: index + 1),
+                                    index: model.pageNumber + 1),
                             child: Container(
                               margin: const EdgeInsets.symmetric(vertical: 10),
                               padding: const EdgeInsets.symmetric(
@@ -97,10 +93,8 @@ class PostExperienceView extends HookWidget {
                                             ),
                                             borderRadius:
                                                 BorderRadius.circular(30)),
-                                        child: Icon(
-                                          model.isCollapsed[index]!
-                                              ? Icons.keyboard_arrow_up
-                                              : Icons.keyboard_arrow_down,
+                                        child: const Icon(
+                                          Icons.keyboard_arrow_up,
                                           size: 17,
                                         ).center(),
                                       ).gestures(
@@ -172,25 +166,6 @@ class PostExperienceView extends HookWidget {
                                   ),
                                   !model.isCollapsed[index]!
                                       ? const SizedBox()
-                                      : verticalSpaceSmall,
-                                  !model.isCollapsed[index]!
-                                      ? const SizedBox()
-                                      : Text(
-                                          "${"Get your experience this weekend \nwith amazing trip in".tr()} ${model.data![index].city![0]}${model.data![index].city!.substring(1).replaceAll('_', ' ').toLowerCase()}",
-                                          style: const TextStyle(fontSize: 20)),
-                                  !model.isCollapsed[index]!
-                                      ? const SizedBox()
-                                      : verticalSpaceSmall,
-                                  !model.isCollapsed[index]!
-                                      ? const SizedBox()
-                                      : Text(model.data![index].description!,
-                                          style: const TextStyle(
-                                              fontSize: 13, color: kGrayText)),
-                                  !model.isCollapsed[index]!
-                                      ? const SizedBox()
-                                      : verticalSpaceRegular,
-                                  !model.isCollapsed[index]!
-                                      ? const SizedBox()
                                       : Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
@@ -257,12 +232,10 @@ class PostExperienceView extends HookWidget {
                                                         FontWeight.w500),
                                               ).center(),
                                             ).gestures(onTap: () {
-                                              model
-                                                  .showAddExperienceInfoBottomSheet(
-                                                experience: model
-                                                    .experienceModels!
-                                                    .results![index],
-                                              );
+                                              model.navigateTo(
+                                                  view: AddExperienceView(
+                                                experience: model.data?[index],
+                                              ));
                                             }),
                                           ],
                                         ),

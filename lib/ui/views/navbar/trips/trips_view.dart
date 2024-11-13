@@ -35,7 +35,7 @@ class TripsView extends HookWidget {
                   text!,
                   style: const TextStyle(
                       fontSize: 22, fontWeight: FontWeight.bold),
-                ).alignment(Alignment.centerLeft),
+                ).alignment(Alignment.centerRight),
                 verticalSpaceMedium,
                 SizedBox(
                   height: 50,

@@ -152,7 +152,6 @@ class ExperienceApiService {
     if (hasImages!) {
       Dio dio = Dio();
       FormData formData = FormData.fromMap(body!);
-
       return dio
           .patch(
         "$baseUrl/api/experience/provider/$experienceId/",
@@ -182,7 +181,7 @@ class ExperienceApiService {
               type: MotionToastType.error);
           return null;
         }
-      });
+      }).catchError((err) {});
     } else {
       return http
           .patch(

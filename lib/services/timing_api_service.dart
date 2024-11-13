@@ -14,61 +14,87 @@ import 'package:motion_toast/resources/arrays.dart';
 class TimingApiService {
   final _authService = locator<AuthService>();
 
-  Future<TimingModel?> createTiming({context, String? token, Map? body, int? experienceId}) async {
-    return http.post(
+  Future<TimingModel?> createTiming(
+      {context, String? token, Map? body, int? experienceId}) async {
+    return http
+        .post(
       Uri.parse("$baseUrl/api/experience/provider/timing/$experienceId/"),
       headers: {
         "Accept-Language": "en-US",
         "Authorization": "Token $token",
       },
       body: body,
-    ).then((response) {
-
+    )
+        .then((response) {
       if (response.statusCode == 201) {
-        return TimingModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+        return TimingModel.fromJson(
+            jsonDecode(utf8.decode(response.bodyBytes)));
       } else if (response.statusCode == 401) {
-        _authService.unAuthClearAndRestart(context: context,);
+        _authService.unAuthClearAndRestart(
+          context: context,
+        );
         return null;
       } else {
-        showMotionToast(context: context, title: 'Create Timing Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(
+            context: context,
+            title: 'Create Timing Failed',
+            msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]
+                ['detail'],
+            type: MotionToastType.error);
         return null;
       }
     });
   }
 
-  Future<TimingModel?> updateTiming({String? token, Map? body, int? timingId, context}) async {
-    return http.post(
+  Future<TimingModel?> updateTiming(
+      {String? token, Map? body, int? timingId, context}) async {
+    return http
+        .patch(
       Uri.parse("$baseUrl/api/experience/provider/timing/$timingId/"),
       headers: {
         "Accept-Language": "en-US",
         "Authorization": "Token $token",
       },
       body: body,
-    ).then((response) {
+    )
+        .then((response) {
       if (response.statusCode == 200) {
-        return TimingModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+        return TimingModel.fromJson(
+            jsonDecode(utf8.decode(response.bodyBytes)));
       } else if (response.statusCode == 401) {
-        _authService.unAuthClearAndRestart(context: context,);
+        _authService.unAuthClearAndRestart(
+          context: context,
+        );
         return null;
       } else {
-        showMotionToast(context: context, title: 'Update Timing Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(
+            context: context,
+            title: 'Update Timing Failed',
+            msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]
+                ['detail'],
+            type: MotionToastType.error);
         return null;
       }
     });
   }
 
-  Future<TimingListModel?> getTimingsList({String? token, int? experienceId, context, int? page}) async {
+  Future<TimingListModel?> getTimingsList(
+      {String? token, int? experienceId, context, int? page}) async {
     return http.get(
-      Uri.parse("$baseUrl/api/experience/provider/timing/$experienceId/?page=$page"),
+      Uri.parse(
+          "$baseUrl/api/experience/provider/timing/$experienceId/?page=$page"),
       headers: {
         "Accept-Language": "en-US",
         "Authorization": "Token $token",
       },
     ).then((response) {
       if (response.statusCode == 200) {
-        return TimingListModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+        return TimingListModel.fromJson(
+            jsonDecode(utf8.decode(response.bodyBytes)));
       } else if (response.statusCode == 401) {
-        _authService.unAuthClearAndRestart(context: context,);
+        _authService.unAuthClearAndRestart(
+          context: context,
+        );
         return null;
       } else {
         return null;
@@ -87,10 +113,17 @@ class TimingApiService {
       if (response.statusCode == 200) {
         return true;
       } else if (response.statusCode == 401) {
-        _authService.unAuthClearAndRestart(context: context,);
+        _authService.unAuthClearAndRestart(
+          context: context,
+        );
         return null;
       } else {
-        showMotionToast(context: context, title: 'Delete Timing Failed', msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]['detail'], type: MotionToastType.error);
+        showMotionToast(
+            context: context,
+            title: 'Delete Timing Failed',
+            msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]
+                ['detail'],
+            type: MotionToastType.error);
         return false;
       }
     });

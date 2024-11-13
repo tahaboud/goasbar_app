@@ -6,6 +6,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:goasbar/data_models/experience_response.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
+import 'package:goasbar/ui/views/new_timing/new_timing_view.dart';
 import 'package:goasbar/ui/views/timing/timing_viewmodel.dart';
 import 'package:goasbar/ui/widgets/creation_aware_item.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
@@ -29,7 +30,7 @@ class TimingView extends HookWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const Icon(CupertinoIcons.arrow_turn_up_left)
+                    const Icon(CupertinoIcons.arrow_turn_up_right)
                         .height(40)
                         .width(40)
                         .gestures(onTap: () {
@@ -70,10 +71,13 @@ class TimingView extends HookWidget {
                         ],
                       ),
                     ).gestures(
-                        onTap: () => model.showNewTimingBottomSheet(
-                            date: model.selectedFormattedDate ??
-                                model.formatSelectedDate(
-                                    date: model.selectedDate))),
+                        onTap: () => {
+                              model.navigateTo(
+                                  view: NewTimingView(
+                                      model: model,
+                                      experienceTitle: experience?.title ?? "",
+                                      experienceId: experience?.id ?? 1))
+                            })
                   ],
                 ),
                 verticalSpaceRegular,
@@ -101,12 +105,12 @@ class TimingView extends HookWidget {
                   'Timings'.tr(),
                   style: const TextStyle(
                       fontSize: 21, fontWeight: FontWeight.w600),
-                ).alignment(Alignment.centerLeft),
+                ).alignment(Alignment.centerRight),
                 verticalSpaceSmall,
                 model.isBusy
                     ? const Loader().center()
                     : model.timingListModel!.count! == 0
-                        ? const Text('No Timing Yet')
+                        ? Text('No Timing Yet'.tr())
                         : ListView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
@@ -119,13 +123,6 @@ class TimingView extends HookWidget {
                                 child: Column(
                                   children: [
                                     TimingItem(
-                                      launchMaps:
-                                          experience!.latitude != null &&
-                                                  experience!.longitude != null
-                                              ? () {}
-                                              : () => model.launchMaps(
-                                                  lat: experience!.latitude,
-                                                  long: experience!.longitude),
                                       timing: model
                                           .timingListModel!.results![index],
                                       experience: experience!,
@@ -159,15 +156,15 @@ class TimingView extends HookWidget {
                                         } else {}
                                       }),
                                     ).gestures(
-                                        onTap: () =>
-                                            model.showNewTimingBottomSheet(
-                                                timing: model.timingListModel!
-                                                    .results![index],
-                                                date: model
-                                                        .selectedFormattedDate ??
-                                                    model.formatSelectedDate(
-                                                      date: model.selectedDate,
-                                                    ))),
+                                        onTap: () => model.navigateTo(
+                                                view: NewTimingView(
+                                              model: model,
+                                              experienceTitle:
+                                                  experience?.title ?? "",
+                                              experienceId: experience?.id ?? 1,
+                                              timing: model.timingListModel!
+                                                  .results![index],
+                                            ))),
                                     const Divider(thickness: 1, height: 30),
                                   ],
                                 ),

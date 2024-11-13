@@ -10,7 +10,7 @@ import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class RequestPasswordView extends HookWidget {
-  const RequestPasswordView({Key? key, this.phone}) : super(key: key);
+  const RequestPasswordView({super.key, this.phone});
   final String? phone;
 
   @override
@@ -128,12 +128,10 @@ class RequestPasswordView extends HookWidget {
                                   context: context,
                                   phoneNumber: "+966${phoneNumber.text}")
                               .then((value) {
-                            if (value!) {
-                              model.navigateTo(
-                                  view: SecurityView(
-                                phoneNumber: "+966${phoneNumber.text}",
-                              ));
-                            } else {}
+                            model.navigateTo(
+                                view: SecurityView(
+                              phoneNumber: "+966${phoneNumber.text}",
+                            ));
                           });
                         }
                       : () {},

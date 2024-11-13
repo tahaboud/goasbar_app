@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:goasbar/data_models/public_provider_response.dart';
 import 'package:goasbar/data_models/user_model.dart';
+import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/provider_profile/provider_profile_viewmodel.dart';
@@ -14,8 +15,7 @@ import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class ProviderProfileView extends HookWidget {
-  const ProviderProfileView({Key? key, this.provider, this.user})
-      : super(key: key);
+  const ProviderProfileView({super.key, this.provider, this.user});
   final PublicProviderResponse? provider;
   final UserModel? user;
 
@@ -29,24 +29,22 @@ class ProviderProfileView extends HookWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(CupertinoIcons.arrow_turn_up_left)
-                    .height(40)
-                    .width(40)
-                    .gestures(
-                  onTap: () {
-                    model.back();
-                  },
-                ).alignment(Alignment.centerLeft),
-                verticalSpaceSmall,
+                IconButton(
+                  icon: const Icon(CupertinoIcons.arrow_turn_up_right),
+                  onPressed: model.back,
+                ),
+                verticalSpaceMedium,
                 Container(
                   height: 100,
                   width: 100,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(100),
-                    image: const DecorationImage(
-                      // image: provider != null ? NetworkImage("$baseUrl${provider!.image}",)
-                      image: AssetImage("assets/images/avatar.png"),
-                      // : FileImage(model.file!) as ImageProvider,
+                    image: DecorationImage(
+                      image: provider != null
+                          ? NetworkImage(
+                              "$baseUrl${provider!.image}",
+                            ) as ImageProvider
+                          : const AssetImage("assets/images/avatar.png"),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -104,16 +102,16 @@ class ProviderProfileView extends HookWidget {
                     ),
                     horizontalSpaceTiny,
                     Text(
-                      provider!.phoneNumber!,
+                      provider!.phoneNumber ?? "++++",
                       style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: kGrayText),
                     ),
                   ],
-                ).gestures(
-                    onTap: () => model.launchPhoneCall(
-                        phoneNumber: provider!.phoneNumber!)),
+                ).gestures(onTap: () {
+                  model.launchPhoneCall(phoneNumber: provider!.phoneNumber!);
+                }),
                 provider!.website != null
                     ? verticalSpaceTiny
                     : const SizedBox(),

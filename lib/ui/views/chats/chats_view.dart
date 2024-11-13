@@ -66,12 +66,12 @@ class ChatsView extends HookWidget {
                               String? notMeName;
                               chatId = chat.id;
 
-                              if (user!.userName == data["member_names"]![0]) {
+                              if (user!.firstName == data["member_names"]![0]) {
                                 notMeId = int.parse(data["members"][1]);
                                 notMeName = data["member_names"][1];
                                 meId = int.parse(data["members"][0]);
                               } else {
-                                if (user!.userName ==
+                                if (user!.firstName ==
                                     data["member_names"]![1]) {
                                   notMeId = int.parse(data["members"][0]);
                                   notMeName = data["member_names"][0];

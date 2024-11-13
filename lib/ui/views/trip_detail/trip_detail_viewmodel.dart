@@ -12,7 +12,7 @@ import 'package:goasbar/services/timing_api_service.dart';
 import 'package:goasbar/services/token_service.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:maps_launcher/maps_launcher.dart';
+import 'package:map_launcher/map_launcher.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -39,8 +39,12 @@ class TripDetailViewModel extends FutureViewModel<PublicProviderModel?> {
   List<Marker> customMarkers = [];
   LatLng? latLon;
 
-  launchMaps({LatLng? latLon}) {
-    MapsLauncher.launchCoordinates(latLon!.latitude, latLon.longitude);
+  launchMaps({LatLng? latLon}) async {
+    final availableMaps = await MapLauncher.installedMaps;
+    await availableMaps.first.showMarker(
+      coords: Coords(latLon!.latitude, latLon.longitude),
+      title: "Meeting point",
+    );
   }
 
   void addFavorites({int? experienceId, context}) {
@@ -101,7 +105,8 @@ class TripDetailViewModel extends FutureViewModel<PublicProviderModel?> {
   String formatMonthYear(String? dateTime) {
     final String year = formatYear(dateTime!);
     final String day = formatDay(dateTime);
-    final String month = shortMonths[int.parse(dateTime.substring(5, 7))];
+    final String month =
+        shortMonthsArabic[int.parse(dateTime.substring(5, 7)) - 1];
     return '$day $month $year';
   }
 

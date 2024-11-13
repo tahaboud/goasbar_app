@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:goasbar/data_models/experience_response.dart';
@@ -34,14 +34,12 @@ class ConfirmBookingView extends HookWidget {
               children: [
                 verticalSpaceMedium,
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Icon(Icons.arrow_back_sharp)
-                        .height(40)
-                        .width(40)
-                        .gestures(onTap: () {
-                      model.back();
-                    }),
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back_sharp),
+                      onPressed: model.back,
+                    ),
                     Text(
                       'Confirm Your Booking'.tr(),
                       style: const TextStyle(fontSize: 21),
@@ -207,9 +205,9 @@ class ConfirmBookingView extends HookWidget {
                                       ? Container(
                                           margin: const EdgeInsets.symmetric(
                                               horizontal: 10),
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10, vertical: 10),
                                           child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
                                             children: [
                                               Text(
                                                   model.formatDate(model.data!
@@ -223,7 +221,6 @@ class ConfirmBookingView extends HookWidget {
                                                                   .selectedIndex
                                                           ? Colors.white
                                                           : Colors.black)),
-                                              verticalSpaceSmall,
                                               Text(
                                                 "${model.data!.results![index].date!.substring(8, 10)}/${model.data!.results![index].date!.substring(5, 7)}",
                                                 style: TextStyle(
@@ -234,7 +231,6 @@ class ConfirmBookingView extends HookWidget {
                                                         ? Colors.white
                                                         : Colors.black),
                                               ),
-                                              verticalSpaceSmall,
                                               Text(
                                                   model.data!.results![index]
                                                       .startTime!
@@ -325,7 +321,7 @@ class ConfirmBookingView extends HookWidget {
                               50,
                           child: Text(
                             model.selectedIndex == null
-                                ? '${"Available Seats".tr()} : Pick a timing first'
+                                ? '${"Available Seats".tr()} : ${"Pick a timing first".tr()}'
                                 : '${"Available Seats".tr()} : ${model.data!.results![model.selectedIndex!].availability} / ${model.data!.results![model.selectedIndex!].capacity}',
                             style: const TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.w600),
@@ -375,14 +371,14 @@ class ConfirmBookingView extends HookWidget {
                     children: [
                       verticalSpaceSmall,
                       Text(
-                        "Guest ${i + 1}",
+                        "${'Guest'.tr()} ${i + 1}",
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       verticalSpaceSmall,
                       TextField(
                         controller: model.firstNames[i],
                         decoration: InputDecoration(
-                          hintText: 'Guest First Name',
+                          hintText: 'Guest First Name'.tr(),
                           hintStyle: const TextStyle(fontSize: 14),
                           // prefixText: 'Saudi Arabia ( +966 ) | ',
                           fillColor: kTextFiledGrayColor,
@@ -399,7 +395,7 @@ class ConfirmBookingView extends HookWidget {
                       TextField(
                         controller: model.lastNames[i],
                         decoration: InputDecoration(
-                          hintText: 'Guest Last Name',
+                          hintText: 'Guest Last Name'.tr(),
                           hintStyle: const TextStyle(fontSize: 14),
                           // prefixText: 'Saudi Arabia ( +966 ) | ',
                           fillColor: kTextFiledGrayColor,
@@ -420,7 +416,7 @@ class ConfirmBookingView extends HookWidget {
                         validator: (value) =>
                             model.validateIsNumeric(value: value),
                         decoration: InputDecoration(
-                          hintText: 'Guest Age',
+                          hintText: 'Guest Age'.tr(),
                           hintStyle: const TextStyle(fontSize: 14),
                           fillColor: kTextFiledGrayColor,
                           filled: true,
@@ -434,47 +430,66 @@ class ConfirmBookingView extends HookWidget {
                       ),
                       verticalSpaceRegular,
                       SizedBox(
-                        height: 60,
-                        child: TextField(
-                          readOnly: true,
-                          controller: model.genders[i],
-                          decoration: InputDecoration(
-                            hintText: 'Guest Gender',
-                            hintStyle: const TextStyle(fontSize: 14),
-                            suffixIcon:
-                                Image.asset('assets/icons/drop_down.png')
-                                    .gestures(onTap: () {
-                              model.showSelectionDialog(
-                                  gender: model.genders[i].text, index: i);
-                            }),
-                            fillColor: kTextFiledGrayColor,
-                            filled: true,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            enabledBorder: const OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: kTextFiledGrayColor),
-                            ),
-                          ),
-                        ),
-                      ),
+                          height: 60,
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButtonFormField<String>(
+                                value: model.genders[i].text,
+                                isExpanded: true,
+                                icon: const Icon(Icons.keyboard_arrow_down),
+                                decoration: InputDecoration(
+                                  hintText: "",
+                                  fillColor: kTextFiledGrayColor,
+                                  filled: true,
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  border: InputBorder.none,
+                                ),
+                                style: const TextStyle(color: Colors.black),
+                                onChanged: (String? value) {
+                                  model.genders[i].text = value ?? "";
+                                },
+                                items: [
+                                  DropdownMenuItem<String>(
+                                    value: "",
+                                    enabled: false,
+                                    child: Text(
+                                      'Guest Gender'.tr(),
+                                      style:
+                                          const TextStyle(color: Colors.grey),
+                                    ),
+                                  ),
+                                  DropdownMenuItem<String>(
+                                    value: "M",
+                                    child: Text("Male".tr()),
+                                  ),
+                                  DropdownMenuItem<String>(
+                                    value: "F",
+                                    child: Text("Female".tr()),
+                                  ),
+                                ]),
+                          )),
                       verticalSpaceRegular,
                       TextFormField(
                         controller: model.phones[i],
                         validator: (value) =>
                             model.validatePhoneNumber(value: value),
+                        textDirection: TextDirection.ltr,
                         keyboardType: TextInputType.number,
                         maxLength: 9,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         decoration: InputDecoration(
                           hintText: 'xx x - xx x - xx x',
-                          hintStyle: const TextStyle(fontSize: 14),
+                          hintTextDirection: TextDirection.ltr,
+                          hintStyle: const TextStyle(
+                            fontSize: 14,
+                          ),
                           counterText: '',
                           // prefixText: 'Saudi Arabia ( +966 ) | ',
-                          prefixIcon: const Text(
-                            'Saudi Arabia ( +966 )  |',
+                          suffixIcon: const Text(
+                            '( +966 ) |',
                             style: TextStyle(color: kMainGray, fontSize: 14),
+                            textDirection: TextDirection.ltr,
                           ).padding(vertical: 20, horizontal: 10),
                           fillColor: kTextFiledGrayColor,
                           filled: true,

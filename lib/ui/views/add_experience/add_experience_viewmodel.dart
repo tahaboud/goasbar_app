@@ -18,7 +18,7 @@ import 'package:goasbar/services/validation_service.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:maps_launcher/maps_launcher.dart';
+import 'package:map_launcher/map_launcher.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -43,7 +43,7 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   int pageIndex = 1;
   int? addedProviding = 0;
   int? addedRequirements = 0;
-  String? city = "Riyadh".tr();
+  String? city = "RIYADH";
   List<dynamic>? selectedExperienceCategory = [];
   String? providedGoodsText = '';
   String? requirementsText = '';
@@ -77,8 +77,12 @@ class AddExperienceInfoViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  launchMaps({LatLng? latLon}) {
-    MapsLauncher.launchCoordinates(latLon!.latitude, latLon.longitude);
+  launchMaps({LatLng? latLon}) async {
+    final availableMaps = await MapLauncher.installedMaps;
+    await availableMaps.first.showMarker(
+      coords: Coords(latLon!.latitude, latLon.longitude),
+      title: "Meeting point",
+    );
   }
 
   updateIsClicked({value}) {
@@ -115,8 +119,9 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   onStart() {
     if (experience != null) {
       setBusy(true);
-      if (experience!.latitude != null && experience!.longitude != null)
+      if (experience!.latitude != null && experience!.longitude != null) {
         latLon = LatLng(experience!.latitude, experience!.longitude);
+      }
       if (experience!.latitude != null && experience!.longitude != null) {
         kGooglePlex = CameraPosition(
           target: LatLng(experience!.latitude, experience!.longitude),
@@ -134,8 +139,9 @@ class AddExperienceInfoViewModel extends BaseViewModel {
       city = getCity();
       genderConstraint = getGenderConstraint();
       selectedExperienceCategory = getSelectedExperienceCategory();
-      if (experience!.profileImage != null)
+      if (experience!.profileImage != null) {
         mainImage = File(experience!.profileImage!);
+      }
       if (experience!.imageSet!.isNotEmpty) {
         additionalImages = experience!.imageSet;
         images = experience!.imageSet!.length;
@@ -391,23 +397,13 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   Future<ExperienceResults?> createExperience({
     context,
     Map<String, dynamic>? body,
-    Map<String, dynamic>? timingBody,
   }) async {
     updateIsClicked(value: true);
     String? token = await _tokenService.getTokenValue();
     return await _experienceApiService
         .createExperience(token: token, body: body, context: context!)
         .then((value) {
-      if (value is ExperienceResults) {
-        _timingApiService.createTiming(
-            context: context,
-            token: token,
-            experienceId: value.id,
-            body: timingBody);
-        return value;
-      } else {
-        return null;
-      }
+      return value;
     });
   }
 
@@ -416,7 +412,7 @@ class AddExperienceInfoViewModel extends BaseViewModel {
       Map<String, dynamic>? body,
       context,
       int? experienceId}) async {
-    updateIsClicked(value: true);
+    // updateIsClicked(value: true);
     String? token = await _tokenService.getTokenValue();
     return await _experienceApiService
         .updateExperience(

@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:goasbar/data_models/experience_response.dart';
 import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
@@ -11,12 +12,11 @@ import 'package:goasbar/ui/views/navbar/search/search_viewmodel.dart';
 import 'package:goasbar/ui/views/trip_detail/trip_detail_view.dart';
 import 'package:goasbar/ui/widgets/creation_aware_item.dart';
 import 'package:goasbar/ui/widgets/loader.dart';
-import 'package:motion_toast/resources/arrays.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class SearchView extends HookWidget {
-  const SearchView({Key? key, this.isUser, this.user}) : super(key: key);
+  const SearchView({super.key, this.isUser, this.user});
   final UserModel? user;
   final bool? isUser;
 
@@ -25,6 +25,44 @@ class SearchView extends HookWidget {
     var minPrice = useTextEditingController();
     var maxPrice = useTextEditingController();
     var title = useTextEditingController();
+    var filteredExperiences = useState<List<ExperienceResults>>([]);
+
+    void filterExperiences(String genderConstraint, String from, String to,
+        String city, String category) {
+      String query = '?gender=$genderConstraint';
+
+      if (from.isNotEmpty) {
+        query = '$query&date_min=$from';
+      }
+      if (to.isNotEmpty) query = '$query&date_max=$to';
+
+      if (city != "All cities") {
+        query = '$query&city=$city';
+      }
+
+      if (title.text.isNotEmpty) {
+        query = '$query&title=${title.text}';
+      }
+
+      if (minPrice.text.isNotEmpty) {
+        query = '$query&price_min=${minPrice.text}';
+      }
+      if (maxPrice.text.isNotEmpty) {
+        query = '$query&price_max=${maxPrice.text}';
+      }
+
+      if (category != "All categories") {
+        query = '$query&category=$category';
+      }
+
+      SearchViewModel()
+          .getPublicExperiences(
+        query: query,
+      )
+          .then((value) {
+        filteredExperiences.value = value!.results ?? [];
+      });
+    }
 
     return ViewModelBuilder<SearchViewModel>.reactive(
       builder: (context, model, child) => Scaffold(
@@ -84,20 +122,16 @@ class SearchView extends HookWidget {
                                 color: Colors.black,
                                 fontSize: 14,
                               ),
-                              onChanged: (value) =>
-                                  model.updateCity(value: value),
+                              onChanged: (value) => model.updateCity(
+                                  value: value ?? "All cities"),
                               items: model
                                   .citiesWithNone()
                                   .map((c) => DropdownMenuItem(
-                                        value: c == 'Search by Region'.tr()
-                                            ? c
-                                            : "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}",
+                                        value: c,
                                         onTap: () {},
                                         child: SizedBox(
                                           child: Text(
-                                            c == 'Search by Region'.tr()
-                                                ? c
-                                                : "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}",
+                                            c.tr(),
                                             style: const TextStyle(
                                                 fontFamily: 'Cairo'),
                                           ),
@@ -122,9 +156,11 @@ class SearchView extends HookWidget {
                         Image.asset('assets/icons/birth_date.png').gestures(
                       onTap: () => model.showDateRangePicker(context),
                     ),
-                    suffixIcon: const Icon(Icons.clear).gestures(
-                      onTap: () => model.clearSearchDate(),
-                    ),
+                    suffixIcon: model.searchDate.text.isNotEmpty
+                        ? const Icon(Icons.clear).gestures(
+                            onTap: () => model.clearSearchDate(),
+                          )
+                        : null,
                     fillColor: kTextFiledGrayColor,
                     filled: true,
                     border: OutlineInputBorder(
@@ -161,14 +197,15 @@ class SearchView extends HookWidget {
                                 fontSize: 14,
                               ),
                               onChanged: (value) =>
-                                  model.updateGenderConstraint(value: value),
+                                  model.updateGenderConstraint(
+                                      value: value ?? "None"),
                               items: genderConstraints
                                   .map((c) => DropdownMenuItem(
                                         value: c,
                                         onTap: () {},
                                         child: SizedBox(
                                           child: Text(
-                                            c,
+                                            c.tr(),
                                             style: const TextStyle(
                                                 fontFamily: 'Cairo'),
                                           ),
@@ -256,21 +293,16 @@ class SearchView extends HookWidget {
                                     color: Colors.black,
                                     fontSize: 14,
                                   ),
-                                  onChanged: (value) =>
-                                      model.updateCategory(value: value),
+                                  onChanged: (value) => model.updateCategory(
+                                      value: value ?? "All categories"),
                                   items: model
                                       .categoriesWithNone()
                                       .map((c) => DropdownMenuItem(
-                                            value: c ==
-                                                    'Experience Category'.tr()
-                                                ? c
-                                                : "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}",
+                                            value: c,
                                             onTap: () {},
                                             child: SizedBox(
                                               child: Text(
-                                                c == 'Experience Category'.tr()
-                                                    ? c
-                                                    : "${c[0]}${c.substring(1).replaceAll('_', ' ').toLowerCase()}",
+                                                c.tr(),
                                                 style: const TextStyle(
                                                     fontFamily: 'Cairo'),
                                               ),
@@ -295,69 +327,13 @@ class SearchView extends HookWidget {
                         child: Image.asset("assets/icons/navbar/search.png",
                             color: Colors.white),
                       ),
-                    ).gestures(onTap: () {
-                      String query = '';
-
-                      if (model.genderConstraint == "No constrains".tr()) {
-                        query = '$query&gender=None';
-                      }
-                      if (model.genderConstraint == "Families only".tr()) {
-                        query = '$query&gender=FAMILIES';
-                      }
-                      if (model.genderConstraint == "Men Only".tr()) {
-                        query = '$query&gender=MEN';
-                      }
-                      if (model.genderConstraint == "Women Only".tr()) {
-                        query = '$query&gender=WOMEN';
-                      }
-
-                      if (model.from != '') {
-                        query = '$query&date_min=${model.from}';
-                      }
-                      if (model.to != '') query = '$query&date_max=${model.to}';
-
-                      if (model.city != 'Search by Region'.tr()) {
-                        query =
-                            '$query&city=${model.city!.replaceAll(' ', '_').toUpperCase()}';
-                      }
-
-                      if (title.text.isNotEmpty) {
-                        query = '$query&title=${title.text}';
-                      }
-
-                      if (minPrice.text.isNotEmpty) {
-                        query = '$query&price_min=${minPrice.text}';
-                      }
-                      if (maxPrice.text.isNotEmpty) {
-                        query = '$query&price_max=${maxPrice.text}';
-                      }
-
-                      if (model.category != 'Experience Category'.tr()) {
-                        query = '$query&category=${model.category}';
-                      }
-
-                      if (query != '') {
-                        model
-                            .getPublicExperiences(
-                          query: query.replaceFirst(r'&', '?'),
-                        )
-                            .then((value) {
-                          if (value != null) {
-                          } else {
-                            showMotionToast(
-                                context: context,
-                                title: 'No experience found',
-                                msg:
-                                    "No experience found with your specifications",
-                                type: MotionToastType.warning);
-                          }
-                        });
-                      }
-                    }),
+                    ).gestures(
+                        onTap: () => filterExperiences(model.genderConstraint,
+                            model.from, model.to, model.city, model.category)),
                   ],
                 ),
                 verticalSpaceLarge,
-                model.experienceModels == null
+                filteredExperiences.value.isEmpty
                     ? const SizedBox()
                     : model.isBusy
                         ? const Loader().center()
@@ -366,14 +342,14 @@ class SearchView extends HookWidget {
                             style: const TextStyle(
                                 fontSize: 22, fontWeight: FontWeight.bold),
                           ),
-                model.experienceModels == null
+                filteredExperiences.value.isEmpty
                     ? const SizedBox()
                     : verticalSpaceMedium,
-                model.experienceModels == null
+                filteredExperiences.value.isEmpty
                     ? const SizedBox()
                     : model.isBusy
                         ? const SizedBox()
-                        : model.experienceModels!.count == 0
+                        : filteredExperiences.value.isEmpty
                             ? const Text(
                                     'No results found with this specifications')
                                 .center()
@@ -385,7 +361,7 @@ class SearchView extends HookWidget {
                                       const EdgeInsets.symmetric(vertical: 2),
                                   physics: const BouncingScrollPhysics(),
                                   scrollDirection: Axis.horizontal,
-                                  itemCount: model.experienceModels!.count,
+                                  itemCount: filteredExperiences.value.length,
                                   itemBuilder: (context, index) {
                                     return CreationAwareListItem(
                                       itemCreated: () => model
@@ -422,34 +398,29 @@ class SearchView extends HookWidget {
                                                 borderRadius:
                                                     BorderRadius.circular(15),
                                                 image: DecorationImage(
-                                                  fit: model
-                                                              .experienceModels!
-                                                              .results![index]
+                                                  fit: filteredExperiences
+                                                              .value[index]
                                                               .profileImage !=
                                                           null
-                                                      ? model
-                                                              .experienceModels!
-                                                              .results![index]
+                                                      ? filteredExperiences
+                                                              .value[index]
                                                               .profileImage!
                                                               .contains(
                                                                   '/asbar-icon.ico')
                                                           ? BoxFit.none
                                                           : BoxFit.cover
                                                       : BoxFit.contain,
-                                                  image: model
-                                                                  .experienceModels!
-                                                                  .results![
-                                                                      index]
+                                                  image: filteredExperiences
+                                                                  .value[index]
                                                                   .profileImage !=
                                                               null &&
-                                                          !model
-                                                              .experienceModels!
-                                                              .results![index]
+                                                          filteredExperiences
+                                                              .value[index]
                                                               .profileImage!
                                                               .contains(
                                                                   '/asbar-icon.ico')
                                                       ? NetworkImage(
-                                                              "$baseUrl${model.experienceModels!.results![index].profileImage}")
+                                                              "$baseUrl${filteredExperiences.value[index].profileImage}")
                                                           as ImageProvider
                                                       : const AssetImage(
                                                           "assets/images/image4.png"),
@@ -465,10 +436,8 @@ class SearchView extends HookWidget {
                                                 SizedBox(
                                                   width: 120,
                                                   child: Text(
-                                                      model
-                                                          .experienceModels!
-                                                          .results![index]
-                                                          .title!,
+                                                      filteredExperiences
+                                                          .value[index].title!,
                                                       overflow:
                                                           TextOverflow.ellipsis,
                                                       style: const TextStyle(
@@ -477,8 +446,8 @@ class SearchView extends HookWidget {
                                                 ),
                                                 Row(
                                                   children: [
-                                                    Text(model.experienceModels!
-                                                        .results![index].rate!),
+                                                    Text(filteredExperiences
+                                                        .value[index].rate!),
                                                     horizontalSpaceTiny,
                                                     const Icon(
                                                       Icons.star,
@@ -497,7 +466,7 @@ class SearchView extends HookWidget {
                                                 SizedBox(
                                                   width: 160,
                                                   child: Text(
-                                                    "${model.experienceModels!.results![index].city![0]}${model.experienceModels!.results![index].city!.substring(1).replaceAll('_', ' ').toLowerCase()}, ${model.experienceModels!.results![index].duration!} ${double.parse(model.experienceModels!.results![index].duration!) >= 2 ? 'Hours'.tr() : 'Hour'.tr()}",
+                                                    "${filteredExperiences.value[index].city![0]}${filteredExperiences.value[index].city!}, ${filteredExperiences.value[index].duration!} ${double.parse(filteredExperiences.value[index].duration!) >= 2 ? 'Hours'.tr() : 'Hour'.tr()}",
                                                     style: const TextStyle(
                                                         color: kMainGray,
                                                         fontSize: 11),
@@ -516,7 +485,7 @@ class SearchView extends HookWidget {
                                                 Row(
                                                   children: [
                                                     Text(
-                                                        '${model.experienceModels!.results![index].price!} ${"SR".tr()}',
+                                                        '${filteredExperiences.value[index].price!} ${"SR".tr()}',
                                                         style: const TextStyle(
                                                             color: kMainColor1,
                                                             fontSize: 9)),
@@ -549,9 +518,10 @@ class SearchView extends HookWidget {
                                                       view: user == null
                                                           ? const LoginView()
                                                           : ConfirmBookingView(
-                                                              experience: model
-                                                                  .experienceModels!
-                                                                  .results![index],
+                                                              experience:
+                                                                  filteredExperiences
+                                                                          .value[
+                                                                      index],
                                                               user: user,
                                                             ));
                                                 }),
@@ -563,9 +533,8 @@ class SearchView extends HookWidget {
                                         onTap: () => model.navigateTo(
                                             view: TripDetailView(
                                                 isUser: isUser,
-                                                experience: model
-                                                    .experienceModels!
-                                                    .results![index],
+                                                experience: filteredExperiences
+                                                    .value[index],
                                                 user: user)),
                                       ),
                                     );

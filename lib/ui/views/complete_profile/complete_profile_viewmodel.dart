@@ -6,10 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/auth_response.dart';
 import 'package:goasbar/enum/dialog_type.dart';
-import 'package:goasbar/enum/status_code.dart';
 import 'package:goasbar/services/auth_service.dart';
 import 'package:goasbar/services/media_service.dart';
-import 'package:goasbar/services/token_service.dart';
 import 'package:goasbar/services/validation_service.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:stacked/stacked.dart';
@@ -29,7 +27,6 @@ class CompleteProfileViewModel extends BaseViewModel {
   final _authService = locator<AuthService>();
   bool? isClicked = false;
   bool isValid = false;
-  final _tokenService = locator<TokenService>();
   AuthResponse? authResponse;
 
   Future<File?> pickImage() async {
@@ -92,7 +89,7 @@ class CompleteProfileViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<bool> verifyPhoneNumber({String? phoneNumber, context}) async {
+  Future<String> verifyPhoneNumber({String? phoneNumber, context}) async {
     updateIsClicked(value: true);
     return await _authService.verifyPhoneNumber(
         phoneNumber: phoneNumber, context: context);
@@ -112,9 +109,9 @@ class CompleteProfileViewModel extends BaseViewModel {
     List<DateTime?>? picked = await showCalendarDatePicker2Dialog(
       context: context,
       config: CalendarDatePicker2WithActionButtonsConfig(
-        calendarType: CalendarDatePicker2Type.single,
-        selectedDayHighlightColor: kMainColor1,
-      ),
+          calendarType: CalendarDatePicker2Type.single,
+          selectedDayHighlightColor: kMainColor1,
+          lastDate: DateTime.now()),
       value: [
         DateTime.now(),
       ],
@@ -122,30 +119,25 @@ class CompleteProfileViewModel extends BaseViewModel {
     );
 
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
-    final String formatted = formatter.format(picked![0]!);
+    String formatted = "";
+    if (picked != null) {
+      formatted = formatter.format(picked[0]!);
+    }
 
     return formatted;
   }
 
-  Future<StatusCode> register(
-      {Map<String, dynamic>? body, context, bool? hasImage}) async {
+  Future<String> register({Map<String, dynamic>? body, bool? hasImage}) async {
     return await _authService
         .register(
-      context: context,
       hasImage: hasImage,
       body: body,
     )
         .then((response) {
-      if (response == null) {
-        return StatusCode.other;
-      } else if (response == StatusCode.throttled) {
-        return StatusCode.throttled;
-      } else {
-        authResponse = response;
-        _tokenService.setTokenValue(authResponse!.token!);
+      if (response == "success") {
         notifyListeners();
-        return StatusCode.ok;
       }
-    });
+      return response;
+    }).catchError((error) {});
   }
 }

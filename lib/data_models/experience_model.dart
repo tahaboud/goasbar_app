@@ -26,7 +26,7 @@ class ExperienceModel {
     data['next'] = next;
     data['previous'] = previous;
     if (results != null) {
-      data['results'] = results!.map((v) => v.toJson()).toList();
+      data['response'] = results!.map((v) => v.toJson()).toList();
     }
     return data;
   }
