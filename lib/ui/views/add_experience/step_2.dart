@@ -24,7 +24,7 @@ class AddExperienceStep2View extends HookWidget {
   final AddExperienceInfoViewModel model;
   final PageController pageController;
   final RegExp youtubeRegExp = RegExp(
-    r'^(https?://)?(www\.)?(youtube\.com/watch\?v=|youtu\.be/)([a-zA-Z0-9_-]{11})$',
+    r'^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube(?:-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|live\/|v\/)?)([\w\-]+)(\S+)?$',
   );
 
   @override

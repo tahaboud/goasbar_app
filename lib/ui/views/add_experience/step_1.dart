@@ -10,23 +10,27 @@ import 'package:goasbar/ui/widgets/loader.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class AddExperienceStep1View extends HookWidget {
-  const AddExperienceStep1View(
-      {super.key,
-      required this.title,
-      required this.model,
-      required this.age,
-      required this.duration,
-      required this.pageController});
+  AddExperienceStep1View({
+    super.key,
+    required this.title,
+    required this.model,
+    required this.age,
+    required this.duration,
+    required this.pageController,
+  });
 
   final TextEditingController title;
   final TextEditingController age;
   final TextEditingController duration;
   final AddExperienceInfoViewModel model;
   final PageController pageController;
+  bool duplicateTitle = false;
 
   @override
   Widget build(BuildContext context) {
-    final titleError = useState<String?>(null);
+    final titleError = useState<String?>(model.duplicateTitle
+        ? "Experience with this title already exists."
+        : null);
     final minAgeError = useState<String?>(null);
     final durationError = useState<String?>(null);
 
@@ -171,6 +175,7 @@ class AddExperienceStep1View extends HookWidget {
                     controller: title,
                     onChanged: (value) {
                       titleError.value = null;
+                      model.updateDuplicateTitle(value: false);
                     },
                     textDirection: TextDirection.rtl,
                     decoration: InputDecoration(

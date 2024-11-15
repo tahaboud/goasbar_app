@@ -35,6 +35,7 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   final _timingApiService = locator<TimingApiService>();
   final _mediaService = locator<MediaService>();
   TextEditingController gender = TextEditingController();
+  bool duplicateTitle = false;
   File? mainImage;
   bool? isProfileImageFromLocal = false;
   bool? isHasAdditionalImagesFromLocal = false;
@@ -88,6 +89,10 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   updateIsClicked({value}) {
     isClicked = value;
     notifyListeners();
+  }
+
+  updateDuplicateTitle({value}) {
+    duplicateTitle = value;
   }
 
   getTappedPosition(LatLng latLong) async {
@@ -198,9 +203,7 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   }
 
   String? getCity() {
-    city = experience != null
-        ? "${experience!.city![0]}${experience!.city!.substring(1).replaceAll('_', ' ').toLowerCase()}"
-        : null;
+    city = experience?.city!;
     return city;
   }
 
@@ -210,15 +213,8 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   }
 
   String? getGenderConstraint() {
-    genderConstraint = experience != null
-        ? experience!.gender == "None"
-            ? "No constrains".tr()
-            : experience!.gender == "FAMILIES"
-                ? "Families only".tr()
-                : experience!.gender == "MEN"
-                    ? "Men Only".tr()
-                    : "Women Only".tr()
-        : genderConstraints[0];
+    genderConstraint =
+        experience != null ? experience!.gender : genderConstraints[0];
     return genderConstraint;
   }
 
@@ -274,7 +270,7 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   }
 
   void clearAndNavigateTo({view}) {
-    _navigationService.clearStackAndShowView(view);
+    _navigationService.clearTillFirstAndShowView(view);
   }
 
   void back() {
@@ -394,7 +390,7 @@ class AddExperienceInfoViewModel extends BaseViewModel {
     }
   }
 
-  Future<ExperienceResults?> createExperience({
+  Future<String?> createExperience({
     context,
     Map<String, dynamic>? body,
   }) async {
@@ -404,7 +400,7 @@ class AddExperienceInfoViewModel extends BaseViewModel {
         .createExperience(token: token, body: body, context: context!)
         .then((value) {
       return value;
-    });
+    }).catchError((error) => error);
   }
 
   Future<ExperienceResults?> updateExperience(

@@ -122,6 +122,45 @@ class BookingItem extends StatelessWidget {
                                   model.formatYear(bookingsList!
                                           .experienceTiming!.date!) <=
                                       model.formatYearFromToday())
+                          ? horizontalSpaceTiny
+                          : const SizedBox(),
+                      Container(
+                        width: 70,
+                        height: 25,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(35)),
+                          color: Colors.redAccent,
+                        ),
+                        child: Text(
+                          'Delete'.tr(),
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w500),
+                        ).center(),
+                      ).gestures(onTap: () => onDelete!()),
+                      horizontalSpaceSmall,
+                    ],
+                  ),
+                  verticalSpaceSmall,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      (model.formatYear(bookingsList!.experienceTiming!.date!) <
+                                  model.formatYearFromToday()) ||
+                              (model.formatMonth(bookingsList!.experienceTiming!.date!) <
+                                      model.formatMonthFromToday() &&
+                                  model.formatYear(bookingsList!
+                                          .experienceTiming!.date!) <=
+                                      model.formatYearFromToday()) ||
+                              (model.formatDay(bookingsList!.experienceTiming!.date!) <
+                                      model.formatDayFromToday() &&
+                                  model.formatMonth(bookingsList!
+                                          .experienceTiming!.date!) <=
+                                      model.formatMonthFromToday() &&
+                                  model.formatYear(bookingsList!
+                                          .experienceTiming!.date!) <=
+                                      model.formatYearFromToday())
                           ? Container(
                               width: 70,
                               height: 25,
@@ -150,42 +189,9 @@ class BookingItem extends StatelessWidget {
                               ),
                             ).gestures(onTap: () => onUpdate!())
                           : const SizedBox(),
-                      (model.formatYear(bookingsList!.experienceTiming!.date!) <
-                                  model.formatYearFromToday()) ||
-                              (model.formatMonth(bookingsList!.experienceTiming!.date!) <
-                                      model.formatMonthFromToday() &&
-                                  model.formatYear(bookingsList!
-                                          .experienceTiming!.date!) <=
-                                      model.formatYearFromToday()) ||
-                              (model.formatDay(bookingsList!.experienceTiming!.date!) <
-                                      model.formatDayFromToday() &&
-                                  model.formatMonth(bookingsList!
-                                          .experienceTiming!.date!) <=
-                                      model.formatMonthFromToday() &&
-                                  model.formatYear(bookingsList!
-                                          .experienceTiming!.date!) <=
-                                      model.formatYearFromToday())
-                          ? horizontalSpaceTiny
-                          : const SizedBox(),
-                      Container(
-                        width: 70,
-                        height: 25,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(3)),
-                          color: Colors.redAccent,
-                        ),
-                        child: Text(
-                          'Delete'.tr(),
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
-                              fontWeight: FontWeight.w500),
-                        ).center(),
-                      ).gestures(onTap: () => onDelete!()),
                       horizontalSpaceSmall,
                     ],
-                  ),
-                  verticalSpaceSmall,
+                  )
                 ],
               ),
             ).center().gestures(

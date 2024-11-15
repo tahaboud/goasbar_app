@@ -33,6 +33,38 @@ class AddExperienceStep5View extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    var priceError = useState<String?>(null);
+    var meetingPointError = useState<String?>(null);
+    var cityError = useState<String?>(null);
+
+    bool validateStep5() {
+      bool isValid = true;
+
+      if (price.text.isEmpty || double.parse(price.text) < 1) {
+        priceError.value = "Price must be greater than 1 SR";
+        isValid = false;
+      }
+
+      if (model.latLon == null) {
+        meetingPointError.value = "Meeting point must be set on the map";
+        isValid = false;
+      }
+
+      if (model.city == null || model.city!.isEmpty) {
+        cityError.value = "This field is required.";
+        isValid = false;
+      }
+
+      return isValid;
+    }
+
+    void handleNextStep() {
+      var isValid = validateStep5();
+      if (isValid) {
+        handlePublishExperience(model);
+      }
+    }
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       height: screenHeightPercentage(context, percentage: 0.85),
@@ -105,15 +137,19 @@ class AddExperienceStep5View extends HookWidget {
                 child: DropdownButtonHideUnderline(
                   child: ButtonTheme(
                     alignedDropdown: true,
-                    child: DropdownButton<String>(
+                    child: DropdownButtonFormField<String>(
                       value: model.city,
+                      decoration: InputDecoration(errorText: cityError.value),
                       iconSize: 24,
                       icon: (null),
                       style: const TextStyle(
                         color: Colors.black,
                         fontSize: 14,
                       ),
-                      onChanged: (value) => model.updateCity(value: value),
+                      onChanged: (value) {
+                        model.updateCity(value: value);
+                        cityError.value = null;
+                      },
                       items: cities
                           .map((city) => DropdownMenuItem(
                                 value: city,
@@ -139,9 +175,12 @@ class AddExperienceStep5View extends HookWidget {
                 height: 50,
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: kTextFiledMainColor,
-                ),
+                    borderRadius: BorderRadius.circular(5),
+                    color: kTextFiledMainColor,
+                    border: Border.all(
+                        color: meetingPointError.value == null
+                            ? Colors.transparent
+                            : Colors.red)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -180,7 +219,11 @@ class AddExperienceStep5View extends HookWidget {
                           height: 300,
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10)),
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                  color: meetingPointError.value == null
+                                      ? Colors.transparent
+                                      : Colors.red)),
                           child: GoogleMap(
                             padding: const EdgeInsets.symmetric(horizontal: 20),
                             mapType: MapType.normal,
@@ -194,6 +237,7 @@ class AddExperienceStep5View extends HookWidget {
                             },
                             onTap: (latLon) {
                               model.getTappedPosition(latLon);
+                              meetingPointError.value = null;
                             },
                             markers: model.customMarkers.toSet(),
                             myLocationEnabled: true,
@@ -201,6 +245,10 @@ class AddExperienceStep5View extends HookWidget {
                             zoomControlsEnabled: false,
                           ),
                         ),
+              meetingPointError.value == null
+                  ? const SizedBox()
+                  : Text(meetingPointError.value ?? "",
+                      style: const TextStyle(color: Colors.red)),
               verticalSpaceRegular,
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -249,6 +297,7 @@ class AddExperienceStep5View extends HookWidget {
             child: TextField(
               controller: price,
               keyboardType: TextInputType.number,
+              onChanged: (value) => {priceError.value = null},
               decoration: InputDecoration(
                 hintStyle: const TextStyle(fontSize: 14),
                 suffix: Text("SR".tr(),
@@ -257,6 +306,7 @@ class AddExperienceStep5View extends HookWidget {
                       fontWeight: FontWeight.bold,
                     )),
                 fillColor: kTextFiledMainColor,
+                errorText: priceError.value,
                 filled: true,
                 focusedBorder: const OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.transparent),
@@ -292,9 +342,7 @@ class AddExperienceStep5View extends HookWidget {
                         ),
                       ),
               ).gestures(
-                onTap: () {
-                  handlePublishExperience(model);
-                },
+                onTap: handleNextStep,
               ),
             ],
           ),

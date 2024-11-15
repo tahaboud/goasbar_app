@@ -17,7 +17,7 @@ import 'package:motion_toast/resources/arrays.dart';
 class ExperienceApiService {
   final _authService = locator<AuthService>();
 
-  Future<ExperienceResults?> createExperience(
+  Future<String?> createExperience(
       {String? token,
       Map<String, dynamic>? body,
       BuildContext? context}) async {
@@ -33,14 +33,6 @@ class ExperienceApiService {
           return handler.next(response);
         },
         onError: (e, ErrorInterceptorHandler handler) {
-          Map<String, dynamic> response =
-              Map<String, dynamic>.from(e.response!.data);
-          showMotionToast(
-              context: context,
-              title: 'Create Experience Failed',
-              msg: response['errors'][0]['detail'],
-              type: MotionToastType.error);
-
           return handler.next(e);
         },
       ),
@@ -60,7 +52,7 @@ class ExperienceApiService {
     )
         .then((response) {
       if (response.statusCode == 201) {
-        return ExperienceResults.fromJson(response.data['response']);
+        return "created";
       } else if (response.statusCode == 401) {
         _authService.unAuthClearAndRestart(
           context: context,
@@ -74,11 +66,14 @@ class ExperienceApiService {
             type: MotionToastType.error);
         return null;
       }
-    }).catchError((onError) {
+    }).catchError((error) {
+      if (error.response.data["errors"][0]["attr"] == "title") {
+        return "duplicate_title";
+      }
       showMotionToast(
           context: context,
           title: 'Create Experience Failed',
-          msg: onError,
+          msg: error,
           type: MotionToastType.error);
       return null;
     });

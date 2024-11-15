@@ -17,19 +17,51 @@ class AddExperienceStep6View extends HookWidget {
     super.key,
     required this.model,
     required this.pageController,
-    required this.addPeople,
+    required this.capacity,
     required this.price,
     required this.handlePublishExperience,
   });
 
   final AddExperienceInfoViewModel model;
   final PageController pageController;
-  final TextEditingController addPeople;
+  final TextEditingController capacity;
   final TextEditingController price;
   final PublishExperienceCallback handlePublishExperience;
 
   @override
   Widget build(BuildContext context) {
+    var capacityError = useState<String?>(null);
+    var priceError = useState<String?>(null);
+    var meetingPointError = useState<String?>(null);
+
+    bool validateStep6() {
+      bool isValid = true;
+
+      if (capacity.text.isEmpty || capacity.text == "0") {
+        capacityError.value = "Capacity must be greater than 0";
+        isValid = false;
+      }
+
+      if (price.text.isEmpty || double.parse(price.text) < 1) {
+        priceError.value = "Price must be greater than 1 SR";
+        isValid = false;
+      }
+
+      if (model.latLon == null) {
+        meetingPointError.value = "Meeting point must be set on the map";
+        isValid = false;
+      }
+
+      return isValid;
+    }
+
+    void handleNextStep() {
+      var isValid = validateStep6();
+      if (isValid) {
+        handlePublishExperience(model);
+      }
+    }
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       height: screenHeightPercentage(context, percentage: 0.85),
@@ -151,17 +183,18 @@ class AddExperienceStep6View extends HookWidget {
               SizedBox(
                 height: 50,
                 child: TextField(
-                  controller: addPeople,
+                  controller: capacity,
                   keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    hintStyle: TextStyle(fontSize: 14),
-                    prefixIcon: Icon(Icons.person_outline_rounded),
+                  decoration: InputDecoration(
+                    hintStyle: const TextStyle(fontSize: 14),
+                    prefixIcon: const Icon(Icons.person_outline_rounded),
                     fillColor: kTextFiledMainColor,
+                    errorText: capacityError.value,
                     filled: true,
-                    focusedBorder: OutlineInputBorder(
+                    focusedBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.transparent),
                     ),
-                    enabledBorder: OutlineInputBorder(
+                    enabledBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.transparent),
                     ),
                   ),
@@ -189,6 +222,7 @@ class AddExperienceStep6View extends HookWidget {
                     )),
                 fillColor: kTextFiledMainColor,
                 filled: true,
+                errorText: priceError.value,
                 focusedBorder: const OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.transparent),
                 ),
@@ -222,7 +256,7 @@ class AddExperienceStep6View extends HookWidget {
                               fontWeight: FontWeight.w500),
                         ),
                       ),
-              ).gestures(onTap: () => handlePublishExperience(model))
+              ).gestures(onTap: handleNextStep)
             ],
           ),
           verticalSpaceRegular,

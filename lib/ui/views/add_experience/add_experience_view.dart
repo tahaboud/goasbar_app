@@ -92,9 +92,14 @@ class AddExperienceView extends HookWidget {
         )
             .then((value) {
           model.updateIsClicked(value: false);
-          if (value != null) {
-            model.showPublishSuccessBottomSheet().then((value) {});
-          } else {}
+          if (value == "duplicate_title") {
+            model.updateDuplicateTitle(value: true);
+            pageController.jumpToPage(0);
+          } else if (value == "created") {
+            model.showPublishSuccessBottomSheet().then((value) {
+              model.back();
+            });
+          }
         });
       }
     }
@@ -109,11 +114,12 @@ class AddExperienceView extends HookWidget {
         onPageChanged: (index) => model.changeIndex(index: index),
         children: [
           AddExperienceStep1View(
-              title: title,
-              model: model,
-              age: age,
-              duration: duration,
-              pageController: pageController),
+            title: title,
+            model: model,
+            age: age,
+            duration: duration,
+            pageController: pageController,
+          ),
           AddExperienceStep2View(
               model: model, link: link, pageController: pageController),
           AddExperienceStep3View(
@@ -131,7 +137,8 @@ class AddExperienceView extends HookWidget {
           ),
         ],
       ))),
-      viewModelBuilder: () => AddExperienceInfoViewModel(),
+      viewModelBuilder: () =>
+          AddExperienceInfoViewModel(experience: experience),
       onViewModelReady: (model) => model.onStart(),
     );
   }
