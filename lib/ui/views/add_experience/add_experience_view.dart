@@ -85,22 +85,38 @@ class AddExperienceView extends HookWidget {
       }
 
       if (context.mounted) {
-        model
-            .createExperience(
-          context: context,
-          body: body,
-        )
-            .then((value) {
-          model.updateIsClicked(value: false);
-          if (value == "duplicate_title") {
-            model.updateDuplicateTitle(value: true);
-            pageController.jumpToPage(0);
-          } else if (value == "created") {
+        if (model.experience == null) {
+          model
+              .createExperience(
+            context: context,
+            body: body,
+          )
+              .then((value) {
+            model.updateIsClicked(value: false);
+            if (value == "duplicate_title") {
+              model.updateDuplicateTitle(value: true);
+              pageController.jumpToPage(0);
+            } else if (value == "created") {
+              model.showPublishSuccessBottomSheet().then((value) {
+                model.back();
+              });
+            }
+          });
+        } else {
+          model
+              .updateExperience(
+                  hasImages: model.isProfileImageFromLocal == true ||
+                      model.isHasAdditionalImagesFromLocal == true,
+                  body: body,
+                  context: context,
+                  experienceId: model.experience?.id)
+              .then((value) {
+            model.updateIsClicked(value: false);
             model.showPublishSuccessBottomSheet().then((value) {
               model.back();
             });
-          }
-        });
+          });
+        }
       }
     }
 

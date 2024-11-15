@@ -408,7 +408,7 @@ class AddExperienceInfoViewModel extends BaseViewModel {
       Map<String, dynamic>? body,
       context,
       int? experienceId}) async {
-    // updateIsClicked(value: true);
+    updateIsClicked(value: true);
     String? token = await _tokenService.getTokenValue();
     return await _experienceApiService
         .updateExperience(
