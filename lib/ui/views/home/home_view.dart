@@ -63,29 +63,54 @@ class HomeView extends StatelessWidget {
             },
             items: [
               BottomNavigationBarItem(
-                label: 'Experience'.tr(),
-                icon: SizedBox(
-                  height: 35,
-                  child: Image.asset("assets/icons/navbar/experience.ico"),
-                ),
-              ),
+                  label: 'Experience'.tr(),
+                  icon: SizedBox(
+                    height: 35,
+                    child: Image.asset("assets/icons/navbar/experience.ico"),
+                  ),
+                  activeIcon: SizedBox(
+                    height: 40,
+                    child: Image.asset(
+                      "assets/icons/navbar/experience.ico",
+                      scale: 0.5,
+                    ),
+                  ),
+                  backgroundColor: Colors.red),
               BottomNavigationBarItem(
                 label: 'Search'.tr(),
                 icon: SizedBox(
                     height: 35,
                     child: Image.asset("assets/icons/navbar/search.png")),
+                activeIcon: SizedBox(
+                    height: 40,
+                    child: Image.asset(
+                      "assets/icons/navbar/search.png",
+                      scale: 0.7,
+                    )),
               ),
               BottomNavigationBarItem(
                 label: 'Trips'.tr(),
                 icon: SizedBox(
                     height: 35,
                     child: Image.asset("assets/icons/navbar/trips.png")),
+                activeIcon: SizedBox(
+                    height: 40,
+                    child: Image.asset(
+                      "assets/icons/navbar/trips.png",
+                      scale: 0.7,
+                    )),
               ),
               BottomNavigationBarItem(
                 label: 'Saved'.tr(),
                 icon: SizedBox(
                     height: 35,
                     child: Image.asset("assets/icons/navbar/saved.png")),
+                activeIcon: SizedBox(
+                    height: 40,
+                    child: Image.asset(
+                      "assets/icons/navbar/saved.png",
+                      scale: 0.7,
+                    )),
               ),
               if (model.user?.isProvider == true)
                 BottomNavigationBarItem(
@@ -94,12 +119,25 @@ class HomeView extends StatelessWidget {
                     height: 35,
                     child: Image.asset("assets/icons/navbar/trips.png"),
                   ),
+                  activeIcon: SizedBox(
+                    height: 40,
+                    child: Image.asset(
+                      "assets/icons/navbar/trips.png",
+                      scale: 0.7,
+                    ),
+                  ),
                 ),
               BottomNavigationBarItem(
                 label: 'Settings'.tr(),
                 icon: SizedBox(
                     height: 35,
                     child: Image.asset("assets/icons/navbar/settings.png")),
+                activeIcon: SizedBox(
+                    height: 40,
+                    child: Image.asset(
+                      "assets/icons/navbar/settings.png",
+                      scale: 0.7,
+                    )),
               ),
             ],
           ),
