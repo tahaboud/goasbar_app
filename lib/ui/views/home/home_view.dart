@@ -56,7 +56,9 @@ class HomeView extends StatelessWidget {
             backgroundColor: Colors.white,
             currentIndex: model.currentIndex,
             onTap: (index) {
-              model.getUserData();
+              if (isUser == true) {
+                model.getUserData(context: context);
+              }
               model.setIndex(index);
             },
             items: [
