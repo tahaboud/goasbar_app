@@ -13,7 +13,7 @@ import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class TripsView extends HookWidget {
-  const TripsView({Key? key, this.text, this.user}) : super(key: key);
+  const TripsView({super.key, this.text, this.user});
   final String? text;
   final UserModel? user;
 
@@ -21,7 +21,6 @@ class TripsView extends HookWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<TripsViewModel>.reactive(
       builder: (context, model, child) => Scaffold(
-        bottomNavigationBar: const BottomAppBar(),
         body: SafeArea(
             child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 20),

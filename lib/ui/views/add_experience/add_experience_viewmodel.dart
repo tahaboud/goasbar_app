@@ -12,7 +12,6 @@ import 'package:goasbar/enum/bottom_sheet_type.dart';
 import 'package:goasbar/enum/dialog_type.dart';
 import 'package:goasbar/services/experience_api_service.dart';
 import 'package:goasbar/services/media_service.dart';
-import 'package:goasbar/services/timing_api_service.dart';
 import 'package:goasbar/services/token_service.dart';
 import 'package:goasbar/services/validation_service.dart';
 import 'package:goasbar/shared/app_configs.dart';
@@ -32,7 +31,6 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   final _bottomSheetService = locator<BottomSheetService>();
   final _tokenService = locator<TokenService>();
   final _experienceApiService = locator<ExperienceApiService>();
-  final _timingApiService = locator<TimingApiService>();
   final _mediaService = locator<MediaService>();
   TextEditingController gender = TextEditingController();
   bool duplicateTitle = false;
@@ -44,7 +42,7 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   int pageIndex = 1;
   int? addedProviding = 0;
   int? addedRequirements = 0;
-  String? city = "RIYADH";
+  String? city;
   List<dynamic>? selectedExperienceCategory = [];
   String? providedGoodsText = '';
   String? requirementsText = '';
@@ -69,6 +67,7 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   List<Marker> customMarkers = [];
   LatLng? latLon;
   Placemark? address;
+  List<City> cities = [];
 
   Future getAddressFromCoordinates({LatLng? latLng}) async {
     List<Placemark> placemarks =
@@ -122,6 +121,7 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   }
 
   onStart() {
+    getCities();
     if (experience != null) {
       setBusy(true);
       if (experience!.latitude != null && experience!.longitude != null) {
@@ -203,12 +203,14 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   }
 
   String? getCity() {
-    city = experience?.city!;
+    city = experience?.city.id.toString();
     return city;
   }
 
   updateCity({String? value}) {
-    city = value;
+    if (value != null) {
+      city = value;
+    }
     notifyListeners();
   }
 
@@ -442,5 +444,10 @@ class AddExperienceInfoViewModel extends BaseViewModel {
       setBusy(false);
       return value;
     });
+  }
+
+  Future getCities() async {
+    String? token = await _tokenService.getTokenValue();
+    cities = await _experienceApiService.getCities(token: token);
   }
 }

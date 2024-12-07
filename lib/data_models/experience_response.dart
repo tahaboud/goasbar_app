@@ -1,5 +1,25 @@
 import 'package:goasbar/data_models/image_set_model.dart';
 
+class City {
+  int id;
+  String nameAr;
+  String nameEn;
+
+  City({
+    required this.id,
+    required this.nameAr,
+    required this.nameEn,
+  });
+
+  factory City.fromJson(Map<String, dynamic> json) {
+    return City(
+      id: json["id"],
+      nameAr: json["name_ar"],
+      nameEn: json["name_en"],
+    );
+  }
+}
+
 class ExperienceResults {
   int? id;
   String? title;
@@ -10,7 +30,7 @@ class ExperienceResults {
   dynamic longitude;
   int? minAge;
   String? locationNotes;
-  String? city;
+  City city;
   String? slug;
   String? profileImage;
   String? providedGoods;
@@ -29,64 +49,68 @@ class ExperienceResults {
 
   ExperienceResults(
       {this.id,
-        this.title,
-        this.description,
-        this.categories,
-        this.price,
-        this.latitude,
-        this.longitude,
-        this.minAge,
-        this.locationNotes,
-        this.city,
-        this.slug,
-        this.profileImage,
-        this.providedGoods,
-        this.events,
-        this.requirements,
-        this.providerNickname,
-        this.rate,
-        this.reviews,
-        this.duration,
-        this.providerId,
-        this.gender,
-        this.youtubeVideo,
-        this.creationDate,
-        this.status,
-        this.imageSet});
+      this.title,
+      this.description,
+      this.categories,
+      this.price,
+      this.latitude,
+      this.longitude,
+      this.minAge,
+      this.locationNotes,
+      required this.city,
+      this.slug,
+      this.profileImage,
+      this.providedGoods,
+      this.events,
+      this.requirements,
+      this.providerNickname,
+      this.rate,
+      this.reviews,
+      this.duration,
+      this.providerId,
+      this.gender,
+      this.youtubeVideo,
+      this.creationDate,
+      this.status,
+      this.imageSet});
 
-  ExperienceResults.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    title = json['title'];
-    description = json['description'];
-    categories = json['categories'];
-    price = json['price'];
-    latitude = json['latitude'];
-    longitude = json['longitude'];
-    minAge = json['min_age'];
-    locationNotes = json['location_notes'];
-    city = json['city'];
-    slug = json['slug'];
-    profileImage = json['profile_image'];
-    providedGoods = json['provided_goods'];
-    events = json['events'];
-    requirements = json['requirements'];
-    rate = json['rate'];
-    reviews = json['reviews'];
-    duration = json['duration'];
-    providerId = json['provider_id'];
-    providerNickname = json['provider_nickname'];
-    gender = json['gender'];
-    youtubeVideo = json['youtube_video'];
-    creationDate = json['creation_date'];
+  factory ExperienceResults.fromJson(Map<String, dynamic> json) {
+    ExperienceResults experience = ExperienceResults(
+      id: json["id"],
+      title: json['title'],
+      description: json['description'],
+      categories: json['categories'],
+      price: json['price'],
+      latitude: json['latitude'],
+      longitude: json['longitude'],
+      minAge: json['min_age'],
+      locationNotes: json['location_notes'],
+      city: City.fromJson(json['city']),
+      slug: json['slug'],
+      profileImage: json['profile_image'],
+      providedGoods: json['provided_goods'],
+      events: json['events'],
+      requirements: json['requirements'],
+      rate: json['rate'],
+      reviews: json['reviews'],
+      duration: json['duration'],
+      providerId: json['provider_id'],
+      providerNickname: json['provider_nickname'],
+      gender: json['gender'],
+      youtubeVideo: json['youtube_video'],
+      creationDate: json['creation_date'],
+    );
+
     if (json.keys.contains("status")) {
-      status = json['status'];
+      experience.status = json['status'];
     }
     if (json['image_set'] != null) {
-      imageSet = <ImageSet>[];
+      experience.imageSet = <ImageSet>[];
       json['image_set'].forEach((v) {
-        imageSet!.add(ImageSet.fromJson(v));
+        experience.imageSet!.add(ImageSet.fromJson(v));
       });
     }
+    return experience;
   }
 
   Map<String, dynamic> toJson() {

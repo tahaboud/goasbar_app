@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/add_experience/add_experience_viewmodel.dart';
@@ -50,7 +49,7 @@ class AddExperienceStep5View extends HookWidget {
         isValid = false;
       }
 
-      if (model.city == null || model.city!.isEmpty) {
+      if (model.city == null || model.city == null) {
         cityError.value = "This field is required.";
         isValid = false;
       }
@@ -150,18 +149,44 @@ class AddExperienceStep5View extends HookWidget {
                         model.updateCity(value: value);
                         cityError.value = null;
                       },
-                      items: cities
-                          .map((city) => DropdownMenuItem(
-                                value: city,
-                                onTap: () {},
-                                child: SizedBox(
-                                  child: Text(
-                                    city.tr(),
-                                    style: const TextStyle(fontFamily: 'Cairo'),
+                      items: () {
+                        var cityItems = model.cities
+                            .map((city) => DropdownMenuItem(
+                                  value: city.id.toString(),
+                                  onTap: () {},
+                                  child: SizedBox(
+                                    child: Text(
+                                      context.locale == const Locale("ar", "SA")
+                                          ? city.nameAr
+                                          : city.nameEn,
+                                      style:
+                                          const TextStyle(fontFamily: 'Cairo'),
+                                    ),
                                   ),
+                                ))
+                            .toList();
+                        if (model.experience?.city != null &&
+                            !model.cities.any((city) =>
+                                city.id == model.experience?.city.id)) {
+                          cityItems = [
+                            ...cityItems,
+                            DropdownMenuItem(
+                              value: model.experience?.city.id.toString(),
+                              enabled: false,
+                              onTap: () {},
+                              child: SizedBox(
+                                child: Text(
+                                  context.locale == const Locale("ar", "SA")
+                                      ? model.experience!.city.nameAr
+                                      : model.experience!.city.nameEn,
+                                  style: const TextStyle(fontFamily: 'Cairo'),
                                 ),
-                              ))
-                          .toList(),
+                              ),
+                            )
+                          ];
+                        }
+                        return cityItems;
+                      }(),
                     ),
                   ),
                 ),

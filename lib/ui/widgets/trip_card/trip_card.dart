@@ -146,7 +146,7 @@ class TripItem extends StatelessWidget {
                         Image.asset("assets/icons/location.png"),
                         horizontalSpaceTiny,
                         Text(
-                            "${experience!.city![0]}${experience!.city!.substring(1).replaceAll('_', ' ').toLowerCase()}, ${experience!.duration!} ${double.parse(experience!.duration!) >= 2 ? 'Hours'.tr() : 'Hour'.tr()}",
+                            "${context.locale == const Locale("ar", "SA") ? experience!.city.nameAr : experience!.city.nameEn}, ${experience!.duration!} ${double.parse(experience!.duration!) >= 2 ? 'Hours'.tr() : 'Hour'.tr()}",
                             style:
                                 const TextStyle(color: kMainGray, fontSize: 11))
                       ],

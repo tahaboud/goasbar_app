@@ -269,7 +269,7 @@ class TripDetailView extends HookWidget {
                       horizontalSpaceTiny,
                       SizedBox(
                         child: Text(
-                            "${experience!.city![0]}${experience!.city!.substring(1).replaceAll('_', ' ').toLowerCase()} , ${'Duration'.tr()} : ${experience!.duration} ${double.parse(experience!.duration!) <= 1 ? "Hour".tr() : "Hours".tr()} ${!isUser! ? "" : model.timingListModel == null ? "" : model.timingListModel!.count! > 0 ? "| Start at ${model.timingListModel!.results![0].startTime!.substring(0, 5)}" : ''}",
+                            "${context.locale == const Locale("ar", "SA") ? experience!.city.nameAr : experience!.city.nameEn} , ${'Duration'.tr()} : ${experience!.duration} ${double.parse(experience!.duration!) <= 1 ? "Hour".tr() : "Hours".tr()} ${!isUser! ? "" : model.timingListModel == null ? "" : model.timingListModel!.count! > 0 ? "| Start at ${model.timingListModel!.results![0].startTime!.substring(0, 5)}" : ''}",
                             overflow: TextOverflow.clip,
                             style: const TextStyle(
                                 color: kMainGray, fontSize: 11)),

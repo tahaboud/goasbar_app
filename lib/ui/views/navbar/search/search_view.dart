@@ -466,7 +466,7 @@ class SearchView extends HookWidget {
                                                 SizedBox(
                                                   width: 160,
                                                   child: Text(
-                                                    "${filteredExperiences.value[index].city![0]}${filteredExperiences.value[index].city!}, ${filteredExperiences.value[index].duration!} ${double.parse(filteredExperiences.value[index].duration!) >= 2 ? 'Hours'.tr() : 'Hour'.tr()}",
+                                                    "${filteredExperiences.value[index].city}${filteredExperiences.value[index].city}, ${filteredExperiences.value[index].duration!} ${double.parse(filteredExperiences.value[index].duration!) >= 2 ? 'Hours'.tr() : 'Hour'.tr()}",
                                                     style: const TextStyle(
                                                         color: kMainGray,
                                                         fontSize: 11),

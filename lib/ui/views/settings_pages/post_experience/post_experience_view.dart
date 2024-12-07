@@ -74,32 +74,49 @@ class PostExperienceView extends HookWidget {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
+                                      Flexible(
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                model.data![index].title!,
+                                                style: const TextStyle(
+                                                    overflow:
+                                                        TextOverflow.ellipsis),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                            horizontalSpaceSmall,
+                                          ],
+                                        ),
+                                      ),
                                       Row(
                                         children: [
-                                          Text(model.data![index].title!),
-                                          horizontalSpaceSmall,
                                           Text(
                                               '${model.data![index].status!.substring(0, 1)}${model.data![index].status!.substring(1).toLowerCase()}',
                                               style: const TextStyle(
-                                                  color: kMainColor1)),
+                                                color: kMainColor1,
+                                              )),
+                                          horizontalSpaceTiny,
+                                          Container(
+                                            height: 22,
+                                            width: 22,
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  width: 1,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(30)),
+                                            child: const Icon(
+                                              Icons.keyboard_arrow_up,
+                                              size: 17,
+                                            ).center(),
+                                          ).gestures(
+                                              onTap: () =>
+                                                  model.collapse(index: index)),
                                         ],
-                                      ),
-                                      Container(
-                                        height: 22,
-                                        width: 22,
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                              width: 1,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(30)),
-                                        child: const Icon(
-                                          Icons.keyboard_arrow_up,
-                                          size: 17,
-                                        ).center(),
-                                      ).gestures(
-                                          onTap: () =>
-                                              model.collapse(index: index)),
+                                      )
                                     ],
                                   ),
                                   verticalSpaceSmall,
@@ -128,7 +145,7 @@ class PostExperienceView extends HookWidget {
                                           bottom: 15,
                                           left: 10,
                                           child: Text(
-                                            "City  |  ${model.data![index].city![0]}${model.data![index].city!.substring(1).replaceAll('_', ' ').toLowerCase()}",
+                                            "City  |  ${context.locale == const Locale("ar", "SA") ? model.data![index].city.nameAr : model.data![index].city.nameEn}",
                                             style: const TextStyle(
                                               color: Colors.white,
                                             ),

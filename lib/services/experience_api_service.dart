@@ -122,9 +122,22 @@ class ExperienceApiService {
   }
 
   Future<TimingListModel?> getExperiencePublicTimings(
-      {int? experienceId, int? page}) async {
+      {int? experienceId,
+      int? page,
+      String? startDate,
+      String? endDate}) async {
+    String url = "$baseUrl/api/experience/timing/$experienceId/";
+    if (page != null) {
+      url += "?page=$page";
+    }
+    if (startDate != null && endDate != null) {
+      url += page == null
+          ? "?start_date=$startDate&end_date=$endDate"
+          : "&start_date=$startDate&end_date=$endDate";
+    }
+
     return http.get(
-      Uri.parse("$baseUrl/api/experience/timing/$experienceId/?page=$page"),
+      Uri.parse(url),
       headers: {
         "Accept-Language": "en-US",
       },
@@ -135,6 +148,23 @@ class ExperienceApiService {
       } else {
         return null;
       }
+    });
+  }
+
+  Future<List<City>> getCities({String? token}) async {
+    return http.get(
+      Uri.parse("$baseUrl/api/experience/cities/"),
+      headers: {
+        "Accept-Language": "en-US",
+        "Authorization": "Token $token",
+        "Accept": "Application/json",
+        "Content-Type": "application/json"
+      },
+    ).then((response) {
+      List<dynamic> citiesAsJson = jsonDecode(utf8.decode(response.bodyBytes));
+      return citiesAsJson
+          .map((cityAsJson) => City.fromJson(cityAsJson))
+          .toList();
     });
   }
 

@@ -123,22 +123,24 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
       ),
       dialogSize: const Size(325, 350),
     );
-
-    if (pickedDates!.length > 1) {
+    if (pickedDates != null && pickedDates.length > 1) {
       final DateFormat formatter = DateFormat('yyyy-MM-dd');
       final String formattedFilter1 = formatter.format(pickedDates[0]!);
       final String formattedFilter2 = formatter.format(pickedDates[1]!);
 
       filterDate1 = formattedFilter1;
       filterDate2 = formattedFilter2;
-
-      notifyListeners();
     } else {
       filterDate1 = "1900-01-01";
       filterDate2 = "3000-12-30";
-
-      notifyListeners();
     }
+    timingListModel?.results?.clear();
+
+    setBusy(true);
+    pageNumber = 1;
+    data = await getExperiencePublicTimings();
+    notifyListeners();
+    setBusy(false);
   }
 
   int formatDay(String date) => int.parse(date.substring(8, 10).toString());
@@ -177,20 +179,30 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
     return booking;
   }
 
-  Future getExperiencePublicTimingsFromNextPage({int? index}) async {
+  Future getExperiencePublicTimingsFromNextPage({
+    int? index,
+  }) async {
     if (index! % 10 == 0) {
       pageNumber++;
       TimingListModel? timingList =
           await _experienceApiService.getExperiencePublicTimings(
-              experienceId: experienceId, page: pageNumber);
-      timingListModel!.results!.addAll(timingList!.results!);
+              experienceId: experienceId,
+              page: pageNumber,
+              startDate: filterDate1,
+              endDate: filterDate2);
+      if (timingList != null) {
+        timingListModel!.results!.addAll(timingList.results!);
+      }
       notifyListeners();
     }
   }
 
   Future<TimingListModel?> getExperiencePublicTimings() async {
     timingListModel = await _experienceApiService.getExperiencePublicTimings(
-        experienceId: experienceId, page: pageNumber);
+        experienceId: experienceId,
+        page: pageNumber,
+        startDate: filterDate1,
+        endDate: filterDate2);
     notifyListeners();
 
     return timingListModel;
