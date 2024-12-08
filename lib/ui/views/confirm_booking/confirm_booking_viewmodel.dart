@@ -27,8 +27,8 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
   BookingModel? booking;
   int? selectedIndex;
   bool? isClicked = false;
-  String? filterDate1 = "1900-01-01";
-  String? filterDate2 = "3000-12-30";
+  String? filterDate1;
+  String? filterDate2;
   final _tokenService = locator<TokenService>();
   final _bookingApiService = locator<BookingApiService>();
   int? numberOfGuests = 0;
@@ -123,16 +123,21 @@ class ConfirmBookingViewModel extends FutureViewModel<TimingListModel?> {
       ),
       dialogSize: const Size(325, 350),
     );
-    if (pickedDates != null && pickedDates.length > 1) {
+    if (pickedDates == null) {
+      filterDate1 = null;
+      filterDate2 = null;
+    } else if (pickedDates.length == 1) {
+      final DateFormat formatter = DateFormat('yyyy-MM-dd');
+      final String formattedFilter1 = formatter.format(pickedDates[0]!);
+      filterDate1 = formattedFilter1;
+      filterDate2 = null;
+    } else {
       final DateFormat formatter = DateFormat('yyyy-MM-dd');
       final String formattedFilter1 = formatter.format(pickedDates[0]!);
       final String formattedFilter2 = formatter.format(pickedDates[1]!);
 
       filterDate1 = formattedFilter1;
       filterDate2 = formattedFilter2;
-    } else {
-      filterDate1 = "1900-01-01";
-      filterDate2 = "3000-12-30";
     }
     timingListModel?.results?.clear();
 

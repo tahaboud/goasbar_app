@@ -447,7 +447,6 @@ class AddExperienceInfoViewModel extends BaseViewModel {
   }
 
   Future getCities() async {
-    String? token = await _tokenService.getTokenValue();
-    cities = await _experienceApiService.getCities(token: token);
+    cities = await _experienceApiService.getCities();
   }
 }

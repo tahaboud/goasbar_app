@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:goasbar/app/app.locator.dart';
 import 'package:goasbar/data_models/experience_model.dart';
+import 'package:goasbar/data_models/experience_response.dart';
 import 'package:goasbar/services/experience_api_service.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
@@ -22,16 +23,9 @@ class SearchViewModel extends BaseViewModel {
   String from = '', to = '';
   String genderConstraint = genderConstraints[0];
   String category = 'All categories';
-  String city = 'All cities';
+  City city = City(id: 0, nameAr: "كل المدن", nameEn: "All cities");
+  List<City> cities = [];
   int pageNumber = 1;
-
-  List<String> citiesWithNone() {
-    List<String> list = [];
-    list.add('All cities');
-    list.addAll(cities);
-
-    return list;
-  }
 
   List<String> categoriesWithNone() {
     List<String> list = [];
@@ -56,7 +50,7 @@ class SearchViewModel extends BaseViewModel {
   }
 
   updateCity({required String value}) {
-    city = value;
+    city = cities.firstWhere((city) => city.id.toString() == value);
     notifyListeners();
   }
 
@@ -108,8 +102,10 @@ class SearchViewModel extends BaseViewModel {
           await _experienceApiService.getPublicExperiences(
         page: pageNumber,
       );
-      experienceModels!.results!.addAll(experienceModelsList!.results!);
-      notifyListeners();
+      if (experienceModels != null) {
+        experienceModels!.results!.addAll(experienceModelsList!.results!);
+        notifyListeners();
+      }
     }
   }
 
@@ -125,5 +121,15 @@ class SearchViewModel extends BaseViewModel {
     notifyListeners();
     setBusy(false);
     return experienceModels!;
+  }
+
+  void onStart() {
+    getCities();
+  }
+
+  Future getCities() async {
+    cities = await _experienceApiService.getCities();
+    cities.insert(0, city);
+    notifyListeners();
   }
 }

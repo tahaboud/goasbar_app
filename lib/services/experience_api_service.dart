@@ -134,6 +134,8 @@ class ExperienceApiService {
       url += page == null
           ? "?start_date=$startDate&end_date=$endDate"
           : "&start_date=$startDate&end_date=$endDate";
+    } else if (startDate != null) {
+      url += page == null ? "?start_date=$startDate" : "&start_date=$startDate";
     }
 
     return http.get(
@@ -151,12 +153,11 @@ class ExperienceApiService {
     });
   }
 
-  Future<List<City>> getCities({String? token}) async {
+  Future<List<City>> getCities() async {
     return http.get(
       Uri.parse("$baseUrl/api/experience/cities/"),
       headers: {
         "Accept-Language": "en-US",
-        "Authorization": "Token $token",
         "Accept": "Application/json",
         "Content-Type": "application/json"
       },

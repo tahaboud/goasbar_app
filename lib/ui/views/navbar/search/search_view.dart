@@ -28,7 +28,7 @@ class SearchView extends HookWidget {
     var filteredExperiences = useState<List<ExperienceResults>>([]);
 
     void filterExperiences(String genderConstraint, String from, String to,
-        String city, String category) {
+        City city, String category) {
       String query = '?gender=$genderConstraint';
 
       if (from.isNotEmpty) {
@@ -36,8 +36,8 @@ class SearchView extends HookWidget {
       }
       if (to.isNotEmpty) query = '$query&date_max=$to';
 
-      if (city != "All cities") {
-        query = '$query&city=$city';
+      if (city.id != 0) {
+        query = '$query&city=${city.id}';
       }
 
       if (title.text.isNotEmpty) {
@@ -115,23 +115,25 @@ class SearchView extends HookWidget {
                           child: ButtonTheme(
                             alignedDropdown: true,
                             child: DropdownButton<String>(
-                              value: model.city,
+                              value: model.city.id.toString(),
                               iconSize: 24,
                               icon: (null),
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 14,
                               ),
-                              onChanged: (value) => model.updateCity(
-                                  value: value ?? "All cities"),
-                              items: model
-                                  .citiesWithNone()
-                                  .map((c) => DropdownMenuItem(
-                                        value: c,
+                              onChanged: (value) =>
+                                  model.updateCity(value: value!),
+                              items: model.cities
+                                  .map((city) => DropdownMenuItem(
+                                        value: city.id.toString(),
                                         onTap: () {},
                                         child: SizedBox(
                                           child: Text(
-                                            c.tr(),
+                                            context.locale ==
+                                                    const Locale("ar", "SA")
+                                                ? city.nameAr
+                                                : city.nameEn,
                                             style: const TextStyle(
                                                 fontFamily: 'Cairo'),
                                           ),
@@ -411,14 +413,9 @@ class SearchView extends HookWidget {
                                                           : BoxFit.cover
                                                       : BoxFit.contain,
                                                   image: filteredExperiences
-                                                                  .value[index]
-                                                                  .profileImage !=
-                                                              null &&
-                                                          filteredExperiences
                                                               .value[index]
-                                                              .profileImage!
-                                                              .contains(
-                                                                  '/asbar-icon.ico')
+                                                              .profileImage !=
+                                                          null
                                                       ? NetworkImage(
                                                               "$baseUrl${filteredExperiences.value[index].profileImage}")
                                                           as ImageProvider
@@ -466,7 +463,7 @@ class SearchView extends HookWidget {
                                                 SizedBox(
                                                   width: 160,
                                                   child: Text(
-                                                    "${filteredExperiences.value[index].city}${filteredExperiences.value[index].city}, ${filteredExperiences.value[index].duration!} ${double.parse(filteredExperiences.value[index].duration!) >= 2 ? 'Hours'.tr() : 'Hour'.tr()}",
+                                                    "${context.locale == const Locale("ar", "SA") ? filteredExperiences.value[index].city.nameAr : filteredExperiences.value[index].city.nameEn}, ${filteredExperiences.value[index].duration!} ${double.parse(filteredExperiences.value[index].duration!) >= 2 ? 'Hours'.tr() : 'Hour'.tr()}",
                                                     style: const TextStyle(
                                                         color: kMainGray,
                                                         fontSize: 11),
@@ -547,6 +544,7 @@ class SearchView extends HookWidget {
         )),
       ),
       viewModelBuilder: () => SearchViewModel(context: context),
+      onViewModelReady: (model) => model.onStart(),
     );
   }
 }
