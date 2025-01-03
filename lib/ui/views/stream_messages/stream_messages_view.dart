@@ -1,104 +1,111 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:goasbar/data_models/chat_message_model.dart';
+import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
-import 'package:goasbar/ui/views/stream_messages/stream_messages_viewmodel.dart';
 import 'package:goasbar/ui/widgets/message_bubble.dart';
-import 'package:goasbar/ui/widgets/seen_widget.dart';
-import 'package:goasbar/ui/widgets/seen_widget_sender.dart';
-import 'package:stacked/stacked.dart';
 
 class StreamMessagesView extends HookWidget {
-  const StreamMessagesView({super.key, this.chatId, this.notMeId, this.meId});
-  final String? chatId;
-  final int? notMeId;
-  final int? meId;
+  StreamMessagesView(
+      {super.key,
+      required this.stream,
+      required this.user,
+      required this.messages,
+      required this.scrollController,
+      required this.scrollToBottom});
+
+  final Stream<dynamic> stream;
+  final UserModel user;
+  final List<ChatMessage> messages;
+  bool isInitialRender = true;
+  ScrollController scrollController;
+  void Function() scrollToBottom;
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<StreamMessagesViewModel>.reactive(
-      builder: (context, model, child) {
-        return StreamBuilder(
-          stream: model.stream,
-          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (!snapshot.hasData) {
-              return Center(
-                child: Container(
-                  height: 100,
-                  width: 100,
-                  decoration: BoxDecoration(
-                    color: Colors.transparent, borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              );
-            }
-
-            List<Widget>? messagesBubble = [];
-            List<DocumentSnapshot>? messages = snapshot.data!.docs;
-            String? time;
-            if (messages.isNotEmpty) {
-              int? minutes = ((DateTime.now().millisecondsSinceEpoch / 60000).floor() - (messages.last.get('createdAt').seconds / 60)).floor();
-              int? hours = ((DateTime.now().millisecondsSinceEpoch / 3600000).floor() - (messages.last.get('createdAt').seconds / 3600)).floor();
-              int? days = ((DateTime.now().millisecondsSinceEpoch / 86400000).floor() - (messages.last.get('createdAt').seconds / 86400)).floor();
-
-              time = minutes < 1
-                  ? "now"
-                  : minutes < 60
-                  ? "$minutes min"
-                  : hours < 2
-                  ? "1 hour"
-                  : hours < 24
-                  ? "$hours hours"
-                  : days < 2
-                  ? "1 day"
-                  : "$days days";
-            }
-
-            for (var message in messages) {
-              if (message.get("senderID") != meId.toString()) {
-                messagesBubble.add(Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Image.asset("assets/images/user.png"),
-                    horizontalSpaceSmall,
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        MessageBubble(isReciever: true, message: message.get("text").toString()),
-                        verticalSpaceTiny,
-                        if (message.get("text") == messages.last.get("text"))
-                          SeenWidgetSender(time: time),
-                        if (message.get("text") == messages.last.get("text"))
-                          verticalSpaceSmall,
-                      ],
-                    )
-                  ],
-                ));
-              } else {
-                messagesBubble.add(Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    MessageBubble(message: message.get("text"), isReciever: false),
-                    verticalSpaceTiny,
-                    if (message.get("text") == messages.last.get("text"))
-                      SeenWidgetMe(time: time,),
-                  ],
-                ));
-              }
-            }
-
-            return SingleChildScrollView(
-              reverse: true,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: messagesBubble,
-              ),
-            );
-          },
-        );
-      },
-      viewModelBuilder: () => StreamMessagesViewModel(chatId: chatId,),
+    final streamMessages = useState<List<StreamChatMessage>>(
+      messages.map((msg) => StreamChatMessage.fromChatMessage(msg)).toList(),
     );
+
+    useEffect(() {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (streamMessages.value.isNotEmpty) {
+          scrollToBottom();
+        }
+      });
+      return null;
+    }, []);
+
+    // Listen to the stream and update messages
+    useEffect(() {
+      final subscription = stream.listen((data) {
+        try {
+          final decodedData = jsonDecode(data);
+
+          final newMessage = StreamChatMessage(
+            message: decodedData["message"] ?? "",
+            sender: decodedData["sender"] ?? "Unknown",
+            createdAt: DateTime.tryParse(decodedData["created_at"] ?? "") ??
+                DateTime.now(),
+          );
+
+          streamMessages.value = [...streamMessages.value, newMessage];
+
+          scrollToBottom();
+
+          // If this is the initial render, scroll to the bottom
+          if (isInitialRender) {
+            scrollToBottom();
+            isInitialRender = false;
+          }
+        } catch (e) {
+          debugPrint("Error parsing message: $e");
+        }
+      });
+
+      return subscription.cancel;
+    }, [stream]);
+
+    return streamMessages.value.isEmpty
+        ? const Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.chat_bubble_outline, size: 50, color: Colors.grey),
+                SizedBox(height: 10),
+                Text(
+                  'No messages yet.',
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ],
+            ),
+          )
+        : SizedBox(
+            width: screenWidth(context),
+            height: screenHeightPercentage(context, percentage: 0.75),
+            child: ListView.builder(
+              controller: scrollController,
+              itemCount: streamMessages.value.length,
+              itemBuilder: (context, index) {
+                final message = streamMessages.value[index];
+                final isSender = message.sender == user.id;
+
+                return Column(
+                  crossAxisAlignment: isSender
+                      ? CrossAxisAlignment.end
+                      : CrossAxisAlignment.start,
+                  children: [
+                    MessageBubble(
+                      message: message.message,
+                      isSender: isSender,
+                      createdAt: message.createdAt,
+                    ),
+                  ],
+                );
+              },
+            ),
+          );
   }
 }

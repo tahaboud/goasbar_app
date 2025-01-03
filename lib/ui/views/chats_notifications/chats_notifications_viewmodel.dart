@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:goasbar/app/app.locator.dart';
-import 'package:goasbar/data_models/chat_token_provider_model.dart';
 import 'package:goasbar/services/chat_api_service.dart';
 import 'package:goasbar/services/token_service.dart';
 import 'package:stacked/stacked.dart';
@@ -18,7 +17,8 @@ class ChatsNotificationsViewModel extends FutureViewModel<String?> {
   final _tokenService = locator<TokenService>();
 
   void navigateTo({view}) {
-    _navigationService.navigateWithTransition(view, curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
+    _navigationService.navigateWithTransition(view,
+        curve: Curves.easeIn, duration: const Duration(milliseconds: 300));
   }
 
   void back() {
@@ -32,9 +32,8 @@ class ChatsNotificationsViewModel extends FutureViewModel<String?> {
 
   Future<String?> getUserFireStoreToken() async {
     String? token = await _tokenService.getTokenValue();
-    ChatTokenProviderModel? userToken = await _chatApiService.getProviderFireStoreTokenAndChatId(context: context, token: token, providerId: 1);
     notifyListeners();
-    return userToken!.chatId;
+    return "";
   }
 
   @override

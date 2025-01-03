@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/chats/chats_view.dart';
 import 'package:goasbar/ui/views/chats_notifications/chats_notifications_viewmodel.dart';
-import 'package:goasbar/ui/views/notifications/notifications_view.dart';
 import 'package:goasbar/ui/widgets/chip_widget.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 
 class ChatsNotificationsView extends HookWidget {
-  const ChatsNotificationsView({Key? key, this.user}) : super(key: key);
+  const ChatsNotificationsView({super.key, this.user});
   final UserModel? user;
 
   @override
@@ -26,17 +25,17 @@ class ChatsNotificationsView extends HookWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Icon(Icons.arrow_back_sharp).height(40)
+                    const Icon(Icons.arrow_back_sharp)
+                        .height(40)
                         .width(40)
-                        .gestures(
-                        onTap: () {
-                          model.back();
-                        }
-                    ),
+                        .gestures(onTap: () {
+                      model.back();
+                    }),
                     Container(
                       height: 40,
-                      width: 230,
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      width: 120,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
                       decoration: BoxDecoration(
                         color: const Color(0xffE8E9ED),
                         borderRadius: BorderRadius.circular(20),
@@ -44,8 +43,6 @@ class ChatsNotificationsView extends HookWidget {
                       child: Row(
                         children: [
                           ChipWidget(index: 1, model: model),
-                          horizontalSpaceSmall,
-                          ChipWidget(index: 2, model: model),
                         ],
                       ),
                     ),
@@ -53,8 +50,12 @@ class ChatsNotificationsView extends HookWidget {
                   ],
                 ),
                 verticalSpaceMedium,
-                !model.dataReady ? const SizedBox() : model.indexTab == 1
-                    ? ChatsView(user: user!, userToken: model.userToken,) : const NotificationsView(),
+                !model.dataReady
+                    ? const SizedBox()
+                    : ChatsView(
+                        user: user!,
+                        userToken: model.userToken,
+                      )
               ],
             ),
           ),

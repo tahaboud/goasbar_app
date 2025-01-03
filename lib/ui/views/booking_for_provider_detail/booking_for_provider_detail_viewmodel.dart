@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:goasbar/app/app.locator.dart';
+import 'package:goasbar/data_models/chat_room_model.dart';
 import 'package:goasbar/data_models/provider_public_experience_response.dart';
 import 'package:goasbar/data_models/public_provider_model.dart';
 import 'package:goasbar/data_models/user_model.dart';
@@ -129,6 +130,16 @@ class BookingForProviderDetailViewModel
     notifyListeners();
 
     return provider;
+  }
+
+  Future<ChatRoom?> getProviderChatRoom(int providerId) async {
+    String? token = await _tokenService.getTokenValue();
+    ChatRoom? chatRoom;
+    if (token != null) {
+      chatRoom = await _providerApiService.getProviderChatRoom(
+          token: token, providerId: providerId, context: context);
+    }
+    return chatRoom;
   }
 
   @override

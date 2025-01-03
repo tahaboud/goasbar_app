@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:goasbar/app/app.locator.dart';
+import 'package:goasbar/data_models/chat_room_model.dart';
 import 'package:goasbar/data_models/provider_model.dart';
 import 'package:goasbar/data_models/provider_public_experience_model.dart';
 import 'package:goasbar/data_models/public_provider_model.dart';
@@ -135,6 +136,34 @@ class ProviderApiService {
         showMotionToast(
             context: context,
             title: 'Update Provider Failed',
+            msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]
+                ['detail'],
+            type: MotionToastType.error);
+        return null;
+      }
+    });
+  }
+
+  Future<ChatRoom?> getProviderChatRoom(
+      {required String token, required int providerId, required context}) {
+    return http.post(
+      Uri.parse("$baseUrl/api/chat/rooms/$providerId/"),
+      headers: {
+        "Accept-Language": "en-US",
+        "Authorization": "Token $token",
+      },
+    ).then((response) {
+      if (response.statusCode == 201) {
+        return ChatRoom.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+      } else if (response.statusCode == 401) {
+        _authService.unAuthClearAndRestart(
+          context: context,
+        );
+        return null;
+      } else {
+        showMotionToast(
+            context: context,
+            title: 'Could not create room',
             msg: jsonDecode(utf8.decode(response.bodyBytes))["errors"][0]
                 ['detail'],
             type: MotionToastType.error);

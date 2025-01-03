@@ -1,81 +1,107 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:goasbar/shared/app_configs.dart';
+import 'package:goasbar/data_models/chat_room_model.dart';
+import 'package:goasbar/data_models/chat_user_model.dart';
+import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
+import 'package:goasbar/ui/views/chat_with_agency/chat.dart';
+import 'package:goasbar/ui/views/chats/chats_viewmodel.dart';
 import 'package:goasbar/ui/widgets/chat_item/chat_item_viewmodel.dart';
 import 'package:stacked/stacked.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class ChatItem extends StatelessWidget {
-  const ChatItem({
-    Key? key,
-    this.onTap,
-    this.receiverName,
-    this.receiverId,
-    this.isUser,
-  }) : super(key: key);
-  final Function()? onTap;
-  final String? receiverName;
-  final int? receiverId;
-  final bool? isUser;
+  ChatItem({
+    super.key,
+    required this.user,
+    required this.room,
+    required this.chatRoomsModel,
+  }) : chatPartner = (room.client.id == user.id) ? room.provider : room.client;
+
+  final UserModel user;
+  final ChatRoom room;
+  final ChatUser chatPartner;
+  ChatsViewModel chatRoomsModel;
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ChatItemViewModel>.reactive(
       builder: (context, model, child) {
-        return Row(
-          children: [
-            Container(
-              height: 50,
-              width: 50,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: model.isBusy
-                      ? const AssetImage("assets/images/message_pic.png")
-                      : model.data == null
-                          ? const AssetImage("assets/images/message_pic.png")
-                          : NetworkImage('$baseUrl${model.data}')
-                              as ImageProvider,
-                  fit: BoxFit.cover,
-                ),
-                borderRadius: BorderRadius.circular(5),
-              ),
-            ),
-            horizontalSpaceSmall,
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  receiverName!,
-                ),
-                verticalSpaceSmall,
-                Text(
-                  'Check your last messages'.tr(),
-                  style:
-                      const TextStyle(color: kMainDisabledGray, fontSize: 12),
-                )
-              ],
-            ),
-            //TODO add non read messages
-            // const Spacer(),
-            // Column(
-            //   crossAxisAlignment: CrossAxisAlignment.end,
-            //   children: [
-            //     const Text('5 min ago', style: TextStyle(color: kMainDisabledGray,),),
-            //     verticalSpaceSmall,
-            //     SizedBox(
-            //       width: 20,
-            //       height: 20,
-            //       child: const Text('4', style: TextStyle(color: Colors.white)).center(),
-            //     ).decorated(borderRadius: BorderRadius.circular(5), color: Colors.black),
-            //   ],
-            // ),
-          ],
-        ).padding(bottom: 20).gestures(onTap: onTap);
+        return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () => model.navigateTo(
+                    view: ChatView(user: user, room: room),
+                    chatRoomsModel: chatRoomsModel),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image:
+                              NetworkImage(chatPartner.image) as ImageProvider,
+                          fit: BoxFit.cover,
+                        ),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                    horizontalSpaceSmall,
+                    Flexible(
+                      child: Column(children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              chatPartner.nickname != null
+                                  ? chatPartner.nickname!
+                                  : "${chatPartner.firstName} ${chatPartner.lastName}",
+                            ),
+                            Text(
+                              room.lastMessageDate != null
+                                  ? DateFormat("dd-MM-yyyy")
+                                      .format(room.lastMessageDate!)
+                                  : "",
+                              style: const TextStyle(
+                                color: kMainDisabledGray,
+                              ),
+                            )
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Check your last messages'.tr(),
+                              style: const TextStyle(
+                                  color: kMainDisabledGray, fontSize: 12),
+                            ),
+                            room.unreadMessagesCount > 0
+                                ? SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: Text(
+                                            room.unreadMessagesCount.toString(),
+                                            style: const TextStyle(
+                                                color: Colors.white))
+                                        .center(),
+                                  ).decorated(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: Colors.red)
+                                : const SizedBox(),
+                          ],
+                        ),
+                      ]),
+                    )
+                  ],
+                )));
       },
-      viewModelBuilder: () =>
-          ChatItemViewModel(id: receiverId, isUser: isUser, context: context),
+      viewModelBuilder: () => ChatItemViewModel(context: context),
     );
   }
 }

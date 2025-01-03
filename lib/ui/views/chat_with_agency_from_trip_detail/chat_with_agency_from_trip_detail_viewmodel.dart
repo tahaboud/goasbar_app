@@ -37,9 +37,7 @@ class ChatWithAgencyFromTripDetailViewModel
   Future<ChatTokenProviderModel?>
       getUserFireStoreTokenAndProviderChatId() async {
     String? token = await _tokenService.getTokenValue();
-    chatTokenProvider =
-        await _chatApiService.getProviderFireStoreTokenAndChatId(
-            context: context, token: token, providerId: providerId);
+
     notifyListeners();
     return chatTokenProvider;
   }

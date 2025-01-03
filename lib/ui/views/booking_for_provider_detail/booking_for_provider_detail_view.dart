@@ -10,7 +10,7 @@ import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:goasbar/ui/views/booking_for_provider_detail/booking_for_provider_detail_viewmodel.dart';
-import 'package:goasbar/ui/views/chat_with_agency_from_trip_detail/chat_with_agency_from_trip_detail_view.dart';
+import 'package:goasbar/ui/views/chat_with_agency/chat.dart';
 import 'package:goasbar/ui/views/login/login_view.dart';
 import 'package:goasbar/ui/widgets/dot_item.dart';
 import 'package:goasbar/ui/widgets/note_item.dart';
@@ -21,14 +21,27 @@ import 'package:styled_widget/styled_widget.dart';
 
 class BookingForProviderDetailView extends HookWidget {
   const BookingForProviderDetailView(
-      {Key? key, this.providerPublicExperience, this.user})
-      : super(key: key);
+      {super.key, this.providerPublicExperience, this.user});
   final ProviderPublicExperienceResults? providerPublicExperience;
   final UserModel? user;
 
   @override
   Widget build(BuildContext context) {
     var pageController = usePageController();
+
+    void handleChatWithProvider(BookingForProviderDetailViewModel model) {
+      if (user == null) {
+        model.navigateTo(view: const LoginView());
+      } else if (providerPublicExperience?.providerId != null) {
+        model
+            .getProviderChatRoom(providerPublicExperience!.providerId!)
+            .then((chatRoom) {
+          if (chatRoom != null) {
+            model.navigateTo(view: ChatView(room: chatRoom, user: user!));
+          }
+        });
+      }
+    }
 
     return ViewModelBuilder<BookingForProviderDetailViewModel>.reactive(
       builder: (context, model, child) => Scaffold(
@@ -297,19 +310,7 @@ class BookingForProviderDetailView extends HookWidget {
                         style: const TextStyle(
                           color: kMainColor1,
                         ),
-                      ).gestures(
-                          onTap: () => model.navigateTo(
-                              view: user == null
-                                  ? const LoginView()
-                                  : ChatWithAgencyFromTripDetailView(
-                                      notMeId:
-                                          providerPublicExperience!.providerId,
-                                      providerId:
-                                          providerPublicExperience!.providerId,
-                                      meId: user!.id,
-                                      notMeName: providerPublicExperience!
-                                          .providerNickname,
-                                    ))),
+                      ).gestures(onTap: () => handleChatWithProvider(model)),
                     ],
                   ).padding(horizontal: 20),
                   verticalSpaceRegular,

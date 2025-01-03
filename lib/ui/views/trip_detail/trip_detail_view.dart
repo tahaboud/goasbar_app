@@ -9,7 +9,7 @@ import 'package:goasbar/data_models/user_model.dart';
 import 'package:goasbar/shared/app_configs.dart';
 import 'package:goasbar/shared/colors.dart';
 import 'package:goasbar/shared/ui_helpers.dart';
-import 'package:goasbar/ui/views/chat_with_agency_from_trip_detail/chat_with_agency_from_trip_detail_view.dart';
+import 'package:goasbar/ui/views/chat_with_agency/chat.dart';
 import 'package:goasbar/ui/views/confirm_booking/confirm_booking_view.dart';
 import 'package:goasbar/ui/views/login/login_view.dart';
 import 'package:goasbar/ui/views/provider_profile/provider_profile_view.dart';
@@ -37,6 +37,19 @@ class TripDetailView extends HookWidget {
   @override
   Widget build(BuildContext context) {
     var pageController = usePageController();
+
+    void handleChatWithProvider(TripDetailViewModel model) {
+      if (user == null) {
+        model.navigateTo(view: const LoginView());
+      } else if (experience?.providerId != null) {
+        model.getProviderChatRoom(experience!.providerId!).then((chatRoom) {
+          if (chatRoom != null) {
+            model.navigateTo(view: ChatView(room: chatRoom, user: user!));
+          }
+        });
+      }
+    }
+
     return ViewModelBuilder<TripDetailViewModel>.reactive(
       builder: (context, model, child) => Scaffold(
         extendBodyBehindAppBar: true,
@@ -387,18 +400,8 @@ class TripDetailView extends HookWidget {
                                           color: kMainColor1,
                                         ),
                                       ).gestures(
-                                          onTap: () => model.navigateTo(
-                                              view: user == null
-                                                  ? const LoginView()
-                                                  : ChatWithAgencyFromTripDetailView(
-                                                      providerId: experience!
-                                                          .providerId,
-                                                      meId: user!.id,
-                                                      notMeName: experience!
-                                                          .providerNickname,
-                                                      notMeId: experience!
-                                                          .providerId,
-                                                    ))),
+                                          onTap: () =>
+                                              handleChatWithProvider(model)),
                                     ],
                                   ).padding(horizontal: 20),
                         verticalSpaceRegular,
