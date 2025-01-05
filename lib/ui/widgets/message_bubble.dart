@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:goasbar/shared/colors.dart';
+import 'package:goasbar/shared/ui_helpers.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 class MessageBubble extends StatelessWidget {
@@ -30,20 +31,23 @@ class MessageBubble extends StatelessWidget {
           isSender ? MainAxisAlignment.start : MainAxisAlignment.end,
       children: [
         Column(
-          // width: screenWidthPercentage(context, percentage: 0.8),
           crossAxisAlignment:
               isSender ? CrossAxisAlignment.start : CrossAxisAlignment.end,
           children: [
-            SizedBox(
-              child: Text(
-                message,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(color: Colors.white),
-                textAlign: TextAlign.right,
-              ).padding(horizontal: 20, vertical: 10),
-            ).decorated(
-              color: isSender ? Colors.green : kMainColor1,
-              borderRadius: const BorderRadius.all(Radius.circular(20)),
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: screenWidth(context) - 40,
+              ),
+              child: SizedBox(
+                child: Text(
+                  message,
+                  style: const TextStyle(color: Colors.white),
+                  textAlign: TextAlign.right,
+                ).padding(horizontal: 20, vertical: 10),
+              ).decorated(
+                color: isSender ? Colors.green : kMainColor1,
+                borderRadius: const BorderRadius.all(Radius.circular(20)),
+              ),
             ),
             Text(formatDate(createdAt.toString()),
                 style: const TextStyle(

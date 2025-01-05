@@ -33,7 +33,7 @@ class ChatView extends HookWidget {
     final FocusNode focusNode = FocusNode();
 
     void sendMessage(WebSocketChannel? channel) {
-      if (channel != null) {
+      if (channel != null && message.text.isNotEmpty) {
         channel.sink
             .add(jsonEncode({"type": "chat_message", "message": message.text}));
         message.text = "";
